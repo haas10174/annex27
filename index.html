@@ -1,0 +1,1731 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Annex27 — ISO 27001 Compliance voor het MKB | Nederland &amp; Belgi&euml;</title>
+  <meta name="description" content="ISO 27001 compliance die wél betaalbaar is. Annex27 combineert slimme technologie met gecertificeerde Lead Auditor expertise. Gap-analyse, beleidsgeneratie en audit-readiness voor het MKB." />
+  <meta name="keywords" content="ISO 27001, compliance, gap-analyse, MKB, audit, ISMS, NIS2, Nederland, België, beleidsgeneratie, certificering, Annex A" />
+  <meta name="author" content="Annex27" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://annex27.nl/" />
+
+  <meta property="og:title" content="Annex27 — ISO 27001 Compliance voor het MKB" />
+  <meta property="og:description" content="Betaalbare ISO 27001 compliance. Slimme technologie + Lead Auditor expertise." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://annex27.nl/" />
+  <meta property="og:locale" content="nl_NL" />
+  <meta property="og:site_name" content="Annex27" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #FAFAFA;
+      --bg-alt: #FFFFFF;
+      --bg-warm: #F5F3EF;
+      --surface: #FFFFFF;
+      --border: #E5E5E5;
+      --border-light: #F0F0F0;
+
+      --text-primary: #0F172A;
+      --text-secondary: #475569;
+      --text-muted: #94A3B8;
+
+      --accent: #0D9488;
+      --accent-hover: #0F766E;
+      --accent-light: #CCFBF1;
+      --accent-glow: rgba(13,148,136,0.08);
+
+      --warm: #D97706;
+      --warm-light: #FEF3C7;
+
+      --success: #059669;
+      --warning: #D97706;
+      --danger: #DC2626;
+
+      --radius-sm: 6px;
+      --radius: 10px;
+      --radius-lg: 16px;
+      --radius-xl: 24px;
+
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+      --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.06);
+      --shadow-lg: 0 12px 32px rgba(0,0,0,0.08);
+      --shadow-glow: 0 0 40px rgba(13,148,136,0.12);
+    }
+
+    /* ── BACKGROUND PATTERNS ─────────── */
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(3deg); }
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 0.4; }
+      50% { opacity: 0.8; }
+    }
+    @keyframes gradientMove {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    @keyframes shimmer {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+    .dot-pattern {
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(circle, rgba(13,148,136,0.08) 1px, transparent 1px);
+      background-size: 32px 32px;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .gradient-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Sora', -apple-system, system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text-secondary);
+      line-height: 1.7;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+
+    /* ── NAV ─────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: rgba(250,250,250,0.8);
+      backdrop-filter: blur(16px) saturate(180%);
+      -webkit-backdrop-filter: blur(16px) saturate(180%);
+      border-bottom: 1px solid var(--border-light);
+      height: 64px;
+      display: flex;
+      align-items: center;
+      padding: 0 5%;
+      transition: box-shadow 0.3s;
+    }
+    nav.scrolled { box-shadow: var(--shadow-sm); }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      max-width: 1120px;
+      margin: 0 auto;
+    }
+    .nav-logo {
+      font-family: 'Sora', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      text-decoration: none;
+      letter-spacing: -0.03em;
+    }
+    .nav-logo span {
+      background: linear-gradient(135deg, var(--accent), #0891B2);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 36px;
+      align-items: center;
+    }
+    .nav-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text-primary); }
+    .nav-cta {
+      background: var(--text-primary) !important;
+      color: white !important;
+      padding: 9px 20px;
+      border-radius: var(--radius-sm);
+      font-weight: 600 !important;
+      font-size: 0.85rem !important;
+      transition: opacity 0.2s !important;
+    }
+    .nav-cta:hover { opacity: 0.85; }
+    .nav-hamburger {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+      flex-direction: column;
+      gap: 5px;
+    }
+    .nav-hamburger span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background: var(--text-primary);
+      border-radius: 2px;
+      transition: all 0.3s;
+    }
+
+    /* ── HERO ────────────────────────────── */
+    .hero {
+      padding: 160px 0 100px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero .dot-pattern { opacity: 0.5; }
+    .hero .gradient-orb.orb-1 {
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(13,148,136,0.12), transparent 70%);
+      top: -20%; right: -10%;
+      animation: float 20s ease-in-out infinite;
+    }
+    .hero .gradient-orb.orb-2 {
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(217,119,6,0.06), transparent 70%);
+      bottom: -30%; left: -15%;
+      animation: float 25s ease-in-out infinite reverse;
+    }
+    .hero .container { position: relative; z-index: 1; }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--accent-light);
+      color: var(--accent-hover);
+      padding: 6px 16px;
+      border-radius: 100px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      margin-bottom: 32px;
+    }
+    .hero-badge svg { width: 14px; height: 14px; }
+    @keyframes revealUp {
+      from { opacity: 0; transform: translateY(40px); filter: blur(8px); }
+      to { opacity: 1; transform: translateY(0); filter: blur(0); }
+    }
+    @keyframes revealWord {
+      from { opacity: 0; transform: translateY(24px) rotateX(40deg); }
+      to { opacity: 1; transform: translateY(0) rotateX(0deg); }
+    }
+    @keyframes glowText {
+      0%, 100% { text-shadow: 0 0 20px rgba(13,148,136,0); }
+      50% { text-shadow: 0 0 40px rgba(13,148,136,0.15), 0 0 80px rgba(13,148,136,0.05); }
+    }
+    .hero h1 {
+      font-family: 'Sora', sans-serif;
+      font-size: clamp(2.8rem, 6vw, 4.2rem);
+      font-weight: 800;
+      color: var(--text-primary);
+      line-height: 1.08;
+      letter-spacing: -0.04em;
+      margin-bottom: 24px;
+      max-width: 780px;
+      margin-left: auto;
+      margin-right: auto;
+      perspective: 600px;
+    }
+    .hero h1 .line {
+      display: block;
+      opacity: 0;
+      animation: revealWord 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    .hero h1 .line:nth-child(1) { animation-delay: 0.1s; }
+    .hero h1 .line:nth-child(2) { animation-delay: 0.35s; }
+    .hero h1 .grad {
+      color: var(--accent);
+    }
+    .hero-desc {
+      font-size: 1.15rem;
+      color: var(--text-secondary);
+      line-height: 1.8;
+      max-width: 560px;
+      margin: 0 auto 40px;
+      animation: revealUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.55s both;
+    }
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 64px;
+      animation: revealUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.7s both;
+    }
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--accent);
+      color: white;
+      padding: 14px 28px;
+      border-radius: var(--radius);
+      font-weight: 600;
+      font-size: 0.95rem;
+      text-decoration: none;
+      transition: all 0.2s;
+      border: none;
+      cursor: pointer;
+    }
+    .btn-primary:hover { background: var(--accent-hover); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(13,148,136,0.3), 0 0 48px rgba(13,148,136,0.1); }
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--surface);
+      color: var(--text-primary);
+      padding: 14px 28px;
+      border-radius: var(--radius);
+      font-weight: 600;
+      font-size: 0.95rem;
+      text-decoration: none;
+      border: 1px solid var(--border);
+      transition: all 0.2s;
+    }
+    .btn-secondary:hover { border-color: var(--text-muted); background: var(--bg); }
+
+    /* Hero visual — interactive dashboard */
+    .dash {
+      max-width: 820px;
+      margin: 0 auto;
+      background: #0F172A;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 24px 80px rgba(15,23,42,0.35), 0 0 60px rgba(13,148,136,0.08);
+      position: relative;
+    }
+    .dash::before {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      border-radius: 17px;
+      background: linear-gradient(135deg, rgba(13,148,136,0.4), rgba(8,145,178,0.2), rgba(13,148,136,0.1));
+      z-index: -1;
+    }
+    .dash-toolbar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 20px;
+      background: rgba(255,255,255,0.03);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .dash-dot {
+      width: 12px; height: 12px;
+      border-radius: 50%;
+    }
+    .dash-dot.r { background: #EF4444; }
+    .dash-dot.y { background: #F59E0B; }
+    .dash-dot.g { background: #10B981; }
+    .dash-tab {
+      margin-left: 20px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: rgba(255,255,255,0.5);
+      background: rgba(255,255,255,0.06);
+      padding: 5px 14px;
+      border-radius: 6px;
+      letter-spacing: 0.02em;
+    }
+    .dash-tab.active {
+      color: var(--accent);
+      background: rgba(13,148,136,0.12);
+    }
+    .dash-body {
+      display: grid;
+      grid-template-columns: 1fr 200px;
+    }
+    .dash-main { padding: 24px; }
+    .dash-sidebar {
+      padding: 24px;
+      border-left: 1px solid rgba(255,255,255,0.06);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    /* Score ring */
+    .score-ring {
+      width: 130px; height: 130px;
+      position: relative;
+    }
+    .score-ring svg {
+      width: 130px; height: 130px;
+      transform: rotate(-90deg);
+    }
+    .score-ring-bg {
+      fill: none;
+      stroke: rgba(255,255,255,0.06);
+      stroke-width: 8;
+    }
+    .score-ring-fill {
+      fill: none;
+      stroke: var(--accent);
+      stroke-width: 8;
+      stroke-linecap: round;
+      stroke-dasharray: 339.292;
+      stroke-dashoffset: 339.292;
+      transition: stroke-dashoffset 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+      filter: drop-shadow(0 0 8px rgba(13,148,136,0.4));
+    }
+    .dash.in-view .score-ring-fill {
+      stroke-dashoffset: 128.931;
+    }
+    .score-ring-text {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .score-pct {
+      font-family: 'Sora', sans-serif;
+      font-size: 2rem;
+      font-weight: 800;
+      color: white;
+      line-height: 1;
+    }
+    .score-label {
+      font-size: 0.68rem;
+      color: rgba(255,255,255,0.4);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-top: 4px;
+    }
+    .score-pct {
+      transition: opacity 0.4s;
+    }
+    .sidebar-stats {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      width: 100%;
+      opacity: 0;
+      transition: opacity 0.6s 1.4s;
+    }
+    .dash.in-view .sidebar-stats { opacity: 1; }
+    .sidebar-stat {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.75rem;
+    }
+    .sidebar-stat-label { color: rgba(255,255,255,0.35); }
+    .sidebar-stat-val { color: rgba(255,255,255,0.8); font-weight: 600; }
+    .sidebar-stat-val.green { color: #34D399; }
+    .sidebar-stat-val.amber { color: #FBBF24; }
+    .sidebar-stat-val.red { color: #F87171; }
+
+    /* Scan rows */
+    .dash-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .dash-title {
+      font-family: 'Sora', sans-serif;
+      font-weight: 700;
+      font-size: 0.92rem;
+      color: white;
+    }
+    .dash-badge {
+      font-size: 0.68rem;
+      font-weight: 600;
+      color: var(--accent);
+      background: rgba(13,148,136,0.15);
+      padding: 4px 10px;
+      border-radius: 100px;
+      letter-spacing: 0.02em;
+    }
+    .scan-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      margin-bottom: 4px;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: default;
+      opacity: 0;
+      transform: translateX(-16px);
+    }
+    .dash.in-view .scan-row {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    .dash.in-view .scan-row:nth-child(1) { transition-delay: 0.3s; }
+    .dash.in-view .scan-row:nth-child(2) { transition-delay: 0.5s; }
+    .dash.in-view .scan-row:nth-child(3) { transition-delay: 0.7s; }
+    .dash.in-view .scan-row:nth-child(4) { transition-delay: 0.9s; }
+    .dash.in-view .scan-row:nth-child(5) { transition-delay: 1.1s; }
+    .scan-row:hover { background: rgba(255,255,255,0.04); }
+    .scan-row .indicator {
+      width: 32px; height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .scan-row .indicator svg {
+      width: 14px; height: 14px;
+      fill: none;
+      stroke-width: 2.5;
+      transition: stroke 0.4s;
+    }
+    .scan-row .indicator.pass { background: rgba(16,185,129,0.12); }
+    .scan-row .indicator.pass svg { stroke: #34D399; }
+    .scan-row .indicator.warn { background: rgba(245,158,11,0.12); }
+    .scan-row .indicator.warn svg { stroke: #FBBF24; }
+    .scan-row .indicator.fail { background: rgba(239,68,68,0.12); }
+    .scan-row .indicator.fail svg { stroke: #F87171; }
+
+    .scan-row .scan-name {
+      flex: 1;
+      font-size: 0.82rem;
+      color: rgba(255,255,255,0.7);
+      transition: color 0.4s;
+    }
+    .scan-row .scan-tag {
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 100px;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .scan-tag.pass { background: rgba(16,185,129,0.12); color: #34D399; }
+    .scan-tag.warn { background: rgba(245,158,11,0.12); color: #FBBF24; }
+    .scan-tag.fail { background: rgba(239,68,68,0.12); color: #F87171; }
+
+    /* Interactive: fixable rows turn green on hover */
+    .scan-row.fixable:hover .indicator.warn,
+    .scan-row.fixable:hover .indicator.fail {
+      background: rgba(16,185,129,0.12);
+    }
+    .scan-row.fixable:hover .indicator.warn svg,
+    .scan-row.fixable:hover .indicator.fail svg {
+      stroke: #34D399;
+    }
+    .scan-row.fixable:hover .scan-tag.warn,
+    .scan-row.fixable:hover .scan-tag.fail {
+      background: rgba(16,185,129,0.12);
+      color: #34D399;
+    }
+    .scan-row.fixable:hover .scan-name { color: rgba(255,255,255,0.95); }
+
+    .dash-footer {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.25);
+    }
+    .dash-footer .pulse-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    .dash-cta {
+      display: block;
+      text-align: center;
+      padding: 14px 24px;
+      background: var(--accent);
+      color: white;
+      font-family: 'Sora', sans-serif;
+      font-weight: 700;
+      font-size: 0.92rem;
+      text-decoration: none;
+      border-bottom-left-radius: 16px;
+      border-bottom-right-radius: 16px;
+      opacity: 0;
+      max-height: 0;
+      overflow: hidden;
+      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .dash-cta.visible {
+      opacity: 1;
+      max-height: 60px;
+      padding: 14px 24px;
+    }
+    .dash-cta:hover {
+      background: var(--accent-hover);
+    }
+
+    @media (max-width: 768px) {
+      .dash-body { grid-template-columns: 1fr; }
+      .dash-sidebar {
+        border-left: none;
+        border-top: 1px solid rgba(255,255,255,0.06);
+        flex-direction: row;
+        justify-content: space-around;
+      }
+      .score-ring { width: 100px; height: 100px; }
+      .score-ring svg { width: 100px; height: 100px; }
+      .score-pct { font-size: 1.5rem; }
+    }
+
+    /* ── TRUST BAR ────────────────────── */
+    .trust {
+      padding: 56px 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .trust .container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 48px;
+      flex-wrap: wrap;
+    }
+    .trust-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.88rem;
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+    .trust-item svg {
+      width: 18px; height: 18px;
+      stroke: var(--accent);
+      fill: none;
+      stroke-width: 2;
+    }
+
+    /* ── SECTIONS SHARED ─────────────── */
+    .section { padding: 120px 0; }
+    .section-alt { background: var(--bg-warm); position: relative; overflow: hidden; }
+    .section-alt .dot-pattern { opacity: 0.3; background-image: radial-gradient(circle, rgba(217,119,6,0.06) 1px, transparent 1px); }
+    .section-white { background: var(--bg-alt); }
+    .section-label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+    .section-title {
+      font-family: 'Sora', sans-serif;
+      font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+      margin-bottom: 16px;
+    }
+    .section-desc {
+      font-size: 1.05rem;
+      color: var(--text-secondary);
+      max-width: 560px;
+      line-height: 1.8;
+    }
+    .section-center { text-align: center; }
+    .section-center .section-desc { margin: 0 auto; }
+
+    /* ── PROBLEEM ─────────────────────── */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      margin-top: 56px;
+    }
+    .stat-card {
+      background: var(--surface);
+      padding: 48px 32px;
+      text-align: center;
+      transition: all 0.4s;
+      position: relative;
+      overflow: hidden;
+    }
+    .stat-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 120%, rgba(13,148,136,0.08), transparent 70%);
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+    .stat-card:hover::after { opacity: 1; }
+    .stat-card:hover { transform: translateY(-2px); }
+    .stat-number {
+      font-size: 2.8rem;
+      font-weight: 900;
+      color: var(--text-primary);
+      letter-spacing: -0.03em;
+      margin-bottom: 8px;
+      position: relative;
+      z-index: 1;
+    }
+    .stat-label {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* ── WERKWIJZE ────────────────────── */
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 48px;
+      margin-top: 64px;
+    }
+    .step { position: relative; }
+    .step-num {
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), #0891B2);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 0.95rem;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 16px rgba(13,148,136,0.25);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .step:hover .step-num {
+      transform: scale(1.1);
+      box-shadow: 0 6px 24px rgba(13,148,136,0.35);
+    }
+    .step-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+    .step-desc {
+      font-size: 0.92rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+    .step-connector {
+      position: absolute;
+      top: 20px;
+      left: calc(40px + 16px);
+      right: -32px;
+      height: 1px;
+      background: var(--border);
+    }
+    .step:last-child .step-connector { display: none; }
+
+    /* ── PAKKETTEN ────────────────────── */
+    .packages {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      margin-top: 56px;
+    }
+    .package {
+      background: var(--surface);
+      padding: 36px 28px;
+      position: relative;
+      transition: all 0.3s;
+    }
+    .package:hover { background: #FCFCFC; transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,0.06); z-index: 2; }
+    .package.featured {
+      background: var(--text-primary);
+      box-shadow: 0 24px 48px rgba(15,23,42,0.2);
+    }
+    .package.featured:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 32px 64px rgba(15,23,42,0.25), 0 0 48px rgba(13,148,136,0.1);
+    }
+    .package.featured .pkg-name,
+    .package.featured .pkg-amount,
+    .package.featured .pkg-period { color: white; }
+    .package.featured .pkg-desc { color: rgba(255,255,255,0.6); }
+    .package.featured .pkg-note { color: rgba(255,255,255,0.4); }
+    .package.featured .pkg-features li { color: rgba(255,255,255,0.8); }
+    .package.featured .pkg-features svg { stroke: var(--accent); }
+    .package.featured .pkg-label {
+      display: block;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      margin-bottom: 16px;
+    }
+    .package.featured .pkg-divider { border-color: rgba(255,255,255,0.1); }
+    .pkg-label { display: none; }
+    .pkg-name {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+    }
+    .pkg-desc {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+    .pkg-divider {
+      border: none;
+      border-top: 1px solid var(--border-light);
+      margin: 0 0 20px;
+    }
+    .pkg-amount {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      letter-spacing: -0.03em;
+    }
+    .pkg-period {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-left: 2px;
+    }
+    .pkg-note {
+      display: block;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+      margin-bottom: 24px;
+    }
+    .pkg-features {
+      list-style: none;
+      margin-bottom: 28px;
+    }
+    .pkg-features li {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      padding: 5px 0;
+    }
+    .pkg-features svg {
+      width: 16px; height: 16px;
+      stroke: var(--success);
+      fill: none;
+      stroke-width: 2.5;
+      flex-shrink: 0;
+      margin-top: 3px;
+    }
+    .pkg-btn {
+      display: block;
+      width: 100%;
+      text-align: center;
+      padding: 11px 20px;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      font-size: 0.88rem;
+      text-decoration: none;
+      transition: all 0.2s;
+      cursor: pointer;
+      border: none;
+      font-family: inherit;
+    }
+    .pkg-btn.dark {
+      background: var(--text-primary);
+      color: white;
+    }
+    .pkg-btn.dark:hover { opacity: 0.85; }
+    .pkg-btn.accent {
+      background: var(--accent);
+      color: white;
+    }
+    .pkg-btn.accent:hover { background: var(--accent-hover); }
+    .pkg-btn.outline {
+      background: transparent;
+      color: var(--text-primary);
+      border: 1px solid var(--border);
+    }
+    .pkg-btn.outline:hover { border-color: var(--text-muted); }
+    .package.featured .pkg-btn.outline {
+      border-color: rgba(255,255,255,0.15);
+      color: white;
+    }
+
+    /* ── WAAROM ────────────────────────── */
+    .why-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+      margin-top: 64px;
+    }
+    .why-list { display: flex; flex-direction: column; gap: 32px; }
+    .why-item { display: flex; gap: 16px; }
+    .why-icon {
+      width: 40px; height: 40px;
+      min-width: 40px;
+      border-radius: var(--radius);
+      background: var(--accent-glow);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .why-icon svg {
+      width: 18px; height: 18px;
+      stroke: var(--accent);
+      fill: none;
+      stroke-width: 2;
+    }
+    .why-item-title {
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+      font-size: 0.95rem;
+    }
+    .why-item-desc {
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+    .why-highlight {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 40px;
+      position: relative;
+      overflow: hidden;
+      transition: box-shadow 0.4s;
+    }
+    .why-highlight:hover { box-shadow: var(--shadow-lg), var(--shadow-glow); }
+    .why-highlight::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent), #0891B2, var(--accent-hover));
+      background-size: 200% 100%;
+      animation: gradientMove 3s ease infinite;
+    }
+    .why-highlight-quote {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      line-height: 1.6;
+      margin-bottom: 24px;
+      font-style: italic;
+    }
+    .why-highlight-stat {
+      display: flex;
+      gap: 32px;
+    }
+    .why-stat-item { text-align: center; }
+    .why-stat-num {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--accent);
+      letter-spacing: -0.02em;
+    }
+    .why-stat-label {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* ── FAQ ──────────────────────────── */
+    .faq-grid {
+      max-width: 720px;
+      margin: 56px auto 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .faq-item {
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: border-color 0.3s;
+    }
+    .faq-item.active { border-color: var(--border); }
+    .faq-q {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px 24px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      width: 100%;
+      text-align: left;
+      font-family: inherit;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    .faq-q svg {
+      width: 18px; height: 18px;
+      stroke: var(--text-muted);
+      fill: none;
+      stroke-width: 2;
+      transition: transform 0.3s;
+      flex-shrink: 0;
+    }
+    .faq-item.active .faq-q svg { transform: rotate(180deg); }
+    .faq-a {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+    .faq-a-inner {
+      padding: 0 24px 18px;
+      font-size: 0.92rem;
+      color: var(--text-secondary);
+      line-height: 1.8;
+    }
+
+    /* ── CTA ──────────────────────────── */
+    .cta {
+      padding: 120px 0;
+      text-align: center;
+      background: var(--text-primary);
+      position: relative;
+      overflow: hidden;
+    }
+    .cta::before {
+      content: '';
+      position: absolute;
+      width: 800px; height: 800px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(13,148,136,0.15), transparent 60%);
+      top: -40%; left: 50%;
+      transform: translateX(-50%);
+      animation: pulse 8s ease-in-out infinite;
+      pointer-events: none;
+    }
+    .cta .container { position: relative; z-index: 1; }
+    .cta .section-label { color: var(--accent); }
+    .cta .section-title { color: white; }
+    .cta .section-desc { color: rgba(255,255,255,0.5); margin: 0 auto 40px; }
+    .cta-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .cta .btn-primary { background: var(--accent); }
+    .cta .btn-secondary {
+      background: transparent;
+      color: white;
+      border-color: rgba(255,255,255,0.15);
+    }
+    .cta .btn-secondary:hover {
+      border-color: rgba(255,255,255,0.3);
+      background: rgba(255,255,255,0.05);
+    }
+
+    /* ── FOOTER ───────────────────────── */
+    footer {
+      padding: 56px 0 40px;
+      border-top: 1px solid var(--border-light);
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 48px;
+      margin-bottom: 48px;
+    }
+    .footer-brand {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      margin-top: 12px;
+      line-height: 1.7;
+    }
+    .footer-heading {
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-primary);
+      margin-bottom: 16px;
+    }
+    .footer-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .footer-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.88rem;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--text-secondary); }
+    .footer-bottom {
+      padding-top: 32px;
+      border-top: 1px solid var(--border-light);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    /* ── RESPONSIVE ───────────────────── */
+    @media (max-width: 1024px) {
+      .packages { grid-template-columns: repeat(2, 1fr); }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 2.4rem; }
+      .stats-grid { grid-template-columns: 1fr; }
+      .steps { grid-template-columns: 1fr; gap: 40px; }
+      .step-connector { display: none; }
+      .packages { grid-template-columns: 1fr; }
+      .why-grid { grid-template-columns: 1fr; gap: 48px; }
+      .footer-grid { grid-template-columns: 1fr; gap: 32px; }
+      .trust .container { gap: 24px; }
+
+      .nav-links { display: none; }
+      .nav-hamburger { display: flex; }
+      .nav-links.open {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 64px;
+        left: 0; right: 0;
+        background: rgba(250,250,250,0.98);
+        backdrop-filter: blur(16px);
+        padding: 20px 24px;
+        border-bottom: 1px solid var(--border-light);
+        gap: 12px;
+      }
+    }
+
+    /* ── ANIMATIONS ──────────────────── */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    :focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">annex<span>27</span></a>
+    <button class="nav-hamburger" aria-label="Menu" onclick="document.getElementById('navMenu').classList.toggle('open')">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links" id="navMenu">
+      <li><a href="#werkwijze">Werkwijze</a></li>
+      <li><a href="#pakketten">Pakketten</a></li>
+      <li><a href="#waarom">Over ons</a></li>
+      <li><a href="#faq">FAQ</a></li>
+      <li><a href="#contact" class="nav-cta">Start quickscan</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="dot-pattern"></div>
+  <div class="gradient-orb orb-1"></div>
+  <div class="gradient-orb orb-2"></div>
+  <div class="container">
+    <h1>
+      <span class="line"><span class="grad">ISO 27001 compliance</span></span>
+      <span class="line">voor het MKB.</span>
+    </h1>
+    <p class="hero-desc">
+      Certificeringstrajecten hoeven geen maanden te duren of tienduizenden euro's te kosten.
+      Annex27 maakt compliance bereikbaar met slimme tooling en persoonlijke expertise.
+    </p>
+    <div class="hero-actions">
+      <a href="gap-analyse.html" class="btn-primary">
+        Start gratis quickscan
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <a href="#pakketten" class="btn-secondary">Bekijk pakketten</a>
+    </div>
+
+    <div class="dash" style="animation: revealUp 1s cubic-bezier(0.16,1,0.3,1) 0.9s both;">
+      <div class="dash-toolbar">
+        <div class="dash-dot r"></div>
+        <div class="dash-dot y"></div>
+        <div class="dash-dot g"></div>
+        <span class="dash-tab active">Compliance Scan</span>
+      </div>
+      <div class="dash-body">
+        <div class="dash-main">
+          <div class="dash-header">
+            <span class="dash-title">Annex A Controls</span>
+            <span class="dash-badge">ISO 27001:2022</span>
+          </div>
+          <div class="scan-row">
+            <div class="indicator pass"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg></div>
+            <span class="scan-name">A.5 Organisatorische maatregelen</span>
+            <span class="scan-tag pass">Voldoet</span>
+          </div>
+          <div class="scan-row">
+            <div class="indicator pass"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg></div>
+            <span class="scan-name">A.6 Persoonsgebonden maatregelen</span>
+            <span class="scan-tag pass">Voldoet</span>
+          </div>
+          <div class="scan-row fixable" id="rowA7">
+            <div class="indicator warn"><svg viewBox="0 0 24 24"><path d="M12 9v4M12 17h.01"/></svg></div>
+            <span class="scan-name">A.7 Fysieke beveiliging</span>
+            <span class="scan-tag warn">Aandacht</span>
+          </div>
+          <div class="scan-row fixable" id="rowA8">
+            <div class="indicator fail"><svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></div>
+            <span class="scan-name">A.8 Technologische maatregelen</span>
+            <span class="scan-tag fail">Actie vereist</span>
+          </div>
+          <div class="scan-row">
+            <div class="indicator pass"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg></div>
+            <span class="scan-name">Risicobehandeling (6.1.3)</span>
+            <span class="scan-tag pass">Voldoet</span>
+          </div>
+          <div class="dash-footer">
+            <div class="pulse-dot"></div>
+            <span>Laatste scan: vandaag 14:32 &middot; 5 van 5 categorieën getoetst</span>
+          </div>
+        </div>
+        <div class="dash-sidebar">
+          <div class="score-ring">
+            <svg viewBox="0 0 120 120">
+              <circle class="score-ring-bg" cx="60" cy="60" r="54" />
+              <circle class="score-ring-fill" cx="60" cy="60" r="54" />
+            </svg>
+            <div class="score-ring-text">
+              <span class="score-pct" id="scorePct">0</span>
+              <span class="score-label">Score</span>
+            </div>
+          </div>
+          <div class="sidebar-stats">
+            <div class="sidebar-stat">
+              <span class="sidebar-stat-label">Voldoet</span>
+              <span class="sidebar-stat-val green" id="statPass">3/5</span>
+            </div>
+            <div class="sidebar-stat">
+              <span class="sidebar-stat-label">Aandacht</span>
+              <span class="sidebar-stat-val amber" id="statWarn">1/5</span>
+            </div>
+            <div class="sidebar-stat">
+              <span class="sidebar-stat-label">Actie vereist</span>
+              <span class="sidebar-stat-val red" id="statFail">1/5</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <a href="gap-analyse.html" class="dash-cta" id="dashCta">Start jouw quickscan →</a>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST -->
+<div class="trust">
+  <div class="container">
+    <div class="trust-item">
+      <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      Gecertificeerd Lead Auditor
+    </div>
+    <div class="trust-item">
+      <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      Nederland &amp; Belgi&euml;
+    </div>
+    <div class="trust-item">
+      <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+      NIS2 &amp; AVG meegenomen
+    </div>
+    <div class="trust-item">
+      <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+      Data blijft in de EU
+    </div>
+  </div>
+</div>
+
+<!-- PROBLEEM -->
+<section class="section section-center" id="probleem">
+  <div class="container">
+    <div class="section-label">Het probleem</div>
+    <h2 class="section-title">ISO 27001 is essentieel.<br />Maar voor het MKB onbereikbaar.</h2>
+    <p class="section-desc">
+      Traditionele trajecten kosten tienduizenden euro's en duren maanden.
+      Grote platformen richten zich op enterprise. Het MKB valt tussen wal en schip.
+    </p>
+    <div class="stats-grid fade-up">
+      <div class="stat-card">
+        <div class="stat-number">&euro;15.000+</div>
+        <div class="stat-label">Gemiddelde kosten van een<br />traditioneel compliance-traject</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">6-12 mnd</div>
+        <div class="stat-label">Doorlooptijd tot certificering<br />met een traditionele consultant</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">73%</div>
+        <div class="stat-label">Van MKB-bedrijven stelt certificering<br />uit vanwege kosten en complexiteit</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WERKWIJZE -->
+<section class="section section-alt" id="werkwijze">
+  <div class="dot-pattern"></div>
+  <div class="container" style="position:relative;z-index:1;">
+    <div class="section-center">
+      <div class="section-label">Werkwijze</div>
+      <h2 class="section-title">Drie stappen naar compliance</h2>
+      <p class="section-desc">
+        Onze aanpak combineert slimme tooling met persoonlijke expertise van een gecertificeerde Lead Auditor.
+      </p>
+    </div>
+    <div class="steps fade-up">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-connector"></div>
+        <div class="step-title">Scan &amp; analyseer</div>
+        <p class="step-desc">
+          Vul de online vragenlijst in. Uw antwoorden worden getoetst aan alle 93 Annex A controls. Binnen minuten heeft u een helder beeld van waar u staat.
+        </p>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-connector"></div>
+        <div class="step-title">Expert valideert</div>
+        <p class="step-desc">
+          Een gecertificeerde ISO 27001 Lead Auditor reviewt de analyse, controleert de bevindingen en voegt persoonlijke aanbevelingen toe.
+        </p>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-title">Aan de slag</div>
+        <p class="step-desc">
+          U ontvangt een professioneel rapport met compliance score, geprioriteerde actiepunten en concrete aanbevelingen — klaar om mee te werken.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PAKKETTEN -->
+<section class="section section-white" id="pakketten">
+  <div class="container">
+    <div class="section-center">
+      <div class="section-label">Pakketten</div>
+      <h2 class="section-title">Investeer in compliance,<br />niet in consultants</h2>
+      <p class="section-desc">
+        Van quickscan tot certificeringsbegeleiding. Elk pakket wordt persoonlijk gevalideerd door een Lead Auditor.
+      </p>
+    </div>
+
+    <div class="packages fade-up">
+      <div class="package">
+        <div class="pkg-label"></div>
+        <div class="pkg-name">Gap-analyse</div>
+        <p class="pkg-desc">Ontdek waar uw organisatie staat ten opzichte van ISO 27001:2022.</p>
+        <hr class="pkg-divider">
+        <span class="pkg-amount">&euro;349</span>
+        <span class="pkg-period">eenmalig</span>
+        <span class="pkg-note">Vergelijk: &euro;2.500-5.000 bij een consultant</span>
+        <ul class="pkg-features">
+          <li><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Volledige Annex A toetsing (93 controls)</li>
+          <li><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Analyse + Lead Auditor review</li>
+          <li><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Compliance score met benchmark</li>
+          <li><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Top 10 risico's geprioriteerd</li>
+          <li><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Concreet actieplan (PDF)</li>
+        </ul>
+        <a href="gap-analyse.html" class="pkg-btn outline">Start gap-analyse</a>
+      </div>
+
+      <div class="package featured">
+        <div class="pkg-label">Meest gekozen</div>
+        <div class="pkg-name">Beleidspakket</div>
+        <p class="pkg-desc">Kant-en-klare beleidsdocumenten op maat van uw organisatie.</p>
+        <hr class="pkg-divider">
+        <span class="pkg-amount">&euro;699</span>
+        <span class="pkg-period">— &euro;1.299</span>
+        <span class="pkg-note">Afhankelijk van bedrijfsomvang en sector</span>
+        <ul class="pkg-features">
+          <li><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Informatiebeveiligingsbeleid</li>
+          <li><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Acceptable use &amp; access control</li>
+          <li><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Incident response procedures</li>
+          <li><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Risicobeheer &amp; SoA template</li>
+          <li><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Aangepast aan uw sector</li>
+          <li><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Review door Lead Auditor</li>
+        </ul>
+        <a href="#contact" class="pkg-btn accent">Offerte aanvragen</a>
+      </div>
+
+      <div class="package">
+        <div class="pkg-label"></div>
+        <div class="pkg-name">Readiness Platform</div>
+        <p class="pkg-desc">Dashboard met voortgang, checklists en herinneringen tot u audit-ready bent.</p>
+        <hr class="pkg-divider">
+        <span class="pkg-amount">&euro;149</span>
+        <span class="pkg-period">/maand</span>
+        <span class="pkg-note">Geen minimum looptijd, maandelijks opzegbaar</span>
+        <ul class="pkg-features">
+          <li><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Compliance dashboard</li>
+          <li><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Checklist per Annex A control</li>
+          <li><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Evidence upload &amp; beheer</li>
+          <li><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Automatische herinneringen</li>
+          <li><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Maandelijkse voortgangsrapportage</li>
+        </ul>
+        <a href="#contact" class="pkg-btn outline">Meer informatie</a>
+      </div>
+
+      <div class="package">
+        <div class="pkg-label"></div>
+        <div class="pkg-name">Pre-audit Review</div>
+        <p class="pkg-desc">Persoonlijke review door een Lead Auditor voordat de certificeerder langskomt.</p>
+        <hr class="pkg-divider">
+        <span class="pkg-amount">&euro;1.999</span>
+        <span class="pkg-period">eenmalig</span>
+        <span class="pkg-note">Vergelijk: &euro;3.000-5.000 bij een consultant</span>
+        <ul class="pkg-features">
+          <li><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Volledige documentatie-review</li>
+          <li><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Simulatie certificeringsaudit</li>
+          <li><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>1-op-1 met Lead Auditor</li>
+          <li><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Resterende gaps identificeren</li>
+          <li><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Medewerkers coachen voor audit</li>
+          <li><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Audit-ready garantie</li>
+        </ul>
+        <a href="#contact" class="pkg-btn outline">Plan een gesprek</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WAAROM ANNEX27 -->
+<section class="section" id="waarom">
+  <div class="container">
+    <div class="why-grid">
+      <div>
+        <div class="section-label">Waarom Annex27</div>
+        <h2 class="section-title">Compliance hoeft niet complex te zijn.</h2>
+        <div class="why-list">
+          <div class="why-item">
+            <div class="why-icon">
+              <svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
+            <div>
+              <div class="why-item-title">Persoonlijke expertise</div>
+              <div class="why-item-desc">Elke analyse wordt gevalideerd door een gecertificeerde ISO 27001 Lead Auditor. Geen anoniem platform, maar een expert die uw organisatie begrijpt.</div>
+            </div>
+          </div>
+          <div class="why-item">
+            <div class="why-icon">
+              <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            <div>
+              <div class="why-item-title">Gebouwd voor de Benelux</div>
+              <div class="why-item-desc">NIS2-richtlijn, BIO en AVG zijn standaard meegenomen. Geen Amerikaanse one-size-fits-all, maar afgestemd op Nederlandse en Belgische wetgeving.</div>
+            </div>
+          </div>
+          <div class="why-item">
+            <div class="why-icon">
+              <svg viewBox="0 0 24 24"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+            </div>
+            <div>
+              <div class="why-item-title">90% goedkoper</div>
+              <div class="why-item-desc">Geen verborgen kosten, geen per-seat pricing, geen jarenlange contracten. Slimme tooling houdt de prijs laag zonder concessies aan kwaliteit.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="why-highlight fade-up">
+        <p class="why-highlight-quote">
+          &ldquo;De meeste MKB-bedrijven weten dat ze ISO 27001 nodig hebben. Ze weten alleen niet hoe ze moeten beginnen zonder een heel consultancy-budget.&rdquo;
+        </p>
+        <div class="why-highlight-stat">
+          <div class="why-stat-item">
+            <div class="why-stat-num">93</div>
+            <div class="why-stat-label">Annex A controls</div>
+          </div>
+          <div class="why-stat-item">
+            <div class="why-stat-num">48u</div>
+            <div class="why-stat-label">Rapport levertijd</div>
+          </div>
+          <div class="why-stat-item">
+            <div class="why-stat-num">NL/BE</div>
+            <div class="why-stat-label">Wet- en regelgeving</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section section-alt" id="faq">
+  <div class="container">
+    <div class="section-center">
+      <div class="section-label">Veelgestelde vragen</div>
+      <h2 class="section-title">Alles wat u wilt weten</h2>
+    </div>
+    <div class="faq-grid">
+      <div class="faq-item">
+        <button class="faq-q">Vervangt Annex27 een certificeringsaudit?<svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button>
+        <div class="faq-a"><div class="faq-a-inner">Nee. Annex27 helpt u klaar te worden voor certificering. De offici&euml;le audit wordt uitgevoerd door een geaccrediteerde instelling (BSI, T&Uuml;V, Kiwa). Wij zorgen ervoor dat u daar met vertrouwen naartoe gaat.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">Wat is het verschil met Vanta of Drata?<svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button>
+        <div class="faq-a"><div class="faq-a-inner">Vanta en Drata richten zich op grotere organisaties met budgetten van &euro;10.000+ per jaar. Annex27 is specifiek gebouwd voor het MKB in de Benelux, met lokale wetgeving standaard inbegrepen, en tegen een fractie van de prijs.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">Hoe lang duurt een gap-analyse?<svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button>
+        <div class="faq-a"><div class="faq-a-inner">De online vragenlijst duurt circa 30-45 minuten. Binnen 48 uur ontvangt u het volledige rapport, inclusief de validatie door onze Lead Auditor. Vergelijk dit met 2-4 weken bij een traditionele consultant.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">Is Annex27 ook geschikt voor NIS2 compliance?<svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button>
+        <div class="faq-a"><div class="faq-a-inner">Ja. ISO 27001 vormt een solide basis voor NIS2. Onze analyses en beleidsdocumenten houden rekening met de NIS2-richtlijn en de specifieke eisen voor essenti&euml;le en belangrijke entiteiten in Nederland en Belgi&euml;.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">Kan ik Annex27 gebruiken als ik al gedeeltelijk compliant ben?<svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button>
+        <div class="faq-a"><div class="faq-a-inner">Absoluut. De gap-analyse meet precies waar u staat — ook als u al stappen heeft gezet. U krijgt een helder overzicht van wat er nog ontbreekt en welke acties prioriteit hebben.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta" id="contact">
+  <div class="container">
+    <div class="section-label">Klaar om te beginnen?</div>
+    <h2 class="section-title">Ontdek in 30 minuten waar<br />uw organisatie staat.</h2>
+    <p class="section-desc">
+      Start met de gratis quickscan en ontvang direct inzicht in uw ISO 27001 compliance.
+      Geen verplichtingen, geen verrassingen.
+    </p>
+    <div class="cta-actions">
+      <a href="gap-analyse.html" class="btn-primary">
+        Start gratis quickscan
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <a href="mailto:info@annex27.nl" class="btn-secondary">Neem contact op</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <a href="#" class="nav-logo">annex<span>27</span></a>
+        <p class="footer-brand">
+          ISO 27001 compliance platform voor het MKB in Nederland en Belgi&euml;.
+          Slimme tooling, persoonlijke expertise.
+        </p>
+      </div>
+      <div>
+        <div class="footer-heading">Platform</div>
+        <ul class="footer-links">
+          <li><a href="gap-analyse.html">Gap-analyse</a></li>
+          <li><a href="#pakketten">Pakketten</a></li>
+          <li><a href="#werkwijze">Werkwijze</a></li>
+          <li><a href="#faq">FAQ</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-heading">Diensten</div>
+        <ul class="footer-links">
+          <li><a href="#pakketten">Beleidsgeneratie</a></li>
+          <li><a href="#pakketten">Readiness Platform</a></li>
+          <li><a href="#pakketten">Pre-audit Review</a></li>
+          <li><a href="#pakketten">NIS2 Begeleiding</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-heading">Contact</div>
+        <ul class="footer-links">
+          <li><a href="mailto:info@annex27.nl">info@annex27.nl</a></li>
+          <li><a href="https://www.linkedin.com/in/raoulhaas" target="_blank">LinkedIn</a></li>
+          <li><a href="#">Privacybeleid</a></li>
+          <li><a href="#">Algemene voorwaarden</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 Annex27. Alle rechten voorbehouden.</span>
+      <span>KvK: [nog in te vullen] &bull; BTW: [nog in te vullen]</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // FAQ
+  document.querySelectorAll('.faq-q').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const item = btn.closest('.faq-item');
+      const answer = item.querySelector('.faq-a');
+      const isActive = item.classList.contains('active');
+      document.querySelectorAll('.faq-item').forEach(i => {
+        i.classList.remove('active');
+        i.querySelector('.faq-a').style.maxHeight = null;
+      });
+      if (!isActive) {
+        item.classList.add('active');
+        answer.style.maxHeight = answer.scrollHeight + 'px';
+      }
+    });
+  });
+
+  // Scroll animations
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
+
+  // Nav shadow on scroll
+  window.addEventListener('scroll', () => {
+    document.querySelector('nav').classList.toggle('scrolled', window.scrollY > 10);
+  });
+
+  // Interactive compliance dashboard — hover to fix, stays fixed, resets at 100%
+  const scorePct = document.getElementById('scorePct');
+  const ring = document.querySelector('.score-ring-fill');
+  const statPass = document.getElementById('statPass');
+  const statWarn = document.getElementById('statWarn');
+  const statFail = document.getElementById('statFail');
+  const circumference = 2 * Math.PI * 54;
+  const checkPath = 'M5 12l5 5L20 7';
+  let fixedRows = new Set();
+  let resetTimeout = null;
+  const rowData = [];
+
+  function updateDash() {
+    const count = fixedRows.size;
+    const score = Math.min(62 + count * 19, 100);
+    const offset = circumference - (score / 100) * circumference;
+
+    scorePct.textContent = score;
+    ring.style.strokeDashoffset = offset;
+
+    statPass.textContent = (3 + count) + '/5';
+    statWarn.textContent = (count >= 1 ? '0' : '1') + '/5';
+    statWarn.className = 'sidebar-stat-val' + (count >= 1 ? '' : ' amber');
+    statFail.textContent = (count >= 2 ? '0' : '1') + '/5';
+    statFail.className = 'sidebar-stat-val' + (count >= 2 ? '' : ' red');
+
+    const cta = document.getElementById('dashCta');
+    if (score >= 100) {
+      cta.classList.add('visible');
+      clearTimeout(resetTimeout);
+      resetTimeout = setTimeout(() => { resetAll(); cta.classList.remove('visible'); }, 4000);
+    } else {
+      cta.classList.remove('visible');
+    }
+  }
+
+  function resetAll() {
+    fixedRows.clear();
+    rowData.forEach(d => {
+      d.indicator.className = d.origIndicatorClass;
+      d.svg.setAttribute('d', d.origPath);
+      d.tag.className = d.origTagClass;
+      d.tag.textContent = d.origTagText;
+    });
+    updateDash();
+  }
+
+  // Animate dashboard into view
+  const dashEl = document.querySelector('.dash');
+  const dashObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        dashEl.classList.add('in-view');
+        // Count up score from 0 to 62
+        let current = 0;
+        const target = 62;
+        const duration = 1200;
+        const start = performance.now();
+        function countUp(now) {
+          const elapsed = now - start;
+          const progress = Math.min(elapsed / duration, 1);
+          const eased = 1 - Math.pow(1 - progress, 3);
+          current = Math.round(eased * target);
+          scorePct.textContent = current;
+          if (progress < 1) requestAnimationFrame(countUp);
+        }
+        setTimeout(() => requestAnimationFrame(countUp), 300);
+        dashObs.unobserve(dashEl);
+      }
+    });
+  }, { threshold: 0.3 });
+  dashObs.observe(dashEl);
+
+  document.querySelectorAll('.scan-row.fixable').forEach(row => {
+    const indicator = row.querySelector('.indicator');
+    const svg = indicator.querySelector('svg path');
+    const tag = row.querySelector('.scan-tag');
+    const data = {
+      row,
+      indicator,
+      svg,
+      tag,
+      origIndicatorClass: indicator.className,
+      origTagClass: tag.className,
+      origTagText: tag.textContent,
+      origPath: svg.getAttribute('d')
+    };
+    rowData.push(data);
+
+    row.addEventListener('mouseenter', () => {
+      if (fixedRows.has(row)) return;
+      fixedRows.add(row);
+      indicator.className = 'indicator pass';
+      svg.setAttribute('d', checkPath);
+      tag.className = 'scan-tag pass';
+      tag.textContent = 'Voldoet';
+      updateDash();
+    });
+  });
+</script>
+
+</body>
+</html>
