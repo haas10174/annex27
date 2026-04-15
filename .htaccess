@@ -76,6 +76,11 @@ RedirectMatch 404 /\.(env|git|htaccess|annex27_ftp|vscode)(/|$)
   RewriteRule ^docs/.+\.(docx|pdf|xlsx)$ - [F,L]
 </IfModule>
 
+# ─── Correct Content-Type voor webmanifest ──────────────────
+<IfModule mod_mime.c>
+  AddType application/manifest+json .webmanifest
+</IfModule>
+
 # ─── Cache static assets ─────────────────────────────────────
 <IfModule mod_expires.c>
   ExpiresActive On
