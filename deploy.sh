@@ -31,3 +31,13 @@ if [ -f "$SRC/.well-known/security.txt" ]; then
 fi
 
 echo "Deploy complete! Site live op https://annex27.nl"
+
+# Ook naar GitHub pushen als er lokale wijzigingen zijn
+cd "$SRC" || exit 0
+if [ -n "$(git status --porcelain)" ]; then
+  echo "Committing changes to GitHub..."
+  git add -A
+  git -c commit.gpgsign=false commit -m "deploy: $(date '+%Y-%m-%d %H:%M')" >/dev/null && git push --quiet && echo "GitHub: ok" || echo "GitHub: FAILED"
+else
+  echo "GitHub: niks om te committen"
+fi
