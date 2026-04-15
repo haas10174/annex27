@@ -307,8 +307,42 @@
       <input class="order-input" type="text" name="btw_nummer" placeholder="BTW-nummer (optioneel)" maxlength="50" pattern="[A-Za-z0-9.\-\s]{0,50}" />
       <!-- Honeypot: hidden field that real users won't fill in; bots often fill all fields -->
       <input type="text" name="website_url" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;opacity:0;pointer-events:none;" aria-hidden="true" />
-      <button type="submit" class="order-pay" id="payBtn">Betalen via iDEAL / Bancontact</button>
+      <button type="submit" class="order-pay" id="payBtn">Betalen via iDEAL, Bancontact of creditcard</button>
     </form>
+
+    <div class="pay-logos" aria-label="Geaccepteerde betaalmethoden">
+      <svg class="pl-svg" viewBox="0 0 64 40" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="iDEAL">
+        <rect width="64" height="40" rx="5" fill="#fff" stroke="#E5E5E5"/>
+        <g transform="translate(9,10)">
+          <rect x="0" y="0" width="10" height="20" rx="2" fill="#0C2074"/>
+          <circle cx="5" cy="4.5" r="1.4" fill="#fff"/>
+          <rect x="3.6" y="7.5" width="2.8" height="10" fill="#fff"/>
+        </g>
+        <text x="44" y="20" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-weight="900" font-size="10" fill="#CD0067" letter-spacing="-0.3">DEAL</text>
+        <circle cx="56" cy="13" r="1.3" fill="#CD0067"/>
+      </svg>
+      <svg class="pl-svg" viewBox="0 0 64 40" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Bancontact">
+        <rect width="64" height="40" rx="5" fill="#fff" stroke="#E5E5E5"/>
+        <rect x="12" y="12" width="18" height="16" rx="1" fill="#1E3791"/>
+        <rect x="26" y="16" width="18" height="16" rx="1" fill="#FFD500"/>
+        <rect x="26" y="16" width="4" height="12" fill="#1E3791"/>
+        <text x="50" y="22" text-anchor="middle" font-family="Arial,sans-serif" font-weight="700" font-size="7" fill="#1E3791">BC</text>
+      </svg>
+      <svg class="pl-svg" viewBox="0 0 64 40" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Visa">
+        <rect width="64" height="40" rx="5" fill="#fff" stroke="#E5E5E5"/>
+        <text x="32" y="26" text-anchor="middle" font-family="Arial Black,Helvetica,sans-serif" font-weight="900" font-size="16" fill="#1A1F71" font-style="italic" letter-spacing="0">VISA</text>
+      </svg>
+      <svg class="pl-svg" viewBox="0 0 64 40" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Mastercard">
+        <rect width="64" height="40" rx="5" fill="#fff" stroke="#E5E5E5"/>
+        <circle cx="26" cy="20" r="9" fill="#EB001B"/>
+        <circle cx="38" cy="20" r="9" fill="#F79E1B" fill-opacity="0.9"/>
+        <path d="M32 13.5 A9 9 0 0 1 32 26.5 A9 9 0 0 1 32 13.5" fill="#FF5F00"/>
+      </svg>
+    </div>
+    <style>
+      .pay-logos{display:flex;gap:8px;align-items:center;justify-content:center;flex-wrap:wrap;margin-top:14px;}
+      .pay-logos .pl-svg{height:28px;width:auto;}
+    </style>
 
     <div class="order-trust">
       <div class="order-trust-item">
