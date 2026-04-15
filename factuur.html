@@ -43,16 +43,21 @@
     .sheet {
       background: #fff;
       border-radius: 12px;
-      padding: 48px 56px;
+      padding: 56px 64px;
       box-shadow: 0 4px 24px rgba(15,23,42,0.06);
       position: relative;
+      min-height: 273mm;
+      display: flex;
+      flex-direction: column;
     }
     .sheet::before {
       content: ''; position: absolute; top: 0; left: 0; right: 0; height: 5px;
       background: var(--accent-light);
       border-radius: 12px 12px 0 0;
     }
-    .head { display: flex; justify-content: space-between; align-items: flex-start; gap: 24px; margin-bottom: 40px; }
+    .sheet-body { flex: 1; display: flex; flex-direction: column; }
+    .items-section { flex: 1; display: flex; flex-direction: column; }
+    .head { display: flex; justify-content: space-between; align-items: flex-start; gap: 24px; margin-bottom: 56px; }
     .brand {
       font-family: 'Sora', sans-serif; font-size: 1.6rem; font-weight: 800; letter-spacing: -0.02em;
     }
@@ -94,11 +99,72 @@
       font-family: 'Sora', sans-serif; font-weight: 800; font-size: 1.1rem; color: var(--ink);
     }
 
+    .deliverables {
+      margin-top: 32px; padding: 22px 26px;
+      background: #F7FBFB;
+      border: 1px solid #D9EEEC;
+      border-left: 3px solid var(--accent-light);
+      border-radius: 8px;
+    }
+    .deliverables h3 {
+      font-family: 'Sora', sans-serif; font-size: 0.82rem; font-weight: 800;
+      letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 14px;
+    }
+    .deliverables ul { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 10px 24px; }
+    .deliverables li {
+      font-size: 0.86rem; color: var(--ink); line-height: 1.5;
+      position: relative; padding-left: 22px;
+    }
+    .deliverables li::before {
+      content: ''; position: absolute; left: 0; top: 7px;
+      width: 14px; height: 8px;
+      border-left: 2px solid var(--accent); border-bottom: 2px solid var(--accent);
+      transform: rotate(-45deg);
+    }
+
+    .next-steps {
+      margin-top: 24px; padding: 18px 22px;
+      background: #FAFBFC;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 16px; align-items: start;
+    }
+    .next-steps-icon {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--accent); color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Sora', sans-serif; font-weight: 800; font-size: 1rem;
+      flex-shrink: 0;
+    }
+    .next-steps h4 {
+      font-family: 'Sora', sans-serif; font-size: 0.88rem; font-weight: 800;
+      color: var(--ink); margin-bottom: 8px;
+    }
+    .next-steps ol { padding-left: 18px; margin: 0; font-size: 0.82rem; color: var(--ink-2); line-height: 1.7; }
+    .next-steps ol li { padding: 2px 0; }
+
+    .thanks {
+      margin-top: 28px; padding: 16px 22px;
+      font-size: 0.86rem; color: var(--ink-2); line-height: 1.6;
+      border-left: 2px solid var(--accent-light);
+      font-style: italic;
+    }
+    .thanks strong { color: var(--ink); font-style: normal; font-weight: 700; }
+
     .footer {
-      margin-top: 48px; padding-top: 28px; border-top: 1px solid var(--border);
+      margin-top: auto; padding-top: 28px; border-top: 1px solid var(--border);
       display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; font-size: 0.78rem; color: var(--ink-2);
     }
     .footer .label { font-size: 0.64rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+    .legal-line {
+      margin-top: 24px; padding-top: 14px; border-top: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center; gap: 16px;
+      font-size: 0.7rem; color: var(--muted);
+    }
+    .legal-line a { color: var(--muted); text-decoration: underline; }
+    .legal-line a:hover { color: var(--ink-2); }
 
     .loading, .error {
       text-align: center; padding: 60px 20px; color: var(--muted); font-size: 0.92rem;
@@ -114,10 +180,11 @@
       @page { margin: 12mm; size: A4; }
     }
     @media (max-width: 640px) {
-      .sheet { padding: 32px 22px; }
+      .sheet { padding: 32px 22px; min-height: auto; }
       .meta { grid-template-columns: 1fr; gap: 20px; }
       .footer { grid-template-columns: 1fr; }
       .doc-title h1 { font-size: 1.6rem; }
+      .deliverables ul { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -159,6 +226,44 @@ const PRODUCT_DESCR = {
   nis2: 'NIS2 Readiness Check: alle 10 Art. 21 maatregelen, meldingsplicht-check en bestuursaansprakelijkheid assessment.',
   custom: ''
 };
+const PRODUCT_DELIVERABLES = {
+  gap: [
+    'Volledig rapport (PDF) + klantportaal-toegang',
+    'Gap-analyse op alle 93 Annex A controls',
+    'Prioriteitslijst met concrete remediatie-stappen',
+    'Persoonlijke review door ISO 27001 Lead Auditor',
+    'Oplevering binnen 48u na evidence upload'
+  ],
+  beleid: [
+    '27 basispakket beleidsdocumenten + werkinstructies',
+    'Sector-specifieke aanpassingen inbegrepen',
+    'Word + PDF versies, direct bruikbaar',
+    'Goedkeuring door ISO 27001 Lead Auditor',
+    '1 revisieronde inbegrepen'
+  ],
+  readiness: [
+    'Maandelijkse toegang tot Readiness Platform',
+    'Documentenbibliotheek + evidence upload',
+    'Live compliance-score + dashboard',
+    'Onbeperkt wijzigingen + updates',
+    'Direct chat-support met Lead Auditor'
+  ],
+  preaudit: [
+    'Persoonlijke 1-op-1 pre-audit sessie (2u)',
+    'Volledige walkthrough van alle Annex A controls',
+    'Specifieke aandachtspunten voor certificerende instantie',
+    'Eindrapport met go/no-go advies',
+    'Oplevering binnen 1 week na sessie'
+  ],
+  nis2: [
+    'Alle 10 Art. 21 NIS2-maatregelen beoordeeld',
+    'Meldingsplicht-check (24u / 72u / 1 maand)',
+    'Bestuursaansprakelijkheid assessment',
+    'Concrete gap-lijst met prioriteiten',
+    'Voldoet aan NIS2-transpositie NL/BE'
+  ],
+  custom: []
+};
 
 function esc(s) { return String(s ?? '').replace(/[<>&"]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c])); }
 function fmt(n) { return '\u20AC ' + Number(n).toLocaleString('nl-NL', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
@@ -192,6 +297,8 @@ function fmt(n) { return '\u20AC ' + Number(n).toLocaleString('nl-NL', { minimum
 
   document.title = 'Factuur ' + data.invoice_number + ' — Annex27';
 
+  const deliverables = PRODUCT_DELIVERABLES[data.product] || [];
+
   sheet.innerHTML = `
     <div class="head">
       <div>
@@ -205,64 +312,97 @@ function fmt(n) { return '\u20AC ' + Number(n).toLocaleString('nl-NL', { minimum
       </div>
     </div>
 
-    <div class="meta">
-      <div class="meta-block">
-        <div class="label">Van</div>
-        <div class="name">Annex27</div>
-        <div class="line">
-          info@annex27.nl<br/>
-          KBO 1006.203.170<br/>
-          ${data.btw_regime === 'none' ? 'Kleine onderneming &mdash; vrijgesteld van BTW (Art. 56bis WBTW)' : 'BTW: BE ' + (data.seller_btw || 'in aanvraag')}
+    <div class="sheet-body">
+      <div class="meta">
+        <div class="meta-block">
+          <div class="label">Van</div>
+          <div class="name">Annex27</div>
+          <div class="line">
+            info@annex27.nl<br/>
+            KBO 1006.203.170<br/>
+            ${data.btw_regime === 'none' ? 'Kleine onderneming &mdash; vrijgesteld van BTW (Art. 56bis WBTW)' : 'BTW: BE ' + (data.seller_btw || 'in aanvraag')}
+          </div>
+        </div>
+        <div class="meta-block">
+          <div class="label">Aan</div>
+          <div class="name">${esc(data.bedrijf)}</div>
+          <div class="line">
+            ${esc(data.naam)}<br/>
+            ${data.adres ? esc(data.adres) + '<br/>' : ''}
+            ${esc(data.email)}<br/>
+            ${data.btw_nummer ? 'BTW: ' + esc(data.btw_nummer) : ''}
+          </div>
         </div>
       </div>
-      <div class="meta-block">
-        <div class="label">Aan</div>
-        <div class="name">${esc(data.bedrijf)}</div>
-        <div class="line">
-          ${esc(data.naam)}<br/>
-          ${data.adres ? esc(data.adres) + '<br/>' : ''}
-          ${esc(data.email)}<br/>
-          ${data.btw_nummer ? 'BTW: ' + esc(data.btw_nummer) : ''}
+
+      <div class="items-section">
+        <table class="items">
+          <thead>
+            <tr>
+              <th>Omschrijving</th>
+              <th class="right">Bedrag</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <strong>${esc(productLabel)}</strong>
+                ${productDescr ? '<div class="desc">' + esc(productDescr) + '</div>' : ''}
+              </td>
+              <td class="right">${fmt(data.subtotal)}</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="totals">
+          ${data.btw_regime === 'none' ? `
+            <div class="totals-row grand"><span>Totaal</span><span>${fmt(data.total)}</span></div>
+            <div style="margin-top:10px;font-size:0.76rem;color:var(--muted);text-align:right;max-width:100%;line-height:1.5;">
+              Geen BTW van toepassing &mdash; Annex27 is kleine onderneming (BTW-vrijgesteld, Art. 56bis WBTW) zolang BTW-nummer in aanvraag is.
+            </div>
+          ` : data.btw_regime === 'reverse_charge' ? `
+            <div class="totals-row"><span>Subtotaal</span><span>${fmt(data.subtotal)}</span></div>
+            <div class="totals-row"><span>BTW verlegd naar afnemer</span><span>&mdash;</span></div>
+            <div class="totals-row grand"><span>Totaal</span><span>${fmt(data.total)}</span></div>
+            <div style="margin-top:10px;font-size:0.76rem;color:var(--muted);text-align:right;line-height:1.5;">
+              BTW verlegd &mdash; art. 196 BTW-richtlijn. BTW-aangifte door afnemer.
+            </div>
+          ` : `
+            <div class="totals-row"><span>Subtotaal</span><span>${fmt(data.subtotal)}</span></div>
+            <div class="totals-row"><span>BTW (21%)</span><span>${fmt(data.btw_amount)}</span></div>
+            <div class="totals-row grand"><span>Totaal</span><span>${fmt(data.total)}</span></div>
+          `}
+        </div>
+
+        <div style="clear:both;"></div>
+
+        ${deliverables.length ? `
+        <div class="deliverables">
+          <h3>Wat u ontvangt</h3>
+          <ul>
+            ${deliverables.map(d => '<li>' + esc(d) + '</li>').join('')}
+          </ul>
+        </div>` : ''}
+
+        <div class="next-steps">
+          <div class="next-steps-icon">&rarr;</div>
+          <div>
+            <h4>Volgende stappen</h4>
+            <ol>
+              <li>U ontvangt binnen enkele minuten een bevestigingsmail.</li>
+              <li>Binnen 24 uur sturen wij de logingegevens voor uw klantportaal.</li>
+              <li>Log in op <a href="https://annex27.nl/portal" style="color:var(--accent);">annex27.nl/portal</a> en start direct met uw traject.</li>
+              <li>Bij vragen: antwoord op deze e-mail of mail naar info@annex27.nl &mdash; persoonlijk contact met uw Lead Auditor.</li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="thanks">
+          <strong>Dank voor uw vertrouwen in Annex27.</strong> Wij kijken ernaar uit uw organisatie te begeleiden naar ISO 27001 compliance &mdash; zonder overbodige complexiteit, met persoonlijke expertise.
+          <br/><br/>
+          &mdash; Raoul Haas, ISO 27001 Lead Auditor
         </div>
       </div>
-    </div>
-
-    <table class="items">
-      <thead>
-        <tr>
-          <th>Omschrijving</th>
-          <th class="right">Bedrag</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            <strong>${esc(productLabel)}</strong>
-            ${productDescr ? '<div class="desc">' + esc(productDescr) + '</div>' : ''}
-          </td>
-          <td class="right">${fmt(data.subtotal)}</td>
-        </tr>
-      </tbody>
-    </table>
-
-    <div class="totals">
-      ${data.btw_regime === 'none' ? `
-        <div class="totals-row grand"><span>Totaal</span><span>${fmt(data.total)}</span></div>
-        <div style="margin-top:10px;font-size:0.76rem;color:var(--muted);text-align:right;max-width:100%;line-height:1.5;">
-          Geen BTW van toepassing &mdash; Annex27 is kleine onderneming (BTW-vrijgesteld, Art. 56bis WBTW) zolang BTW-nummer in aanvraag is.
-        </div>
-      ` : data.btw_regime === 'reverse_charge' ? `
-        <div class="totals-row"><span>Subtotaal</span><span>${fmt(data.subtotal)}</span></div>
-        <div class="totals-row"><span>BTW verlegd naar afnemer</span><span>&mdash;</span></div>
-        <div class="totals-row grand"><span>Totaal</span><span>${fmt(data.total)}</span></div>
-        <div style="margin-top:10px;font-size:0.76rem;color:var(--muted);text-align:right;line-height:1.5;">
-          BTW verlegd &mdash; art. 196 BTW-richtlijn. BTW-aangifte door afnemer.
-        </div>
-      ` : `
-        <div class="totals-row"><span>Subtotaal</span><span>${fmt(data.subtotal)}</span></div>
-        <div class="totals-row"><span>BTW (21%)</span><span>${fmt(data.btw_amount)}</span></div>
-        <div class="totals-row grand"><span>Totaal</span><span>${fmt(data.total)}</span></div>
-      `}
     </div>
 
     <div class="footer">
@@ -276,8 +416,14 @@ function fmt(n) { return '\u20AC ' + Number(n).toLocaleString('nl-NL', { minimum
       </div>
       <div>
         <div class="label">Vragen?</div>
-        info@annex27.nl
+        info@annex27.nl<br/>
+        <span style="color:var(--muted);">Reactie binnen 24u</span>
       </div>
+    </div>
+
+    <div class="legal-line">
+      <span>Annex27 &middot; KBO 1006.203.170 &middot; annex27.nl</span>
+      <span><a href="https://annex27.nl/trust" target="_blank">Trust &amp; Security</a> &middot; <a href="https://annex27.nl/faq" target="_blank">Voorwaarden</a></span>
     </div>
   `;
 
