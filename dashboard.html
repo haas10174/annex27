@@ -2024,7 +2024,7 @@
   <!-- Sidebar -->
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-header">
-      <a href="index.html" class="sidebar-logo">annex<span>27</span></a>
+      <a href="/" class="sidebar-logo">annex<span>27</span></a>
     </div>
     <nav class="sidebar-nav" role="navigation" aria-label="Dashboard navigatie">
       <button class="sidebar-link active" onclick="showView('dashboard')" data-view="dashboard">
@@ -2691,7 +2691,7 @@ let user = null;
 // ── AUTH CHECK ──
 (async () => {
   const { data: { session } } = await sb.auth.getSession();
-  if (!session) { window.location.href = 'portal.html'; return; }
+  if (!session) { window.location.href = '/portal'; return; }
   user = session.user;
   await loadProfile();
   await loadProgress();
@@ -3032,7 +3032,7 @@ async function downloadDoc(file) {
         alert('Geen toegang tot dit document. Upgrade uw pakket om toegang te krijgen.');
       } else if (msg.includes('Niet ingelogd') || msg.includes('Ongeldige sessie')) {
         alert('Uw sessie is verlopen. Log opnieuw in.');
-        window.location.href = 'portal.html';
+        window.location.href = '/portal';
       } else {
         alert('Document kon niet worden opgehaald: ' + msg);
       }
@@ -4589,7 +4589,7 @@ async function handleLogout() {
   userSector = null;
 
   // 5. Redirect to portal (with cache-busting)
-  window.location.href = 'portal.html?t=' + Date.now();
+  window.location.href = '/portal?t=' + Date.now();
 }
 
 // Also auto-logout on window close / tab close (optional, aggressive)

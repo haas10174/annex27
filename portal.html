@@ -375,7 +375,7 @@
       <div class="form-success" id="forgotSuccess" style="margin-top:16px;"></div>
 
       <div class="back-link">
-        <a href="index.html">&larr; Terug naar annex27.nl</a>
+        <a href="/">&larr; Terug naar annex27.nl</a>
       </div>
     </div>
   </div>
@@ -390,7 +390,7 @@
   // Check if already logged in
   (async () => {
     const { data: { session } } = await sb.auth.getSession();
-    if (session) window.location.href = 'dashboard.html';
+    if (session) window.location.href = '/dashboard';
   })();
 
   function showError(id, msg) {
@@ -425,7 +425,7 @@
       return;
     }
 
-    window.location.href = 'dashboard.html';
+    window.location.href = '/dashboard';
   }
 
   // Forgot password
@@ -438,7 +438,7 @@
     }
 
     const { error } = await sb.auth.resetPasswordForEmail(email, {
-      redirectTo: window.location.origin + '/portal.html'
+      redirectTo: window.location.origin + '/portal'
     });
 
     if (error) {

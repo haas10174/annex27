@@ -7,6 +7,16 @@ RewriteEngine On
 RewriteCond %{HTTPS} off
 RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
+# ─── Clean URLs (hide .html extension) ───────────────────────
+# 1. Redirect /page.html → /page (external 301 for SEO)
+RewriteCond %{THE_REQUEST} \s/+([^?\s]+?)\.html[\s?] [NC]
+RewriteRule ^ /%1 [L,R=301,NE]
+
+# 2. Internally rewrite /page → /page.html (when the .html file exists)
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}.html -f
+RewriteRule ^([^.]+)$ $1.html [L]
+
 # ─── Security Headers ────────────────────────────────────────
 <IfModule mod_headers.c>
   # Force HTTPS for 2 years + preload eligible (HSTS)
