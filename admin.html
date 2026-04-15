@@ -889,6 +889,7 @@
       <button class="view-btn" data-view="facturen">Facturen <span class="badge" id="facturenBadge">0</span></button>
       <button class="view-btn" data-view="leads">Aanvragen <span class="badge" id="leadsBadge">0</span></button>
       <button class="view-btn" data-view="mail">Mail <span class="badge" id="mailBadge">0</span></button>
+      <button class="view-btn" data-view="settings">Instellingen</button>
     </div>
     <div class="client-filters">
       <button class="filter-btn active" data-filter="all">Alle</button>
@@ -1244,6 +1245,46 @@
         </div>
       </div>
     </div>
+
+    <!-- View: Instellingen -->
+    <div class="view" id="viewSettings">
+      <div class="view-full">
+        <div class="view-header">
+          <h1 style="font-family:'Sora',sans-serif;font-size:1.4rem;font-weight:800;margin:0 0 4px;">Instellingen</h1>
+          <p style="color:var(--text-muted);font-size:0.9rem;margin:0 0 20px;">Integratie-status, profiel en systeeminfo.</p>
+        </div>
+
+        <div class="ov-row" style="grid-template-columns:1fr 1fr;">
+          <div class="ov-card">
+            <div class="ov-card-head"><h3>Integraties</h3></div>
+            <div id="settingsIntegrations" class="ov-list"></div>
+          </div>
+          <div class="ov-card">
+            <div class="ov-card-head"><h3>Profiel</h3></div>
+            <div id="settingsProfile" style="font-size:0.88rem;color:var(--text);line-height:1.8;"></div>
+          </div>
+        </div>
+
+        <div class="ov-row" style="grid-template-columns:1fr 1fr;">
+          <div class="ov-card">
+            <div class="ov-card-head"><h3>Prijzen (huidig)</h3></div>
+            <div style="font-size:0.88rem;color:var(--text);line-height:1.8;">
+              <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);"><span>Gap-analyse</span><strong>&euro; 349</strong></div>
+              <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);"><span>Beleidspakket (basis)</span><strong>&euro; 599</strong></div>
+              <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);"><span>Beleidspakket (premium)</span><strong>&euro; 899</strong></div>
+              <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);"><span>Readiness Platform</span><strong>&euro; 149 / maand</strong></div>
+              <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);"><span>Pre-audit Review</span><strong>&euro; 1.850</strong></div>
+              <div style="display:flex;justify-content:space-between;padding:6px 0;"><span>NIS2 Readiness Check</span><strong>&euro; 499</strong></div>
+              <div style="margin-top:14px;font-size:0.76rem;color:var(--text-muted);">Prijzen wijzigen: momenteel hardcoded in <code>bestellen.html</code> + <code>supabase/functions/create-payment</code>. Config-scherm volgt.</div>
+            </div>
+          </div>
+          <div class="ov-card">
+            <div class="ov-card-head"><h3>Systeem</h3></div>
+            <div id="settingsSystem" style="font-size:0.85rem;color:var(--text-muted);line-height:1.75;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
   </main>
 </div>
 
@@ -1507,6 +1548,47 @@ async function loadOverview() {
   }
 }
 
+// ── SETTINGS ──
+async function loadSettings() {
+  const integrations = [
+    { name: 'Supabase', status: 'ok', detail: 'Database + Auth + Edge Functions actief' },
+    { name: 'Mollie', status: 'ok', detail: 'create-payment + mollie-webhook edge functions gedeployed' },
+    { name: 'Google Analytics 4', status: 'ok', detail: 'G-VWXHXN3KV2 \u2014 Consent Mode v2 actief' },
+    { name: 'Google Search Console', status: 'ok', detail: 'Domain property geverifieerd \u2014 annex27.nl' },
+    { name: 'GA4 Data API (realtime widget)', status: 'pending', detail: 'Vereist Google Cloud service-account met GA Viewer rol' },
+    { name: 'Hostnet IMAP / SMTP', status: 'pending', detail: 'Vereist mailbox-wachtwoord in Supabase secrets' },
+    { name: 'Hostnet FTP deploy', status: 'ok', detail: 'deploy.sh \u2014 FTP + GitHub push' },
+    { name: 'GitHub repo', status: 'ok', detail: 'haas10174/annex27 \u2014 auto-commit via Stop-hook' }
+  ];
+  const statusColor = s => s === 'ok' ? 'var(--success)' : (s === 'pending' ? 'var(--warning)' : 'var(--danger)');
+  const statusLabel = s => s === 'ok' ? 'actief' : (s === 'pending' ? 'wachtend' : 'fout');
+  document.getElementById('settingsIntegrations').innerHTML = integrations.map(i =>
+    '<div class="ov-list-item">'
+    + '<div style="display:flex;justify-content:space-between;align-items:center;gap:12px;">'
+    + '<div class="ov-list-title">' + esc(i.name) + '</div>'
+    + '<span style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:' + statusColor(i.status) + ';">\u25CF ' + statusLabel(i.status) + '</span>'
+    + '</div>'
+    + '<div class="ov-list-meta" style="margin-top:4px;">' + esc(i.detail) + '</div>'
+    + '</div>'
+  ).join('');
+
+  const email = (currentUser && currentUser.email) || '—';
+  const role = (currentUser && currentUser.app_metadata && currentUser.app_metadata.role) || '—';
+  document.getElementById('settingsProfile').innerHTML =
+    '<div><span style="color:var(--text-muted);font-size:0.78rem;text-transform:uppercase;letter-spacing:0.08em;">Account</span><br/><strong>' + esc(email) + '</strong></div>'
+    + '<div style="margin-top:12px;"><span style="color:var(--text-muted);font-size:0.78rem;text-transform:uppercase;letter-spacing:0.08em;">Rol</span><br/><strong>' + esc(role) + '</strong></div>'
+    + '<div style="margin-top:12px;"><span style="color:var(--text-muted);font-size:0.78rem;text-transform:uppercase;letter-spacing:0.08em;">KBO</span><br/>1006.203.170</div>'
+    + '<div style="margin-top:12px;"><span style="color:var(--text-muted);font-size:0.78rem;text-transform:uppercase;letter-spacing:0.08em;">BTW</span><br/>In aanvraag (kleine onderneming, Art. 56bis)</div>'
+    + '<div style="margin-top:18px;"><button class="action-btn" onclick="sb.auth.signOut().then(()=>location.reload())">Uitloggen</button></div>';
+
+  document.getElementById('settingsSystem').innerHTML =
+    '<div><strong style="color:var(--text);">Hosting</strong><br/>Hostnet Webhosting Lite &bull; annex27.nl</div>'
+    + '<div style="margin-top:10px;"><strong style="color:var(--text);">Deploy</strong><br/><code style="font-size:0.78rem;background:var(--bg-alt);padding:1px 6px;border-radius:4px;">bash deploy.sh</code> (FTP + GitHub + clean-URL rewrite)</div>'
+    + '<div style="margin-top:10px;"><strong style="color:var(--text);">Supabase project</strong><br/>tvqhxhoohzdzekcfzjuv</div>'
+    + '<div style="margin-top:10px;"><strong style="color:var(--text);">Security</strong><br/>HSTS preload, CSP, X-Frame DENY, nosniff, Permissions-Policy</div>'
+    + '<div style="margin-top:10px;"><strong style="color:var(--text);">Documenten</strong><br/>137 bestanden (Word + PDF + HTML)</div>';
+}
+
 // ── FACTUREN (admin management + boekhouding) ──
 const INV_PRODUCT_LABELS = {
   gap: 'Gap-analyse',
@@ -1768,6 +1850,7 @@ function bindViewSwitch() {
       if (target === 'leads') loadLeads();
       if (target === 'mail') loadMail();
       if (target === 'facturen') loadInvoicesAdmin();
+      if (target === 'settings') loadSettings();
     });
   });
 }
@@ -1833,7 +1916,7 @@ function renderLeads() {
               : '<button onclick="markLeadProcessed(\''+l.id+'\')" class="action-btn" style="font-size:0.75rem;padding:5px 10px;">Markeer afgehandeld</button>'}
           </div>
         </div>
-        ${l.bericht ? `<div style="margin-top:10px;padding:10px 14px;background:rgba(0,0,0,0.15);border-radius:6px;font-size:0.88rem;color:var(--text-secondary);white-space:pre-wrap;">${esc(l.bericht)}</div>` : ''}
+        ${l.bericht ? `<div style="margin-top:10px;padding:10px 14px;background:var(--bg-alt);border:1px solid var(--border);border-radius:6px;font-size:0.88rem;color:var(--text-muted);white-space:pre-wrap;">${esc(l.bericht)}</div>` : ''}
       </div>
     `;
   }).join('');
