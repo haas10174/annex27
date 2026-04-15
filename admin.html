@@ -22,20 +22,28 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --bg: #0c0f1a;
-      --bg-alt: #151929;
-      --surface: #1a1f2e;
-      --border: rgba(255,255,255,0.08);
-      --border-hover: rgba(255,255,255,0.15);
-      --text: #e8ecf1;
-      --text-muted: #8b95a5;
-      --text-dim: #5b6572;
+      --bg: #F7F8FA;
+      --bg-alt: #EEF0F4;
+      --surface: #FFFFFF;
+      --sidebar: #FFFFFF;
+      --border: #E4E7EC;
+      --border-hover: #CBD1D9;
+      --text: #1A1F2E;
+      --text-muted: #5B6572;
+      --text-dim: #8B95A5;
       --accent: #0D9488;
-      --accent-light: #14b8a6;
-      --accent-bg: rgba(13,148,136,0.1);
+      --accent-light: #14B8A6;
+      --accent-dark: #0F766E;
+      --accent-bg: rgba(13,148,136,0.08);
       --warning: #F59E0B;
+      --warning-bg: rgba(245,158,11,0.1);
       --danger: #EF4444;
+      --danger-bg: rgba(239,68,68,0.08);
       --success: #10B981;
+      --success-bg: rgba(16,185,129,0.08);
+      --shadow-sm: 0 1px 2px rgba(16,24,40,0.04);
+      --shadow: 0 1px 3px rgba(16,24,40,0.06), 0 1px 2px rgba(16,24,40,0.04);
+      --shadow-md: 0 4px 8px rgba(16,24,40,0.06), 0 2px 4px rgba(16,24,40,0.04);
       --radius: 8px;
       --radius-lg: 12px;
     }
@@ -81,7 +89,7 @@
       align-items: center;
       justify-content: space-between;
     }
-    .view-btn:hover { color: var(--text); background: rgba(255,255,255,0.03); }
+    .view-btn:hover { color: var(--text); background: rgba(16,24,40,0.03); }
     .view-btn.active {
       color: var(--accent-light);
       border-left-color: var(--accent-light);
@@ -92,7 +100,7 @@
       font-size: 0.65rem;
       padding: 1px 7px;
       border-radius: 10px;
-      background: rgba(255,255,255,0.08);
+      background: rgba(16,24,40,0.08);
     }
     .view-btn.active .badge { background: rgba(13,148,136,0.25); color: var(--accent-light); }
 
@@ -144,7 +152,7 @@
       border-bottom: 1px solid var(--border);
     }
     .orders-table tr:last-child td { border-bottom: none; }
-    .orders-table tr:hover td { background: rgba(255,255,255,0.02); }
+    .orders-table tr:hover td { background: rgba(16,24,40,0.02); }
     .status-pill {
       display: inline-block;
       padding: 3px 10px;
@@ -235,7 +243,7 @@
       align-items: center;
       gap: 10px;
       padding: 8px 12px;
-      background: rgba(255,255,255,0.03);
+      background: rgba(16,24,40,0.03);
       border-radius: var(--radius);
       font-size: 0.82rem;
       margin-bottom: 4px;
@@ -249,7 +257,7 @@
 
     /* Sidebar: client list */
     .sidebar {
-      background: var(--bg-alt);
+      background: var(--sidebar);
       border-right: 1px solid var(--border);
       display: flex;
       flex-direction: column;
@@ -258,15 +266,15 @@
     .sidebar-header {
       padding: 20px 24px;
       border-bottom: 1px solid var(--border);
-      background: #f5f7fa;
-      color: #0c0f1a;
+      background: var(--sidebar);
+      color: var(--text);
     }
     .brand {
       font-family: 'Sora', sans-serif;
       font-size: 1.1rem;
       font-weight: 700;
       margin-bottom: 8px;
-      color: #0c0f1a;
+      color: var(--text);
     }
     .brand span { color: var(--accent); }
     .role-badge {
@@ -325,7 +333,7 @@
       transition: background 0.15s;
       position: relative;
     }
-    .client-item:hover { background: rgba(255,255,255,0.03); }
+    .client-item:hover { background: rgba(16,24,40,0.03); }
     .client-item.active { background: var(--accent-bg); border-left: 3px solid var(--accent-light); padding-left: 17px; }
     .client-head {
       display: flex;
@@ -372,7 +380,7 @@
     .client-status.review-requested { background: rgba(245,158,11,0.12); color: var(--warning); }
     .client-status.in-review { background: rgba(13,148,136,0.12); color: var(--accent-light); }
     .client-status.reviewed { background: rgba(16,185,129,0.12); color: var(--success); }
-    .client-status.in-progress { background: rgba(255,255,255,0.06); color: var(--text-muted); }
+    .client-status.in-progress { background: rgba(16,24,40,0.06); color: var(--text-muted); }
     .client-unread {
       position: absolute;
       right: 16px;
@@ -388,7 +396,7 @@
     }
     .client-progress {
       height: 3px;
-      background: rgba(255,255,255,0.05);
+      background: rgba(16,24,40,0.05);
       border-radius: 2px;
       margin-top: 8px;
       overflow: hidden;
@@ -476,7 +484,7 @@
       font-size: 0.7rem;
       padding: 1px 7px;
       border-radius: 8px;
-      background: rgba(255,255,255,0.06);
+      background: rgba(16,24,40,0.06);
     }
 
     /* Tab panels */
@@ -503,7 +511,7 @@
       cursor: pointer;
       transition: background 0.15s;
     }
-    .control-header:hover { background: rgba(255,255,255,0.02); }
+    .control-header:hover { background: rgba(16,24,40,0.02); }
     .control-id {
       font-family: 'Sora', sans-serif;
       font-weight: 700;
@@ -531,7 +539,7 @@
     .ci-badge.compliant { background: rgba(16,185,129,0.12); color: var(--success); }
     .ci-badge.partial { background: rgba(245,158,11,0.12); color: var(--warning); }
     .ci-badge.non-compliant { background: rgba(239,68,68,0.12); color: var(--danger); }
-    .ci-badge.pending { background: rgba(255,255,255,0.06); color: var(--text-muted); }
+    .ci-badge.pending { background: rgba(16,24,40,0.06); color: var(--text-muted); }
     .ci-badge.evidence-yes { background: rgba(13,148,136,0.12); color: var(--accent-light); }
     .ci-badge.evidence-no { background: rgba(245,158,11,0.12); color: var(--warning); }
 
@@ -555,7 +563,7 @@
       margin-bottom: 8px;
     }
     .client-answer {
-      background: rgba(255,255,255,0.03);
+      background: rgba(16,24,40,0.03);
       border-left: 2px solid var(--border-hover);
       padding: 10px 14px;
       border-radius: var(--radius);
@@ -569,18 +577,18 @@
       align-items: center;
       gap: 10px;
       padding: 8px 12px;
-      background: rgba(255,255,255,0.03);
+      background: rgba(16,24,40,0.03);
       border-radius: var(--radius);
       font-size: 0.82rem;
       margin-bottom: 4px;
       cursor: pointer;
       transition: background 0.15s;
     }
-    .evidence-file-row:hover { background: rgba(255,255,255,0.06); }
+    .evidence-file-row:hover { background: rgba(16,24,40,0.06); }
     .evidence-file-row svg { width: 14px; height: 14px; stroke: var(--accent-light); fill: none; stroke-width: 2; }
     .evidence-note {
       padding: 10px 14px;
-      background: rgba(255,255,255,0.03);
+      background: rgba(16,24,40,0.03);
       border-radius: var(--radius);
       font-size: 0.82rem;
       color: var(--text-muted);
@@ -612,7 +620,7 @@
     }
     .finding-input, .finding-textarea, .finding-select {
       width: 100%;
-      background: var(--bg);
+      background: var(--surface);
       border: 1px solid var(--border);
       color: var(--text);
       padding: 8px 12px;
@@ -692,6 +700,7 @@
       max-width: 420px;
       width: 100%;
       text-align: center;
+      box-shadow: var(--shadow-md);
     }
     .login-card h1 {
       font-family: 'Sora', sans-serif;
@@ -708,6 +717,128 @@
       color: var(--accent-light);
       text-decoration: none;
       font-weight: 600;
+    }
+
+    /* Overview dashboard */
+    .ov-kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .ov-kpi {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px 22px;
+      box-shadow: var(--shadow-sm);
+    }
+    .ov-kpi-label { font-size: 0.76rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px; }
+    .ov-kpi-value { font-family: 'Sora', sans-serif; font-size: 1.8rem; font-weight: 800; color: var(--text); line-height: 1.1; }
+    .ov-kpi-sub { font-size: 0.76rem; color: var(--text-dim); margin-top: 6px; }
+
+    .ov-row {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .ov-row.ov-row-3 { grid-template-columns: 1fr 1fr 1fr; }
+
+    .ov-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px 22px;
+      box-shadow: var(--shadow-sm);
+      display: flex; flex-direction: column;
+    }
+    .ov-card-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+    .ov-card-head h3 {
+      font-family: 'Sora', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text);
+      margin: 0;
+    }
+    .ov-mini {
+      padding: 6px 8px !important;
+      min-width: 0 !important;
+    }
+    .ov-mini svg { width: 14px; height: 14px; }
+    .ov-link {
+      background: none;
+      border: none;
+      color: var(--accent);
+      font-family: inherit;
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 4px 2px;
+    }
+    .ov-link:hover { color: var(--accent-dark); text-decoration: underline; }
+    .ov-badge {
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 10px;
+      letter-spacing: 0.02em;
+    }
+    .ov-pending { background: var(--warning-bg); color: var(--warning); border: 1px solid rgba(245,158,11,0.25); }
+
+    .ov-realtime { text-align: center; padding: 8px 4px; }
+    .ov-rt-big { font-family: 'Sora', sans-serif; font-size: 2.8rem; font-weight: 800; color: var(--accent); line-height: 1; }
+    .ov-rt-label { font-size: 0.85rem; color: var(--text-muted); margin: 8px 0 16px; }
+    .ov-rt-hint { font-size: 0.78rem; color: var(--text-dim); line-height: 1.55; background: var(--bg-alt); padding: 10px 12px; border-radius: 8px; text-align: left; margin: 0 0 12px; }
+    .ov-rt-hint code { background: rgba(13,148,136,0.1); padding: 1px 6px; border-radius: 4px; font-size: 0.72rem; color: var(--accent); }
+    .ov-rt-link { font-size: 0.85rem; color: var(--accent); font-weight: 600; text-decoration: none; }
+    .ov-rt-link:hover { text-decoration: underline; }
+
+    .ov-activity { flex: 1; display: flex; flex-direction: column; gap: 8px; max-height: 280px; overflow-y: auto; }
+    .ov-activity-row {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.85rem;
+    }
+    .ov-activity-row:last-child { border-bottom: none; }
+    .ov-activity-icon {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      background: var(--accent-bg);
+      color: var(--accent);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+    .ov-activity-body { flex: 1; min-width: 0; }
+    .ov-activity-title { font-weight: 600; color: var(--text); font-size: 0.85rem; }
+    .ov-activity-meta { color: var(--text-muted); font-size: 0.75rem; margin-top: 2px; }
+
+    .ov-list { display: flex; flex-direction: column; gap: 6px; max-height: 280px; overflow-y: auto; }
+    .ov-list-item {
+      padding: 10px 12px;
+      background: var(--bg-alt);
+      border-radius: 8px;
+      font-size: 0.82rem;
+      border: 1px solid transparent;
+      transition: border-color 0.15s;
+    }
+    .ov-list-item:hover { border-color: var(--border-hover); }
+    .ov-list-title { font-weight: 600; color: var(--text); margin-bottom: 2px; }
+    .ov-list-meta { color: var(--text-muted); font-size: 0.72rem; }
+
+    @media (max-width: 1100px) {
+      .ov-kpi-grid { grid-template-columns: repeat(2, 1fr); }
+      .ov-row, .ov-row.ov-row-3 { grid-template-columns: 1fr; }
     }
 
     @media (max-width: 900px) {
@@ -729,13 +860,13 @@
     <h1>Auditor Dashboard</h1>
     <p id="loginMessage" style="margin-bottom:20px;">Log in met uw auditor-account.</p>
     <form id="adminLoginForm" onsubmit="return adminLogin(event)" style="display:flex;flex-direction:column;gap:10px;margin-bottom:14px;">
-      <input type="email" id="adminEmail" placeholder="E-mailadres" required autocomplete="email" style="padding:12px 14px;border:1px solid rgba(255,255,255,0.12);border-radius:10px;background:rgba(255,255,255,0.04);color:#fff;font-family:inherit;font-size:0.92rem;outline:none;" />
-      <input type="password" id="adminPassword" placeholder="Wachtwoord" required autocomplete="current-password" style="padding:12px 14px;border:1px solid rgba(255,255,255,0.12);border-radius:10px;background:rgba(255,255,255,0.04);color:#fff;font-family:inherit;font-size:0.92rem;outline:none;" />
+      <input type="email" id="adminEmail" placeholder="E-mailadres" required autocomplete="email" style="padding:12px 14px;border:1px solid rgba(16,24,40,0.12);border-radius:10px;background:rgba(16,24,40,0.04);color:var(--text);font-family:inherit;font-size:0.92rem;outline:none;" />
+      <input type="password" id="adminPassword" placeholder="Wachtwoord" required autocomplete="current-password" style="padding:12px 14px;border:1px solid rgba(16,24,40,0.12);border-radius:10px;background:rgba(16,24,40,0.04);color:var(--text);font-family:inherit;font-size:0.92rem;outline:none;" />
       <div id="adminLoginError" style="display:none;padding:10px 12px;background:rgba(220,38,38,0.1);border:1px solid rgba(220,38,38,0.3);border-radius:8px;color:#fca5a5;font-size:0.82rem;"></div>
       <button type="submit" id="adminLoginBtn" style="padding:12px;background:#0D9488;color:#fff;border:none;border-radius:10px;font-weight:700;font-size:0.92rem;cursor:pointer;transition:background .2s;">Inloggen</button>
     </form>
     <div style="display:flex;justify-content:space-between;font-size:0.78rem;">
-      <a href="/portal" style="color:rgba(255,255,255,0.5);text-decoration:none;">&larr; Klant-portaal</a>
+      <a href="/portal" style="color:rgba(16,24,40,0.5);text-decoration:none;">&larr; Klant-portaal</a>
       <a href="#" onclick="adminForgot(event)" style="color:#14b8a6;text-decoration:none;">Wachtwoord vergeten?</a>
     </div>
   </div>
@@ -751,7 +882,8 @@
       <span class="role-badge">Lead Auditor</span>
     </div>
     <div class="view-switch">
-      <button class="view-btn active" data-view="clients">Klanten</button>
+      <button class="view-btn active" data-view="overview">Overzicht</button>
+      <button class="view-btn" data-view="clients">Klanten</button>
       <button class="view-btn" data-view="inbox">Inbox <span class="badge" id="inboxBadge">0</span></button>
       <button class="view-btn" data-view="orders">Orders <span class="badge" id="ordersBadge">0</span></button>
       <button class="view-btn" data-view="facturen">Facturen <span class="badge" id="facturenBadge">0</span></button>
@@ -774,8 +906,91 @@
 
   <!-- Main: selected client view -->
   <main class="main" id="main">
-    <!-- View: Klanten (default) -->
-    <div class="view active" id="viewClients">
+
+    <!-- View: Overzicht (dashboard KPIs + realtime) -->
+    <div class="view active" id="viewOverview">
+      <div class="view-full">
+        <div class="view-header">
+          <h1 style="font-family:'Sora',sans-serif;font-size:1.4rem;font-weight:800;margin:0 0 4px;">Overzicht</h1>
+          <p style="color:var(--text-muted);font-size:0.9rem;margin:0 0 20px;">Live KPI's en activiteit van Annex27.</p>
+        </div>
+
+        <!-- KPI grid -->
+        <div class="ov-kpi-grid">
+          <div class="ov-kpi">
+            <div class="ov-kpi-label">Omzet deze maand</div>
+            <div class="ov-kpi-value" id="ovRevenueMonth">&mdash;</div>
+            <div class="ov-kpi-sub" id="ovRevenueMonthSub">Betaalde orders</div>
+          </div>
+          <div class="ov-kpi">
+            <div class="ov-kpi-label">Open orders</div>
+            <div class="ov-kpi-value" id="ovOpenOrders">&mdash;</div>
+            <div class="ov-kpi-sub">Wachten op betaling</div>
+          </div>
+          <div class="ov-kpi">
+            <div class="ov-kpi-label">Actieve klanten</div>
+            <div class="ov-kpi-value" id="ovActiveClients">&mdash;</div>
+            <div class="ov-kpi-sub">Totaal in portaal</div>
+          </div>
+          <div class="ov-kpi">
+            <div class="ov-kpi-label">Nieuwe aanvragen</div>
+            <div class="ov-kpi-value" id="ovNewLeads">&mdash;</div>
+            <div class="ov-kpi-sub">Nog niet verwerkt</div>
+          </div>
+        </div>
+
+        <!-- Two-column row: activity feed + GA4 realtime slot -->
+        <div class="ov-row">
+          <div class="ov-card">
+            <div class="ov-card-head">
+              <h3>Recente activiteit</h3>
+              <button class="action-btn ov-mini" onclick="loadOverview()"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-6.2-8.55"/><polyline points="21 3 21 9 15 9"/></svg></button>
+            </div>
+            <div id="ovActivity" class="ov-activity"><div class="empty-state">Laden...</div></div>
+          </div>
+          <div class="ov-card">
+            <div class="ov-card-head">
+              <h3>Realtime bezoekers</h3>
+              <span class="ov-badge ov-pending">GA4 Data API nog niet gekoppeld</span>
+            </div>
+            <div class="ov-realtime">
+              <div class="ov-rt-big" id="ovRtUsers">&mdash;</div>
+              <div class="ov-rt-label">actieve gebruikers nu</div>
+              <p class="ov-rt-hint">Deze widget wordt in stage 2 gevuld via een Supabase Edge Function die de GA4 Data API pollt. Benodigd: Google Cloud service-account met "GA Viewer" rol op property <code>G-VWXHXN3KV2</code>.</p>
+              <a href="https://analytics.google.com/analytics/web/#/p/realtime/overview" target="_blank" rel="noopener" class="ov-rt-link">Open GA4 Realtime &rarr;</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Three-column row: latest orders, inbox, leads -->
+        <div class="ov-row ov-row-3">
+          <div class="ov-card">
+            <div class="ov-card-head">
+              <h3>Laatste orders</h3>
+              <button class="ov-link" onclick="switchTo('orders')">Alles &rarr;</button>
+            </div>
+            <div id="ovLatestOrders" class="ov-list"><div class="empty-state">Laden...</div></div>
+          </div>
+          <div class="ov-card">
+            <div class="ov-card-head">
+              <h3>Ongelezen berichten</h3>
+              <button class="ov-link" onclick="switchTo('inbox')">Inbox &rarr;</button>
+            </div>
+            <div id="ovUnreadMsgs" class="ov-list"><div class="empty-state">Laden...</div></div>
+          </div>
+          <div class="ov-card">
+            <div class="ov-card-head">
+              <h3>Nieuwste aanvragen</h3>
+              <button class="ov-link" onclick="switchTo('leads')">Alles &rarr;</button>
+            </div>
+            <div id="ovLatestLeads" class="ov-list"><div class="empty-state">Laden...</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- View: Klanten -->
+    <div class="view" id="viewClients">
     <div class="empty-state" id="mainEmpty">
       <div class="empty-icon"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
       <h2 style="font-family:'Sora',sans-serif;font-size:1.1rem;color:var(--text);margin-bottom:6px;">Selecteer een klant</h2>
@@ -1142,6 +1357,154 @@ async function startApp() {
   loadLeadsCount();
   loadMailCount();
   loadInvoicesCount();
+  // Initial: active tab is Overzicht — verberg klant-filters/list
+  const cf = document.querySelector('.client-filters'); if (cf) cf.style.display = 'none';
+  const cl = document.getElementById('clientList'); if (cl) cl.style.display = 'none';
+  loadOverview();
+}
+
+// ── OVERVIEW ──
+function switchTo(viewName) {
+  const btn = document.querySelector('.view-btn[data-view="' + viewName + '"]');
+  if (btn) btn.click();
+}
+
+function ovFormatEur(n) {
+  return '\u20AC ' + Number(n || 0).toLocaleString('nl-NL', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+}
+function ovTimeAgo(iso) {
+  if (!iso) return '';
+  const d = new Date(iso);
+  const s = Math.floor((Date.now() - d.getTime()) / 1000);
+  if (s < 60) return s + 's geleden';
+  if (s < 3600) return Math.floor(s/60) + 'm geleden';
+  if (s < 86400) return Math.floor(s/3600) + 'u geleden';
+  return Math.floor(s/86400) + 'd geleden';
+}
+
+async function loadOverview() {
+  const monthStart = new Date();
+  monthStart.setDate(1); monthStart.setHours(0,0,0,0);
+  const monthIso = monthStart.toISOString();
+
+  try {
+    // Revenue this month (paid orders)
+    const { data: paidOrders } = await sb.from('orders')
+      .select('amount, created_at, plan, bedrijf, status')
+      .eq('status', 'paid')
+      .gte('created_at', monthIso);
+    const revMonth = (paidOrders || []).reduce((sum, o) => sum + (Number(o.amount) || 0), 0);
+    document.getElementById('ovRevenueMonth').textContent = ovFormatEur(revMonth);
+    document.getElementById('ovRevenueMonthSub').textContent = (paidOrders || []).length + ' betaalde order' + ((paidOrders || []).length === 1 ? '' : 's');
+
+    // Open orders (pending)
+    const { count: openCount } = await sb.from('orders')
+      .select('*', { count: 'exact', head: true })
+      .eq('status', 'pending');
+    document.getElementById('ovOpenOrders').textContent = openCount || 0;
+
+    // Active clients
+    document.getElementById('ovActiveClients').textContent = (clients && clients.length) || 0;
+
+    // New leads (not yet processed)
+    const { count: leadCount } = await sb.from('waitlist')
+      .select('*', { count: 'exact', head: true })
+      .is('processed_at', null);
+    document.getElementById('ovNewLeads').textContent = leadCount || 0;
+
+    // Latest 5 orders (any status)
+    const { data: latestOrders } = await sb.from('orders')
+      .select('payment_id, created_at, plan, bedrijf, amount, status')
+      .order('created_at', { ascending: false })
+      .limit(5);
+    const ovLO = document.getElementById('ovLatestOrders');
+    if (!latestOrders || !latestOrders.length) {
+      ovLO.innerHTML = '<div class="empty-state" style="padding:16px;text-align:center;color:var(--text-dim);font-size:0.82rem;">Nog geen orders</div>';
+    } else {
+      ovLO.innerHTML = latestOrders.map(o => {
+        const label = (INV_PRODUCT_LABELS && INV_PRODUCT_LABELS[o.plan]) || o.plan || 'Onbekend';
+        const statusColor = o.status === 'paid' ? 'var(--success)' : (o.status === 'pending' ? 'var(--warning)' : 'var(--text-muted)');
+        return '<div class="ov-list-item">'
+          + '<div class="ov-list-title">' + esc(o.bedrijf || '-') + ' &middot; ' + esc(label) + '</div>'
+          + '<div class="ov-list-meta">' + ovFormatEur(o.amount) + ' &bull; <span style="color:' + statusColor + ';font-weight:600;">' + esc(o.status || '?') + '</span> &bull; ' + ovTimeAgo(o.created_at) + '</div>'
+          + '</div>';
+      }).join('');
+    }
+
+    // Latest 5 unread client messages
+    const { data: unreadMsgs } = await sb.from('messages')
+      .select('body, created_at, user_id, sender_role, read_by_auditor')
+      .eq('sender_role', 'client')
+      .eq('read_by_auditor', false)
+      .order('created_at', { ascending: false })
+      .limit(5);
+    const ovUM = document.getElementById('ovUnreadMsgs');
+    if (!unreadMsgs || !unreadMsgs.length) {
+      ovUM.innerHTML = '<div class="empty-state" style="padding:16px;text-align:center;color:var(--text-dim);font-size:0.82rem;">Geen ongelezen berichten</div>';
+    } else {
+      ovUM.innerHTML = unreadMsgs.map(m => {
+        const clientInfo = (clients || []).find(c => c.user_id === m.user_id);
+        const who = clientInfo ? (clientInfo.bedrijf || clientInfo.email) : m.user_id.slice(0, 8);
+        return '<div class="ov-list-item" onclick="openClientFromInbox(\'' + esc(m.user_id) + '\')" style="cursor:pointer;">'
+          + '<div class="ov-list-title">' + esc(who) + '</div>'
+          + '<div class="ov-list-meta">' + esc((m.body || '').slice(0, 80)) + ' &bull; ' + ovTimeAgo(m.created_at) + '</div>'
+          + '</div>';
+      }).join('');
+    }
+
+    // Latest 5 leads
+    const { data: latestLeads } = await sb.from('waitlist')
+      .select('bedrijf, email, kind, created_at, processed_at')
+      .order('created_at', { ascending: false })
+      .limit(5);
+    const ovLL = document.getElementById('ovLatestLeads');
+    if (!latestLeads || !latestLeads.length) {
+      ovLL.innerHTML = '<div class="empty-state" style="padding:16px;text-align:center;color:var(--text-dim);font-size:0.82rem;">Geen aanvragen</div>';
+    } else {
+      ovLL.innerHTML = latestLeads.map(l => {
+        const pending = !l.processed_at;
+        return '<div class="ov-list-item">'
+          + '<div class="ov-list-title">' + esc(l.bedrijf || l.email || '-') + '</div>'
+          + '<div class="ov-list-meta">' + esc(l.kind || 'lead') + ' &bull; ' + (pending ? '<span style="color:var(--warning);font-weight:600;">open</span>' : '<span style="color:var(--text-muted);">verwerkt</span>') + ' &bull; ' + ovTimeAgo(l.created_at) + '</div>'
+          + '</div>';
+      }).join('');
+    }
+
+    // Activity feed — combine recent events
+    const activity = [];
+    (paidOrders || []).slice(0, 3).forEach(o => activity.push({
+      icon: '\u20AC', title: 'Betaling ontvangen van ' + (o.bedrijf || '-'),
+      meta: ovFormatEur(o.amount) + ' \u2022 ' + ovTimeAgo(o.created_at), ts: o.created_at
+    }));
+    (latestLeads || []).slice(0, 3).forEach(l => activity.push({
+      icon: '+', title: 'Nieuwe aanvraag ' + (l.kind || 'lead'),
+      meta: (l.bedrijf || l.email || '-') + ' \u2022 ' + ovTimeAgo(l.created_at), ts: l.created_at
+    }));
+    (unreadMsgs || []).slice(0, 3).forEach(m => {
+      const clientInfo = (clients || []).find(c => c.user_id === m.user_id);
+      const who = clientInfo ? (clientInfo.bedrijf || clientInfo.email) : m.user_id.slice(0, 8);
+      activity.push({
+        icon: '\u2709', title: 'Bericht van ' + who,
+        meta: (m.body || '').slice(0, 60) + ' \u2022 ' + ovTimeAgo(m.created_at), ts: m.created_at
+      });
+    });
+    activity.sort((a, b) => new Date(b.ts) - new Date(a.ts));
+
+    const ovA = document.getElementById('ovActivity');
+    if (!activity.length) {
+      ovA.innerHTML = '<div class="empty-state" style="padding:16px;text-align:center;color:var(--text-dim);font-size:0.82rem;">Nog geen activiteit</div>';
+    } else {
+      ovA.innerHTML = activity.slice(0, 9).map(a => '<div class="ov-activity-row">'
+        + '<div class="ov-activity-icon">' + a.icon + '</div>'
+        + '<div class="ov-activity-body"><div class="ov-activity-title">' + esc(a.title) + '</div><div class="ov-activity-meta">' + esc(a.meta) + '</div></div>'
+        + '</div>').join('');
+    }
+
+    // GA4 Realtime placeholder
+    document.getElementById('ovRtUsers').textContent = '\u2014';
+  } catch (e) {
+    console.error('loadOverview error:', e);
+  }
 }
 
 // ── FACTUREN (admin management + boekhouding) ──
@@ -1325,7 +1688,7 @@ async function openBookkeepingView() {
           </div>
           <table style="width:100%;border-collapse:collapse;">
             <thead>
-              <tr style="background:rgba(255,255,255,0.02);">
+              <tr style="background:rgba(16,24,40,0.02);">
                 <th style="padding:8px 10px;text-align:left;font-size:0.68rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-muted);">Rek.</th>
                 <th style="padding:8px 10px;text-align:left;font-size:0.68rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-muted);">Naam</th>
                 <th style="padding:8px 10px;text-align:left;font-size:0.68rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-muted);">Omschrijving</th>
@@ -1395,6 +1758,11 @@ function bindViewSwitch() {
       const target = btn.dataset.view;
       document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
       document.getElementById('view' + target.charAt(0).toUpperCase() + target.slice(1)).classList.add('active');
+      // Toon klant-filters + klantenlijst alleen bij Klanten view
+      const clientOnly = (target === 'clients');
+      const cf = document.querySelector('.client-filters'); if (cf) cf.style.display = clientOnly ? 'flex' : 'none';
+      const cl = document.getElementById('clientList'); if (cl) cl.style.display = clientOnly ? '' : 'none';
+      if (target === 'overview') loadOverview();
       if (target === 'inbox') loadInbox();
       if (target === 'orders') loadOrders();
       if (target === 'leads') loadLeads();
@@ -1452,7 +1820,7 @@ function renderLeads() {
     const productColor = l.product === 'nis2' ? '#B45309' : '#0D9488';
     const processed = !!l.processed_at;
     return `
-      <div style="background:${processed ? 'rgba(255,255,255,0.02)' : 'var(--surface)'};border:1px solid ${processed ? 'transparent' : 'var(--border)'};border-left:3px solid ${processed ? 'var(--border)' : productColor};border-radius:10px;padding:16px 20px;${processed ? 'opacity:0.65;' : ''}">
+      <div style="background:${processed ? 'rgba(16,24,40,0.02)' : 'var(--surface)'};border:1px solid ${processed ? 'transparent' : 'var(--border)'};border-left:3px solid ${processed ? 'var(--border)' : productColor};border-radius:10px;padding:16px 20px;${processed ? 'opacity:0.65;' : ''}">
         <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:6px;">
           <div>
             <div style="font-family:'Sora',sans-serif;font-size:0.95rem;font-weight:700;">${esc(l.naam)}${l.bedrijf ? ' &middot; <span style=\"color:var(--text-muted);font-weight:500;\">' + esc(l.bedrijf) + '</span>' : ''}</div>
@@ -1505,7 +1873,7 @@ function renderMail() {
   const listEl = document.getElementById('mailList');
   if (!mailData.length) {
     listEl.innerHTML = `
-      <div style="padding:40px 24px;text-align:center;background:rgba(255,255,255,0.02);border:1px dashed var(--border);border-radius:10px;">
+      <div style="padding:40px 24px;text-align:center;background:rgba(16,24,40,0.02);border:1px dashed var(--border);border-radius:10px;">
         <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:1rem;margin-bottom:8px;">Nog geen mail binnen</div>
         <div style="color:var(--text-muted);font-size:0.88rem;max-width:520px;margin:0 auto;line-height:1.6;">
           Om mail van <strong>info@annex27.nl</strong> hier te laten verschijnen, moet de mailkoppeling eenmalig worden geactiveerd. Zie de uitleg in de chat &mdash; vraag Raoul of deze stap al is doorgevoerd.
@@ -1519,7 +1887,7 @@ function renderMail() {
     const snippet = (m.body_text || '').slice(0, 180).replace(/\n+/g, ' ');
     const atts = Array.isArray(m.attachments) ? m.attachments.length : 0;
     return `
-      <div onclick="openMail('${m.id}')" style="cursor:pointer;background:${unread ? 'var(--surface)' : 'rgba(255,255,255,0.02)'};border:1px solid ${unread ? 'var(--accent)' : 'var(--border)'};border-radius:10px;padding:14px 18px;">
+      <div onclick="openMail('${m.id}')" style="cursor:pointer;background:${unread ? 'var(--surface)' : 'rgba(16,24,40,0.02)'};border:1px solid ${unread ? 'var(--accent)' : 'var(--border)'};border-radius:10px;padding:14px 18px;">
         <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:4px;">
           <div style="font-weight:${unread ? '700' : '500'};font-size:0.9rem;">${esc(m.from_name || m.from_email)}</div>
           <div style="font-size:0.76rem;color:var(--text-muted);white-space:nowrap;">${d}</div>
@@ -2153,7 +2521,7 @@ async function loadClientMessages(userId) {
         <strong style="color:${isClient?'var(--accent-light)':'var(--text)'}">${esc(isClient?'Klant':'U (auditor)')}</strong> · ${esc(time)}
       </div>
       <div style="font-size:0.88rem;white-space:pre-wrap;">${esc(m.body)}</div>
-      ${m.attachment_name ? `<div onclick="downloadAttachment('${esc(m.attachment_path)}','${esc(m.attachment_name)}')" style="margin-top:10px;padding:8px 12px;background:rgba(255,255,255,0.04);border-radius:6px;cursor:pointer;display:flex;align-items:center;gap:10px;font-size:0.82rem;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent-light)" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/></svg>${esc(m.attachment_name)}</div>` : ''}
+      ${m.attachment_name ? `<div onclick="downloadAttachment('${esc(m.attachment_path)}','${esc(m.attachment_name)}')" style="margin-top:10px;padding:8px 12px;background:rgba(16,24,40,0.04);border-radius:6px;cursor:pointer;display:flex;align-items:center;gap:10px;font-size:0.82rem;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent-light)" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/></svg>${esc(m.attachment_name)}</div>` : ''}
     </div>`;
   });
   html += '</div>';
