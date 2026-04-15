@@ -1499,7 +1499,6 @@ function renderMail() {
       </div>`;
     return;
   }
-  const esc = (s) => String(s ?? '').replace(/[<>&"]/g, c => ({'<':'&lt;','>':'&gt;','&':'amp;','"':'&quot;'}[c]));
   listEl.innerHTML = mailData.map(m => {
     const d = new Date(m.received_at).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
     const unread = !m.is_read;
