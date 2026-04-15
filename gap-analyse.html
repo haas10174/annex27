@@ -1815,6 +1815,13 @@ function submitLead(e) {
     a.href = 'bestellen.html?' + params.toString();
   });
 
+  if (window.annex27Track) {
+    window.annex27Track('quickscan_completed', {
+      sector: lead.sector || 'onbekend',
+      score: lead.score || ''
+    });
+  }
+
   document.getElementById('leadCapture').style.display = 'none';
   document.getElementById('leadSuccess').classList.add('visible');
 }

@@ -156,5 +156,29 @@
   <a href="/portal" class="back-link">Al een account? Log hier in &rarr;</a>
 </div>
 
+<script>
+(function () {
+  // Fire purchase event on success — dedupe via localStorage so reloads don't double-count
+  try {
+    var params = new URLSearchParams(location.search);
+    var orderId = params.get('order') || params.get('id') || params.get('paymentId');
+    var plan = params.get('plan') || 'unknown';
+    var value = parseFloat(params.get('value') || params.get('amount') || '0');
+    if (!orderId) return;
+    var key = 'annex27_purchase_' + orderId;
+    if (localStorage.getItem(key)) return;
+    localStorage.setItem(key, '1');
+    if (window.annex27Track) {
+      window.annex27Track('purchase', {
+        transaction_id: orderId,
+        currency: 'EUR',
+        value: isFinite(value) ? value : 0,
+        items: [{ item_id: plan, item_name: plan, quantity: 1, price: isFinite(value) ? value : 0 }]
+      });
+    }
+  } catch (e) {}
+})();
+</script>
+
 </body>
 </html>

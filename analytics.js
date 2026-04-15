@@ -52,7 +52,65 @@
     try { gtag('event', name, params || {}); } catch (e) {}
   };
 
-  // 6. Cookie banner — alleen tonen als nog geen keuze
+  // 6. Auto-tracking via data-attributes + outbound/mailto/tel
+  function attrsToParams(el) {
+    var params = {};
+    for (var i = 0; i < el.attributes.length; i++) {
+      var a = el.attributes[i];
+      if (a.name.indexOf('data-ga-') === 0 && a.name !== 'data-ga-event') {
+        params[a.name.substring(8).replace(/-/g, '_')] = a.value;
+      }
+    }
+    return params;
+  }
+
+  function onClickDelegate(e) {
+    // 1) Any element with data-ga-event fires that event
+    var trigger = e.target.closest('[data-ga-event]');
+    if (trigger) {
+      window.annex27Track(trigger.getAttribute('data-ga-event'), attrsToParams(trigger));
+      return;
+    }
+    // 2) Anchor defaults
+    var a = e.target.closest('a[href]');
+    if (!a) return;
+    var href = a.getAttribute('href') || '';
+    if (href.indexOf('mailto:') === 0) {
+      window.annex27Track('email_click', { link_text: (a.textContent || '').trim().slice(0, 50) });
+    } else if (href.indexOf('tel:') === 0) {
+      window.annex27Track('phone_click', {});
+    } else if (a.hostname && a.hostname !== location.hostname && a.hostname !== '') {
+      window.annex27Track('outbound_click', { link_domain: a.hostname, link_url: href });
+    }
+  }
+
+  // 7. Scroll depth (25/50/75/100%)
+  var scrollMarks = [25, 50, 75, 100];
+  var scrollFired = {};
+  function onScroll() {
+    var sh = document.documentElement.scrollHeight - window.innerHeight;
+    if (sh <= 0) return;
+    var pct = Math.round((window.pageYOffset / sh) * 100);
+    for (var i = 0; i < scrollMarks.length; i++) {
+      var m = scrollMarks[i];
+      if (pct >= m && !scrollFired[m]) {
+        scrollFired[m] = true;
+        window.annex27Track('scroll_depth', { percent: m });
+      }
+    }
+  }
+
+  function bind() {
+    document.addEventListener('click', onClickDelegate, true);
+    window.addEventListener('scroll', onScroll, { passive: true });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', bind);
+  } else {
+    bind();
+  }
+
+  // 8. Cookie banner — alleen tonen als nog geen keuze
   if (saved) return;
 
   function buildBanner() {

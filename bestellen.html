@@ -379,6 +379,10 @@
     selectedPlan = plan;
     selectedPrice = price;
 
+    if (window.annex27Track) {
+      window.annex27Track('bestelling_clicked', { plan: plan, price: price, currency: 'EUR' });
+    }
+
     const btw = Math.round(price * 0.21 * 100) / 100;
     const total = Math.round((price + btw) * 100) / 100;
 
@@ -447,6 +451,14 @@
 
       if (error || !result?.checkoutUrl) {
         throw new Error(result?.error || error?.message || 'Betaling kon niet worden aangemaakt');
+      }
+
+      if (window.annex27Track) {
+        window.annex27Track('begin_checkout', {
+          currency: 'EUR',
+          value: selectedPrice,
+          items: [{ item_id: selectedPlan, item_name: selectedPlan, price: selectedPrice, quantity: 1 }]
+        });
       }
 
       // Redirect to Mollie checkout
