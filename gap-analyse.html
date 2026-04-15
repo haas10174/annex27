@@ -3,9 +3,67 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Gratis ISO 27001 Quickscan | Annex27</title>
-  <meta name="description" content="Ontdek in 5 minuten hoe compliant uw organisatie is. Gratis ISO 27001 quickscan met directe score en NIS2-indicatie." />
-  <link rel="canonical" href="https://annex27.nl/gap-analyse" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <meta name="theme-color" content="#14b8a6" />
+
+  <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
+  <title>Gratis ISO 27001 Quickscan voor MKB | Annex27</title>
+  <meta name="title" content="Gratis ISO 27001 Quickscan voor MKB | Annex27" />
+  <meta name="description" content="Doe in 5 minuten een gratis ISO 27001 quickscan met directe compliance-score, sector-specifieke aanbevelingen en NIS2-indicatie. Geen registratie nodig." />
+  <meta name="keywords" content="ISO 27001 quickscan, gratis gap-analyse, ISO 27001 self-assessment, NIS2 check, compliance score, MKB informatiebeveiliging" />
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large" />
+  <meta name="theme-color" content="#0D9488" />
+  <link rel="canonical" href="https://annex27.nl/gap-analyse.html" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://annex27.nl/gap-analyse.html" />
+  <meta property="og:title" content="Gratis ISO 27001 Quickscan voor MKB | Annex27" />
+  <meta property="og:description" content="Binnen 5 minuten weten hoe compliant u bent. Sector-specifieke score + NIS2-indicatie. Geen registratie nodig." />
+  <meta property="og:image" content="https://annex27.nl/og-image.svg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:locale" content="nl_NL" />
+  <meta property="og:site_name" content="Annex27" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Gratis ISO 27001 Quickscan voor MKB | Annex27" />
+  <meta name="twitter:description" content="5-minuten compliance-check met sector-profiel en NIS2-indicatie. Gratis." />
+  <meta name="twitter:image" content="https://annex27.nl/og-image.svg" />
+
+  <link rel="alternate" hreflang="nl-NL" href="https://annex27.nl/gap-analyse.html" />
+  <link rel="alternate" hreflang="nl-BE" href="https://annex27.nl/gap-analyse.html" />
+  <link rel="alternate" hreflang="x-default" href="https://annex27.nl/gap-analyse.html" />
+
+  <!-- Structured Data: BreadcrumbList + Service -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {"@type":"ListItem","position":1,"name":"Home","item":"https://annex27.nl/"},
+      {"@type":"ListItem","position":2,"name":"Gratis quickscan","item":"https://annex27.nl/gap-analyse.html"}
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "name": "Gratis ISO 27001 Quickscan",
+    "provider": {"@type":"Organization","name":"Annex27","url":"https://annex27.nl"},
+    "areaServed": [{"@type":"Country","name":"Netherlands"},{"@type":"Country","name":"Belgium"}],
+    "description": "Gratis online self-assessment tegen 13 kern-controles uit ISO 27001:2022 met directe compliance-score en sector-specifieke aanbevelingen.",
+    "offers": {"@type":"Offer","price":"0","priceCurrency":"EUR"}
+  }
+  </script>
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -771,6 +829,214 @@
       .q-text { font-size: 1.15rem; }
       .lead-capture { padding: 24px; }
     }
+
+    /* ── SECTOR SELECTION ────────────── */
+    .sector-select {
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 40px 24px;
+      background: var(--bg);
+    }
+    .sector-content { max-width: 640px; position: relative; z-index: 1; }
+    .sector-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      cursor: pointer;
+      background: none;
+      border: none;
+      font-family: 'Sora', sans-serif;
+      margin-bottom: 32px;
+      transition: color 0.2s;
+    }
+    .sector-back:hover { color: var(--text-primary); }
+    .sector-back svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2; }
+    .sector-content h2 {
+      font-size: clamp(1.5rem, 4vw, 2rem);
+      font-weight: 800;
+      color: var(--text-primary);
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+      margin-bottom: 8px;
+    }
+    .sector-content > p {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      margin-bottom: 36px;
+    }
+    .sector-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      text-align: left;
+    }
+    .sector-option {
+      padding: 20px;
+      background: var(--surface);
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .sector-option:hover {
+      border-color: var(--accent);
+      background: var(--accent-glow);
+    }
+    .sector-option.selected {
+      border-color: var(--accent);
+      background: var(--accent-light);
+    }
+    .sector-option-icon { font-size: 1.3rem; margin-bottom: 8px; display: block; }
+    .sector-option-name {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+    .sector-option-desc {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+    .sector-confirm {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--accent);
+      color: white;
+      padding: 14px 32px;
+      border-radius: var(--radius);
+      font-family: 'Sora', sans-serif;
+      font-weight: 700;
+      font-size: 0.95rem;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-top: 28px;
+      opacity: 0.4;
+      pointer-events: none;
+    }
+    .sector-confirm.enabled { opacity: 1; pointer-events: auto; }
+    .sector-confirm.enabled:hover { background: var(--accent-hover); transform: translateY(-2px); }
+    .sector-confirm svg { width: 16px; height: 16px; stroke: white; fill: none; stroke-width: 2.5; }
+
+    @media (max-width: 480px) {
+      .sector-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ── SECTOR RESULTS SECTIONS ─────── */
+    .results-sector-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(13,148,136,0.12);
+      border: 1px solid rgba(13,148,136,0.2);
+      border-radius: 100px;
+      padding: 5px 14px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--accent);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .sector-insights {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 24px;
+    }
+    .sector-insight-card {
+      background: var(--dark-card);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: var(--radius);
+      padding: 20px;
+    }
+    .sector-insight-card h4 {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.35);
+      margin-bottom: 12px;
+    }
+    .sector-insight-card ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .sector-insight-card li {
+      font-size: 0.82rem;
+      color: rgba(255,255,255,0.6);
+      padding: 5px 0;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      line-height: 1.5;
+    }
+    .sector-insight-card li::before {
+      content: '';
+      width: 4px; height: 4px;
+      border-radius: 50%;
+      background: var(--accent);
+      flex-shrink: 0;
+      margin-top: 7px;
+    }
+    .soa-preview {
+      background: var(--dark-card);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: var(--radius);
+      padding: 20px;
+    }
+    .soa-preview h4 {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.35);
+      margin-bottom: 8px;
+    }
+    .soa-stat {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+    .soa-stat-num {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: white;
+    }
+    .soa-stat-label {
+      font-size: 0.82rem;
+      color: rgba(255,255,255,0.4);
+    }
+    .soa-stat-sub {
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.35);
+      line-height: 1.6;
+    }
+    .framework-badges {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+    .framework-badge {
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 100px;
+      background: rgba(255,255,255,0.06);
+      color: rgba(255,255,255,0.5);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    @media (max-width: 900px) {
+      .sector-insights { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>
@@ -807,6 +1073,54 @@
         Uw data blijft privé
       </div>
     </div>
+  </div>
+</div>
+
+<!-- ═══ SECTOR SELECTION SCREEN ══════════ -->
+<div class="screen sector-select" id="screenSector">
+  <div class="sector-content">
+    <button class="sector-back" onclick="show('screenIntro')">
+      <svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      Terug
+    </button>
+    <h2>In welke sector opereert<br />uw organisatie?</h2>
+    <p>Wij stemmen de quickscan af op uw sector zodat de resultaten en aanbevelingen direct relevant zijn.</p>
+    <div class="sector-grid">
+      <div class="sector-option" onclick="pickSector('saas', this)">
+        <span class="sector-option-icon">&#9729;&#65039;</span>
+        <div class="sector-option-name">SaaS &amp; Cloud</div>
+        <div class="sector-option-desc">Software, platforms, cloud-diensten</div>
+      </div>
+      <div class="sector-option" onclick="pickSector('it', this)">
+        <span class="sector-option-icon">&#128421;&#65039;</span>
+        <div class="sector-option-name">IT-dienstverlener / MSP</div>
+        <div class="sector-option-desc">Managed services, consultancy, hosting</div>
+      </div>
+      <div class="sector-option" onclick="pickSector('zorg', this)">
+        <span class="sector-option-icon">&#127973;</span>
+        <div class="sector-option-name">Zorg &amp; Medisch</div>
+        <div class="sector-option-desc">Zorginstellingen, medische technologie</div>
+      </div>
+      <div class="sector-option" onclick="pickSector('overheid', this)">
+        <span class="sector-option-icon">&#127963;&#65039;</span>
+        <div class="sector-option-name">Overheid &amp; Semi-overheid</div>
+        <div class="sector-option-desc">Gemeenten, uitvoeringsorganisaties, ZBO's</div>
+      </div>
+      <div class="sector-option" onclick="pickSector('bouw', this)">
+        <span class="sector-option-icon">&#127959;&#65039;</span>
+        <div class="sector-option-name">Bouw &amp; Techniek</div>
+        <div class="sector-option-desc">Aannemers, ingenieursbureaus, infra</div>
+      </div>
+      <div class="sector-option" onclick="pickSector('overig', this)">
+        <span class="sector-option-icon">&#128640;</span>
+        <div class="sector-option-name">Scale-up / Overig</div>
+        <div class="sector-option-desc">Fintech, retail, logistiek, overige</div>
+      </div>
+    </div>
+    <button class="sector-confirm" id="sectorConfirm" onclick="confirmSector()">
+      Start quickscan
+      <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </button>
   </div>
 </div>
 
@@ -850,6 +1164,7 @@
   </div>
   <div class="results-body">
     <div class="results-header">
+      <div class="results-sector-badge" id="resultsSectorBadge"></div>
       <h2 id="resultsTitle">Uw compliance score</h2>
       <p id="resultsSubtitle"></p>
     </div>
@@ -882,30 +1197,279 @@
         </div>
       </div>
     </div>
+
+    <!-- Sector-specific insights -->
+    <div class="sector-insights" id="sectorInsights" style="display:none;">
+      <div class="sector-insight-card">
+        <h4>Veelvoorkomende valkuilen in uw sector</h4>
+        <ul id="sectorPitfalls"></ul>
+      </div>
+      <div class="soa-preview">
+        <h4>SoA indicatie</h4>
+        <div class="soa-stat">
+          <span class="soa-stat-num" id="soaNum">88+</span>
+          <span class="soa-stat-label">van 93 controls van toepassing</span>
+        </div>
+        <div class="soa-stat-sub" id="soaDesc"></div>
+        <div class="framework-badges" id="frameworkBadges"></div>
+      </div>
+    </div>
+
+    <!-- Prioritized action list -->
+    <div class="sector-insight-card" id="sectorActions" style="display:none;margin-top:16px;">
+      <h4>Aanbevolen prioriteiten voor uw sector</h4>
+      <ul id="sectorActionList"></ul>
+    </div>
     <div class="lead-capture" id="leadCapture">
-      <h3>Ontvang uw persoonlijke actieplan</h3>
-      <p>Wij sturen u een uitgebreid rapport met concrete aanbevelingen per categorie.</p>
+      <h3>Bewaar uw resultaat</h3>
+      <p>Vul uw gegevens in om uw score te bewaren en ontdek hoe u uw compliance kunt verbeteren.</p>
       <form class="lead-form" id="leadForm" onsubmit="submitLead(event)">
         <input class="lead-input" type="text" name="naam" placeholder="Naam" required />
         <input class="lead-input" type="text" name="bedrijf" placeholder="Bedrijfsnaam" required />
         <input class="lead-input full" type="email" name="email" placeholder="E-mailadres" required />
-        <button type="submit" class="lead-submit">Verstuur mijn actieplan</button>
+        <button type="submit" class="lead-submit">Resultaat bewaren</button>
       </form>
     </div>
     <div class="lead-success" id="leadSuccess">
-      <h3>Uw actieplan is onderweg</h3>
-      <p style="color:rgba(255,255,255,0.45);margin-bottom:24px;">U ontvangt het rapport binnen 24 uur per e-mail, gevalideerd door onze Lead Auditor.</p>
-      <p style="color:rgba(255,255,255,0.55);font-size:0.95rem;margin-bottom:8px;">Wilt u exact weten waar u staat?</p>
-      <a href="#" class="cta-gap" onclick="alert('De volledige gap-analyse pagina wordt binnenkort gelanceerd.');return false;">
-        Start de volledige gap-analyse — €349
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </a>
-      <p style="color:rgba(255,255,255,0.3);font-size:0.78rem;margin-top:12px;">Alle 93 Annex A controls · Lead Auditor review · Concreet actieplan</p>
+      <h3>Resultaat bewaard</h3>
+      <p style="color:rgba(255,255,255,0.6);margin-bottom:28px;max-width:520px;margin-left:auto;margin-right:auto;line-height:1.7;">
+        Dit was de <strong style="color:rgba(255,255,255,0.9);">gratis quickscan</strong> &mdash; een indicatie op basis van 13 vragen. Voor een <strong style="color:rgba(255,255,255,0.9);">auditor-ready rapport</strong> doet u de volledige gap-analyse: alle 93 Annex A controls met verplichte bewijsvoering en persoonlijke review door onze Lead Auditor.
+      </p>
+
+      <div style="max-width:540px;margin:0 auto 20px;background:rgba(13,148,136,0.08);border:1px solid rgba(13,148,136,0.25);border-radius:12px;padding:24px;text-align:left;">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:16px;">
+          <div>
+            <div style="font-size:0.7rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#14b8a6;margin-bottom:4px;">Volgende stap</div>
+            <div style="font-size:1.1rem;font-weight:700;color:white;">Volledige gap-analyse</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:1.4rem;font-weight:800;color:white;">&euro;349</div>
+            <div style="font-size:0.72rem;color:rgba(255,255,255,0.4);">eenmalig</div>
+          </div>
+        </div>
+        <ul style="list-style:none;padding:0;margin:0 0 20px;">
+          <li style="display:flex;gap:8px;align-items:flex-start;font-size:0.85rem;color:rgba(255,255,255,0.75);padding:4px 0;"><span style="color:#14b8a6;">&#10003;</span> Alle 93 Annex A controls + clausules 4-10</li>
+          <li style="display:flex;gap:8px;align-items:flex-start;font-size:0.85rem;color:rgba(255,255,255,0.75);padding:4px 0;"><span style="color:#14b8a6;">&#10003;</span> Bewijsvoering per claim verplicht</li>
+          <li style="display:flex;gap:8px;align-items:flex-start;font-size:0.85rem;color:rgba(255,255,255,0.75);padding:4px 0;"><span style="color:#14b8a6;">&#10003;</span> Persoonlijke Lead Auditor review</li>
+          <li style="display:flex;gap:8px;align-items:flex-start;font-size:0.85rem;color:rgba(255,255,255,0.75);padding:4px 0;"><span style="color:#14b8a6;">&#10003;</span> Professioneel PDF-rapport binnen 48u</li>
+        </ul>
+        <a href="bestellen.html?plan=gap" class="cta-gap" style="display:block;text-align:center;width:100%;margin:0;font-size:0.95rem;">
+          Bestellen &amp; direct starten &rarr;
+        </a>
+      </div>
+
+      <p style="color:rgba(255,255,255,0.35);font-size:0.78rem;margin-top:16px;">
+        Na betaling ontvangt u direct uw inloggegevens voor het dashboard.
+      </p>
+
+      <p style="color:rgba(255,255,255,0.3);font-size:0.75rem;margin-top:24px;">
+        Vragen? Mail <a href="mailto:info@annex27.nl" style="color:rgba(255,255,255,0.6);text-decoration:underline;">info@annex27.nl</a>
+      </p>
     </div>
   </div>
 </div>
 
 <script>
+// ── SECTOR PROFILES ──────────────────
+const sectorProfiles = {
+  saas: {
+    label: 'SaaS & Cloud',
+    icon: '\u2601\uFE0F',
+    benchmark: 38,
+    relevantControls: 88,
+    naControls: 5,
+    priority: 'Certificeringsvolgorde: scope \u2192 risicobeoordeling \u2192 beleid \u2192 implementatie \u2192 interne audit',
+    pitfalls: [
+      'Supplier management: geen overzicht van (sub)verwerkers en geen leveranciersbeoordelingen',
+      'Logging & monitoring: geen centraal logging, alerting of retentiebeleid',
+      'Change management: geen formeel wijzigingsproces, geen scheiding dev/staging/prod',
+      'Offboarding: toegangsrechten worden niet tijdig ingetrokken bij vertrek'
+    ],
+    actions: [
+      'Stel ISMS-scope en toepassingsverklaring op (Clause 4.3)',
+      'Voer een formele risicobeoordeling uit (Clause 6.1.2)',
+      'Documenteer informatiebeveiligingsbeleid en laat het goedkeuren door directie',
+      'Breng alle leveranciers en subverwerkers in kaart (A.5.19\u2013A.5.22)',
+      'Implementeer centraal logging en stel retentiebeleid vast (A.8.15)',
+      'Formaliseer change management proces met approvals (A.8.32)'
+    ],
+    frameworks: ['ISO 27001', 'AVG/GDPR', 'NIS2', 'SOC 2'],
+    soaDesc: 'Bij SaaS-organisaties zijn vrijwel alle 93 Annex A controls van toepassing. Slechts een handvol fysieke controls (bijv. equipment disposal, bekabeling) kan onderbouwd worden uitgesloten.',
+    categoryTips: {
+      org:  { low: 'Governance en beleid ontbreken \u2014 bij SaaS-bedrijven is dit de basis voor klantvertrouwen en enterprise deals.', mid: 'Goede start. Formaliseer beleid en supplier management om certificeringsklaar te zijn.', high: 'Sterke organisatorische basis voor certificering.' },
+      hr:   { low: 'Zonder screening en awareness training vormen medewerkers uw grootste risico.', mid: 'Procedures bestaan maar zijn niet volledig \u2014 let op offboarding.', high: 'Goed ingericht qua personeel.' },
+      phys: { low: 'Ook bij cloud-first organisaties is fysieke beveiliging van kantoor en apparatuur vereist.', mid: 'Basisbescherming aanwezig. Vergeet clean desk policy niet.', high: 'Fysieke beveiliging is op orde.' },
+      tech: { low: 'Technische basismaatregelen ontbreken \u2014 MFA, encryptie en patching zijn minimale vereisten.', mid: 'Deels ingericht. Focus op logging, vulnerability management en netwerksegmentatie.', high: 'Sterke technische maatregelen.' },
+      risk: { low: 'Geen formeel risicoproces \u2014 dit is een harde eis voor ISO 27001 certificering.', mid: 'Risicobewustzijn is er. Documenteer de risicobeoordeling en stel een behandelplan op.', high: 'Goed gedocumenteerd risicobeheer.' },
+    }
+  },
+  it: {
+    label: 'IT-dienstverlener / MSP',
+    icon: '\uD83D\uDDA5\uFE0F',
+    benchmark: 41,
+    relevantControls: 90,
+    naControls: 3,
+    priority: 'Certificeringsvolgorde met nadruk op klant-facing controls en supplier management',
+    pitfalls: [
+      'Scheiding klantomgevingen: onvoldoende isolatie tussen klantdata',
+      'Incident response: geen formeel proces voor het melden aan klanten',
+      'Toegangsbeheer: te brede rechten op klantinfrastructuur',
+      'Business continuity: geen getest continuiteitsplan voor eigen dienstverlening'
+    ],
+    actions: [
+      'Stel ISMS-scope op inclusief klantdiensten (Clause 4.3)',
+      'Voer risicobeoordeling uit met focus op klantdata (Clause 6.1.2)',
+      'Implementeer strikte access control per klantomgeving (A.5.15\u2013A.5.18)',
+      'Documenteer incident response inclusief klantnotificatie (A.5.24\u2013A.5.28)',
+      'Stel business continuity plan op en test periodiek (A.5.29\u2013A.5.30)',
+      'Breng eigen leveranciersketen in kaart (A.5.19\u2013A.5.22)'
+    ],
+    frameworks: ['ISO 27001', 'AVG/GDPR', 'NIS2', 'SOC 2'],
+    soaDesc: 'MSP\'s en IT-dienstverleners hebben vrijwel alle controls nodig, inclusief fysieke beveiliging van eigen en klantlocaties.',
+    categoryTips: {
+      org:  { low: 'Beleid ontbreekt \u2014 voor IT-dienstverleners is dit cruciaal om aanbestedingen te winnen.', mid: 'Goede start. Formaliseer supplier management en incidentproces.', high: 'Sterke governance basis.' },
+      hr:   { low: 'Medewerkers met toegang tot klantinfrastructuur zonder screening is een groot risico.', mid: 'Procedures bestaan maar screening en offboarding moeten strakker.', high: 'Goed ingericht.' },
+      phys: { low: 'Fysieke toegang tot serverruimtes en kantoor moet geregeld zijn.', mid: 'Basisbescherming aanwezig.', high: 'Op orde.' },
+      tech: { low: 'Technische basismaatregelen ontbreken.', mid: 'Focus op klant-isolatie, logging en vulnerability management.', high: 'Sterk technisch fundament.' },
+      risk: { low: 'Zonder risicoproces kunt u geen ISO 27001 certificering behalen.', mid: 'Documenteer risico\'s specifiek per klantomgeving.', high: 'Goed gedocumenteerd.' },
+    }
+  },
+  zorg: {
+    label: 'Zorg & Medisch',
+    icon: '\uD83C\uDFE5',
+    benchmark: 35,
+    relevantControls: 91,
+    naControls: 2,
+    priority: 'Patiëntgegevens en privacy eerst, dan governance en technische maatregelen',
+    pitfalls: [
+      'Toegang tot patiëntdossiers: onvoldoende logging en controle',
+      'Verwerkersovereenkomsten: niet op orde met leveranciers van zorgsystemen',
+      'Mobile devices: onbeveiligde apparaten in klinische omgevingen',
+      'Awareness: medisch personeel onvoldoende getraind in informatiebeveiliging'
+    ],
+    actions: [
+      'Breng alle verwerkingen van bijzondere persoonsgegevens in kaart',
+      'Stel ISMS-scope op met nadruk op patiëntgegevens (Clause 4.3)',
+      'Implementeer logging op toegang tot patiëntdossiers (A.8.15)',
+      'Controleer alle verwerkersovereenkomsten met zorgsysteem-leveranciers',
+      'Voer awareness training uit gericht op medisch personeel (A.6.3)',
+      'Stel mobile device policy op voor klinische omgevingen (A.8.1)'
+    ],
+    frameworks: ['ISO 27001', 'NEN 7510', 'AVG/GDPR', 'NIS2'],
+    soaDesc: 'In de zorgsector zijn vrijwel alle controls van toepassing. NEN 7510 stelt aanvullende eisen bovenop ISO 27001 specifiek voor gezondheidsinformatie.',
+    categoryTips: {
+      org:  { low: 'Beleid rondom patiëntgegevens ontbreekt \u2014 dit is een wettelijke verplichting.', mid: 'Basis aanwezig, maar verwerkersovereenkomsten en incidentproces moeten op orde.', high: 'Goede organisatorische basis.' },
+      hr:   { low: 'Medisch personeel zonder awareness training is het grootste risico in de zorg.', mid: 'Basis aanwezig, maar training moet structureel en periodiek.', high: 'Goed ingericht.' },
+      phys: { low: 'Fysieke toegang tot behandelruimtes en dossierkasten moet geregeld.', mid: 'Basisbescherming aanwezig.', high: 'Op orde.' },
+      tech: { low: 'Technische basismaatregelen ontbreken \u2014 logging op patiëntdossiers is prioriteit.', mid: 'Focus op logging, encryptie en mobile device management.', high: 'Sterk technisch.' },
+      risk: { low: 'Zonder risicoproces geen zicht op bedreigingen voor patiëntgegevens.', mid: 'Risicobewustzijn is er, documenteer en behandel specifiek per zorgsysteem.', high: 'Goed gedocumenteerd.' },
+    }
+  },
+  overheid: {
+    label: 'Overheid & Semi-overheid',
+    icon: '\uD83C\uDFDB\uFE0F',
+    benchmark: 44,
+    relevantControls: 91,
+    naControls: 2,
+    priority: 'BIO-compliance als uitgangspunt, aangevuld met ISO 27001 certificering',
+    pitfalls: [
+      'Classificatie: overheidsinformatie niet geclassificeerd volgens BIR/BIO',
+      'Leveranciersmanagement: geen eisen aan toeleveranciers in aanbestedingen',
+      'Logging: onvoldoende audit trails op gevoelige verwerkingen',
+      'Continuiteit: geen getest uitwijkplan voor kritieke dienstverlening'
+    ],
+    actions: [
+      'Classificeer alle informatie volgens BIO-richtlijnen',
+      'Stel ISMS-scope op afgestemd op BIO-verplichtingen (Clause 4.3)',
+      'Neem informatiebeveiligingseisen op in aanbestedingen (A.5.19)',
+      'Implementeer audit logging op alle gevoelige verwerkingen (A.8.15)',
+      'Stel uitwijkplan op en test jaarlijks (A.5.29\u2013A.5.30)',
+      'Voer periodieke risicobeoordelingen uit (Clause 6.1.2)'
+    ],
+    frameworks: ['ISO 27001', 'BIO', 'AVG/GDPR', 'NIS2'],
+    soaDesc: 'Bij overheidsorganisaties zijn vrijwel alle controls van toepassing. De BIO (Baseline Informatiebeveiliging Overheid) is het verplichte normenkader en sluit direct aan op ISO 27001.',
+    categoryTips: {
+      org:  { low: 'Governance ontbreekt \u2014 BIO-compliance vereist formeel beleid en classificatie.', mid: 'Basis aanwezig. Focus op classificatie en leveranciersmanagement.', high: 'Sterke organisatorische basis.' },
+      hr:   { low: 'Screening en bewustzijn zijn verplicht voor overheidsmedewerkers.', mid: 'Procedures bestaan maar moeten formeler.', high: 'Goed ingericht.' },
+      phys: { low: 'Fysieke beveiliging van overheidslocaties is kritiek.', mid: 'Basisbescherming aanwezig.', high: 'Op orde.' },
+      tech: { low: 'Technische basismaatregelen ontbreken.', mid: 'Focus op logging en netwerksegmentatie.', high: 'Sterk technisch.' },
+      risk: { low: 'BIO vereist een formeel risicomanagementproces.', mid: 'Documenteer en behandel risico\'s per informatiesysteem.', high: 'Goed gedocumenteerd.' },
+    }
+  },
+  bouw: {
+    label: 'Bouw & Techniek',
+    icon: '\uD83C\uDFD7\uFE0F',
+    benchmark: 28,
+    relevantControls: 85,
+    naControls: 8,
+    priority: 'Basisbeleid en fysieke beveiliging eerst, dan technische maatregelen',
+    pitfalls: [
+      'Projectlocaties: geen beveiliging van gevoelige informatie op bouwplaatsen',
+      'Onderaannemers: geen informatiebeveiligingseisen in contracten',
+      'Mobile devices: onbeveiligde tablets en laptops op locatie',
+      'Documentbeheer: projectdocumentatie niet geclassificeerd of beschermd'
+    ],
+    actions: [
+      'Stel informatiebeveiligingsbeleid op, goedgekeurd door directie',
+      'Classificeer projectinformatie en stel toegangsbeleid op',
+      'Neem informatiebeveiligingseisen op in onderaannemerscontracten (A.5.19)',
+      'Beveilig mobiele apparaten op projectlocaties (A.8.1)',
+      'Implementeer clean desk beleid voor kantoor en keten (A.7.7)',
+      'Voer een risicobeoordeling uit gericht op projectinformatie (Clause 6.1.2)'
+    ],
+    frameworks: ['ISO 27001', 'AVG/GDPR'],
+    soaDesc: 'In de bouwsector zijn circa 85 van de 93 controls relevant. Sommige geavanceerde technische controls (bijv. DLP, code review) kunnen onderbouwd worden uitgesloten.',
+    categoryTips: {
+      org:  { low: 'Beleid ontbreekt \u2014 voor aanbestedingen bij overheden is dit steeds vaker vereist.', mid: 'Goede start. Focus op onderaannemersmanagement.', high: 'Sterke basis.' },
+      hr:   { low: 'Medewerkers en onderaannemers zonder bewustzijnstraining vormen een risico.', mid: 'Basistraining aanwezig, maar moet uitgebreid naar onderaannemers.', high: 'Goed ingericht.' },
+      phys: { low: 'Fysieke beveiliging op bouwplaatsen en kantoor is een aandachtspunt.', mid: 'Kantoor is beveiligd, projectlocaties vereisen aandacht.', high: 'Op orde.' },
+      tech: { low: 'Basismaatregelen zoals MFA en encryptie ontbreken.', mid: 'Focus op mobile device management en documentsbeveiliging.', high: 'Goed ingericht.' },
+      risk: { low: 'Geen formeel risicoproces \u2014 start met projectrisico\'s.', mid: 'Risicobewustzijn is er, maar documentatie ontbreekt.', high: 'Goed gedocumenteerd.' },
+    }
+  },
+  overig: {
+    label: 'Scale-up / Overig',
+    icon: '\uD83D\uDE80',
+    benchmark: 36,
+    relevantControls: 87,
+    naControls: 6,
+    priority: 'Certificeringsvolgorde: scope \u2192 risico \u2192 beleid \u2192 implementatie \u2192 audit',
+    pitfalls: [
+      'Documentatie: beleid en procedures ontbreken of zijn verouderd',
+      'Groei zonder governance: processen schalen niet mee met de organisatie',
+      'Toegangsbeheer: ad-hoc rechten zonder formeel proces',
+      'Supplier management: geen overzicht van leveranciers en verwerkersovereenkomsten'
+    ],
+    actions: [
+      'Stel ISMS-scope vast afgestemd op uw organisatie (Clause 4.3)',
+      'Voer een risicobeoordeling uit (Clause 6.1.2)',
+      'Documenteer informatiebeveiligingsbeleid (A.5.1)',
+      'Formaliseer toegangsbeheerprocedures (A.5.15\u2013A.5.18)',
+      'Breng leveranciers in kaart en stel verwerkersovereenkomsten op',
+      'Implementeer basismaatregelen: MFA, encryptie, patching'
+    ],
+    frameworks: ['ISO 27001', 'AVG/GDPR'],
+    soaDesc: 'Het aantal relevante controls hangt af van uw specifieke situatie. In de volledige gap-analyse bepalen we samen welke controls van toepassing zijn.',
+    categoryTips: null // use default tips
+  }
+};
+
+let selectedSector = null;
+
+function pickSector(key, el) {
+  selectedSector = key;
+  document.querySelectorAll('.sector-option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  document.getElementById('sectorConfirm').classList.add('enabled');
+}
+
+function confirmSector() {
+  if (!selectedSector) return;
+  show('screenQuiz');
+  renderQuestion();
+  renderCatBars();
+}
+
 const questions = [
   { cat: 'org', catLabel: 'A.5 Organisatorische maatregelen', q: 'Heeft uw organisatie een formeel informatiebeveiligingsbeleid dat door het management is goedgekeurd?' },
   { cat: 'org', catLabel: 'A.5 Organisatorische maatregelen', q: 'Zijn rollen en verantwoordelijkheden voor informatiebeveiliging duidelijk vastgelegd en gecommuniceerd?' },
@@ -945,9 +1509,7 @@ const liveCirc = 2 * Math.PI * 60;  // 376.99
 const bigCirc = 2 * Math.PI * 88;   // 553.0
 
 function startQuiz() {
-  show('screenQuiz');
-  renderQuestion();
-  renderCatBars();
+  show('screenSector');
 }
 
 function show(id) {
@@ -1145,8 +1707,15 @@ function showResults() {
   else if (pct >= 40) { verdict.textContent = 'Meerdere verbeterpunten'; verdict.className = 'big-ring-verdict mid'; }
   else { verdict.textContent = 'Significante gaps aanwezig'; verdict.className = 'big-ring-verdict low'; }
 
-  // Compare
-  document.getElementById('bigCompare').innerHTML = `Uw score: <strong>${pct}%</strong> · Gemiddeld MKB: <strong>42%</strong>`;
+  // Compare — sector-specific benchmark
+  const profile = sectorProfiles[selectedSector] || sectorProfiles.overig;
+  const benchmark = profile.benchmark;
+  document.getElementById('bigCompare').innerHTML = `Uw score: <strong>${pct}%</strong> · Gemiddelde ${profile.label}: <strong>${benchmark}%</strong>`;
+
+  // Sector badge
+  const badge = document.getElementById('resultsSectorBadge');
+  badge.textContent = profile.icon + ' ' + profile.label;
+  badge.style.display = 'inline-flex';
 
   // Category results
   const catsEl = document.getElementById('resultsCats');
@@ -1154,7 +1723,8 @@ function showResults() {
   for (const [key, cat] of Object.entries(categories)) {
     const catPct = Math.round((cat.score / (cat.count * 3)) * 100);
     const level = catPct <= 33 ? 'low' : catPct <= 66 ? 'mid' : 'high';
-    const tipText = cat.tip[level];
+    const sectorTips = profile.categoryTips;
+    const tipText = (sectorTips && sectorTips[key]) ? sectorTips[key][level] : cat.tip[level];
     catsHtml += `<div class="result-cat">
       <div class="result-cat-header">
         <span class="result-cat-name">${cat.label}</span>
@@ -1187,6 +1757,29 @@ function showResults() {
     document.getElementById('nis2ResultTitle').textContent = 'NIS2-status onbekend';
     document.getElementById('nis2ResultDesc').textContent = 'Wij raden aan om uw NIS2-status te laten beoordelen. In de volledige gap-analyse checken wij dit voor u.';
   }
+
+  // ── Sector-specific insights ──
+  if (selectedSector && profile) {
+    // Pitfalls
+    const pitfallsEl = document.getElementById('sectorPitfalls');
+    pitfallsEl.innerHTML = profile.pitfalls.map(p => `<li>${p}</li>`).join('');
+
+    // SoA preview
+    document.getElementById('soaNum').textContent = profile.relevantControls + '+';
+    document.getElementById('soaDesc').textContent = profile.soaDesc;
+
+    // Framework badges
+    const badgesEl = document.getElementById('frameworkBadges');
+    badgesEl.innerHTML = profile.frameworks.map(f => `<span class="framework-badge">${f}</span>`).join('');
+
+    // Show insights
+    document.getElementById('sectorInsights').style.display = 'grid';
+
+    // Prioritized actions
+    const actionsEl = document.getElementById('sectorActionList');
+    actionsEl.innerHTML = profile.actions.map(a => `<li>${a}</li>`).join('');
+    document.getElementById('sectorActions').style.display = 'block';
+  }
 }
 
 function submitLead(e) {
@@ -1194,14 +1787,31 @@ function submitLead(e) {
   const form = document.getElementById('leadForm');
   const data = new FormData(form);
 
-  // Store in localStorage
-  localStorage.setItem('annex27_lead', JSON.stringify({
+  const profile = sectorProfiles[selectedSector] || {};
+  const lead = {
     naam: data.get('naam'),
     bedrijf: data.get('bedrijf'),
     email: data.get('email'),
+    sector: selectedSector,
+    sectorLabel: profile.label || 'Onbekend',
     score: document.getElementById('bigPct').textContent,
     date: new Date().toISOString()
-  }));
+  };
+  localStorage.setItem('annex27_lead', JSON.stringify(lead));
+
+  // Enrich the "Bestellen & direct starten" link with personalization params
+  const params = new URLSearchParams({
+    plan: 'gap',
+    naam: lead.naam || '',
+    bedrijf: lead.bedrijf || '',
+    email: lead.email || '',
+    sector: lead.sector || '',
+    sectorLabel: lead.sectorLabel || '',
+    score: lead.score || ''
+  });
+  document.querySelectorAll('a.cta-gap[href*="bestellen.html"]').forEach(a => {
+    a.href = 'bestellen.html?' + params.toString();
+  });
 
   document.getElementById('leadCapture').style.display = 'none';
   document.getElementById('leadSuccess').classList.add('visible');

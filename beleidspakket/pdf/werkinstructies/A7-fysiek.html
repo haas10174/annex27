@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<title>A7-fysiek</title>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Sora', sans-serif;
+    color: #1E293B;
+    line-height: 1.7;
+    padding: 48px 56px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  h1 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #0F172A;
+    margin-bottom: 8px;
+    padding-bottom: 12px;
+    border-bottom: 3px solid #0D9488;
+  }
+  h2 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #0F172A;
+    margin-top: 32px;
+    margin-bottom: 12px;
+  }
+  h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #0D9488;
+    margin-top: 24px;
+    margin-bottom: 8px;
+  }
+  p { margin-bottom: 12px; font-size: 0.9rem; color: #475569; }
+  strong { color: #0F172A; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 0.82rem;
+  }
+  th {
+    background: #0F172A;
+    color: white;
+    padding: 10px 12px;
+    text-align: left;
+    font-weight: 600;
+  }
+  td {
+    padding: 8px 12px;
+    border-bottom: 1px solid #E2E8F0;
+    color: #475569;
+  }
+  tr:nth-child(even) td { background: #F8FAFC; }
+  tr:hover td { background: #F0FDFA; }
+  ul, ol { margin: 12px 0 12px 24px; font-size: 0.9rem; color: #475569; }
+  li { margin-bottom: 4px; }
+  code {
+    background: #F1F5F9;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.82rem;
+    color: #0D9488;
+  }
+  pre {
+    background: #0F172A;
+    color: #E2E8F0;
+    padding: 20px;
+    border-radius: 8px;
+    margin: 16px 0;
+    font-size: 0.8rem;
+    overflow-x: auto;
+  }
+  pre code { background: none; color: inherit; padding: 0; }
+  hr {
+    border: none;
+    border-top: 1px solid #E2E8F0;
+    margin: 24px 0;
+  }
+  .header-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #E2E8F0;
+  }
+  .logo {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #0F172A;
+  }
+  .logo span { color: #0D9488; }
+  .doc-meta {
+    font-size: 0.72rem;
+    color: #94A3B8;
+    text-align: right;
+  }
+  @media print {
+    body { padding: 24px 32px; }
+    h1 { font-size: 1.4rem; }
+  }
+</style>
+
+</head>
+<body>
+<div class="header-bar">
+  <div class="logo">annex<span>27</span></div>
+  <div class="doc-meta">ISO 27001:2022 Beleidspakket<br/>annex27.nl</div>
+</div>
+<h1>Werkinstructies — A.7 Fysieke maatregelen</h1>
+<hr />
+<h2>A.7.1 — Fysieke beveiligingsperimeters</h2>
+<p><strong>Wat:</strong> Grenzen van beveiligde zones definiëren en beschermen.
+<strong>Doen:</strong> Bepaal zones (openbaar/beperkt/beveiligd/hoog beveiligd). Voorzie buitengrenzen van sloten, alarmen of toegangscontrole.
+<strong>Bewijs:</strong> Plattegrond met beveiligingszones, beveiligingsmaatregelen per zone (ISMS-015).</p>
+<hr />
+<h2>A.7.2 — Fysieke toegang</h2>
+<p><strong>Wat:</strong> Toegang tot beveiligde zones beperken tot geautoriseerde personen.
+<strong>Doen:</strong> Badge-systeem, bezoekers registreren en begeleiden, tailgating voorkomen.
+<strong>Bewijs:</strong> Badge-logboek, bezoekersregister, toegangsregels per zone.</p>
+<hr />
+<h2>A.7.3 — Beveiliging van kantoren, ruimtes en faciliteiten</h2>
+<p><strong>Wat:</strong> Kantoren en faciliteiten adequaat beveiligen.
+<strong>Doen:</strong> Deuren op slot buiten werktijd, alarmsysteem actief, waardevolle apparatuur in afsluitbare ruimtes.
+<strong>Bewijs:</strong> Beveiligingsmaatregelen per locatie, alarmcontract, sleutelbeheer.</p>
+<hr />
+<h2>A.7.4 — Fysieke beveiligingsmonitoring</h2>
+<p><strong>Wat:</strong> Locaties monitoren op ongeautoriseerde toegang.
+<strong>Doen:</strong> Camerabewaking bij entree en serverruimte (indien aanwezig), badge-logging, alarmsysteem.
+<strong>Bewijs:</strong> Camerabeleid (AVG-conform), badge-logs, alarmmeldingen.</p>
+<hr />
+<h2>A.7.5 — Bescherming tegen fysieke en omgevingsdreigingen</h2>
+<p><strong>Wat:</strong> Bescherming tegen brand, water, stroomuitval en andere omgevingsrisico's.
+<strong>Doen:</strong> Brandmelders, brandblussers, UPS voor servers, geen waterleiding boven serverracks.
+<strong>Bewijs:</strong> Inspectierapporten brandpreventie, UPS-onderhoud, risicobeoordeling omgeving.</p>
+<hr />
+<h2>A.7.6 — Werken in beveiligde zones</h2>
+<p><strong>Wat:</strong> Aanvullende regels voor werken in zones met gevoelige informatie/apparatuur.
+<strong>Doen:</strong> Geen onbegeleide bezoekers, geen foto's/video, geen onbeheerde apparatuur, geen eten/drinken bij servers.
+<strong>Bewijs:</strong> Regels voor beveiligde zones, borden met instructies, bezoekersbegeleiding.</p>
+<hr />
+<h2>A.7.7 — Clear desk en clear screen</h2>
+<p><strong>Wat:</strong> Werkplekken opruimen, schermen vergrendelen.
+<strong>Doen:</strong> Vertrouwelijke documenten opbergen, scherm vergrendelen bij weglopen (Win+L / Ctrl+Cmd+Q), printer direct legen.
+<strong>Bewijs:</strong> Clean desk policy (ISMS-015), steekproefcontroles, automatische schermvergrendeling (max 5 min).</p>
+<hr />
+<h2>A.7.8 — Plaatsing en bescherming van apparatuur</h2>
+<p><strong>Wat:</strong> Apparatuur zo plaatsen dat risico's worden beperkt.
+<strong>Doen:</strong> Servers in afgesloten ruimte, schermen weg van ramen, kabels netjes en beschermd.
+<strong>Bewijs:</strong> Plattegrond met apparatuurlocaties, beveiligingsmaatregelen per locatie.</p>
+<hr />
+<h2>A.7.9 — Beveiliging van assets buiten het terrein</h2>
+<p><strong>Wat:</strong> Apparatuur die buiten kantoor wordt gebruikt beschermen.
+<strong>Doen:</strong> Laptops versleuteld (BitLocker/FileVault), nooit onbeheerd achterlaten, fysiek beveiligen.
+<strong>Bewijs:</strong> Encryptie-status werkstations, remote working policy (ISMS-030).</p>
+<hr />
+<h2>A.7.10 — Opslagmedia</h2>
+<p><strong>Wat:</strong> Opslagmedia (USB, externe schijven, tapes) beveiligen.
+<strong>Doen:</strong> Versleutelen, veilig opbergen, veilig vernietigen bij afvoer. USB-gebruik beperken.
+<strong>Bewijs:</strong> Encryptiebeleid (ISMS-016), vernietigingsregistratie, USB-beleid.</p>
+<hr />
+<h2>A.7.11 — Ondersteunende nutsvoorzieningen</h2>
+<p><strong>Wat:</strong> Stroom, klimaat en communicatie-infrastructuur beschermen.
+<strong>Doen:</strong> UPS voor kritieke systemen, klimaatbeheersing serverruimte, redundante internet.
+<strong>Bewijs:</strong> UPS-onderhoud, klimaatmonitoring, redundantie-overzicht.</p>
+<hr />
+<h2>A.7.12 — Beveiliging van bekabeling</h2>
+<p><strong>Wat:</strong> Netwerk- en stroomkabels beschermen tegen schade en aftappen.
+<strong>Doen:</strong> Kabels in kabelgoten, geen losse kabels over de vloer, fiber waar mogelijk, patchkasten afgesloten.
+<strong>Bewijs:</strong> Kabelbeheerplan, foto's van kabelmanagement.</p>
+<hr />
+<h2>A.7.13 — Onderhoud van apparatuur</h2>
+<p><strong>Wat:</strong> Apparatuur correct onderhouden.
+<strong>Doen:</strong> Preventief onderhoud volgens fabrikantschema, alleen geautoriseerde technici, data wissen voor reparatie.
+<strong>Bewijs:</strong> Onderhoudslogboek, servicecontracten, procedure voor data-wissing voor reparatie.</p>
+<hr />
+<h2>A.7.14 — Veilige verwijdering of hergebruik van apparatuur</h2>
+<p><strong>Wat:</strong> Bij afvoer of hergebruik alle data veilig verwijderen.
+<strong>Doen:</strong> Harde schijven degaussing of fysiek vernietigen, SSD crypto-shredding, vernietigingscertificaat opvragen.
+<strong>Bewijs:</strong> Vernietigingsregistratie (ISMS-027), certificaten van vernietigingsbedrijf.</p>
+</body>
+</html>

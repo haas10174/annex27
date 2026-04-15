@@ -1,0 +1,9 @@
+Contact: mailto:info@annex27.nl
+Expires: 2027-04-12T00:00:00.000Z
+Preferred-Languages: nl, en
+Canonical: https://annex27.nl/.well-known/security.txt
+Policy: https://annex27.nl/security-policy
+
+# Annex27 Responsible Disclosure
+# Wij stellen responsible disclosure op prijs. Neem contact op via info@annex27.nl
+# voordat u een kwetsbaarheid publiek maakt. Wij streven naar een reactie binnen 48 uur.

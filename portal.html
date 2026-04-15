@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <meta name="theme-color" content="#14b8a6" />
+
+  <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
+  <title>Inloggen — Annex27 Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.min.js" integrity="sha384-2zrRDgDHSYB/GN3nFW3fsZXoxEhKIr3N2h63Tc6DEOB9JJdFIu8xMJT2Cph/gBil" crossorigin="anonymous"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #FAFAFA;
+      --surface: #FFFFFF;
+      --border: #E5E5E5;
+      --border-light: #F0F0F0;
+      --text-primary: #0F172A;
+      --text-secondary: #475569;
+      --text-muted: #94A3B8;
+      --accent: #0D9488;
+      --accent-hover: #0F766E;
+      --accent-light: #CCFBF1;
+      --danger: #DC2626;
+      --radius: 10px;
+      --radius-lg: 16px;
+    }
+    html, body { height: 100%; }
+    body {
+      font-family: 'Inter', -apple-system, system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text-secondary);
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .portal {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 100vh;
+    }
+
+    /* Left: Branding */
+    .portal-brand {
+      background: var(--text-primary);
+      display: flex;
+      flex-direction: column;
+      padding: 56px 64px;
+      position: relative;
+      overflow: hidden;
+      color: rgba(255,255,255,0.8);
+    }
+    .portal-brand::before {
+      content: '';
+      position: absolute; top:0; left:0; right:0; height: 3px;
+      background: var(--accent);
+    }
+    .portal-brand-top { flex: 0 0 auto; }
+    .portal-brand-center { flex: 1 1 auto; display: flex; flex-direction: column; justify-content: center; max-width: 460px; }
+    .portal-brand-bottom { flex: 0 0 auto; }
+    .portal-brand-logo {
+      font-size: 2rem;
+      font-weight: 800;
+      color: white;
+      letter-spacing: -0.02em;
+      margin-bottom: 0;
+    }
+    .portal-brand-logo span { color: var(--accent); }
+    .portal-brand h2 {
+      font-size: 2.25rem;
+      font-weight: 800;
+      color: white;
+      line-height: 1.15;
+      margin-bottom: 20px;
+      letter-spacing: -0.035em;
+    }
+    .portal-brand p {
+      color: rgba(255,255,255,0.62);
+      font-size: 1.02rem;
+      line-height: 1.7;
+      max-width: 420px;
+      margin-bottom: 40px;
+    }
+    .portal-features {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .portal-usp {
+      display: flex;
+      gap: 32px;
+      padding-top: 32px;
+      margin-top: 32px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.55);
+      letter-spacing: 0.02em;
+    }
+    .portal-usp-item { display: flex; align-items: center; gap: 8px; }
+    .portal-usp-item svg { width: 14px; height: 14px; stroke: var(--accent); fill: none; stroke-width: 2; flex-shrink: 0; }
+    .portal-feature {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: rgba(255,255,255,0.72);
+      font-size: 0.92rem;
+    }
+    .portal-feature-icon {
+      width: 32px; height: 32px;
+      border-radius: 8px;
+      background: rgba(13,148,136,0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .portal-feature-icon svg {
+      width: 16px; height: 16px;
+      stroke: var(--accent);
+      fill: none;
+      stroke-width: 2;
+    }
+
+    /* Right: Form */
+    .portal-form-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 48px;
+    }
+    .portal-form-inner {
+      width: 100%;
+      max-width: 400px;
+    }
+    .portal-tabs {
+      display: flex;
+      gap: 0;
+      margin-bottom: 32px;
+      border-bottom: 2px solid var(--border-light);
+    }
+    .portal-tab {
+      flex: 1;
+      padding: 12px 0;
+      text-align: center;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      border: none;
+      background: none;
+      font-family: inherit;
+      position: relative;
+      transition: color 0.2s;
+    }
+    .portal-tab.active {
+      color: var(--accent);
+    }
+    .portal-tab.active::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0; right: 0;
+      height: 2px;
+      background: var(--accent);
+    }
+    .portal-tab:hover { color: var(--text-primary); }
+
+    .form-panel { display: none; }
+    .form-panel.active { display: block; }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+    .form-label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+    }
+    .form-input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
+      color: var(--text-primary);
+      outline: none;
+      transition: border-color 0.2s;
+      background: var(--surface);
+    }
+    .form-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(13,148,136,0.1);
+    }
+    .form-submit {
+      width: 100%;
+      padding: 14px;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: var(--radius);
+      font-family: 'Inter', sans-serif;
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-top: 8px;
+    }
+    .form-submit:hover { background: var(--accent-hover); }
+    .form-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .form-error {
+      display: none;
+      padding: 10px 14px;
+      background: #FEF2F2;
+      border: 1px solid #FECACA;
+      border-radius: var(--radius);
+      color: var(--danger);
+      font-size: 0.82rem;
+      margin-bottom: 16px;
+    }
+    .form-error.visible { display: block; }
+
+    .form-success {
+      display: none;
+      padding: 10px 14px;
+      background: #ECFDF5;
+      border: 1px solid #A7F3D0;
+      border-radius: var(--radius);
+      color: #059669;
+      font-size: 0.82rem;
+      margin-bottom: 16px;
+    }
+    .form-success.visible { display: block; }
+
+    .form-link {
+      display: block;
+      text-align: center;
+      margin-top: 16px;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+    .form-link a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .form-link a:hover { text-decoration: underline; }
+
+    .form-forgot {
+      text-align: right;
+      margin-bottom: 16px;
+    }
+    .form-forgot a {
+      font-size: 0.8rem;
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .back-link {
+      display: block;
+      text-align: center;
+      margin-top: 32px;
+      font-size: 0.82rem;
+    }
+    .back-link a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .back-link a:hover { color: var(--accent); }
+
+    /* Forgot password panel */
+    .forgot-panel { display: none; }
+    .forgot-panel.active { display: block; }
+    .forgot-back {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      cursor: pointer;
+      background: none;
+      border: none;
+      font-family: inherit;
+      margin-bottom: 24px;
+    }
+    .forgot-back svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; }
+
+    @media (max-width: 768px) {
+      .portal { grid-template-columns: 1fr; }
+      .portal-brand { display: none; }
+      .portal-form-wrap { padding: 32px 24px; }
+    }
+    @media (max-width: 1100px) {
+      .portal-brand { padding: 40px 40px; }
+      .portal-brand h2 { font-size: 1.85rem; }
+      .portal-usp { flex-wrap: wrap; gap: 12px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="portal">
+  <!-- Left: Branding -->
+  <div class="portal-brand">
+    <div class="portal-brand-top">
+      <div class="portal-brand-logo">annex<span>27</span></div>
+    </div>
+    <div class="portal-brand-center">
+      <h2>Uw ISO 27001<br/>compliance portaal</h2>
+      <p>Volg uw voortgang, beheer uw bewijsvoering en werk toe naar certificeringsgereedheid &mdash; gevalideerd door een Lead Auditor.</p>
+      <div class="portal-features">
+        <div class="portal-feature">
+          <div class="portal-feature-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
+          Realtime compliance-score per categorie
+        </div>
+        <div class="portal-feature">
+          <div class="portal-feature-icon"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg></div>
+          Alle 93 Annex A controls in &eacute;&eacute;n overzicht
+        </div>
+        <div class="portal-feature">
+          <div class="portal-feature-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/></svg></div>
+          Auditor-ready PDF-rapport binnen 48 uur
+        </div>
+        <div class="portal-feature">
+          <div class="portal-feature-icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+          Persoonlijke review door Lead Auditor
+        </div>
+      </div>
+    </div>
+    <div class="portal-brand-bottom">
+      <div class="portal-usp">
+        <div class="portal-usp-item"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>EU-servers &middot; AVG-compliant</div>
+        <div class="portal-usp-item"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Versleutelde opslag</div>
+        <div class="portal-usp-item"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>ISO 27001 methodologie</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right: Form -->
+  <div class="portal-form-wrap">
+    <div class="portal-form-inner">
+
+      <h2 style="font-size:1.3rem;font-weight:700;color:var(--text-primary);margin-bottom:8px;">Inloggen</h2>
+      <p style="font-size:0.88rem;color:var(--text-muted);margin-bottom:28px;">Log in met de gegevens die u van ons heeft ontvangen.</p>
+
+      <div class="form-error" id="loginError"></div>
+      <form onsubmit="handleLogin(event)">
+        <div class="form-group">
+          <label class="form-label">E-mailadres</label>
+          <input class="form-input" type="email" id="loginEmail" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Wachtwoord</label>
+          <input class="form-input" type="password" id="loginPassword" required />
+        </div>
+        <div class="form-forgot">
+          <a href="#" onclick="handleForgotClick(event)">Wachtwoord vergeten?</a>
+        </div>
+        <button type="submit" class="form-submit" id="loginBtn">Inloggen</button>
+      </form>
+
+      <div class="form-success" id="forgotSuccess" style="margin-top:16px;"></div>
+
+      <div class="back-link">
+        <a href="index.html">&larr; Terug naar annex27.nl</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ── SUPABASE CONFIG ──
+  const SUPABASE_URL = 'https://tvqhxhoohzdzekcfzjuv.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_-a0bntwsGr8mR9xROgJTzQ_Gylt8ZSo';
+  const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  // Check if already logged in
+  (async () => {
+    const { data: { session } } = await sb.auth.getSession();
+    if (session) window.location.href = 'dashboard.html';
+  })();
+
+  function showError(id, msg) {
+    const el = document.getElementById(id);
+    el.textContent = msg;
+    el.classList.add('visible');
+  }
+
+  function showSuccess(id, msg) {
+    const el = document.getElementById(id);
+    el.textContent = msg;
+    el.classList.add('visible');
+  }
+
+  // Login
+  async function handleLogin(e) {
+    e.preventDefault();
+    document.getElementById('loginError').classList.remove('visible');
+    const btn = document.getElementById('loginBtn');
+    btn.disabled = true;
+    btn.textContent = 'Even geduld...';
+
+    const email = document.getElementById('loginEmail').value;
+    const password = document.getElementById('loginPassword').value;
+
+    const { data, error } = await sb.auth.signInWithPassword({ email, password });
+
+    if (error) {
+      showError('loginError', 'Inloggen mislukt. Controleer uw e-mailadres en wachtwoord.');
+      btn.disabled = false;
+      btn.textContent = 'Inloggen';
+      return;
+    }
+
+    window.location.href = 'dashboard.html';
+  }
+
+  // Forgot password
+  async function handleForgotClick(e) {
+    e.preventDefault();
+    const email = document.getElementById('loginEmail').value;
+    if (!email) {
+      showError('loginError', 'Vul eerst uw e-mailadres in en klik dan op "Wachtwoord vergeten".');
+      return;
+    }
+
+    const { error } = await sb.auth.resetPasswordForEmail(email, {
+      redirectTo: window.location.origin + '/portal.html'
+    });
+
+    if (error) {
+      showError('loginError', error.message);
+      return;
+    }
+
+    showSuccess('forgotSuccess', 'Reset-link verzonden naar ' + email + '. Controleer uw e-mail.');
+  }
+</script>
+
+</body>
+</html>

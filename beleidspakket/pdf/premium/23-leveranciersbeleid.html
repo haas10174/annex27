@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<title>23-leveranciersbeleid</title>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Sora', sans-serif;
+    color: #1E293B;
+    line-height: 1.7;
+    padding: 48px 56px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  h1 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #0F172A;
+    margin-bottom: 8px;
+    padding-bottom: 12px;
+    border-bottom: 3px solid #0D9488;
+  }
+  h2 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #0F172A;
+    margin-top: 32px;
+    margin-bottom: 12px;
+  }
+  h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #0D9488;
+    margin-top: 24px;
+    margin-bottom: 8px;
+  }
+  p { margin-bottom: 12px; font-size: 0.9rem; color: #475569; }
+  strong { color: #0F172A; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 0.82rem;
+  }
+  th {
+    background: #0F172A;
+    color: white;
+    padding: 10px 12px;
+    text-align: left;
+    font-weight: 600;
+  }
+  td {
+    padding: 8px 12px;
+    border-bottom: 1px solid #E2E8F0;
+    color: #475569;
+  }
+  tr:nth-child(even) td { background: #F8FAFC; }
+  tr:hover td { background: #F0FDFA; }
+  ul, ol { margin: 12px 0 12px 24px; font-size: 0.9rem; color: #475569; }
+  li { margin-bottom: 4px; }
+  code {
+    background: #F1F5F9;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.82rem;
+    color: #0D9488;
+  }
+  pre {
+    background: #0F172A;
+    color: #E2E8F0;
+    padding: 20px;
+    border-radius: 8px;
+    margin: 16px 0;
+    font-size: 0.8rem;
+    overflow-x: auto;
+  }
+  pre code { background: none; color: inherit; padding: 0; }
+  hr {
+    border: none;
+    border-top: 1px solid #E2E8F0;
+    margin: 24px 0;
+  }
+  .header-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #E2E8F0;
+  }
+  .logo {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #0F172A;
+  }
+  .logo span { color: #0D9488; }
+  .doc-meta {
+    font-size: 0.72rem;
+    color: #94A3B8;
+    text-align: right;
+  }
+  @media print {
+    body { padding: 24px 32px; }
+    h1 { font-size: 1.4rem; }
+  }
+</style>
+
+</head>
+<body>
+<div class="header-bar">
+  <div class="logo">annex<span>27</span></div>
+  <div class="doc-meta">ISO 27001:2022 Beleidspakket<br/>annex27.nl</div>
+</div>
+<h1>Leveranciersbeleid</h1>
+<p><strong>ISO 27001:2022 — A.5.19, A.5.20, A.5.21, A.5.22</strong></p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Documentnummer</strong></td>
+<td>ISMS-023</td>
+</tr>
+<tr>
+<td><strong>Versie</strong></td>
+<td>1.0</td>
+</tr>
+<tr>
+<td><strong>Classificatie</strong></td>
+<td>Intern</td>
+</tr>
+<tr>
+<td><strong>Eigenaar</strong></td>
+<td>[Naam CISO / Verantwoordelijke]</td>
+</tr>
+<tr>
+<td><strong>Goedgekeurd door</strong></td>
+<td>[Naam Directie]</td>
+</tr>
+<tr>
+<td><strong>Datum goedkeuring</strong></td>
+<td>[DD-MM-JJJJ]</td>
+</tr>
+<tr>
+<td><strong>Volgende review</strong></td>
+<td>[DD-MM-JJJJ]</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>1. Doel</h2>
+<p>Dit beleid beschrijft hoe [Organisatienaam] informatiebeveiligingsrisico's beheert in relaties met leveranciers, dienstverleners en andere externe partijen die toegang hebben tot informatie of systemen.</p>
+<h2>2. Toepassingsgebied</h2>
+<p>Alle externe partijen die:
+- Toegang hebben tot informatie of informatiesystemen van [Organisatienaam]
+- Persoonsgegevens verwerken namens [Organisatienaam]
+- ICT-diensten leveren (hosting, SaaS, managed services, ontwikkeling)
+- Fysiek toegang hebben tot locaties met gevoelige informatie</p>
+<h2>3. Leveranciersclassificatie</h2>
+<table>
+<thead>
+<tr>
+<th>Categorie</th>
+<th>Beschrijving</th>
+<th>Voorbeeld</th>
+<th>Beoordelingsfrequentie</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Kritiek</strong></td>
+<td>Directe toegang tot vertrouwelijke data of bedrijfskritieke systemen</td>
+<td>Cloud-hostingprovider, SaaS-kernplatform, managed IT</td>
+<td>Jaarlijks + bij wijzigingen</td>
+</tr>
+<tr>
+<td><strong>Hoog</strong></td>
+<td>Toegang tot interne systemen of persoonsgegevens</td>
+<td>Salarisverwerker, CRM-provider, extern IT-personeel</td>
+<td>Jaarlijks</td>
+</tr>
+<tr>
+<td><strong>Midden</strong></td>
+<td>Beperkte toegang of indirecte impact</td>
+<td>Kantoorautomatisering, communicatietools, printerleverancier</td>
+<td>Tweejaarlijks</td>
+</tr>
+<tr>
+<td><strong>Laag</strong></td>
+<td>Geen toegang tot informatie of systemen</td>
+<td>Kantoorbenodigdheden, schoonmaak (zonder toegang tot beveiligde zones)</td>
+<td>Bij contractverlenging</td>
+</tr>
+</tbody>
+</table>
+<h2>4. Selectie van leveranciers</h2>
+<p>Voorafgaand aan het aangaan van een relatie met een nieuwe leverancier (categorie Kritiek of Hoog):</p>
+<table>
+<thead>
+<tr>
+<th>Stap</th>
+<th>Actie</th>
+<th>Verantwoordelijke</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Beveiligingsbeoordeling uitvoeren (ISMS-024)</td>
+<td>CISO</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Controleren op ISO 27001 certificering of vergelijkbaar</td>
+<td>CISO</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Beoordelen van leveranciers privacy- en beveiligingsbeleid</td>
+<td>CISO</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Verwerkersovereenkomst (AVG) afsluiten indien persoonsgegevens betrokken</td>
+<td>Juridisch / CISO</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Beveiligingseisen opnemen in contract</td>
+<td>CISO + Inkoop</td>
+</tr>
+</tbody>
+</table>
+<h2>5. Contractuele beveiligingseisen (A.5.20)</h2>
+<p>Contracten met leveranciers van categorie Kritiek en Hoog bevatten minimaal:</p>
+<table>
+<thead>
+<tr>
+<th>Eis</th>
+<th>Beschrijving</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Vertrouwelijkheidsclausule</td>
+<td>Geheimhouding van alle verstrekte informatie</td>
+</tr>
+<tr>
+<td>Beveiligingseisen</td>
+<td>Verplichte beveiligingsmaatregelen (encryptie, toegangscontrole, logging)</td>
+</tr>
+<tr>
+<td>Incidentmelding</td>
+<td>Verplichting om beveiligingsincidenten binnen 24 uur te melden</td>
+</tr>
+<tr>
+<td>Auditrecht</td>
+<td>Recht om audits uit te voeren of auditrapporten op te vragen</td>
+</tr>
+<tr>
+<td>Subverwerkers</td>
+<td>Toestemming vereist voor inschakeling van sub-leveranciers</td>
+</tr>
+<tr>
+<td>Datalocatie</td>
+<td>Gegevens worden verwerkt en opgeslagen binnen de EU/EER</td>
+</tr>
+<tr>
+<td>Exit-regeling</td>
+<td>Procedure voor teruggave of vernietiging van data bij beëindiging</td>
+</tr>
+<tr>
+<td>Aansprakelijkheid</td>
+<td>Aansprakelijkheid bij beveiligingsincidenten of dataverlies</td>
+</tr>
+</tbody>
+</table>
+<h2>6. Monitoring van leveranciers (A.5.22)</h2>
+<table>
+<thead>
+<tr>
+<th>Activiteit</th>
+<th>Frequentie</th>
+<th>Methode</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Review van SLA-prestaties</td>
+<td>Kwartaallijks</td>
+<td>SLA-rapportage</td>
+</tr>
+<tr>
+<td>Controleren van beveiligingscertificeringen</td>
+<td>Jaarlijks</td>
+<td>Opvragen certificaat / SOC2-rapport</td>
+</tr>
+<tr>
+<td>Beoordelen van incidenten bij leverancier</td>
+<td>Bij voorval</td>
+<td>Incidentrapportage leverancier</td>
+</tr>
+<tr>
+<td>Hernieuwde beveiligingsbeoordeling</td>
+<td>Conform classificatie (sectie 3)</td>
+<td>Assessment template (ISMS-024)</td>
+</tr>
+<tr>
+<td>Controleren op gewijzigde subverwerkers</td>
+<td>Jaarlijks</td>
+<td>Leverancierscommunicatie</td>
+</tr>
+</tbody>
+</table>
+<h2>7. ICT-toeleveringsketen (A.5.21)</h2>
+<p>Voor leveranciers in de ICT-keten (hosting, software, managed services):</p>
+<ul>
+<li>Beoordeel risico's in de toeleveringsketen (cascade-risico)</li>
+<li>Verifieer of de leverancier eigen leveranciers beoordeelt</li>
+<li>Eis transparantie over subverwerkers en hun locaties</li>
+<li>Beoordeel de afhankelijkheid: wat als deze leverancier uitvalt?</li>
+</ul>
+<h2>8. Leveranciersregister</h2>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Leverancier</th>
+<th>Dienst</th>
+<th>Categorie</th>
+<th>ISO 27001?</th>
+<th>Contract tot</th>
+<th>VWO?</th>
+<th>Laatste beoordeling</th>
+<th>Volgende beoordeling</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>L-001</td>
+<td>[Naam]</td>
+<td>[Dienst]</td>
+<td>[K/H/M/L]</td>
+<td>[Ja/Nee]</td>
+<td>[Datum]</td>
+<td>[Ja/Nee]</td>
+<td>[Datum]</td>
+<td>[Datum]</td>
+<td>[Actief]</td>
+</tr>
+<tr>
+<td>L-002</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><em>VWO = Verwerkersovereenkomst</em></p>
+<h2>9. Beëindiging leveranciersrelatie</h2>
+<p>Bij beëindiging van een leveranciersrelatie:</p>
+<table>
+<thead>
+<tr>
+<th>Stap</th>
+<th>Actie</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Verifieer dat alle data is teruggegeven of vernietigd (met bewijsstuk)</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Trek alle toegangsrechten van de leverancier in</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Deactiveer leveranciersaccounts</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Archiveer contractdocumentatie</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Update het leveranciersregister</td>
+</tr>
+</tbody>
+</table>
+<h2>10. Versiebeheer</h2>
+<table>
+<thead>
+<tr>
+<th>Versie</th>
+<th>Datum</th>
+<th>Wijziging</th>
+<th>Auteur</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1.0</td>
+<td>[DD-MM-JJJJ]</td>
+<td>Initiële versie</td>
+<td>[Naam]</td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/0.9">
+
+  <url>
+    <loc>https://annex27.nl/</loc>
+    <lastmod>2026-04-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="nl-NL" href="https://annex27.nl/" />
+    <xhtml:link rel="alternate" hreflang="nl-BE" href="https://annex27.nl/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://annex27.nl/" />
+    <image:image>
+      <image:loc>https://annex27.nl/og-image.svg</image:loc>
+      <image:title>Annex27 — ISO 27001 Compliance voor het MKB</image:title>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://annex27.nl/gap-analyse.html</loc>
+    <lastmod>2026-04-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="nl-NL" href="https://annex27.nl/gap-analyse.html" />
+    <xhtml:link rel="alternate" hreflang="nl-BE" href="https://annex27.nl/gap-analyse.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://annex27.nl/gap-analyse.html" />
+  </url>
+
+  <url>
+    <loc>https://annex27.nl/faq.html</loc>
+    <lastmod>2026-04-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="nl-NL" href="https://annex27.nl/faq.html" />
+    <xhtml:link rel="alternate" hreflang="nl-BE" href="https://annex27.nl/faq.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://annex27.nl/faq.html" />
+  </url>
+
+  <url>
+    <loc>https://annex27.nl/trust.html</loc>
+    <lastmod>2026-04-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="nl-NL" href="https://annex27.nl/trust.html" />
+    <xhtml:link rel="alternate" hreflang="nl-BE" href="https://annex27.nl/trust.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://annex27.nl/trust.html" />
+  </url>
+
+  <url>
+    <loc>https://annex27.nl/bestellen.html</loc>
+    <lastmod>2026-04-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://annex27.nl/#pakketten</loc>
+    <lastmod>2026-04-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://annex27.nl/#werkwijze</loc>
+    <lastmod>2026-04-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+</urlset>

@@ -1,0 +1,29 @@
+User-agent: *
+Allow: /
+Allow: /gap-analyse.html
+Allow: /faq.html
+Allow: /trust.html
+Disallow: /portal.html
+Disallow: /dashboard.html
+Disallow: /admin.html
+Disallow: /success.html
+Disallow: /docs/
+Disallow: /beleidspakket/
+Disallow: /supabase/
+Disallow: /*.sql$
+Disallow: /*.md$
+Disallow: /*.sh$
+Disallow: /*.py$
+
+# Block AI scrapers that don't respect robots
+User-agent: GPTBot
+Disallow: /dashboard.html
+Disallow: /admin.html
+Disallow: /portal.html
+
+User-agent: CCBot
+Disallow: /dashboard.html
+Disallow: /admin.html
+Disallow: /portal.html
+
+Sitemap: https://annex27.nl/sitemap.xml

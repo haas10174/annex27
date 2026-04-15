@@ -1,0 +1,2342 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <meta name="theme-color" content="#14b8a6" />
+
+  <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Auditor Dashboard &mdash; Annex27</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.min.js" integrity="sha384-2zrRDgDHSYB/GN3nFW3fsZXoxEhKIr3N2h63Tc6DEOB9JJdFIu8xMJT2Cph/gBil" crossorigin="anonymous"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0c0f1a;
+      --bg-alt: #151929;
+      --surface: #1a1f2e;
+      --border: rgba(255,255,255,0.08);
+      --border-hover: rgba(255,255,255,0.15);
+      --text: #e8ecf1;
+      --text-muted: #8b95a5;
+      --text-dim: #5b6572;
+      --accent: #0D9488;
+      --accent-light: #14b8a6;
+      --accent-bg: rgba(13,148,136,0.1);
+      --warning: #F59E0B;
+      --danger: #EF4444;
+      --success: #10B981;
+      --radius: 8px;
+      --radius-lg: 12px;
+    }
+    html, body { height: 100%; }
+    body {
+      font-family: 'Inter', -apple-system, system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Layout */
+    .app {
+      display: grid;
+      grid-template-columns: 380px 1fr;
+      min-height: 100vh;
+    }
+
+    /* Global view switcher */
+    .view-switch {
+      display: flex;
+      gap: 4px;
+      padding: 10px 16px 0 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .view-btn {
+      flex: 1;
+      font-family: inherit;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 10px 12px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: all 0.15s;
+      position: relative;
+    }
+    .view-btn:hover { color: var(--text); }
+    .view-btn.active { color: var(--accent-light); border-bottom-color: var(--accent-light); }
+    .view-btn .badge {
+      margin-left: 6px;
+      font-size: 0.65rem;
+      padding: 1px 6px;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.08);
+    }
+    .view-btn.active .badge { background: var(--accent-bg); color: var(--accent-light); }
+
+    /* Full-width views (Inbox / Orders) */
+    .view { display: none; }
+    .view.active { display: block; }
+    .view-full {
+      grid-column: 1 / -1;
+      padding: 24px 32px;
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+    }
+    .view-header {
+      margin-bottom: 20px;
+    }
+    .view-header h1 {
+      font-family: 'Sora', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 4px;
+    }
+    .view-header p { color: var(--text-muted); font-size: 0.88rem; }
+
+    /* Orders table */
+    .orders-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      font-size: 0.88rem;
+    }
+    .orders-table th {
+      text-align: left;
+      padding: 14px 16px;
+      background: var(--bg-alt);
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      border-bottom: 1px solid var(--border);
+    }
+    .orders-table td {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .orders-table tr:last-child td { border-bottom: none; }
+    .orders-table tr:hover td { background: rgba(255,255,255,0.02); }
+    .status-pill {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 100px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .status-pill.paid { background: rgba(16,185,129,0.12); color: var(--success); }
+    .status-pill.failed,
+    .status-pill.canceled,
+    .status-pill.expired { background: rgba(239,68,68,0.12); color: var(--danger); }
+    .status-pill.open,
+    .status-pill.pending { background: rgba(245,158,11,0.12); color: var(--warning); }
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .kpi {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 16px 18px;
+    }
+    .kpi-label {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+    .kpi-value {
+      font-family: 'Sora', sans-serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    /* Inbox */
+    .inbox-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .inbox-row {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 14px 18px;
+      cursor: pointer;
+      transition: all 0.15s;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: start;
+    }
+    .inbox-row:hover { border-color: var(--border-hover); background: var(--bg-alt); }
+    .inbox-row.unread { border-left: 3px solid var(--accent-light); }
+    .inbox-from {
+      font-weight: 600;
+      font-size: 0.9rem;
+      margin-bottom: 2px;
+    }
+    .inbox-preview {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
+    .inbox-time {
+      font-size: 0.72rem;
+      color: var(--text-dim);
+      white-space: nowrap;
+    }
+
+    /* Evidence list */
+    .ev-folder {
+      margin-top: 6px;
+    }
+    .ev-file {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      background: rgba(255,255,255,0.03);
+      border-radius: var(--radius);
+      font-size: 0.82rem;
+      margin-bottom: 4px;
+      cursor: pointer;
+      transition: background 0.15s;
+      border: 1px solid transparent;
+    }
+    .ev-file:hover { background: rgba(13,148,136,0.08); border-color: rgba(13,148,136,0.25); }
+    .ev-file svg { width: 14px; height: 14px; stroke: var(--accent-light); fill: none; stroke-width: 2; flex-shrink: 0; }
+    .ev-file .ev-size { color: var(--text-dim); font-size: 0.75rem; margin-left: auto; }
+
+    /* Sidebar: client list */
+    .sidebar {
+      background: var(--bg-alt);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .sidebar-header {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border);
+    }
+    .brand {
+      font-family: 'Sora', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .brand span { color: var(--accent-light); }
+    .role-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent-light);
+      background: var(--accent-bg);
+      border: 1px solid rgba(20,184,166,0.25);
+      padding: 4px 10px;
+      border-radius: 100px;
+    }
+    .role-badge::before {
+      content: '';
+      width: 5px; height: 5px;
+      background: var(--accent-light);
+      border-radius: 50%;
+    }
+
+    .client-filters {
+      padding: 12px 16px;
+      display: flex;
+      gap: 6px;
+      border-bottom: 1px solid var(--border);
+      overflow-x: auto;
+    }
+    .filter-btn {
+      font-family: inherit;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 6px 12px;
+      border-radius: 100px;
+      font-size: 0.75rem;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.15s;
+    }
+    .filter-btn:hover { border-color: var(--border-hover); color: var(--text); }
+    .filter-btn.active { background: var(--accent); border-color: var(--accent); color: white; }
+
+    .client-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 8px 0;
+    }
+    .client-item {
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      transition: background 0.15s;
+      position: relative;
+    }
+    .client-item:hover { background: rgba(255,255,255,0.03); }
+    .client-item.active { background: var(--accent-bg); border-left: 3px solid var(--accent-light); padding-left: 17px; }
+    .client-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 4px;
+    }
+    .client-name {
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--text);
+    }
+    .client-email {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+    .client-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      font-size: 0.7rem;
+      color: var(--text-dim);
+    }
+    .client-pakket {
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 100px;
+      background: var(--accent-bg);
+      color: var(--accent-light);
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .client-status {
+      font-weight: 600;
+      font-size: 0.65rem;
+      padding: 2px 8px;
+      border-radius: 100px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .client-status.review-requested { background: rgba(245,158,11,0.12); color: var(--warning); }
+    .client-status.in-review { background: rgba(13,148,136,0.12); color: var(--accent-light); }
+    .client-status.reviewed { background: rgba(16,185,129,0.12); color: var(--success); }
+    .client-status.in-progress { background: rgba(255,255,255,0.06); color: var(--text-muted); }
+    .client-unread {
+      position: absolute;
+      right: 16px;
+      top: 16px;
+      background: var(--danger);
+      color: white;
+      font-size: 0.65rem;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 10px;
+      min-width: 18px;
+      text-align: center;
+    }
+    .client-progress {
+      height: 3px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 2px;
+      margin-top: 8px;
+      overflow: hidden;
+    }
+    .client-progress-fill {
+      height: 100%;
+      background: var(--accent);
+      border-radius: 2px;
+      transition: width 0.4s;
+    }
+
+    /* Main content */
+    .main {
+      overflow-y: auto;
+      padding: 0;
+    }
+    .main-header {
+      padding: 24px 32px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 20px;
+    }
+    .main-title {
+      font-family: 'Sora', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+      letter-spacing: -0.02em;
+    }
+    .main-subtitle {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+    }
+    .main-actions {
+      display: flex;
+      gap: 8px;
+    }
+    .action-btn {
+      font-family: inherit;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 8px 14px;
+      border-radius: var(--radius);
+      font-size: 0.82rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .action-btn:hover { border-color: var(--border-hover); }
+    .action-btn.primary { background: var(--accent); border-color: var(--accent); color: white; }
+    .action-btn.primary:hover { background: var(--accent-light); border-color: var(--accent-light); }
+    .action-btn svg { width: 13px; height: 13px; stroke: currentColor; fill: none; stroke-width: 2; }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      gap: 2px;
+      padding: 0 32px;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg-alt);
+    }
+    .tab {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 14px 18px;
+      font-family: inherit;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: all 0.15s;
+      position: relative;
+    }
+    .tab:hover { color: var(--text); }
+    .tab.active { color: var(--accent-light); border-bottom-color: var(--accent-light); }
+    .tab-count {
+      margin-left: 6px;
+      font-size: 0.7rem;
+      padding: 1px 7px;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.06);
+    }
+
+    /* Tab panels */
+    .panel { display: none; padding: 24px 32px; }
+    .panel.active { display: block; }
+
+    /* Control list (for bevindingen) */
+    .control-list {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .control-row {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .control-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .control-header:hover { background: rgba(255,255,255,0.02); }
+    .control-id {
+      font-family: 'Sora', sans-serif;
+      font-weight: 700;
+      font-size: 0.78rem;
+      color: var(--accent-light);
+      width: 70px;
+      flex-shrink: 0;
+    }
+    .control-name {
+      flex: 1;
+      font-size: 0.88rem;
+      font-weight: 500;
+    }
+    .control-indicators {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      font-size: 0.7rem;
+    }
+    .ci-badge {
+      padding: 3px 9px;
+      border-radius: 100px;
+      font-weight: 600;
+    }
+    .ci-badge.compliant { background: rgba(16,185,129,0.12); color: var(--success); }
+    .ci-badge.partial { background: rgba(245,158,11,0.12); color: var(--warning); }
+    .ci-badge.non-compliant { background: rgba(239,68,68,0.12); color: var(--danger); }
+    .ci-badge.pending { background: rgba(255,255,255,0.06); color: var(--text-muted); }
+    .ci-badge.evidence-yes { background: rgba(13,148,136,0.12); color: var(--accent-light); }
+    .ci-badge.evidence-no { background: rgba(245,158,11,0.12); color: var(--warning); }
+
+    .control-body {
+      display: none;
+      padding: 0 16px 16px 16px;
+      border-top: 1px solid var(--border);
+    }
+    .control-row.open .control-body { display: block; }
+    .control-row.open .control-header { background: rgba(13,148,136,0.05); }
+
+    .control-section {
+      margin-top: 14px;
+    }
+    .section-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 8px;
+    }
+    .client-answer {
+      background: rgba(255,255,255,0.03);
+      border-left: 2px solid var(--border-hover);
+      padding: 10px 14px;
+      border-radius: var(--radius);
+      font-size: 0.85rem;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+    .client-answer strong { color: var(--accent-light); }
+    .evidence-file-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      background: rgba(255,255,255,0.03);
+      border-radius: var(--radius);
+      font-size: 0.82rem;
+      margin-bottom: 4px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .evidence-file-row:hover { background: rgba(255,255,255,0.06); }
+    .evidence-file-row svg { width: 14px; height: 14px; stroke: var(--accent-light); fill: none; stroke-width: 2; }
+    .evidence-note {
+      padding: 10px 14px;
+      background: rgba(255,255,255,0.03);
+      border-radius: var(--radius);
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      white-space: pre-wrap;
+    }
+    .no-evidence {
+      padding: 10px 14px;
+      background: rgba(245,158,11,0.06);
+      border: 1px solid rgba(245,158,11,0.2);
+      border-radius: var(--radius);
+      font-size: 0.82rem;
+      color: var(--warning);
+    }
+
+    /* Finding editor */
+    .finding-editor { margin-top: 16px; }
+    .finding-row {
+      display: grid;
+      grid-template-columns: 160px 1fr;
+      gap: 10px;
+      margin-bottom: 10px;
+      align-items: start;
+    }
+    .finding-label {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      padding-top: 8px;
+      font-weight: 500;
+    }
+    .finding-input, .finding-textarea, .finding-select {
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 8px 12px;
+      border-radius: var(--radius);
+      font-family: inherit;
+      font-size: 0.85rem;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    .finding-textarea { min-height: 70px; resize: vertical; line-height: 1.5; }
+    .finding-input:focus, .finding-textarea:focus, .finding-select:focus { border-color: var(--accent); }
+
+    .severity-pills {
+      display: flex;
+      gap: 4px;
+    }
+    .severity-pill {
+      font-family: inherit;
+      flex: 1;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 7px 8px;
+      border-radius: var(--radius);
+      font-size: 0.72rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .severity-pill:hover { color: var(--text); }
+    .severity-pill.active[data-sev="info"] { background: rgba(13,148,136,0.15); color: var(--accent-light); border-color: var(--accent-light); }
+    .severity-pill.active[data-sev="minor"] { background: rgba(245,158,11,0.15); color: var(--warning); border-color: var(--warning); }
+    .severity-pill.active[data-sev="major"] { background: rgba(239,68,68,0.15); color: var(--danger); border-color: var(--danger); }
+    .severity-pill.active[data-sev="critical"] { background: var(--danger); color: white; border-color: var(--danger); }
+
+    .save-status {
+      font-size: 0.72rem;
+      color: var(--text-dim);
+      padding-top: 4px;
+      text-align: right;
+    }
+    .save-status.saving { color: var(--warning); }
+    .save-status.saved { color: var(--success); }
+
+    /* Empty state */
+    .empty-state {
+      padding: 80px 40px;
+      text-align: center;
+      color: var(--text-muted);
+    }
+    .empty-icon {
+      width: 56px; height: 56px;
+      margin: 0 auto 16px;
+      background: var(--bg-alt);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .empty-icon svg { width: 24px; height: 24px; stroke: var(--text-dim); fill: none; stroke-width: 2; }
+
+    /* Login screen */
+    .login-screen {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .login-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 40px;
+      max-width: 420px;
+      width: 100%;
+      text-align: center;
+    }
+    .login-card h1 {
+      font-family: 'Sora', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .login-card p {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+    }
+    .login-card a {
+      color: var(--accent-light);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    @media (max-width: 900px) {
+      .app { grid-template-columns: 1fr; }
+      .sidebar { display: none; }
+      .sidebar.mobile-open { display: flex; position: fixed; inset: 0; z-index: 100; }
+      .finding-row { grid-template-columns: 1fr; }
+    }
+
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  </style>
+</head>
+<body>
+
+<!-- Login screen (shown while checking auth or when not logged in) -->
+<div class="login-screen" id="loginScreen" style="display:none;">
+  <div class="login-card">
+    <div style="font-size:0.7rem;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:#14b8a6;margin-bottom:10px;">Annex27 &middot; Auditor</div>
+    <h1>Auditor Dashboard</h1>
+    <p id="loginMessage" style="margin-bottom:20px;">Log in met uw auditor-account.</p>
+    <form id="adminLoginForm" onsubmit="return adminLogin(event)" style="display:flex;flex-direction:column;gap:10px;margin-bottom:14px;">
+      <input type="email" id="adminEmail" placeholder="E-mailadres" required autocomplete="email" style="padding:12px 14px;border:1px solid rgba(255,255,255,0.12);border-radius:10px;background:rgba(255,255,255,0.04);color:#fff;font-family:inherit;font-size:0.92rem;outline:none;" />
+      <input type="password" id="adminPassword" placeholder="Wachtwoord" required autocomplete="current-password" style="padding:12px 14px;border:1px solid rgba(255,255,255,0.12);border-radius:10px;background:rgba(255,255,255,0.04);color:#fff;font-family:inherit;font-size:0.92rem;outline:none;" />
+      <div id="adminLoginError" style="display:none;padding:10px 12px;background:rgba(220,38,38,0.1);border:1px solid rgba(220,38,38,0.3);border-radius:8px;color:#fca5a5;font-size:0.82rem;"></div>
+      <button type="submit" id="adminLoginBtn" style="padding:12px;background:#0D9488;color:#fff;border:none;border-radius:10px;font-weight:700;font-size:0.92rem;cursor:pointer;transition:background .2s;">Inloggen</button>
+    </form>
+    <div style="display:flex;justify-content:space-between;font-size:0.78rem;">
+      <a href="portal.html" style="color:rgba(255,255,255,0.5);text-decoration:none;">&larr; Klant-portaal</a>
+      <a href="#" onclick="adminForgot(event)" style="color:#14b8a6;text-decoration:none;">Wachtwoord vergeten?</a>
+    </div>
+  </div>
+</div>
+
+<!-- Main app (hidden until auth ok) -->
+<div class="app" id="app" style="display:none;">
+
+  <!-- Sidebar: client list -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="brand">annex<span>27</span></div>
+      <span class="role-badge">Lead Auditor</span>
+    </div>
+    <div class="view-switch">
+      <button class="view-btn active" data-view="clients">Klanten</button>
+      <button class="view-btn" data-view="inbox">Inbox <span class="badge" id="inboxBadge">0</span></button>
+      <button class="view-btn" data-view="orders">Orders <span class="badge" id="ordersBadge">0</span></button>
+      <button class="view-btn" data-view="facturen">Facturen <span class="badge" id="facturenBadge">0</span></button>
+      <button class="view-btn" data-view="leads">Aanvragen <span class="badge" id="leadsBadge">0</span></button>
+      <button class="view-btn" data-view="mail">Mail <span class="badge" id="mailBadge">0</span></button>
+    </div>
+    <div class="client-filters">
+      <button class="filter-btn active" data-filter="all">Alle</button>
+      <button class="filter-btn" data-filter="review_requested">Te reviewen</button>
+      <button class="filter-btn" data-filter="in_progress">In progress</button>
+      <button class="filter-btn" data-filter="reviewed">Afgerond</button>
+    </div>
+    <div class="client-list" id="clientList">
+      <div class="empty-state">
+        <div class="empty-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
+        Bezig met laden...
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main: selected client view -->
+  <main class="main" id="main">
+    <!-- View: Klanten (default) -->
+    <div class="view active" id="viewClients">
+    <div class="empty-state" id="mainEmpty">
+      <div class="empty-icon"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+      <h2 style="font-family:'Sora',sans-serif;font-size:1.1rem;color:var(--text);margin-bottom:6px;">Selecteer een klant</h2>
+      <p>Kies een klant uit de lijst om het assessment te reviewen.</p>
+    </div>
+
+    <div id="mainContent" style="display:none;">
+      <div class="main-header">
+        <div>
+          <h1 class="main-title" id="clientTitle">&nbsp;</h1>
+          <div class="main-subtitle" id="clientInfo">&nbsp;</div>
+        </div>
+        <div class="main-actions">
+          <button class="action-btn" onclick="refreshClient()">
+            <svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-6.2-8.55"/><polyline points="21 3 21 9 15 9"/></svg>
+            Vernieuwen
+          </button>
+          <button class="action-btn primary" id="markReviewedBtn" onclick="markReviewed()">
+            <svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>
+            Markeer als afgerond
+          </button>
+        </div>
+      </div>
+
+      <div class="tabs">
+        <button class="tab active" data-tab="findings">
+          Bevindingen <span class="tab-count" id="findingsCount">0</span>
+        </button>
+        <button class="tab" data-tab="messages">
+          Berichten <span class="tab-count" id="msgCount">0</span>
+        </button>
+        <button class="tab" data-tab="rapport">Rapport</button>
+        <button class="tab" data-tab="profile">Profiel</button>
+      </div>
+
+      <!-- Findings tab: control-by-control review -->
+      <div class="panel active" id="panelFindings">
+        <div class="control-list" id="controlList"></div>
+      </div>
+
+      <!-- Messages tab -->
+      <div class="panel" id="panelMessages">
+        <div id="msgContainer"></div>
+      </div>
+
+      <!-- Rapport tab: upload/release PDF for client -->
+      <div class="panel" id="panelRapport">
+        <div id="rapportContainer"></div>
+      </div>
+
+      <!-- Profile tab -->
+      <div class="panel" id="panelProfile">
+        <div id="profileContainer"></div>
+      </div>
+    </div>
+    </div><!-- /viewClients -->
+
+    <!-- View: Inbox (global messages) -->
+    <div class="view" id="viewInbox">
+      <div class="view-full">
+        <div class="view-header">
+          <h1>Inbox &mdash; alle klantberichten</h1>
+          <p>Alle berichten van klanten in één overzicht. Klik op een bericht om naar de klant te gaan.</p>
+        </div>
+        <div style="display:flex;gap:8px;margin-bottom:16px;">
+          <button class="filter-btn active" data-inbox="all" onclick="setInboxFilter('all', this)">Alle</button>
+          <button class="filter-btn" data-inbox="unread" onclick="setInboxFilter('unread', this)">Ongelezen</button>
+          <button class="filter-btn" data-inbox="attachment" onclick="setInboxFilter('attachment', this)">Met bijlage</button>
+          <button class="action-btn" onclick="loadInbox()" style="margin-left:auto;">
+            <svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-6.2-8.55"/><polyline points="21 3 21 9 15 9"/></svg>
+            Vernieuwen
+          </button>
+        </div>
+        <div class="inbox-list" id="inboxList">
+          <div class="empty-state">Laden...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- View: Orders (payments) -->
+    <div class="view" id="viewOrders">
+      <div class="view-full">
+        <div class="view-header">
+          <h1>Orders &amp; betalingen</h1>
+          <p>Alle betalingen en bestellingen via Mollie. Paid = definitief verwerkt en gebruiker aangemaakt.</p>
+        </div>
+        <div class="kpi-grid" id="ordersKpis"></div>
+        <div style="display:flex;gap:8px;margin-bottom:16px;">
+          <button class="filter-btn active" data-order="all" onclick="setOrderFilter('all', this)">Alle</button>
+          <button class="filter-btn" data-order="paid" onclick="setOrderFilter('paid', this)">Betaald</button>
+          <button class="filter-btn" data-order="failed" onclick="setOrderFilter('failed', this)">Mislukt/afgebroken</button>
+          <button class="action-btn" onclick="loadOrders()" style="margin-left:auto;">
+            <svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-6.2-8.55"/><polyline points="21 3 21 9 15 9"/></svg>
+            Vernieuwen
+          </button>
+        </div>
+        <div style="overflow-x:auto;">
+          <table class="orders-table" id="ordersTable">
+            <thead>
+              <tr>
+                <th>Datum</th>
+                <th>Klant</th>
+                <th>Pakket</th>
+                <th>Bedrag</th>
+                <th>Status</th>
+                <th>Payment ID</th>
+              </tr>
+            </thead>
+            <tbody id="ordersBody">
+              <tr><td colspan="6" style="text-align:center;padding:40px;color:var(--text-muted);">Laden...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- View: Facturen (admin management + boekhouding) -->
+    <div class="view" id="viewFacturen">
+      <div class="container-card" style="padding:24px;">
+        <div class="section-title-row" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;gap:10px;flex-wrap:wrap;">
+          <div>
+            <h1 style="font-family:'Sora',sans-serif;font-size:1.3rem;font-weight:800;margin:0 0 4px;">Facturen</h1>
+            <p style="color:var(--text-muted);font-size:0.88rem;margin:0;">Maak en beheer facturen. Auto-gegenereerd bij elke betaalde Mollie-order.</p>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <button class="action-btn" onclick="openInvModal()">
+              <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+              Nieuwe factuur
+            </button>
+            <button class="action-btn" onclick="openBookkeepingView()">
+              <svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2zM22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+              Voor de boekhouder
+            </button>
+            <button class="action-btn" onclick="exportInvoicesCsv()">
+              <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Export CSV
+            </button>
+            <button class="action-btn" onclick="loadInvoicesAdmin()">
+              <svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-6.2-8.55"/><polyline points="21 3 21 9 15 9"/></svg>
+              Vernieuwen
+            </button>
+          </div>
+        </div>
+        <div style="overflow-x:auto;">
+          <table class="orders-table" id="invoicesTable">
+            <thead>
+              <tr>
+                <th>Nummer</th>
+                <th>Datum</th>
+                <th>Klant</th>
+                <th>Product</th>
+                <th>Totaal</th>
+                <th>BTW-regime</th>
+                <th>Status</th>
+                <th>Actie</th>
+              </tr>
+            </thead>
+            <tbody id="invoicesAdminBody">
+              <tr><td colspan="8" style="text-align:center;padding:40px;color:var(--text-muted);">Laden...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Invoice modal (new invoice) -->
+    <div class="inv-modal" id="invModal" onclick="if(event.target===this)this.classList.remove('open')" style="display:none;position:fixed;inset:0;z-index:9999;align-items:center;justify-content:center;background:rgba(12,15,26,0.72);backdrop-filter:blur(6px);padding:24px;">
+      <div style="background:#fff;color:#0F172A;border-radius:16px;padding:32px;max-width:560px;width:100%;max-height:90vh;overflow-y:auto;position:relative;">
+        <button onclick="document.getElementById('invModal').classList.remove('open')" style="position:absolute;top:12px;right:12px;background:transparent;border:none;font-size:1.4rem;color:#64748b;cursor:pointer;">&times;</button>
+        <h3 style="font-family:'Sora',sans-serif;font-size:1.3rem;font-weight:800;margin-bottom:18px;">Nieuwe factuur</h3>
+        <form onsubmit="createInvoice(event)" style="display:flex;flex-direction:column;gap:10px;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+            <div><label style="font-size:0.78rem;font-weight:600;">Klantnaam</label><input type="text" id="invKlant" required style="width:100%;padding:10px 12px;border:1px solid #E5E5E5;border-radius:8px;font-family:inherit;" /></div>
+            <div><label style="font-size:0.78rem;font-weight:600;">Bedrijf</label><input type="text" id="invBedrijf" required style="width:100%;padding:10px 12px;border:1px solid #E5E5E5;border-radius:8px;font-family:inherit;" /></div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+            <div><label style="font-size:0.78rem;font-weight:600;">E-mail</label><input type="email" id="invEmail" required style="width:100%;padding:10px 12px;border:1px solid #E5E5E5;border-radius:8px;font-family:inherit;" /></div>
+            <div><label style="font-size:0.78rem;font-weight:600;">BTW-nummer klant</label><input type="text" id="invBtwNr" placeholder="Optioneel" style="width:100%;padding:10px 12px;border:1px solid #E5E5E5;border-radius:8px;font-family:inherit;" /></div>
+          </div>
+          <div><label style="font-size:0.78rem;font-weight:600;">Adres</label><input type="text" id="invAdres" placeholder="Straat, nr, postcode, stad" style="width:100%;padding:10px 12px;border:1px solid #E5E5E5;border-radius:8px;font-family:inherit;" /></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+            <div><label style="font-size:0.78rem;font-weight:600;">Product</label>
+              <select id="invProduct" onchange="updateInvTotal()" style="width:100%;padding:10px 12px;border:1px solid #E5E5E5;border-radius:8px;font-family:inherit;">
+                <option value="gap" data-price="349">Gap-analyse &mdash; &euro;349</option>
+                <option value="beleid" data-price="699">Beleidspakket &mdash; &euro;699</option>
+                <option value="preaudit" data-price="1850">Pre-audit Review &mdash; &euro;1.850</option>
+                <option value="nis2" data-price="499">NIS2 Readiness &mdash; &euro;499</option>
+                <option value="custom" data-price="0">Aangepast bedrag</option>
+              </select>
+            </div>
+            <div><label style="font-size:0.78rem;font-weight:600;">Bedrag (subtotal)</label><input type="number" id="invBedrag" value="349" step="0.01" onchange="updateInvTotal()" style="width:100%;padding:10px 12px;border:1px solid #E5E5E5;border-radius:8px;font-family:inherit;" /></div>
+          </div>
+          <div><label style="font-size:0.78rem;font-weight:600;">Omschrijving</label><textarea id="invOmschrijving" rows="2" placeholder="Optionele toelichting" style="width:100%;padding:10px 12px;border:1px solid #E5E5E5;border-radius:8px;font-family:inherit;resize:vertical;"></textarea></div>
+          <div style="display:flex;justify-content:space-between;padding:6px 0;"><span style="color:#64748b;">Totaal</span><span id="invTotaal" style="font-family:'Sora',sans-serif;font-weight:800;font-size:1.1rem;">&euro; 349,00</span></div>
+          <div style="font-size:0.76rem;color:#64748b;line-height:1.5;">Automatisch zonder BTW-verrekening (Art. 56bis WBTW) zolang het BTW-nummer in aanvraag is.</div>
+          <button type="submit" style="margin-top:8px;padding:12px;background:#0D9488;color:#fff;border:none;border-radius:10px;font-weight:700;cursor:pointer;">Factuur aanmaken</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Bookkeeping modal -->
+    <div class="inv-modal" id="bkModal" onclick="if(event.target===this)this.classList.remove('open')" style="display:none;position:fixed;inset:0;z-index:9999;align-items:center;justify-content:center;background:rgba(12,15,26,0.72);backdrop-filter:blur(6px);padding:24px;">
+      <div style="background:var(--surface);color:var(--text);border-radius:16px;padding:32px;max-width:960px;width:100%;max-height:90vh;overflow-y:auto;position:relative;">
+        <button onclick="document.getElementById('bkModal').classList.remove('open')" style="position:absolute;top:12px;right:12px;background:transparent;border:none;font-size:1.4rem;color:var(--text-muted);cursor:pointer;">&times;</button>
+        <h3 style="font-family:'Sora',sans-serif;font-size:1.3rem;font-weight:800;margin-bottom:6px;">Boekhouding-overzicht</h3>
+        <p style="color:var(--text-muted);font-size:0.88rem;margin-bottom:16px;">Journaalposten per factuur volgens Belgisch MAR (Minimum Algemeen Rekeningstelsel). Deel met uw boekhouder of exporteer als CSV.</p>
+        <div id="bkContent"></div>
+      </div>
+    </div>
+
+    <!-- View: Aanvragen (waitlist / offerte) -->
+    <div class="view" id="viewLeads">
+      <div class="container-card" style="padding:24px;">
+        <div class="section-title-row" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+          <div>
+            <h1 style="font-family:'Sora',sans-serif;font-size:1.3rem;font-weight:800;margin:0 0 4px;">Aanvragen</h1>
+            <p style="color:var(--text-muted);font-size:0.88rem;margin:0;">Waitlist NIS2 + offerte-aanvragen Beleidspakket</p>
+          </div>
+          <button class="action-btn" onclick="loadLeads()">
+            <svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-6.2-8.55"/><polyline points="21 3 21 9 15 9"/></svg>
+            Vernieuwen
+          </button>
+        </div>
+        <div style="display:flex;gap:8px;margin-bottom:16px;">
+          <button class="filter-btn active" data-leads="open" onclick="setLeadsFilter('open', this)">Open</button>
+          <button class="filter-btn" data-leads="all" onclick="setLeadsFilter('all', this)">Alle</button>
+          <button class="filter-btn" data-leads="nis2" onclick="setLeadsFilter('nis2', this)">NIS2</button>
+          <button class="filter-btn" data-leads="beleid" onclick="setLeadsFilter('beleid', this)">Beleidspakket</button>
+        </div>
+        <div id="leadsList" style="display:flex;flex-direction:column;gap:10px;">
+          <div class="empty-state">Laden...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- View: Mail (inbound info@annex27.nl) -->
+    <div class="view" id="viewMail">
+      <div class="container-card" style="padding:24px;">
+        <div class="section-title-row" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+          <div>
+            <h1 style="font-family:'Sora',sans-serif;font-size:1.3rem;font-weight:800;margin:0 0 4px;">Mail <span style="font-size:0.72rem;font-weight:600;color:var(--text-muted);letter-spacing:0.1em;text-transform:uppercase;">&middot; info@annex27.nl</span></h1>
+            <p style="color:var(--text-muted);font-size:0.88rem;margin:0;" id="mailSubtitle">Inbound mail van info@annex27.nl. Zie onderaan om de koppeling te activeren.</p>
+          </div>
+          <button class="action-btn" onclick="loadMail()">
+            <svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-6.2-8.55"/><polyline points="21 3 21 9 15 9"/></svg>
+            Vernieuwen
+          </button>
+        </div>
+        <div id="mailList" style="display:flex;flex-direction:column;gap:10px;">
+          <div class="empty-state">Laden...</div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+const SUPABASE_URL = 'https://tvqhxhoohzdzekcfzjuv.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_-a0bntwsGr8mR9xROgJTzQ_Gylt8ZSo';
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+function esc(s) {
+  if (s == null) return '';
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// Annex A controls (mirror from dashboard.html — simplified)
+const CONTROL_CATS = ['Organisatorisch', 'Personeel', 'Fysiek', 'Technologie'];
+
+let currentUser = null;
+let currentClient = null;
+let clients = [];
+let controls = [];
+let currentFilter = 'all';
+const findingCache = {};
+
+// ── AUTH CHECK ──
+async function checkAdminSession() {
+  const loginMsg = document.getElementById('loginMessage');
+  const loginForm = document.getElementById('adminLoginForm');
+
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) {
+    loginMsg.textContent = 'Log in met uw auditor-account.';
+    loginForm.style.display = 'flex';
+    return;
+  }
+
+  currentUser = session.user;
+  const role = currentUser.app_metadata?.role;
+  const pakket = currentUser.app_metadata?.pakket;
+
+  if (role !== 'auditor' && pakket !== 'admin') {
+    loginMsg.textContent = 'U heeft geen auditor-rechten. Log in met een account dat wel is gekoppeld.';
+    loginForm.style.display = 'flex';
+    await sb.auth.signOut();
+    return;
+  }
+
+  // Authorized — proceed to startApp
+  await startApp();
+}
+
+async function adminLogin(e) {
+  e.preventDefault();
+  const errEl = document.getElementById('adminLoginError');
+  const btn = document.getElementById('adminLoginBtn');
+  const email = document.getElementById('adminEmail').value.trim().toLowerCase();
+  const password = document.getElementById('adminPassword').value;
+  errEl.style.display = 'none';
+  btn.disabled = true; btn.textContent = 'Bezig met inloggen...';
+
+  const { data, error } = await sb.auth.signInWithPassword({ email, password });
+  btn.disabled = false; btn.textContent = 'Inloggen';
+
+  if (error || !data.session) {
+    errEl.textContent = 'Onjuist e-mailadres of wachtwoord.';
+    errEl.style.display = 'block';
+    return false;
+  }
+
+  const role = data.session.user.app_metadata?.role;
+  const pakket = data.session.user.app_metadata?.pakket;
+  if (role !== 'auditor' && pakket !== 'admin') {
+    errEl.textContent = 'Dit account heeft geen auditor-rechten.';
+    errEl.style.display = 'block';
+    await sb.auth.signOut();
+    return false;
+  }
+
+  currentUser = data.session.user;
+  await startApp();
+  return false;
+}
+
+async function adminForgot(e) {
+  e.preventDefault();
+  const email = (document.getElementById('adminEmail').value || '').trim().toLowerCase();
+  if (!email) {
+    document.getElementById('adminEmail').focus();
+    return;
+  }
+  const errEl = document.getElementById('adminLoginError');
+  const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo: window.location.origin + '/portal.html' });
+  errEl.style.background = error ? 'rgba(220,38,38,0.1)' : 'rgba(20,184,166,0.1)';
+  errEl.style.borderColor = error ? 'rgba(220,38,38,0.3)' : 'rgba(20,184,166,0.3)';
+  errEl.style.color = error ? '#fca5a5' : '#5eead4';
+  errEl.textContent = error ? 'Kon geen reset-link sturen. Probeer later opnieuw.' : 'Reset-link verstuurd naar ' + email + '.';
+  errEl.style.display = 'block';
+}
+
+async function startApp() {
+  // Authorized — load the app
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('app').style.display = 'grid';
+  await loadControls();
+  await loadClientList();
+  bindTabs();
+  bindFilters();
+  bindViewSwitch();
+  // Preload counters (non-blocking)
+  loadInboxCount();
+  loadOrdersCount();
+  loadLeadsCount();
+  loadMailCount();
+  loadInvoicesCount();
+}
+
+// ── FACTUREN (admin management + boekhouding) ──
+const INV_PRODUCT_LABELS = {
+  gap: 'Gap-analyse',
+  beleid: 'Beleidspakket',
+  readiness: 'Readiness Platform',
+  preaudit: 'Pre-audit Review',
+  nis2: 'NIS2 Readiness',
+  custom: 'Aangepast'
+};
+const LEDGER = {
+  debtor:     { code: '400000', name: 'Handelsvorderingen — klanten' },
+  revenue:    { code: '705000', name: 'Omzet dienstprestaties' },
+  vat_owed:   { code: '451054', name: 'Verschuldigde BTW (21%)' },
+  bank:       { code: '550000', name: 'Bank' },
+  mollie_fee: { code: '656000', name: 'Bankkosten / betaalprovider-kosten' },
+};
+
+async function loadInvoicesCount() {
+  try {
+    const { count } = await sb.from('invoices').select('*', { count: 'exact', head: true });
+    document.getElementById('facturenBadge').textContent = count || 0;
+  } catch(e) {}
+}
+
+async function loadInvoicesAdmin() {
+  const tbody = document.getElementById('invoicesAdminBody');
+  tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:40px;color:var(--text-muted);">Laden...</td></tr>';
+  const { data, error } = await sb.from('invoices').select('*').order('issued_at', { ascending: false });
+  if (error) { tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:40px;color:var(--danger);">Kon facturen niet laden.</td></tr>'; return; }
+  if (!data.length) { tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:40px;color:var(--text-muted);">Nog geen facturen.</td></tr>'; return; }
+  const esc = (s) => String(s ?? '').replace(/[<>&"]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c]));
+  tbody.innerHTML = data.map(inv => {
+    const d = new Date(inv.issued_at).toLocaleDateString('nl-NL', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    const statusColor = inv.status === 'paid' ? '#10b981' : '#0D9488';
+    const regime = inv.btw_regime === 'standard' ? 'BTW 21%' : inv.btw_regime === 'reverse_charge' ? 'Verlegd' : 'Vrijgesteld';
+    return `
+      <tr>
+        <td><code>${esc(inv.invoice_number)}</code></td>
+        <td>${d}</td>
+        <td>${esc(inv.naam)}<br/><span style="font-size:0.76rem;color:var(--text-muted);">${esc(inv.bedrijf)}</span></td>
+        <td>${esc(INV_PRODUCT_LABELS[inv.product] || inv.product)}</td>
+        <td><strong>&euro;${Number(inv.total).toLocaleString('nl-NL', {minimumFractionDigits:2})}</strong></td>
+        <td><span style="font-size:0.78rem;color:var(--text-muted);">${regime}</span></td>
+        <td><span style="color:${statusColor};font-weight:600;font-size:0.82rem;text-transform:capitalize;">${esc(inv.status)}</span></td>
+        <td><a href="factuur.html?nr=${encodeURIComponent(inv.invoice_number)}" target="_blank" class="action-btn" style="font-size:0.76rem;">Bekijk / PDF</a></td>
+      </tr>`;
+  }).join('');
+  loadInvoicesCount();
+}
+
+function updateInvTotal() {
+  const sel = document.getElementById('invProduct');
+  const opt = sel.options[sel.selectedIndex];
+  const presetPrice = parseFloat(opt.dataset.price || '0');
+  const bedragEl = document.getElementById('invBedrag');
+  if (sel.value !== 'custom' && presetPrice > 0) bedragEl.value = presetPrice;
+  const bedrag = parseFloat(bedragEl.value || '0') || 0;
+  document.getElementById('invTotaal').textContent = '\u20AC ' + bedrag.toLocaleString('nl-NL', { minimumFractionDigits: 2 });
+}
+
+function openInvModal() {
+  document.getElementById('invModal').classList.add('open');
+  document.getElementById('invModal').style.display = 'flex';
+  updateInvTotal();
+}
+
+async function nextInvoiceNumber() {
+  const year = new Date().getFullYear();
+  const prefix = year + '-';
+  const { data } = await sb.from('invoices').select('invoice_number').like('invoice_number', prefix + '%').order('invoice_number', { ascending: false }).limit(1);
+  let seq = 1;
+  if (data && data[0]) {
+    const m = /^(\d{4})-(\d+)$/.exec(data[0].invoice_number);
+    if (m) seq = parseInt(m[2], 10) + 1;
+  }
+  return prefix + String(seq).padStart(4, '0');
+}
+
+async function createInvoice(e) {
+  e.preventDefault();
+  const subtotaal = parseFloat(document.getElementById('invBedrag').value || '0') || 0;
+  const invoice_number = await nextInvoiceNumber();
+  const payload = {
+    invoice_number,
+    naam: document.getElementById('invKlant').value.trim(),
+    bedrijf: document.getElementById('invBedrijf').value.trim(),
+    email: document.getElementById('invEmail').value.trim().toLowerCase(),
+    btw_nummer: document.getElementById('invBtwNr').value.trim() || null,
+    adres: document.getElementById('invAdres').value.trim() || null,
+    product: document.getElementById('invProduct').value,
+    omschrijving: document.getElementById('invOmschrijving').value.trim() || null,
+    subtotal: subtotaal,
+    btw_amount: 0,
+    total: subtotaal,
+    status: 'sent',
+    btw_regime: 'none'
+  };
+  const { error } = await sb.from('invoices').insert(payload);
+  if (error) { alert('Kon factuur niet opslaan: ' + error.message); return; }
+  document.getElementById('invModal').classList.remove('open');
+  document.getElementById('invModal').style.display = 'none';
+  e.target.reset();
+  loadInvoicesAdmin();
+}
+
+async function exportInvoicesCsv() {
+  const { data, error } = await sb.from('invoices').select('*').order('issued_at', { ascending: true });
+  if (error || !data || !data.length) { alert('Geen facturen om te exporteren.'); return; }
+  const cols = ['invoice_number','issued_at','status','product','omschrijving','naam','bedrijf','email','adres','btw_nummer','subtotal','btw_amount','total','btw_regime','payment_method','payment_id','order_id','user_id'];
+  const esc = (v) => { if (v == null) return ''; const s = String(v).replace(/"/g, '""'); return /[",\n;]/.test(s) ? '"' + s + '"' : s; };
+  const rows = [cols.join(';')].concat(data.map(inv => cols.map(c => esc(inv[c])).join(';')));
+  const csv = '\uFEFF' + rows.join('\n');
+  const stamp = new Date().toISOString().slice(0,10);
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `annex27-facturen-${stamp}.csv`;
+  document.body.appendChild(a); a.click(); a.remove();
+  URL.revokeObjectURL(a.href);
+  const ids = data.filter(d => !d.exported_at).map(d => d.id);
+  if (ids.length) await sb.from('invoices').update({ exported_at: new Date().toISOString() }).in('id', ids);
+}
+
+function journalEntriesFor(inv) {
+  const entries = [];
+  const base = { date: inv.issued_at, journal: 'V', ref: inv.invoice_number, party: inv.bedrijf };
+  if (inv.btw_regime === 'standard') {
+    entries.push({ ...base, account: LEDGER.debtor.code, name: LEDGER.debtor.name, debit: Number(inv.total), credit: 0, desc: 'Factuur ' + inv.invoice_number + ' — ' + inv.bedrijf });
+    entries.push({ ...base, account: LEDGER.revenue.code, name: LEDGER.revenue.name, debit: 0, credit: Number(inv.subtotal), desc: INV_PRODUCT_LABELS[inv.product] || inv.product });
+    entries.push({ ...base, account: LEDGER.vat_owed.code, name: LEDGER.vat_owed.name, debit: 0, credit: Number(inv.btw_amount), desc: 'BTW 21% op factuur ' + inv.invoice_number });
+  } else {
+    const note = inv.btw_regime === 'reverse_charge' ? '(BTW verlegd afnemer)' : '(Art. 56bis WBTW — vrijgesteld)';
+    entries.push({ ...base, account: LEDGER.debtor.code, name: LEDGER.debtor.name, debit: Number(inv.total), credit: 0, desc: 'Factuur ' + inv.invoice_number + ' — ' + inv.bedrijf });
+    entries.push({ ...base, account: LEDGER.revenue.code, name: LEDGER.revenue.name, debit: 0, credit: Number(inv.total), desc: (INV_PRODUCT_LABELS[inv.product] || inv.product) + ' ' + note });
+  }
+  if (inv.status === 'paid' && inv.payment_id) {
+    const fee = Number(inv.mollie_fee || 0);
+    const bankNet = Number(inv.total) - fee;
+    entries.push({ date: inv.issued_at, journal: 'B', ref: inv.invoice_number, party: inv.bedrijf, account: LEDGER.bank.code, name: LEDGER.bank.name, debit: bankNet, credit: 0, desc: 'Ontvangst Mollie ' + (inv.payment_id || '') });
+    if (fee > 0) entries.push({ date: inv.issued_at, journal: 'B', ref: inv.invoice_number, party: inv.bedrijf, account: LEDGER.mollie_fee.code, name: LEDGER.mollie_fee.name, debit: fee, credit: 0, desc: 'Mollie transactiekosten' });
+    entries.push({ date: inv.issued_at, journal: 'B', ref: inv.invoice_number, party: inv.bedrijf, account: LEDGER.debtor.code, name: LEDGER.debtor.name, debit: 0, credit: Number(inv.total), desc: 'Aanzuivering factuur ' + inv.invoice_number });
+  }
+  return entries;
+}
+
+async function openBookkeepingView() {
+  const { data, error } = await sb.from('invoices').select('*').order('issued_at', { ascending: true });
+  if (error) { alert('Kon facturen niet laden.'); return; }
+  const content = document.getElementById('bkContent');
+  const esc = (s) => String(s ?? '').replace(/[<>&]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]));
+  const fmt = (n) => '\u20AC ' + Number(n || 0).toLocaleString('nl-NL', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+  if (!data.length) {
+    content.innerHTML = '<div style="padding:24px;text-align:center;color:var(--text-muted);">Nog geen facturen om te boeken.</div>';
+  } else {
+    let totalD = 0, totalC = 0;
+    const invoiceBlocks = data.map(inv => {
+      const entries = journalEntriesFor(inv);
+      const d = new Date(inv.issued_at).toLocaleDateString('nl-NL', { day: '2-digit', month: '2-digit', year: 'numeric' });
+      const rows = entries.map(e => {
+        totalD += Number(e.debit || 0); totalC += Number(e.credit || 0);
+        return `<tr>
+          <td style="padding:6px 10px;font-family:Menlo,monospace;font-size:0.82rem;">${e.account}</td>
+          <td style="padding:6px 10px;font-size:0.85rem;">${esc(e.name)}</td>
+          <td style="padding:6px 10px;font-size:0.82rem;color:var(--text-muted);">${esc(e.desc)}</td>
+          <td style="padding:6px 10px;text-align:right;font-variant-numeric:tabular-nums;font-size:0.85rem;">${e.debit ? fmt(e.debit) : ''}</td>
+          <td style="padding:6px 10px;text-align:right;font-variant-numeric:tabular-nums;font-size:0.85rem;color:#0D9488;">${e.credit ? fmt(e.credit) : ''}</td>
+        </tr>`;
+      }).join('');
+      const regimeLabel = inv.btw_regime === 'standard' ? 'BTW 21%' : inv.btw_regime === 'reverse_charge' ? 'BTW verlegd' : 'Vrijgesteld (Art. 56bis)';
+      return `
+        <div style="margin-bottom:22px;border:1px solid var(--border);border-radius:10px;overflow:hidden;">
+          <div style="padding:12px 16px;background:rgba(20,184,166,0.08);border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
+            <div>
+              <div style="font-weight:700;font-size:0.92rem;">Factuur ${esc(inv.invoice_number)} &middot; ${esc(inv.bedrijf)}</div>
+              <div style="font-size:0.78rem;color:var(--text-muted);">Dagboek V &middot; ${d} &middot; ${regimeLabel}</div>
+            </div>
+            <div style="font-family:'Sora',sans-serif;font-weight:700;color:#0D9488;">${fmt(inv.total)}</div>
+          </div>
+          <table style="width:100%;border-collapse:collapse;">
+            <thead>
+              <tr style="background:rgba(255,255,255,0.02);">
+                <th style="padding:8px 10px;text-align:left;font-size:0.68rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-muted);">Rek.</th>
+                <th style="padding:8px 10px;text-align:left;font-size:0.68rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-muted);">Naam</th>
+                <th style="padding:8px 10px;text-align:left;font-size:0.68rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-muted);">Omschrijving</th>
+                <th style="padding:8px 10px;text-align:right;font-size:0.68rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-muted);">Debet</th>
+                <th style="padding:8px 10px;text-align:right;font-size:0.68rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-muted);">Credit</th>
+              </tr>
+            </thead>
+            <tbody>${rows}</tbody>
+          </table>
+        </div>`;
+    }).join('');
+
+    content.innerHTML = `
+      <div style="display:flex;gap:10px;margin-bottom:18px;flex-wrap:wrap;">
+        <button class="action-btn" onclick="exportJournalCsv()">Journaalposten (CSV)</button>
+        <button class="action-btn" onclick="exportInvoicesCsv()">Facturen (CSV)</button>
+        <button class="action-btn" onclick="window.print()">Print</button>
+      </div>
+      <div style="padding:12px 16px;background:rgba(20,184,166,0.08);border:1px solid rgba(20,184,166,0.25);border-radius:8px;margin-bottom:20px;font-size:0.86rem;color:var(--text-secondary);line-height:1.6;">
+        <strong>Toelichting voor uw boekhouder:</strong> Annex27 (BE &middot; KBO 1006.203.170) factureert momenteel onder de <strong>vrijstellingsregeling kleine onderneming</strong> (Art. 56bis WBTW). Alle verkopen worden direct op 705000 geboekt zonder BTW-verrekening. Mollie fungeert als betaalprovider (dagboek B &middot; bank, provisie op 656000).
+      </div>
+      <div style="padding:12px 16px;background:var(--surface);border:1px solid var(--border);border-radius:8px;margin-bottom:20px;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;font-size:0.88rem;">
+        <div><span style="color:var(--text-muted);">Totaal debet:</span> <strong>${fmt(totalD)}</strong></div>
+        <div><span style="color:var(--text-muted);">Totaal credit:</span> <strong style="color:#0D9488;">${fmt(totalC)}</strong></div>
+        <div><span style="color:var(--text-muted);">Balans:</span> <strong style="color:${Math.abs(totalD-totalC)<0.01?'#10b981':'#DC2626'};">${fmt(totalD - totalC)}</strong></div>
+      </div>
+      ${invoiceBlocks}
+    `;
+  }
+  document.getElementById('bkModal').classList.add('open');
+  document.getElementById('bkModal').style.display = 'flex';
+}
+
+async function exportJournalCsv() {
+  const { data } = await sb.from('invoices').select('*').order('issued_at', { ascending: true });
+  if (!data || !data.length) { alert('Geen facturen.'); return; }
+  const cols = ['datum','dagboek','stuknummer','rekening','rekeningnaam','tegenpartij','omschrijving','debet','credit','btw_regime'];
+  const esc = (v) => { if (v == null) return ''; const s = String(v).replace(/<[^>]*>/g,'').replace(/&[a-z]+;/g,'').replace(/"/g, '""'); return /[",\n;]/.test(s) ? '"' + s + '"' : s; };
+  const rows = [cols.join(';')];
+  data.forEach(inv => {
+    journalEntriesFor(inv).forEach(e => {
+      rows.push([new Date(e.date).toISOString().slice(0,10), e.journal, e.ref, e.account, e.name, e.party, e.desc, (e.debit ? e.debit.toFixed(2).replace('.', ',') : ''), (e.credit ? e.credit.toFixed(2).replace('.', ',') : ''), inv.btw_regime].map(esc).join(';'));
+    });
+  });
+  const csv = '\uFEFF' + rows.join('\n');
+  const stamp = new Date().toISOString().slice(0,10);
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `annex27-journaalposten-${stamp}.csv`;
+  document.body.appendChild(a); a.click(); a.remove();
+  URL.revokeObjectURL(a.href);
+}
+
+// Kick off auth check on load
+(async () => {
+  document.getElementById('loginScreen').style.display = 'flex';
+  await checkAdminSession();
+})();
+
+// ── VIEW SWITCHER ──
+function bindViewSwitch() {
+  document.querySelectorAll('.view-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const target = btn.dataset.view;
+      document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+      document.getElementById('view' + target.charAt(0).toUpperCase() + target.slice(1)).classList.add('active');
+      if (target === 'inbox') loadInbox();
+      if (target === 'orders') loadOrders();
+      if (target === 'leads') loadLeads();
+      if (target === 'mail') loadMail();
+      if (target === 'facturen') loadInvoicesAdmin();
+    });
+  });
+}
+
+// ── LEADS (waitlist + offerte-aanvragen) ──
+let leadsData = [];
+let currentLeadsFilter = 'open';
+
+async function loadLeadsCount() {
+  try {
+    const { count } = await sb.from('waitlist')
+      .select('*', { count: 'exact', head: true })
+      .is('processed_at', null);
+    document.getElementById('leadsBadge').textContent = count || 0;
+  } catch(e) {}
+}
+
+function setLeadsFilter(filter, btn) {
+  currentLeadsFilter = filter;
+  document.querySelectorAll('[data-leads]').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderLeads();
+}
+
+async function loadLeads() {
+  const listEl = document.getElementById('leadsList');
+  listEl.innerHTML = '<div class="empty-state">Laden...</div>';
+  const { data, error } = await sb.from('waitlist').select('*').order('created_at', { ascending: false });
+  if (error) { listEl.innerHTML = '<div class="empty-state">Kon aanvragen niet laden.</div>'; return; }
+  leadsData = data || [];
+  renderLeads();
+  loadLeadsCount();
+}
+
+function renderLeads() {
+  const listEl = document.getElementById('leadsList');
+  let filtered = leadsData;
+  if (currentLeadsFilter === 'open') filtered = filtered.filter(l => !l.processed_at);
+  else if (currentLeadsFilter === 'nis2') filtered = filtered.filter(l => l.product === 'nis2');
+  else if (currentLeadsFilter === 'beleid') filtered = filtered.filter(l => l.product === 'beleid');
+
+  if (!filtered.length) {
+    listEl.innerHTML = '<div class="empty-state" style="padding:40px;text-align:center;color:var(--text-muted);">Geen aanvragen in deze filter.</div>';
+    return;
+  }
+  const esc = (s) => String(s ?? '').replace(/[<>&"]/g, c => ({'<':'&lt;','>':'&gt;','&':'amp;','"':'&quot;'}[c]));
+  listEl.innerHTML = filtered.map(l => {
+    const d = new Date(l.created_at).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
+    const productLabel = l.product === 'nis2' ? 'NIS2 Readiness (waitlist)' : 'Beleidspakket (offerte)';
+    const productColor = l.product === 'nis2' ? '#B45309' : '#0D9488';
+    const processed = !!l.processed_at;
+    return `
+      <div style="background:${processed ? 'rgba(255,255,255,0.02)' : 'var(--surface)'};border:1px solid ${processed ? 'transparent' : 'var(--border)'};border-left:3px solid ${processed ? 'var(--border)' : productColor};border-radius:10px;padding:16px 20px;${processed ? 'opacity:0.65;' : ''}">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:6px;">
+          <div>
+            <div style="font-family:'Sora',sans-serif;font-size:0.95rem;font-weight:700;">${esc(l.naam)}${l.bedrijf ? ' &middot; <span style=\"color:var(--text-muted);font-weight:500;\">' + esc(l.bedrijf) + '</span>' : ''}</div>
+            <div style="font-size:0.82rem;color:var(--text-muted);margin-top:2px;"><a href="mailto:${esc(l.email)}" style="color:var(--accent);text-decoration:none;">${esc(l.email)}</a> &middot; ${d}</div>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center;flex-shrink:0;">
+            <span style="font-size:0.7rem;font-weight:600;padding:4px 10px;border-radius:999px;background:${productColor}20;color:${productColor};border:1px solid ${productColor}40;">${productLabel}</span>
+            ${processed
+              ? '<span style="font-size:0.7rem;color:var(--text-muted);">&#10003; Afgehandeld</span>'
+              : '<button onclick="markLeadProcessed(\''+l.id+'\')" class="action-btn" style="font-size:0.75rem;padding:5px 10px;">Markeer afgehandeld</button>'}
+          </div>
+        </div>
+        ${l.bericht ? `<div style="margin-top:10px;padding:10px 14px;background:rgba(0,0,0,0.15);border-radius:6px;font-size:0.88rem;color:var(--text-secondary);white-space:pre-wrap;">${esc(l.bericht)}</div>` : ''}
+      </div>
+    `;
+  }).join('');
+}
+
+async function markLeadProcessed(id) {
+  const { error } = await sb.from('waitlist').update({ processed_at: new Date().toISOString() }).eq('id', id);
+  if (!error) loadLeads();
+}
+
+// ── MAIL (inbound from info@annex27.nl) ──
+let mailData = [];
+
+async function loadMailCount() {
+  try {
+    const { count } = await sb.from('inbound_mail')
+      .select('*', { count: 'exact', head: true })
+      .eq('is_read', false);
+    document.getElementById('mailBadge').textContent = count || 0;
+  } catch(e) {}
+}
+
+async function loadMail() {
+  const listEl = document.getElementById('mailList');
+  listEl.innerHTML = '<div class="empty-state">Laden...</div>';
+  const { data, error } = await sb.from('inbound_mail').select('*').order('received_at', { ascending: false }).limit(100);
+  if (error) {
+    listEl.innerHTML = '<div class="empty-state" style="padding:40px;text-align:center;color:var(--text-muted);">Kon mail niet laden.</div>';
+    return;
+  }
+  mailData = data || [];
+  renderMail();
+  loadMailCount();
+}
+
+function renderMail() {
+  const listEl = document.getElementById('mailList');
+  if (!mailData.length) {
+    listEl.innerHTML = `
+      <div style="padding:40px 24px;text-align:center;background:rgba(255,255,255,0.02);border:1px dashed var(--border);border-radius:10px;">
+        <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:1rem;margin-bottom:8px;">Nog geen mail binnen</div>
+        <div style="color:var(--text-muted);font-size:0.88rem;max-width:520px;margin:0 auto;line-height:1.6;">
+          Om mail van <strong>info@annex27.nl</strong> hier te laten verschijnen, moet de mailkoppeling eenmalig worden geactiveerd. Zie de uitleg in de chat &mdash; vraag Raoul of deze stap al is doorgevoerd.
+        </div>
+      </div>`;
+    return;
+  }
+  const esc = (s) => String(s ?? '').replace(/[<>&"]/g, c => ({'<':'&lt;','>':'&gt;','&':'amp;','"':'&quot;'}[c]));
+  listEl.innerHTML = mailData.map(m => {
+    const d = new Date(m.received_at).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
+    const unread = !m.is_read;
+    const snippet = (m.body_text || '').slice(0, 180).replace(/\n+/g, ' ');
+    const atts = Array.isArray(m.attachments) ? m.attachments.length : 0;
+    return `
+      <div onclick="openMail('${m.id}')" style="cursor:pointer;background:${unread ? 'var(--surface)' : 'rgba(255,255,255,0.02)'};border:1px solid ${unread ? 'var(--accent)' : 'var(--border)'};border-radius:10px;padding:14px 18px;">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:4px;">
+          <div style="font-weight:${unread ? '700' : '500'};font-size:0.9rem;">${esc(m.from_name || m.from_email)}</div>
+          <div style="font-size:0.76rem;color:var(--text-muted);white-space:nowrap;">${d}</div>
+        </div>
+        <div style="font-weight:${unread ? '600' : '500'};font-size:0.88rem;margin-bottom:4px;">${esc(m.subject || '(geen onderwerp)')}</div>
+        <div style="font-size:0.82rem;color:var(--text-muted);line-height:1.5;">${esc(snippet)}${snippet.length >= 180 ? '…' : ''}</div>
+        ${atts ? `<div style="margin-top:6px;font-size:0.72rem;color:var(--accent);">&#128206; ${atts} bijlage${atts>1?'n':''}</div>` : ''}
+      </div>
+    `;
+  }).join('');
+}
+
+async function openMail(id) {
+  await sb.from('inbound_mail').update({ is_read: true }).eq('id', id);
+  loadMail();
+}
+
+// ── INBOX (global messages across all clients) ──
+let inboxMessages = [];
+let currentInboxFilter = 'all';
+
+async function loadInboxCount() {
+  try {
+    const { count } = await sb.from('messages')
+      .select('*', { count: 'exact', head: true })
+      .eq('sender_role', 'client')
+      .eq('read_by_auditor', false);
+    document.getElementById('inboxBadge').textContent = count || 0;
+  } catch(e) { /* silent */ }
+}
+
+async function loadInbox() {
+  const list = document.getElementById('inboxList');
+  list.innerHTML = '<div class="empty-state">Laden...</div>';
+
+  const { data, error } = await sb.from('messages')
+    .select('*')
+    .order('created_at', { ascending: false })
+    .limit(300);
+
+  if (error) {
+    list.innerHTML = `<div class="empty-state">Fout: ${esc(error.message)}</div>`;
+    return;
+  }
+
+  inboxMessages = data || [];
+  renderInbox();
+  loadInboxCount();
+}
+
+function setInboxFilter(filter, btn) {
+  currentInboxFilter = filter;
+  btn.parentElement.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderInbox();
+}
+
+function renderInbox() {
+  const list = document.getElementById('inboxList');
+  let filtered = inboxMessages;
+  if (currentInboxFilter === 'unread') filtered = filtered.filter(m => m.sender_role === 'client' && !m.read_by_auditor);
+  if (currentInboxFilter === 'attachment') filtered = filtered.filter(m => m.attachment_name);
+
+  if (filtered.length === 0) {
+    list.innerHTML = '<div class="empty-state">Geen berichten in deze filter.</div>';
+    return;
+  }
+
+  const fmt = (d) => new Date(d).toLocaleString('nl-NL', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' });
+  list.innerHTML = filtered.map(m => {
+    const isClient = m.sender_role === 'client';
+    const unread = isClient && !m.read_by_auditor;
+    const clientInfo = clients.find(c => c.user_id === m.user_id);
+    const fromName = isClient
+      ? (clientInfo ? (clientInfo.bedrijf || clientInfo.naam || clientInfo.email) : m.user_id.slice(0,8))
+      : 'U (auditor)';
+    const tag = isClient ? '<span style="color:var(--accent-light);">Klant</span>' : '<span style="color:var(--text-muted);">Uitgaand</span>';
+    const attach = m.attachment_name
+      ? `<div style="margin-top:6px;font-size:0.75rem;color:var(--text-muted);display:inline-flex;align-items:center;gap:6px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>${esc(m.attachment_name)}</div>`
+      : '';
+    return `<div class="inbox-row ${unread?'unread':''}" onclick="openClientFromInbox('${esc(m.user_id)}')">
+      <div>
+        <div class="inbox-from">${esc(fromName)} <span style="font-weight:400;color:var(--text-dim);font-size:0.75rem;margin-left:6px;">${tag}</span></div>
+        <div class="inbox-preview">${esc(m.body || '').slice(0,220)}</div>
+        ${attach}
+      </div>
+      <div class="inbox-time">${esc(fmt(m.created_at))}</div>
+    </div>`;
+  }).join('');
+}
+
+async function openClientFromInbox(userId) {
+  // Switch to clients view and select
+  document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector('.view-btn[data-view="clients"]').classList.add('active');
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById('viewClients').classList.add('active');
+
+  // Also mark client messages as read (best-effort)
+  sb.from('messages').update({ read_by_auditor: true })
+    .eq('user_id', userId).eq('sender_role', 'client')
+    .then(() => loadInboxCount(), () => {});
+
+  // Switch to messages tab within client
+  await selectClient(userId);
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  const msgTab = document.querySelector('.tab[data-tab="messages"]');
+  if (msgTab) msgTab.classList.add('active');
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panelMessages').classList.add('active');
+}
+
+// ── ORDERS (payments) ──
+let ordersData = [];
+let currentOrderFilter = 'all';
+
+async function loadOrdersCount() {
+  try {
+    const { count } = await sb.from('orders')
+      .select('*', { count: 'exact', head: true })
+      .eq('status', 'paid');
+    document.getElementById('ordersBadge').textContent = count || 0;
+  } catch(e) { /* silent */ }
+}
+
+async function loadOrders() {
+  const body = document.getElementById('ordersBody');
+  body.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:40px;color:var(--text-muted);">Laden...</td></tr>';
+
+  const { data, error } = await sb.from('orders')
+    .select('*')
+    .order('created_at', { ascending: false })
+    .limit(500);
+
+  if (error) {
+    body.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:40px;color:var(--danger);">Fout: ${esc(error.message)}</td></tr>`;
+    return;
+  }
+
+  ordersData = data || [];
+  renderOrderKpis();
+  renderOrders();
+  loadOrdersCount();
+}
+
+function setOrderFilter(filter, btn) {
+  currentOrderFilter = filter;
+  btn.parentElement.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderOrders();
+}
+
+function renderOrderKpis() {
+  const paid = ordersData.filter(o => o.status === 'paid');
+  const revenue = paid.reduce((sum, o) => sum + (parseFloat(o.amount) || 0), 0);
+  const now = new Date();
+  const thisMonth = paid.filter(o => {
+    if (!o.paid_at) return false;
+    const d = new Date(o.paid_at);
+    return d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth();
+  });
+  const monthRev = thisMonth.reduce((s,o) => s + (parseFloat(o.amount)||0), 0);
+  const failed = ordersData.filter(o => ['failed','canceled','expired'].includes(o.status)).length;
+
+  const fmtEur = (n) => new Intl.NumberFormat('nl-NL', { style:'currency', currency:'EUR', minimumFractionDigits: 0 }).format(n);
+
+  document.getElementById('ordersKpis').innerHTML = `
+    <div class="kpi"><div class="kpi-label">Totaal paid</div><div class="kpi-value">${paid.length}</div></div>
+    <div class="kpi"><div class="kpi-label">Totale omzet</div><div class="kpi-value">${fmtEur(revenue)}</div></div>
+    <div class="kpi"><div class="kpi-label">Deze maand</div><div class="kpi-value">${thisMonth.length} &middot; ${fmtEur(monthRev)}</div></div>
+    <div class="kpi"><div class="kpi-label">Mislukt/afgebroken</div><div class="kpi-value">${failed}</div></div>
+  `;
+}
+
+function renderOrders() {
+  const body = document.getElementById('ordersBody');
+  let filtered = ordersData;
+  if (currentOrderFilter === 'paid') filtered = filtered.filter(o => o.status === 'paid');
+  else if (currentOrderFilter === 'failed') filtered = filtered.filter(o => ['failed','canceled','expired'].includes(o.status));
+
+  if (filtered.length === 0) {
+    body.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:40px;color:var(--text-muted);">Geen orders.</td></tr>';
+    return;
+  }
+
+  const fmtDate = (d) => d ? new Date(d).toLocaleString('nl-NL', { day:'2-digit', month:'short', year:'2-digit', hour:'2-digit', minute:'2-digit' }) : '—';
+  const fmtEur = (n) => new Intl.NumberFormat('nl-NL', { style:'currency', currency:'EUR' }).format(n || 0);
+
+  body.innerHTML = filtered.map(o => `
+    <tr ${o.user_id ? `style="cursor:pointer;" onclick="openClientFromInbox('${esc(o.user_id)}')"` : ''}>
+      <td>${esc(fmtDate(o.paid_at || o.created_at))}</td>
+      <td>
+        <div style="font-weight:600;">${esc(o.bedrijf || o.naam || '—')}</div>
+        <div style="font-size:0.78rem;color:var(--text-muted);">${esc(o.email || '')}</div>
+      </td>
+      <td><span class="client-pakket">${esc(o.plan || '—')}</span></td>
+      <td style="font-variant-numeric:tabular-nums;">${fmtEur(o.amount)}</td>
+      <td><span class="status-pill ${esc(o.status||'pending')}">${esc(o.status||'pending')}</span></td>
+      <td style="font-family:monospace;font-size:0.75rem;color:var(--text-dim);">${esc(o.payment_id || '')}</td>
+    </tr>
+  `).join('');
+}
+
+async function loadControls() {
+  // Fetch controls list — we dupl the structure but fetch from existing dashboard session data if possible
+  // For now: we hardcode the known structure. In production this could come from a shared JSON.
+  // Simple approach: build from known A.5/A.6/A.7/A.8 range with placeholders.
+  // The real control catalog is in dashboard.html — we read it via a tiny helper by loading dashboard DOM? No.
+  // We'll use a minimal known catalog here:
+  controls = ANNEX_A_CONTROLS.slice();
+}
+
+function bindTabs() {
+  document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      const target = tab.dataset.tab;
+      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+      document.getElementById('panel' + target.charAt(0).toUpperCase() + target.slice(1)).classList.add('active');
+      if (target === 'rapport') loadRapportPanel();
+    });
+  });
+}
+
+// ── RAPPORT UPLOAD/RELEASE (admin) ──
+let selectedClientReports = [];
+
+async function loadRapportPanel() {
+  const container = document.getElementById('rapportContainer');
+  if (!currentClient?.user_id) {
+    container.innerHTML = '<div class="empty-state">Selecteer eerst een klant.</div>';
+    return;
+  }
+  container.innerHTML = '<div class="empty-state">Laden...</div>';
+  const { data, error } = await sb.from('reports').select('*').eq('user_id', currentClient?.user_id).order('created_at', { ascending: false });
+  if (error) { container.innerHTML = '<div class="empty-state">Kon rapporten niet laden.</div>'; return; }
+  selectedClientReports = data || [];
+  renderRapportPanel();
+}
+
+function renderRapportPanel() {
+  const container = document.getElementById('rapportContainer');
+  const esc = (s) => String(s ?? '').replace(/[<>&"]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c]));
+  const rows = selectedClientReports.map(r => {
+    const released = !!r.released_at;
+    const d = released ? new Date(r.released_at).toLocaleString('nl-NL') : new Date(r.created_at).toLocaleString('nl-NL');
+    return `
+      <div style="display:flex;align-items:center;gap:14px;padding:14px 16px;background:var(--surface);border:1px solid var(--border);border-radius:10px;">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="${released ? '#14b8a6' : '#94a3b8'}" stroke-width="2" style="flex-shrink:0;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/></svg>
+        <div style="flex:1;min-width:0;">
+          <div style="font-weight:700;font-size:0.92rem;">${esc(r.title || 'Gap-analyse rapport')}</div>
+          <div style="font-size:0.78rem;color:var(--text-muted);">${released ? 'Vrijgegeven op ' + d : 'Klaar maar nog niet vrijgegeven &mdash; ' + d}</div>
+        </div>
+        <button class="action-btn" onclick="downloadReport('${r.id}')" style="font-size:0.78rem;">Download</button>
+        ${released
+          ? '<button class="action-btn" onclick="unreleaseReport(\''+r.id+'\')" style="font-size:0.78rem;background:rgba(220,38,38,0.08);color:#DC2626;">Intrekken</button>'
+          : '<button class="action-btn" onclick="releaseReport(\''+r.id+'\')" style="font-size:0.78rem;background:#0D9488;color:#fff;border-color:#0D9488;">Vrijgeven</button>'}
+        <button class="action-btn" onclick="deleteReport('${r.id}', '${esc(r.file_path)}')" style="font-size:0.78rem;color:#DC2626;" aria-label="Verwijder">&times;</button>
+      </div>
+    `;
+  }).join('');
+
+  container.innerHTML = `
+    <div style="margin-bottom:18px;">
+      <label style="display:inline-flex;align-items:center;gap:8px;padding:10px 16px;background:#0D9488;color:#fff;border-radius:10px;cursor:pointer;font-weight:600;font-size:0.88rem;">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        Upload PDF-rapport
+        <input type="file" accept="application/pdf" onchange="uploadReport(this)" style="display:none;" />
+      </label>
+      <span style="margin-left:12px;font-size:0.8rem;color:var(--text-muted);">Max 50MB, alleen PDF. Upload → klik "Vrijgeven" om de klant toegang te geven.</span>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      ${rows || '<div class="empty-state" style="padding:32px;text-align:center;color:var(--text-muted);">Nog geen rapporten voor deze klant.</div>'}
+    </div>
+  `;
+}
+
+async function uploadReport(input) {
+  const file = input.files[0];
+  if (!file) return;
+  if (file.size > 50 * 1024 * 1024) { alert('Bestand is te groot (max 50MB).'); return; }
+  if (file.type !== 'application/pdf') { alert('Alleen PDF-bestanden.'); return; }
+
+  const path = `${currentClient?.user_id}/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g, '_').slice(0,60)}`;
+  const { error: upErr } = await sb.storage.from('reports').upload(path, file, { contentType: 'application/pdf' });
+  if (upErr) { alert('Upload mislukt: ' + upErr.message); return; }
+  const { error: insErr } = await sb.from('reports').insert({
+    user_id: currentClient?.user_id, file_path: path, title: file.name.replace(/\.pdf$/i, '')
+  });
+  if (insErr) { alert('Opslaan mislukt: ' + insErr.message); return; }
+  loadRapportPanel();
+}
+
+async function releaseReport(id) {
+  await sb.from('reports').update({ released_at: new Date().toISOString(), released_by: currentUser.id }).eq('id', id);
+  loadRapportPanel();
+}
+
+async function unreleaseReport(id) {
+  if (!confirm('Toegang van klant intrekken?')) return;
+  await sb.from('reports').update({ released_at: null, released_by: null }).eq('id', id);
+  loadRapportPanel();
+}
+
+async function deleteReport(id, filePath) {
+  if (!confirm('Rapport permanent verwijderen?')) return;
+  await sb.storage.from('reports').remove([filePath]);
+  await sb.from('reports').delete().eq('id', id);
+  loadRapportPanel();
+}
+
+async function downloadReport(id) {
+  const r = selectedClientReports.find(x => x.id === id);
+  if (!r) return;
+  const { data, error } = await sb.storage.from('reports').createSignedUrl(r.file_path, 300);
+  if (error) { alert('Kon signed URL niet maken: ' + error.message); return; }
+  window.open(data.signedUrl, '_blank');
+}
+
+function bindFilters() {
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentFilter = btn.dataset.filter;
+      renderClientList();
+    });
+  });
+}
+
+async function loadClientList() {
+  try {
+    const { data, error } = await sb.rpc('auditor_client_list');
+    if (error) {
+      document.getElementById('clientList').innerHTML = `<div class="empty-state">Fout: ${esc(error.message)}<br><small>Heeft u de SQL in supabase-auditor-setup.sql al uitgevoerd?</small></div>`;
+      return;
+    }
+    clients = data || [];
+    renderClientList();
+  } catch(e) {
+    console.error('loadClientList:', e);
+    document.getElementById('clientList').innerHTML = `<div class="empty-state">Fout bij laden: ${esc(e.message)}</div>`;
+  }
+}
+
+function renderClientList() {
+  const list = document.getElementById('clientList');
+  let filtered = clients;
+  if (currentFilter !== 'all') {
+    filtered = clients.filter(c => c.status === currentFilter);
+  }
+
+  if (filtered.length === 0) {
+    list.innerHTML = '<div class="empty-state">Geen klanten in deze filter.</div>';
+    return;
+  }
+
+  list.innerHTML = filtered.map(c => {
+    const pct = c.total_controls > 0 ? Math.round((c.controls_answered / c.total_controls) * 100) : 0;
+    const statusCls = (c.status || 'in_progress').replace('_', '-');
+    const statusLabel = {
+      'in_progress': 'In progress',
+      'review_requested': 'Te reviewen',
+      'in_review': 'In review',
+      'reviewed': 'Afgerond',
+      'deleted': 'Verwijderd'
+    }[c.status] || 'In progress';
+    return `<div class="client-item" onclick="selectClient('${esc(c.user_id)}')" data-id="${esc(c.user_id)}">
+      ${c.unread_messages > 0 ? `<span class="client-unread">${c.unread_messages}</span>` : ''}
+      <div class="client-head">
+        <div class="client-name">${esc(c.bedrijf || c.naam || c.email)}</div>
+      </div>
+      <div class="client-email">${esc(c.email)}</div>
+      <div class="client-meta">
+        <span class="client-pakket">${esc(c.pakket || 'gap')}</span>
+        <span class="client-status ${statusCls}">${esc(statusLabel)}</span>
+        <span>${c.controls_answered} / ${c.total_controls} controls</span>
+      </div>
+      <div class="client-progress"><div class="client-progress-fill" style="width:${pct}%"></div></div>
+    </div>`;
+  }).join('');
+}
+
+async function selectClient(userId) {
+  document.querySelectorAll('.client-item').forEach(el => el.classList.toggle('active', el.dataset.id === userId));
+  currentClient = clients.find(c => c.user_id === userId);
+  if (!currentClient) return;
+
+  document.getElementById('mainEmpty').style.display = 'none';
+  document.getElementById('mainContent').style.display = 'block';
+
+  document.getElementById('clientTitle').textContent = currentClient.bedrijf || currentClient.naam || currentClient.email;
+  document.getElementById('clientInfo').textContent = `${currentClient.naam || ''} · ${currentClient.email} · ${currentClient.pakket || 'gap'}-pakket`;
+
+  await Promise.all([
+    loadClientFindings(userId),
+    loadClientMessages(userId),
+    renderClientProfile()
+  ]);
+}
+
+async function loadClientFindings(userId) {
+  const list = document.getElementById('controlList');
+  list.innerHTML = '<div class="empty-state">Laden...</div>';
+
+  // Fetch gap-analyse answers + evidence + existing findings in parallel
+  const [gaRes, evRes, findRes] = await Promise.all([
+    sb.from('gap_analyse').select('*').eq('user_id', userId).maybeSingle(),
+    sb.storage.from('evidence').list(userId, { limit: 500 }).catch(() => ({ data: [] })),
+    sb.from('auditor_findings').select('*').eq('user_id', userId)
+  ]);
+
+  const gapAnswers = gaRes.data?.answers || {};
+  const findings = findRes.data || [];
+  findings.forEach(f => { findingCache[f.control_id] = f; });
+
+  // Group controls by category and render
+  let html = '';
+  CONTROL_CATS.forEach(cat => {
+    const catControls = controls.filter(c => c.cat === cat);
+    if (catControls.length === 0) return;
+    html += `<div style="margin-top:20px;margin-bottom:8px;font-family:'Sora',sans-serif;font-size:0.82rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.1em;">${esc(cat)} (${catControls.length})</div>`;
+    catControls.forEach(ctrl => {
+      html += renderControlRow(ctrl, gapAnswers, findings.find(f => f.control_id === ctrl.id));
+    });
+  });
+
+  list.innerHTML = html;
+  document.getElementById('findingsCount').textContent = findings.length;
+
+  // Bind control header clicks to expand + lazy-load evidence
+  document.querySelectorAll('.control-row').forEach(row => {
+    const header = row.querySelector('.control-header');
+    header.addEventListener('click', () => {
+      row.classList.toggle('open');
+      if (row.classList.contains('open') && !row.dataset.evLoaded) {
+        const ctrlId = row.id.replace('row_', '').replace(/_/g, '.');
+        loadControlEvidence(ctrlId, userId);
+        row.dataset.evLoaded = '1';
+      }
+    });
+  });
+}
+
+function renderControlRow(ctrl, gapAnswers, existingFinding) {
+  const safeId = ctrl.id.replace(/\./g, '_');
+  // Determine status based on gapAnswers
+  const scoreMap = {'4': 3, '3': 2, '2': 1, '1': 0};
+  const ansKeys = Object.keys(gapAnswers).filter(k => k.startsWith(ctrl.id + '_'));
+  const ansCount = ansKeys.length;
+
+  let statusCls = 'pending', statusLabel = 'Niet beoordeeld';
+  if (ansCount > 0) {
+    const vals = ansKeys.map(k => gapAnswers[k]);
+    const scores = vals.filter(v => v !== 'nvt').map(v => parseInt(v));
+    const avg = scores.length > 0 ? scores.reduce((a,b)=>a+b,0)/scores.length : 0;
+    if (vals.every(v => v === 'nvt')) { statusCls = 'compliant'; statusLabel = 'N.v.t.'; }
+    else if (avg >= 3) { statusCls = 'compliant'; statusLabel = 'Compliant'; }
+    else if (avg >= 2) { statusCls = 'partial'; statusLabel = 'Gedeeltelijk'; }
+    else { statusCls = 'non-compliant'; statusLabel = 'Non-compliant'; }
+  }
+
+  const sev = existingFinding?.severity || 'info';
+  const findingText = existingFinding?.finding || '';
+  const recommendationText = existingFinding?.recommendation || '';
+
+  return `<div class="control-row" id="row_${safeId}">
+    <div class="control-header">
+      <span class="control-id">${esc(ctrl.id)}</span>
+      <span class="control-name">${esc(ctrl.name)}</span>
+      <div class="control-indicators">
+        <span class="ci-badge ${statusCls}">${esc(statusLabel)}</span>
+        ${existingFinding ? `<span class="ci-badge evidence-yes">Bevinding gezet</span>` : ''}
+      </div>
+    </div>
+    <div class="control-body">
+      <div class="control-section">
+        <div class="section-label">Antwoorden van klant</div>
+        ${ansCount === 0 ? '<div class="no-evidence">Klant heeft deze control nog niet beoordeeld.</div>' :
+          ansKeys.map(k => {
+            const label = { '4': 'Volledig ingericht', '3': 'Volledig ingericht', '2': 'Gedeeltelijk', '1': 'Niet gestart', '0': 'Weet niet', 'nvt': 'N.v.t.' }[gapAnswers[k]] || gapAnswers[k];
+            const qi = k.split('_').pop();
+            return `<div class="client-answer">Vraag ${parseInt(qi)+1}: <strong>${esc(label)}</strong></div>`;
+          }).join('')
+        }
+      </div>
+
+      <div class="control-section">
+        <div class="section-label">Bewijsvoering</div>
+        <div id="ev_${safeId}"><em style="color:var(--text-dim);font-size:0.82rem;">Laden...</em></div>
+      </div>
+
+      <div class="control-section finding-editor">
+        <div class="section-label">Uw bevinding (komt in rapport)</div>
+
+        <div class="finding-row">
+          <div class="finding-label">Severity</div>
+          <div class="severity-pills" data-ctrl="${esc(ctrl.id)}">
+            <button type="button" class="severity-pill ${sev==='info'?'active':''}" data-sev="info" onclick="setSeverity('${esc(ctrl.id)}','info',this)">Info</button>
+            <button type="button" class="severity-pill ${sev==='minor'?'active':''}" data-sev="minor" onclick="setSeverity('${esc(ctrl.id)}','minor',this)">Minor</button>
+            <button type="button" class="severity-pill ${sev==='major'?'active':''}" data-sev="major" onclick="setSeverity('${esc(ctrl.id)}','major',this)">Major</button>
+            <button type="button" class="severity-pill ${sev==='critical'?'active':''}" data-sev="critical" onclick="setSeverity('${esc(ctrl.id)}','critical',this)">Critical</button>
+          </div>
+        </div>
+
+        <div class="finding-row">
+          <div class="finding-label">Bevinding</div>
+          <textarea class="finding-textarea" id="finding_${safeId}" placeholder="Wat heeft u geconstateerd? (komt zichtbaar in het eindrapport van de klant)" onblur="saveFinding('${esc(ctrl.id)}')">${esc(findingText)}</textarea>
+        </div>
+
+        <div class="finding-row">
+          <div class="finding-label">Aanbeveling</div>
+          <textarea class="finding-textarea" id="rec_${safeId}" placeholder="Welke concrete actie raadt u aan?" onblur="saveFinding('${esc(ctrl.id)}')">${esc(recommendationText)}</textarea>
+        </div>
+
+        <div class="save-status" id="save_${safeId}"></div>
+      </div>
+    </div>
+  </div>`;
+}
+
+// Load evidence for a control lazily (when row is opened)
+// Files live in storage bucket 'evidence' at path: {userId}/{controlId}/{filename}
+async function loadControlEvidence(ctrlId, userId) {
+  const safeId = ctrlId.replace(/\./g, '_');
+  const target = document.getElementById('ev_' + safeId);
+  if (!target) return;
+  target.innerHTML = `<em style="color:var(--text-dim);font-size:0.82rem;">Bewijsvoering ophalen...</em>`;
+
+  const folder = `${userId}/${ctrlId}`;
+  const { data, error } = await sb.storage.from('evidence').list(folder, { limit: 100, sortBy: { column: 'created_at', order: 'desc' } });
+
+  if (error) {
+    target.innerHTML = `<div class="no-evidence">Kon bewijsvoering niet ophalen: ${esc(error.message)}</div>`;
+    return;
+  }
+
+  if (!data || data.length === 0) {
+    target.innerHTML = `<div class="no-evidence">Nog geen bewijsvoering geüpload voor ${esc(ctrlId)}.</div>`;
+    return;
+  }
+
+  const fmtSize = (b) => !b ? '' : (b < 1024 ? b + ' B' : b < 1024*1024 ? (b/1024).toFixed(0) + ' KB' : (b/(1024*1024)).toFixed(1) + ' MB');
+  target.innerHTML = `<div class="ev-folder">` + data.map(f => {
+    const path = `${folder}/${f.name}`;
+    const size = f.metadata?.size;
+    return `<div class="ev-file" onclick="previewEvidence('${esc(path)}','${esc(f.name)}')">
+      <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/></svg>
+      <span>${esc(f.name)}</span>
+      <span class="ev-size">${fmtSize(size)}</span>
+    </div>`;
+  }).join('') + `</div>`;
+}
+
+async function previewEvidence(path, name) {
+  try {
+    const { data, error } = await sb.storage.from('evidence').createSignedUrl(path, 120);
+    if (error) throw error;
+    // Open in new tab (browser will preview PDFs/images inline, force download for docx)
+    window.open(data.signedUrl, '_blank', 'noopener');
+  } catch(e) {
+    alert('Kon bewijsvoering niet openen: ' + e.message);
+  }
+}
+
+function setSeverity(ctrlId, sev, btn) {
+  const parent = btn.parentElement;
+  parent.querySelectorAll('.severity-pill').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  saveFinding(ctrlId);
+}
+
+async function saveFinding(ctrlId) {
+  if (!currentClient) return;
+  const safeId = ctrlId.replace(/\./g, '_');
+  const findingEl = document.getElementById('finding_' + safeId);
+  const recEl = document.getElementById('rec_' + safeId);
+  const sevBtn = document.querySelector(`.severity-pills[data-ctrl="${ctrlId}"] .severity-pill.active`);
+  const sev = sevBtn?.dataset.sev || 'info';
+  const status = document.getElementById('save_' + safeId);
+
+  if (status) { status.textContent = 'Opslaan...'; status.className = 'save-status saving'; }
+
+  try {
+    const { error } = await sb.from('auditor_findings').upsert({
+      user_id: currentClient.user_id,
+      control_id: ctrlId,
+      severity: sev,
+      finding: findingEl?.value || '',
+      recommendation: recEl?.value || '',
+      auditor_id: currentUser.id,
+      updated_at: new Date().toISOString()
+    }, { onConflict: 'user_id,control_id' });
+
+    if (error) throw error;
+    if (status) { status.textContent = '✓ Opgeslagen'; status.className = 'save-status saved'; }
+    setTimeout(() => { if (status) status.textContent = ''; }, 2500);
+  } catch(e) {
+    if (status) { status.textContent = 'Fout: ' + e.message; status.className = 'save-status'; }
+  }
+}
+
+async function loadClientMessages(userId) {
+  const container = document.getElementById('msgContainer');
+  const { data, error } = await sb.from('messages')
+    .select('*')
+    .eq('user_id', userId)
+    .order('created_at', { ascending: true });
+
+  if (error) {
+    container.innerHTML = `<div class="empty-state">Fout: ${esc(error.message)}</div>`;
+    return;
+  }
+
+  document.getElementById('msgCount').textContent = data?.length || 0;
+
+  if (!data || data.length === 0) {
+    container.innerHTML = '<div class="empty-state"><div class="empty-icon"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>Geen berichten.</div>';
+    return;
+  }
+
+  let html = '<div style="display:flex;flex-direction:column;gap:12px;max-width:760px;">';
+  data.forEach(m => {
+    const isClient = m.sender_role === 'client';
+    const bg = isClient ? 'var(--bg-alt)' : 'var(--accent-bg)';
+    const border = isClient ? 'var(--border)' : 'rgba(13,148,136,0.3)';
+    const time = new Date(m.created_at).toLocaleString('nl-NL', { day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit' });
+    html += `<div style="background:${bg};border:1px solid ${border};border-radius:10px;padding:14px 16px;${isClient?'':'align-self:flex-end;max-width:75%;'}">
+      <div style="font-size:0.72rem;color:var(--text-muted);margin-bottom:4px;">
+        <strong style="color:${isClient?'var(--accent-light)':'var(--text)'}">${esc(isClient?'Klant':'U (auditor)')}</strong> · ${esc(time)}
+      </div>
+      <div style="font-size:0.88rem;white-space:pre-wrap;">${esc(m.body)}</div>
+      ${m.attachment_name ? `<div onclick="downloadAttachment('${esc(m.attachment_path)}','${esc(m.attachment_name)}')" style="margin-top:10px;padding:8px 12px;background:rgba(255,255,255,0.04);border-radius:6px;cursor:pointer;display:flex;align-items:center;gap:10px;font-size:0.82rem;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent-light)" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/></svg>${esc(m.attachment_name)}</div>` : ''}
+    </div>`;
+  });
+  html += '</div>';
+
+  // Reply composer
+  html += `<div style="margin-top:24px;padding:16px;background:var(--bg-alt);border:1px solid var(--border);border-radius:10px;max-width:760px;">
+    <textarea id="replyBody" placeholder="Typ uw antwoord..." rows="3" style="width:100%;background:var(--bg);border:1px solid var(--border);color:var(--text);padding:10px 12px;border-radius:8px;font-family:inherit;font-size:0.88rem;resize:vertical;"></textarea>
+    <div style="margin-top:10px;text-align:right;">
+      <button class="action-btn primary" onclick="sendAuditorReply()">Verstuur antwoord</button>
+    </div>
+  </div>`;
+
+  container.innerHTML = html;
+}
+
+async function sendAuditorReply() {
+  const body = document.getElementById('replyBody').value.trim();
+  if (!body || !currentClient) return;
+
+  try {
+    const { error } = await sb.from('messages').insert({
+      thread_id: currentClient.user_id,
+      user_id: currentClient.user_id,
+      sender_role: 'auditor',
+      body: body
+    });
+    if (error) throw error;
+    document.getElementById('replyBody').value = '';
+    await loadClientMessages(currentClient.user_id);
+  } catch(e) {
+    alert('Kon bericht niet versturen: ' + e.message);
+  }
+}
+
+async function downloadAttachment(path, name) {
+  try {
+    const { data, error } = await sb.storage.from('evidence').createSignedUrl(path, 60);
+    if (error) throw error;
+    const a = document.createElement('a');
+    a.href = data.signedUrl;
+    a.download = name;
+    a.click();
+  } catch(e) { alert('Download mislukt: ' + e.message); }
+}
+
+function renderClientProfile() {
+  if (!currentClient) return;
+  const el = document.getElementById('profileContainer');
+  el.innerHTML = `
+    <div style="max-width:600px;display:grid;grid-template-columns:180px 1fr;gap:12px;font-size:0.9rem;">
+      <div style="color:var(--text-muted);">E-mail</div><div>${esc(currentClient.email)}</div>
+      <div style="color:var(--text-muted);">Naam</div><div>${esc(currentClient.naam || '—')}</div>
+      <div style="color:var(--text-muted);">Bedrijf</div><div>${esc(currentClient.bedrijf || '—')}</div>
+      <div style="color:var(--text-muted);">Pakket</div><div>${esc(currentClient.pakket || 'gap')}</div>
+      <div style="color:var(--text-muted);">Status</div><div>${esc(currentClient.status || 'in_progress')}</div>
+      <div style="color:var(--text-muted);">Controls ingevuld</div><div>${currentClient.controls_answered} van ${currentClient.total_controls}</div>
+      <div style="color:var(--text-muted);">Review aangevraagd</div><div>${currentClient.review_requested_at ? new Date(currentClient.review_requested_at).toLocaleString('nl-NL') : '—'}</div>
+      <div style="color:var(--text-muted);">Laatste activiteit</div><div>${currentClient.last_activity ? new Date(currentClient.last_activity).toLocaleString('nl-NL') : '—'}</div>
+    </div>
+  `;
+}
+
+async function refreshClient() {
+  if (!currentClient) return;
+  await loadClientList();
+  const fresh = clients.find(c => c.user_id === currentClient.user_id);
+  if (fresh) {
+    currentClient = fresh;
+    await selectClient(fresh.user_id);
+  }
+}
+
+async function markReviewed() {
+  if (!currentClient) return;
+  if (!confirm('Markeer dit assessment als afgerond? De klant krijgt hier notificatie van.')) return;
+  try {
+    await sb.from('assessments').update({
+      status_detail: 'reviewed',
+      review_completed_at: new Date().toISOString(),
+      reviewed_by: currentUser.id
+    }).eq('user_id', currentClient.user_id);
+
+    await sb.from('messages').insert({
+      thread_id: currentClient.user_id,
+      user_id: currentClient.user_id,
+      sender_role: 'auditor',
+      body: '[Systeem] Uw assessment review is afgerond. U kunt het eindrapport downloaden in uw dashboard.'
+    });
+
+    alert('Assessment is gemarkeerd als afgerond.');
+    await refreshClient();
+  } catch(e) { alert('Fout: ' + e.message); }
+}
+
+// ── ANNEX A CONTROLS CATALOG ──
+// Minimal catalog (ISO 27001:2022) — names kort gehouden voor auditor view
+const ANNEX_A_CONTROLS = [
+  // A.5 Organisatorisch
+  {cat:'Organisatorisch', id:'A.5.1', name:'Beleid voor informatiebeveiliging'},
+  {cat:'Organisatorisch', id:'A.5.2', name:'Rollen en verantwoordelijkheden'},
+  {cat:'Organisatorisch', id:'A.5.3', name:'Scheiding van taken'},
+  {cat:'Organisatorisch', id:'A.5.4', name:'Managementverantwoordelijkheden'},
+  {cat:'Organisatorisch', id:'A.5.5', name:'Contact met autoriteiten'},
+  {cat:'Organisatorisch', id:'A.5.6', name:'Contact met speciale belangengroepen'},
+  {cat:'Organisatorisch', id:'A.5.7', name:'Threat intelligence'},
+  {cat:'Organisatorisch', id:'A.5.8', name:'IB in projectmanagement'},
+  {cat:'Organisatorisch', id:'A.5.9', name:'Inventarisatie van assets'},
+  {cat:'Organisatorisch', id:'A.5.10', name:'Acceptabel gebruik'},
+  {cat:'Organisatorisch', id:'A.5.11', name:'Teruggave van assets'},
+  {cat:'Organisatorisch', id:'A.5.12', name:'Classificatie van informatie'},
+  {cat:'Organisatorisch', id:'A.5.13', name:'Labeling van informatie'},
+  {cat:'Organisatorisch', id:'A.5.14', name:'Informatieoverdracht'},
+  {cat:'Organisatorisch', id:'A.5.15', name:'Toegangsbeveiliging'},
+  {cat:'Organisatorisch', id:'A.5.16', name:'Identiteitsbeheer'},
+  {cat:'Organisatorisch', id:'A.5.17', name:'Authenticatie-informatie'},
+  {cat:'Organisatorisch', id:'A.5.18', name:'Toegangsrechten'},
+  {cat:'Organisatorisch', id:'A.5.19', name:'IB in leveranciersrelaties'},
+  {cat:'Organisatorisch', id:'A.5.20', name:'IB in leveranciersovereenkomsten'},
+  {cat:'Organisatorisch', id:'A.5.21', name:'ICT-toeleveringsketen'},
+  {cat:'Organisatorisch', id:'A.5.22', name:'Monitoring leveranciersdiensten'},
+  {cat:'Organisatorisch', id:'A.5.23', name:'Clouddiensten beveiliging'},
+  {cat:'Organisatorisch', id:'A.5.24', name:'Incidentmanagement planning'},
+  {cat:'Organisatorisch', id:'A.5.25', name:'Beoordeling IB-gebeurtenissen'},
+  {cat:'Organisatorisch', id:'A.5.26', name:'Respons op incidenten'},
+  {cat:'Organisatorisch', id:'A.5.27', name:'Leren van incidenten'},
+  {cat:'Organisatorisch', id:'A.5.28', name:'Verzameling van bewijsmateriaal'},
+  {cat:'Organisatorisch', id:'A.5.29', name:'IB tijdens verstoring'},
+  {cat:'Organisatorisch', id:'A.5.30', name:'ICT-gereedheid bedrijfscontinuiteit'},
+  {cat:'Organisatorisch', id:'A.5.31', name:'Wettelijke vereisten'},
+  {cat:'Organisatorisch', id:'A.5.32', name:'Intellectuele eigendomsrechten'},
+  {cat:'Organisatorisch', id:'A.5.33', name:'Bescherming van registraties'},
+  {cat:'Organisatorisch', id:'A.5.34', name:'Privacy en PII'},
+  {cat:'Organisatorisch', id:'A.5.35', name:'Onafhankelijke beoordeling IB'},
+  {cat:'Organisatorisch', id:'A.5.36', name:'Naleving beleid en normen'},
+  {cat:'Organisatorisch', id:'A.5.37', name:'Gedocumenteerde procedures'},
+  // A.6 Personeel
+  {cat:'Personeel', id:'A.6.1', name:'Screening'},
+  {cat:'Personeel', id:'A.6.2', name:'Arbeidsvoorwaarden'},
+  {cat:'Personeel', id:'A.6.3', name:'Bewustwording en training'},
+  {cat:'Personeel', id:'A.6.4', name:'Disciplinair proces'},
+  {cat:'Personeel', id:'A.6.5', name:'Verantwoordelijkheden bij beëindiging'},
+  {cat:'Personeel', id:'A.6.6', name:'Geheimhoudingsovereenkomsten'},
+  {cat:'Personeel', id:'A.6.7', name:'Werken op afstand'},
+  {cat:'Personeel', id:'A.6.8', name:'Rapportage IB-gebeurtenissen'},
+  // A.7 Fysiek
+  {cat:'Fysiek', id:'A.7.1', name:'Fysieke beveiligingsperimeters'},
+  {cat:'Fysiek', id:'A.7.2', name:'Fysieke toegang'},
+  {cat:'Fysiek', id:'A.7.3', name:'Beveiliging kantoren en faciliteiten'},
+  {cat:'Fysiek', id:'A.7.4', name:'Fysieke beveiligingsmonitoring'},
+  {cat:'Fysiek', id:'A.7.5', name:'Bescherming tegen omgevingsdreigingen'},
+  {cat:'Fysiek', id:'A.7.6', name:'Werken in beveiligde zones'},
+  {cat:'Fysiek', id:'A.7.7', name:'Clear desk en clear screen'},
+  {cat:'Fysiek', id:'A.7.8', name:'Plaatsing apparatuur'},
+  {cat:'Fysiek', id:'A.7.9', name:'Beveiliging assets buiten terrein'},
+  {cat:'Fysiek', id:'A.7.10', name:'Opslagmedia'},
+  {cat:'Fysiek', id:'A.7.11', name:'Ondersteunende nutsvoorzieningen'},
+  {cat:'Fysiek', id:'A.7.12', name:'Beveiliging bekabeling'},
+  {cat:'Fysiek', id:'A.7.13', name:'Onderhoud apparatuur'},
+  {cat:'Fysiek', id:'A.7.14', name:'Veilige verwijdering apparatuur'},
+  // A.8 Technologie
+  {cat:'Technologie', id:'A.8.1', name:'Gebruikersapparatuur'},
+  {cat:'Technologie', id:'A.8.2', name:'Geprivilegieerde toegangsrechten'},
+  {cat:'Technologie', id:'A.8.3', name:'Beperking toegang tot informatie'},
+  {cat:'Technologie', id:'A.8.4', name:'Toegang tot broncode'},
+  {cat:'Technologie', id:'A.8.5', name:'Beveiligde authenticatie'},
+  {cat:'Technologie', id:'A.8.6', name:'Capaciteitsbeheer'},
+  {cat:'Technologie', id:'A.8.7', name:'Bescherming tegen malware'},
+  {cat:'Technologie', id:'A.8.8', name:'Beheer technische kwetsbaarheden'},
+  {cat:'Technologie', id:'A.8.9', name:'Configuratiebeheer'},
+  {cat:'Technologie', id:'A.8.10', name:'Verwijdering van informatie'},
+  {cat:'Technologie', id:'A.8.11', name:'Datamaskering'},
+  {cat:'Technologie', id:'A.8.12', name:'Preventie gegevenslekken'},
+  {cat:'Technologie', id:'A.8.13', name:'Back-up van informatie'},
+  {cat:'Technologie', id:'A.8.14', name:'Redundantie faciliteiten'},
+  {cat:'Technologie', id:'A.8.15', name:'Logging'},
+  {cat:'Technologie', id:'A.8.16', name:'Monitoringactiviteiten'},
+  {cat:'Technologie', id:'A.8.17', name:'Kloksynchronisatie'},
+  {cat:'Technologie', id:'A.8.18', name:'Geprivilegieerde hulpprogramma\'s'},
+  {cat:'Technologie', id:'A.8.19', name:'Software op operationele systemen'},
+  {cat:'Technologie', id:'A.8.20', name:'Netwerkbeveiliging'},
+  {cat:'Technologie', id:'A.8.21', name:'Beveiliging netwerkdiensten'},
+  {cat:'Technologie', id:'A.8.22', name:'Segmentatie van netwerken'},
+  {cat:'Technologie', id:'A.8.23', name:'Webfiltering'},
+  {cat:'Technologie', id:'A.8.24', name:'Gebruik van cryptografie'},
+  {cat:'Technologie', id:'A.8.25', name:'Veilige ontwikkellevenscyclus'},
+  {cat:'Technologie', id:'A.8.26', name:'Beveiligingseisen applicaties'},
+  {cat:'Technologie', id:'A.8.27', name:'Veilige systeemarchitectuur'},
+  {cat:'Technologie', id:'A.8.28', name:'Veilig coderen'},
+  {cat:'Technologie', id:'A.8.29', name:'Beveiligingstesten'},
+  {cat:'Technologie', id:'A.8.30', name:'Uitbestede ontwikkeling'},
+  {cat:'Technologie', id:'A.8.31', name:'Scheiding omgevingen'},
+  {cat:'Technologie', id:'A.8.32', name:'Wijzigingsbeheer'},
+  {cat:'Technologie', id:'A.8.33', name:'Testinformatie'},
+  {cat:'Technologie', id:'A.8.34', name:'Bescherming tijdens audittesten'}
+];
+</script>
+
+</body>
+</html>

@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<title>12-toegangsbeleid</title>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Sora', sans-serif;
+    color: #1E293B;
+    line-height: 1.7;
+    padding: 48px 56px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  h1 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #0F172A;
+    margin-bottom: 8px;
+    padding-bottom: 12px;
+    border-bottom: 3px solid #0D9488;
+  }
+  h2 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #0F172A;
+    margin-top: 32px;
+    margin-bottom: 12px;
+  }
+  h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #0D9488;
+    margin-top: 24px;
+    margin-bottom: 8px;
+  }
+  p { margin-bottom: 12px; font-size: 0.9rem; color: #475569; }
+  strong { color: #0F172A; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 0.82rem;
+  }
+  th {
+    background: #0F172A;
+    color: white;
+    padding: 10px 12px;
+    text-align: left;
+    font-weight: 600;
+  }
+  td {
+    padding: 8px 12px;
+    border-bottom: 1px solid #E2E8F0;
+    color: #475569;
+  }
+  tr:nth-child(even) td { background: #F8FAFC; }
+  tr:hover td { background: #F0FDFA; }
+  ul, ol { margin: 12px 0 12px 24px; font-size: 0.9rem; color: #475569; }
+  li { margin-bottom: 4px; }
+  code {
+    background: #F1F5F9;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.82rem;
+    color: #0D9488;
+  }
+  pre {
+    background: #0F172A;
+    color: #E2E8F0;
+    padding: 20px;
+    border-radius: 8px;
+    margin: 16px 0;
+    font-size: 0.8rem;
+    overflow-x: auto;
+  }
+  pre code { background: none; color: inherit; padding: 0; }
+  hr {
+    border: none;
+    border-top: 1px solid #E2E8F0;
+    margin: 24px 0;
+  }
+  .header-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #E2E8F0;
+  }
+  .logo {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #0F172A;
+  }
+  .logo span { color: #0D9488; }
+  .doc-meta {
+    font-size: 0.72rem;
+    color: #94A3B8;
+    text-align: right;
+  }
+  @media print {
+    body { padding: 24px 32px; }
+    h1 { font-size: 1.4rem; }
+  }
+</style>
+
+</head>
+<body>
+<div class="header-bar">
+  <div class="logo">annex<span>27</span></div>
+  <div class="doc-meta">ISO 27001:2022 Beleidspakket<br/>annex27.nl</div>
+</div>
+<h1>Toegangsbeleid</h1>
+<p><strong>ISO 27001:2022 — A.5.15, A.5.18, A.8.2, A.8.3, A.8.4, A.8.5</strong></p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Documentnummer</strong></td>
+<td>ISMS-012</td>
+</tr>
+<tr>
+<td><strong>Versie</strong></td>
+<td>1.0</td>
+</tr>
+<tr>
+<td><strong>Classificatie</strong></td>
+<td>Intern</td>
+</tr>
+<tr>
+<td><strong>Eigenaar</strong></td>
+<td>[Naam CISO / Verantwoordelijke]</td>
+</tr>
+<tr>
+<td><strong>Goedgekeurd door</strong></td>
+<td>[Naam Directie]</td>
+</tr>
+<tr>
+<td><strong>Datum goedkeuring</strong></td>
+<td>[DD-MM-JJJJ]</td>
+</tr>
+<tr>
+<td><strong>Volgende review</strong></td>
+<td>[DD-MM-JJJJ]</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>1. Doel</h2>
+<p>Dit beleid regelt wie toegang krijgt tot welke informatie en systemen, op basis van welke principes, en hoe toegangsrechten worden aangevraagd, verleend, gewijzigd en ingetrokken.</p>
+<h2>2. Principes</h2>
+<table>
+<thead>
+<tr>
+<th>Principe</th>
+<th>Beschrijving</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Need-to-know</strong></td>
+<td>Toegang wordt alleen verleend tot informatie die noodzakelijk is voor de functie-uitoefening</td>
+</tr>
+<tr>
+<td><strong>Least privilege</strong></td>
+<td>Gebruikers krijgen de minimaal benodigde rechten; geen standaard admin-accounts</td>
+</tr>
+<tr>
+<td><strong>Scheiding van taken</strong></td>
+<td>Kritieke taken worden verdeeld over meerdere personen om fraude en fouten te voorkomen</td>
+</tr>
+<tr>
+<td><strong>Standaard: geen toegang</strong></td>
+<td>Nieuwe accounts hebben standaard geen toegang; rechten worden expliciet toegekend</td>
+</tr>
+</tbody>
+</table>
+<h2>3. Toegangsrollen</h2>
+<table>
+<thead>
+<tr>
+<th>Rol</th>
+<th>Toegangsniveau</th>
+<th>Toekenning door</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Standaard gebruiker</strong></td>
+<td>Toegang tot eigen afdeling en benodigde applicaties</td>
+<td>Leidinggevende + IT-beheer</td>
+</tr>
+<tr>
+<td><strong>Beheerder</strong></td>
+<td>Uitgebreide rechten voor systeembeheer</td>
+<td>CISO + IT-manager</td>
+</tr>
+<tr>
+<td><strong>Privileged user</strong></td>
+<td>Root/admin-toegang tot infrastructuur</td>
+<td>CISO (met goedkeuring directie)</td>
+</tr>
+<tr>
+<td><strong>Extern / leverancier</strong></td>
+<td>Beperkte, tijdgebonden toegang tot specifieke systemen</td>
+<td>CISO</td>
+</tr>
+<tr>
+<td><strong>Alleen-lezen</strong></td>
+<td>Inzage zonder wijzigingsrechten</td>
+<td>Leidinggevende</td>
+</tr>
+</tbody>
+</table>
+<h2>4. Levenscyclus van toegangsrechten</h2>
+<h3>4.1 Aanvragen</h3>
+<table>
+<thead>
+<tr>
+<th>Stap</th>
+<th>Actie</th>
+<th>Verantwoordelijke</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Leidinggevende dient een toegangsverzoek in via [ticketsysteem / formulier / e-mail]</td>
+<td>Leidinggevende</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Verzoek bevat: naam medewerker, functie, benodigde systemen en rol, reden</td>
+<td>Aanvrager</td>
+</tr>
+<tr>
+<td>3</td>
+<td>CISO of IT-beheer beoordeelt het verzoek op basis van need-to-know en least privilege</td>
+<td>CISO / IT-beheer</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Bij goedkeuring: rechten worden toegekend en geregistreerd</td>
+<td>IT-beheer</td>
+</tr>
+</tbody>
+</table>
+<h3>4.2 Wijzigen</h3>
+<ul>
+<li>Bij functiewijziging: leidinggevende meldt dit aan IT-beheer</li>
+<li>Oude rechten worden ingetrokken, nieuwe rechten worden toegekend</li>
+<li>Geen cumulatie van rechten uit vorige functies</li>
+</ul>
+<h3>4.3 Intrekken</h3>
+<ul>
+<li>Bij uitdiensttreding: alle rechten worden ingetrokken op de laatste werkdag (zie HR-beleid ISMS-009)</li>
+<li>Bij langdurige afwezigheid (&gt;30 dagen): rechten worden tijdelijk opgeschort</li>
+<li>Bij beveiligingsincident: rechten kunnen onmiddellijk worden ingetrokken door CISO of IT-beheer</li>
+</ul>
+<h3>4.4 Periodieke review</h3>
+<table>
+<thead>
+<tr>
+<th>Activiteit</th>
+<th>Frequentie</th>
+<th>Verantwoordelijke</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Review van gebruikersrechten</td>
+<td>Halfjaarlijks</td>
+<td>Leidinggevenden + IT-beheer</td>
+</tr>
+<tr>
+<td>Review van privileged accounts</td>
+<td>Kwartaallijks</td>
+<td>CISO</td>
+</tr>
+<tr>
+<td>Review van externe toegang</td>
+<td>Kwartaallijks</td>
+<td>CISO</td>
+</tr>
+<tr>
+<td>Controle op inactieve accounts</td>
+<td>Maandelijks</td>
+<td>IT-beheer</td>
+</tr>
+</tbody>
+</table>
+<p>Inactieve accounts (&gt;90 dagen geen login) worden onderzocht en bij bevestiging van inactiviteit uitgeschakeld.</p>
+<h2>5. Privileged Access Management (A.8.2)</h2>
+<p>Accounts met verhoogde rechten (admin, root, service accounts) zijn onderworpen aan aanvullende eisen:</p>
+<ul>
+<li>Persoonlijke admin-accounts (geen gedeelde admin-accounts)</li>
+<li>MFA verplicht op alle privileged accounts</li>
+<li>Logging van alle privileged activiteiten</li>
+<li>Tijdgebonden elevated access waar mogelijk (just-in-time)</li>
+<li>Aparte admin-werkstations of jump servers voor beheertaken</li>
+<li>Kwartaallijkse review door CISO</li>
+</ul>
+<h2>6. Externe toegang (leveranciers, partners)</h2>
+<table>
+<thead>
+<tr>
+<th>Eis</th>
+<th>Beschrijving</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tijdgebonden</td>
+<td>Toegang verloopt automatisch na afgesproken periode</td>
+</tr>
+<tr>
+<td>Minimale rechten</td>
+<td>Alleen toegang tot benodigde systemen</td>
+</tr>
+<tr>
+<td>MFA verplicht</td>
+<td>Externe accounts altijd met multi-factor authenticatie</td>
+</tr>
+<tr>
+<td>Logging</td>
+<td>Alle activiteiten van externe accounts worden gelogd</td>
+</tr>
+<tr>
+<td>Overeenkomst</td>
+<td>Verwerkersovereenkomst of NDA vereist voorafgaand aan toegang</td>
+</tr>
+<tr>
+<td>Goedkeuring</td>
+<td>Elk extern account wordt goedgekeurd door CISO</td>
+</tr>
+</tbody>
+</table>
+<h2>7. Toegang tot broncode (A.8.4)</h2>
+<p>Indien van toepassing:</p>
+<ul>
+<li>Toegang tot broncode-repositories is beperkt tot ontwikkelaars met een aantoonbare behoefte</li>
+<li>Leestoegang en schrijftoegang worden apart toegekend</li>
+<li>Wijzigingen in broncode worden gereviewed (code review / pull request)</li>
+<li>Productieomgevingen zijn gescheiden van ontwikkel- en testomgevingen</li>
+</ul>
+<h2>8. Registraties</h2>
+<table>
+<thead>
+<tr>
+<th>Registratie</th>
+<th>Bewaartermijn</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Toegangsverzoeken en goedkeuringen</td>
+<td>2 jaar</td>
+</tr>
+<tr>
+<td>Wijzigingen in toegangsrechten</td>
+<td>2 jaar</td>
+</tr>
+<tr>
+<td>Resultaten van periodieke reviews</td>
+<td>2 jaar</td>
+</tr>
+<tr>
+<td>Logging van privileged access</td>
+<td>Minimaal 1 jaar</td>
+</tr>
+</tbody>
+</table>
+<h2>9. Versiebeheer</h2>
+<table>
+<thead>
+<tr>
+<th>Versie</th>
+<th>Datum</th>
+<th>Wijziging</th>
+<th>Auteur</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1.0</td>
+<td>[DD-MM-JJJJ]</td>
+<td>Initiële versie</td>
+<td>[Naam]</td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

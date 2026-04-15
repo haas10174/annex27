@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<title>06-soa</title>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Sora', sans-serif;
+    color: #1E293B;
+    line-height: 1.7;
+    padding: 48px 56px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  h1 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #0F172A;
+    margin-bottom: 8px;
+    padding-bottom: 12px;
+    border-bottom: 3px solid #0D9488;
+  }
+  h2 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #0F172A;
+    margin-top: 32px;
+    margin-bottom: 12px;
+  }
+  h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #0D9488;
+    margin-top: 24px;
+    margin-bottom: 8px;
+  }
+  p { margin-bottom: 12px; font-size: 0.9rem; color: #475569; }
+  strong { color: #0F172A; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 0.82rem;
+  }
+  th {
+    background: #0F172A;
+    color: white;
+    padding: 10px 12px;
+    text-align: left;
+    font-weight: 600;
+  }
+  td {
+    padding: 8px 12px;
+    border-bottom: 1px solid #E2E8F0;
+    color: #475569;
+  }
+  tr:nth-child(even) td { background: #F8FAFC; }
+  tr:hover td { background: #F0FDFA; }
+  ul, ol { margin: 12px 0 12px 24px; font-size: 0.9rem; color: #475569; }
+  li { margin-bottom: 4px; }
+  code {
+    background: #F1F5F9;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.82rem;
+    color: #0D9488;
+  }
+  pre {
+    background: #0F172A;
+    color: #E2E8F0;
+    padding: 20px;
+    border-radius: 8px;
+    margin: 16px 0;
+    font-size: 0.8rem;
+    overflow-x: auto;
+  }
+  pre code { background: none; color: inherit; padding: 0; }
+  hr {
+    border: none;
+    border-top: 1px solid #E2E8F0;
+    margin: 24px 0;
+  }
+  .header-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #E2E8F0;
+  }
+  .logo {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #0F172A;
+  }
+  .logo span { color: #0D9488; }
+  .doc-meta {
+    font-size: 0.72rem;
+    color: #94A3B8;
+    text-align: right;
+  }
+  @media print {
+    body { padding: 24px 32px; }
+    h1 { font-size: 1.4rem; }
+  }
+</style>
+
+</head>
+<body>
+<div class="header-bar">
+  <div class="logo">annex<span>27</span></div>
+  <div class="doc-meta">ISO 27001:2022 Beleidspakket<br/>annex27.nl</div>
+</div>
+<h1>Statement of Applicability (SoA)</h1>
+<p><strong>ISO 27001:2022 — Clause 6.1.3d</strong></p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Documentnummer</strong></td>
+<td>ISMS-006</td>
+</tr>
+<tr>
+<td><strong>Versie</strong></td>
+<td>1.0</td>
+</tr>
+<tr>
+<td><strong>Classificatie</strong></td>
+<td>Vertrouwelijk</td>
+</tr>
+<tr>
+<td><strong>Eigenaar</strong></td>
+<td>[Naam CISO / Verantwoordelijke]</td>
+</tr>
+<tr>
+<td><strong>Goedgekeurd door</strong></td>
+<td>[Naam Directie]</td>
+</tr>
+<tr>
+<td><strong>Datum goedkeuring</strong></td>
+<td>[DD-MM-JJJJ]</td>
+</tr>
+<tr>
+<td><strong>Volgende review</strong></td>
+<td>[DD-MM-JJJJ]</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>1. Doel</h2>
+<p>De Statement of Applicability (SoA) geeft een overzicht van alle 93 Annex A controls uit ISO 27001:2022. Per control is vastgelegd of deze van toepassing is, wat de implementatiestatus is, en waar de onderbouwing te vinden is.</p>
+<h2>2. Toelichting kolommen</h2>
+<ul>
+<li><strong>Van toepassing:</strong> Ja/Nee — gebaseerd op de risicobeoordeling en organisatiecontext</li>
+<li><strong>Onderbouwing uitsluiting:</strong> Bij "Nee" — waarom de control niet van toepassing is</li>
+<li><strong>Implementatiestatus:</strong> Volledig / Gedeeltelijk / Gepland / Niet gestart</li>
+<li><strong>Referentie:</strong> Verwijzing naar beleidsdocument of procedure</li>
+</ul>
+<h2>3. Annex A Controls</h2>
+<h3>A.5 Organisatorische maatregelen (37 controls)</h3>
+<table>
+<thead>
+<tr>
+<th>Control</th>
+<th>Beschrijving</th>
+<th>Van toepassing</th>
+<th>Status</th>
+<th>Onderbouwing / Referentie</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A.5.1</td>
+<td>Beleid voor informatiebeveiliging</td>
+<td>Ja</td>
+<td>[Status]</td>
+<td>ISMS-002</td>
+</tr>
+<tr>
+<td>A.5.2</td>
+<td>Rollen en verantwoordelijkheden</td>
+<td>Ja</td>
+<td>[Status]</td>
+<td>ISMS-004</td>
+</tr>
+<tr>
+<td>A.5.3</td>
+<td>Scheiding van taken</td>
+<td>[Ja/Nee]</td>
+<td>[Status]</td>
+<td>[Ref]</td>
+</tr>
+<tr>
+<td>A.5.4</td>
+<td>Managementverantwoordelijkheden</td>
+<td>Ja</td>
+<td>[Status]</td>
+<td>ISMS-004</td>
+</tr>
+<tr>
+<td>A.5.5</td>
+<td>Contact met autoriteiten</td>
+<td>[Ja/Nee]</td>
+<td>[Status]</td>
+<td>[Ref]</td>
+</tr>
+<tr>
+<td>A.5.6</td>
+<td>Contact met speciale belangengroepen</td>
+<td>[Ja/Nee]</td>
+<td>[Status]</td>
+<td>[Ref]</td>
+</tr>
+<tr>
+<td>A.5.7</td>
+<td>Threat intelligence</td>
+<td>[Ja/Nee]</td>
+<td>[Status]</td>
+<td>[Ref]</td>
+</tr>
+<tr>
+<td>A.5.8</td>
+<td>Informatiebeveiliging in projectmanagement</td>
+<td>[Ja/Nee]</td>
+<td>[Status]</td>
+<td>[Ref]</td>
+</tr>
+<tr>
+<td>A.5.9</td>
+<td>Inventarisatie van informatie en assets</td>
+<td>Ja</td>
+<td>[Status]</td>
+<td>ISMS-008</td>
+</tr>
+<tr>
+<td>A.5.10</td>
+<td>Acceptabel gebruik van informatie</td>
+<td>Ja</td>
+<td>[Status]</td>
+<td>ISMS-011</td>
+</tr>
+<tr>
+<td>A.5.11</td>
+<td>Teruggave van assets</td>
+<td>[Ja/Nee]</td>
+<td>[Status]</td>
+<td>[Ref]</td>
+</tr>
+<tr>
+<td>A.5.12</td>
+<td>Classificatie van informatie</td>
+<td>Ja</td>
+<td>[Status]</td>
+<td>ISMS-014</td>
+</tr>
+<tr>
+<td>A.5.13</td>
+<td>Labeling van informatie</td>
+<td>Ja</td>
+<td>[Status]</td>
+<td>ISMS-014</td>
+</tr>
+<tr>
+<td>A.5.14</td>
+<td>Informatieoverdracht</td>
+<td>[Ja/Nee]</td>
+<td>[Status]</td>
+<td>[Ref]</td>
+</tr>
+<tr>
+<td>A.5.15</td>
+<td>Toegangsbeveiliging</td>
+<td>Ja</td>
+<td>[Status]</td>
+<td>ISMS-012</td>
+</tr>
+<tr>
+<td>A.5.16</td>
+<td>Identiteitsbeheer</td>
+<td>[Ja/Nee]</td>
+<td>[Status]</td>
+<td>[Ref]</td>
+</tr>
+<tr>
+<td>A.5.17</td>
+<td>Authenticatie-informatie</td>
+<td>Ja</td>
+<td>[Status]</td>
+<td>ISMS-013</td>
+</tr>
+<tr>
+<td>A.5.18</td>
+<td>Toegangsrechten</td>
+<td>Ja</td>
+<td>[Status]</td>
+<td>ISMS-012</td>
+</tr>
+<tr>
+<td>A.5.19</td>
+<td>Informatiebeveiliging in leveranciersrelaties</td>
+<td>[Ja/Nee]</td>
+<td>[Status]</td>
+<td>[Ref]</td>
+</tr>
+<tr>
+<td>A.5.20</td>
+<td>Adressering van IB in leveranciersovereenkomsten</td>
+<td>[Ja/Nee]</td>
+<td>[Status]</td>
+<td>[Ref]</td>
+</tr>
+<tr>
+<td>A.5.21</td>
+<td>Beheer van IB in de ICT-toeleveringsketen</td>
+<td>[Ja/Nee]</td>
+<td>[Status]</td>
+<td>[Ref]</td>
+</tr>
+<tr>
+<td>A.5.22</td>
+<td>Monitoring en review van leveranciersdiensten</td>
+<td>[Ja/Nee]</td>
+<td>[Status]</td>
+<td>[Ref]</td>
+</tr>
+<tr>
+<td>A.5.23</td>
+<td>Informatiebeveiliging voor gebruik van clouddiensten</td>
+<td>[Ja/Nee]</td>
+<td>[Status]</td>
+<td>[Ref]</td>
+</tr>
+<tr>
+<td>A.5.24</td>
+<td>Planning incidentmanagement</td>
+<td>Ja</td>
+<td>[Status]</td>
+<td>ISMS-019</td>
+</tr>
+<tr>
+<td>A.5.25</td>
+<td>Beoordeling en besluitvorming over IB-gebeurtenissen</td>
+<td>Ja</td>
+<td>[Status]</td>
+<td>ISMS-019</td>
+</tr>
+<tr>
+<td>A.5.26</td>
+<td>Respons op IB-incidenten</td>
+<td>Ja</td>
+<td>[Status]</td>
+<td>ISMS-019</td>
+</tr>
+<tr>
+<td>A.5.27</td>
+<td>Leren van IB-incidenten</td>
+<td>Ja</td>
+<td>[Status]</td>
+<td>ISMS-019</td>
+</tr>
+<tr>
+<td>A.5.28</td>
+<td>Verzameling van bewijsmateriaal</td>
+<td>[Ja/Nee]</td>
+<td>[Status]</td>
+<td>[Ref]</td>
+</tr>
+<tr>
+<td>A.5.29</td>
+<td>IB tijdens verstoring</td>
+<td>Ja</td>
+<td>[Status]</td>
+<td>ISMS-020</td>
+</tr>
+<tr>
+<td>A.5.30</td>
+<td>ICT-gereedheid voor bedrijfscontinuïteit</td>
+<td>Ja</td>
+<td>[Status]</td>
+<td>ISMS-020</td>
+</tr>
+<tr>
+<td>A.5.31</td>
+<td>Wettelijke, statutaire en contractuele eisen</td>
+<td>[Ja/Nee]</td>
+<td>[Status]</td>
+<td>[Ref]</td>
+</tr>
+<tr>
+<td>A.5.32</td>
+<td>Intellectuele eigendomsrechten</td>
+<td>[Ja/Nee]</td>
+<td>[Status]</td>
+<td>[Ref]</td>
+</tr>
+<tr>
+<td>A.5.33</td>
+<td>Bescherming van registraties</td>
+<td>[Ja/Nee]</td>
+<td>[Status]</td>
+<td>[Ref]</td>
+</tr>
+<tr>
+<td>A.5.34</td>
+<td>Privacy en bescherming van PII</td>
+<td>[Ja/Nee]</td>
+<td>[Status]</td>
+<td>[Ref]</td>
+</tr>
+<tr>
+<td>A.5.35</td>
+<td>Onafhankelijke beoordeling van IB</td>
+<td>[Ja/Nee]</td>
+<td>[Status]</td>
+<td>[Ref]</td>
+</tr>
+<tr>
+<td>A.5.36</td>
+<td>Naleving van beleid, regels en normen</td>
+<td>[Ja/Nee]</td>
+<td>[Status]</td>
+<td>[Ref]</td>
+</tr>
+<tr>
+<td>A.5.37</td>
+<td>Gedocumenteerde bedieningsprocedures</td>
+<td>[Ja/Nee]</td>
+<td>[Status]</td>
+<td>[Ref]</td>
+</tr>
+</tbody>
+</table>
+<h3>A.6 Persoonsgebonden maatregelen (8 controls)</h3>
+<table>
+<thead>
+<tr>
+<th>Control</th>
+<th>Beschrijving</th>
+<th>Van toepassing</th>
+<th>Status</th>
+<th>Onderbouwing / Referentie</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A.6.1</td>
+<td>Screening</td>
+<td>Ja</td>
+<td>[Status]</td>
+<td>ISMS-009</td>
+</tr>
+<tr>
+<td>A.6.2</td>
+<td>Arbeidsvoorwaarden</td>
+<td>Ja</td>
+<td>[Status]</td>
+<td>ISMS-009</td>
+</tr>
+<tr>
+<td>A.6.3</td>
+<td>IB-bewustwording, opleiding en training</td>
+<td>Ja</td>
+<td>[Status]</td>
+<td>ISMS-010</td>
+</tr>
+<tr>
+<td>A.6.4</td>
+<td>Disciplinair proces</td>
+<td>[Ja/Nee]</td>
+<td>[Status]</td>
+<td>[Ref]</td>
+</tr>
+<tr>
+<td>A.6.5</td>
+<td>Verantwoordelijkheden bij beëindiging of wijziging</td>
+<td>Ja</td>
+<td>[Status]</td>
+<td>ISMS-009</td>
+</tr>
+<tr>
+<td>A.6.6</td>
+<td>Geheimhoudingsovereenkomsten</td>
+<td>[Ja/Nee]</td>
+<td>[Status]</td>
+<td>[Ref]</td>
+</tr>
+<tr>
+<td>A.6.7</td>
+<td>Werken op afstand</td>
+<td>[Ja/Nee]</td>
+<td>[Status]</td>
+<td>[Ref]</td>
+</tr>
+<tr>
+<td>A.6.8</td>
+<td>Rapportage van IB-gebeurtenissen</td>
+<td>Ja</td>
+<td>[Status]</td>
+<td>ISMS-019</td>
+</tr>
+</tbody>
+</table>
+<h3>A.7 Fysieke maatregelen (14 controls)</h3>
+<table>
+<thead>
+<tr>
+<th>Control</th>
+<th>Beschrijving</th>
+<th>Van toepassing</th>
+<th>Status</th>
+<th>Onderbouwing / Referentie</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A.7.1</td>
+<td>Fysieke beveiligingsperimeters</td>
+<td>Ja</td>
+<td>[Status]</td>
+<td>ISMS-015</td>
+</tr>
+<tr>
+<td>A.7.2</td>
+<td>Fysieke toegang</td>
+<td>Ja</td>
+<td>[Status]</td>
+<td>ISMS-015</td>
+</tr>
+<tr>
+<td>A.7.3</td>
+<td>Beveiliging van kantoren, ruimtes en faciliteiten</td>
+<td>Ja</td>
+<td>[Status]</td>
+<td>ISMS-015</td>
+</tr>
+<tr>
+<td>A.7.4</td>
+<td>Fysieke beveiligingsmonitoring</td>
+<td>[Ja/Nee]</td>
+<td>[Status]</td>
+<td>[Ref]</td>
+</tr>
+<tr>
+<td>A.7.5</td>
+<td>Bescherming tegen fysieke en omgevingsdreigingen</td>
+<td>[Ja/Nee]</td>
+<td>[Status]</td>
+<td>[Ref]</td>
+</tr>
+<tr>
+<td>A.7.6</td>
+<td>Werken in beveiligde zones</td>
+<td>[Ja/Nee]</td>
+<td>[Status]</td>
+<td>[Ref]</td>
+</tr>
+<tr>
+<td>A.7.7</td>
+<td>Clear desk en clear screen</td>
+<td>Ja</td>
+<td>[Status]</td>
+<td>ISMS-015</td>
+</tr>
+<tr>
+<td>A.7.8</td>
+<td>Plaatsing en bescherming van apparatuur</td>
+<td>[Ja/Nee]</td>
+<td>[Status]</td>
+<td>[Ref]</td>
+</tr>
+<tr>
+<td>A.7.9</td>
+<td>Beveiliging van assets buiten het terrein</td>
+<td>[Ja/Nee]</td>
+<td>[Status]</td>
+<td>[Ref]</td>
+</tr>
+<tr>
+<td>A.7.10</td>
+<td>Opslagmedia</td>
+<td>[Ja/Nee]</td>
+<td>[Status]</td>
+<td>[Ref]</td>
+</tr>
+<tr>
+<td>A.7.11</td>
+<td>Ondersteunende nutsvoorzieningen</td>
+<td>[Ja/Nee]</td>
+<td>[Status]</td>
+<td>[Ref]</td>
+</tr>
+<tr>
+<td>A.7.12</td>
+<td>Beveiliging van bekabeling</td>
+<td>[Ja/Nee]</td>
+<td>[Status]</td>
+<td>[Ref]</td>
+</tr>
+<tr>
+<td>A.7.13</td>
+<td>Onderhoud van apparatuur</td>
+<td>[Ja/Nee]</td>
+<td>[Status]</td>
+<td>[Ref]</td>
+</tr>
+<tr>
+<td>A.7.14</td>
+<td>Veilige verwijdering of hergebruik van apparatuur</td>
+<td>[Ja/Nee]</td>
+<td>[Status]</td>
+<td>[Ref]</td>
+</tr>
+</tbody>
+</table>
+<h3>A.8 Technologische maatregelen (34 controls)</h3>
+<table>
+<thead>
+<tr>
+<th>Control</th>
+<th>Beschrijving</th>
+<th>Van toepassing</th>
+<th>Status</th>
+<th>Onderbouwing / Referentie</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A.8.1</td>
+<td>Gebruikersapparatuur</td>
+<td>[Ja/Nee]</td>
+<td>[Status]</td>
+<td>[Ref]</td>
+</tr>
+<tr>
+<td>A.8.2</td>
+<td>Geprivilegieerde toegangsrechten</td>
+<td>Ja</td>
+<td>[Status]</td>
+<td>ISMS-012</td>
+</tr>
+<tr>
+<td>A.8.3</td>
+<td>Beperking van toegang tot informatie</td>
+<td>Ja</td>
+<td>[Status]</td>
+<td>ISMS-012</td>
+</tr>
+<tr>
+<td>A.8.4</td>
+<td>Toegang tot broncode</td>
+<td>[Ja/Nee]</td>
+<td>[Status]</td>
+<td>[Ref]</td>
+</tr>
+<tr>
+<td>A.8.5</td>
+<td>Beveiligde authenticatie</td>
+<td>Ja</td>
+<td>[Status]</td>
+<td>ISMS-013</td>
+</tr>
+<tr>
+<td>A.8.6</td>
+<td>Capaciteitsbeheer</td>
+<td>[Ja/Nee]</td>
+<td>[Status]</td>
+<td>[Ref]</td>
+</tr>
+<tr>
+<td>A.8.7</td>
+<td>Bescherming tegen malware</td>
+<td>[Ja/Nee]</td>
+<td>[Status]</td>
+<td>[Ref]</td>
+</tr>
+<tr>
+<td>A.8.8</td>
+<td>Beheer van technische kwetsbaarheden</td>
+<td>Ja</td>
+<td>[Status]</td>
+<td>ISMS-017</td>
+</tr>
+<tr>
+<td>A.8.9</td>
+<td>Configuratiebeheer</td>
+<td>[Ja/Nee]</td>
+<td>[Status]</td>
+<td>[Ref]</td>
+</tr>
+<tr>
+<td>A.8.10</td>
+<td>Verwijdering van informatie</td>
+<td>[Ja/Nee]</td>
+<td>[Status]</td>
+<td>[Ref]</td>
+</tr>
+<tr>
+<td>A.8.11</td>
+<td>Datamaskering</td>
+<td>[Ja/Nee]</td>
+<td>[Status]</td>
+<td>[Ref]</td>
+</tr>
+<tr>
+<td>A.8.12</td>
+<td>Preventie van gegevenslekken</td>
+<td>[Ja/Nee]</td>
+<td>[Status]</td>
+<td>[Ref]</td>
+</tr>
+<tr>
+<td>A.8.13</td>
+<td>Back-up van informatie</td>
+<td>[Ja/Nee]</td>
+<td>[Status]</td>
+<td>[Ref]</td>
+</tr>
+<tr>
+<td>A.8.14</td>
+<td>Redundantie van informatieverwerkende faciliteiten</td>
+<td>[Ja/Nee]</td>
+<td>[Status]</td>
+<td>[Ref]</td>
+</tr>
+<tr>
+<td>A.8.15</td>
+<td>Logging</td>
+<td>Ja</td>
+<td>[Status]</td>
+<td>ISMS-018</td>
+</tr>
+<tr>
+<td>A.8.16</td>
+<td>Monitoringactiviteiten</td>
+<td>Ja</td>
+<td>[Status]</td>
+<td>ISMS-018</td>
+</tr>
+<tr>
+<td>A.8.17</td>
+<td>Kloksynchronisatie</td>
+<td>[Ja/Nee]</td>
+<td>[Status]</td>
+<td>[Ref]</td>
+</tr>
+<tr>
+<td>A.8.18</td>
+<td>Gebruik van geprivilegieerde hulpprogramma's</td>
+<td>[Ja/Nee]</td>
+<td>[Status]</td>
+<td>[Ref]</td>
+</tr>
+<tr>
+<td>A.8.19</td>
+<td>Installatie van software op operationele systemen</td>
+<td>[Ja/Nee]</td>
+<td>[Status]</td>
+<td>[Ref]</td>
+</tr>
+<tr>
+<td>A.8.20</td>
+<td>Netwerkbeveiliging</td>
+<td>[Ja/Nee]</td>
+<td>[Status]</td>
+<td>[Ref]</td>
+</tr>
+<tr>
+<td>A.8.21</td>
+<td>Beveiliging van netwerkdiensten</td>
+<td>[Ja/Nee]</td>
+<td>[Status]</td>
+<td>[Ref]</td>
+</tr>
+<tr>
+<td>A.8.22</td>
+<td>Segmentatie van netwerken</td>
+<td>[Ja/Nee]</td>
+<td>[Status]</td>
+<td>[Ref]</td>
+</tr>
+<tr>
+<td>A.8.23</td>
+<td>Webfiltering</td>
+<td>[Ja/Nee]</td>
+<td>[Status]</td>
+<td>[Ref]</td>
+</tr>
+<tr>
+<td>A.8.24</td>
+<td>Gebruik van cryptografie</td>
+<td>Ja</td>
+<td>[Status]</td>
+<td>ISMS-016</td>
+</tr>
+<tr>
+<td>A.8.25</td>
+<td>Levenscyclus van veilige ontwikkeling</td>
+<td>[Ja/Nee]</td>
+<td>[Status]</td>
+<td>[Ref]</td>
+</tr>
+<tr>
+<td>A.8.26</td>
+<td>Beveiligingseisen voor applicaties</td>
+<td>[Ja/Nee]</td>
+<td>[Status]</td>
+<td>[Ref]</td>
+</tr>
+<tr>
+<td>A.8.27</td>
+<td>Veilige systeemarchitectuur en technische principes</td>
+<td>[Ja/Nee]</td>
+<td>[Status]</td>
+<td>[Ref]</td>
+</tr>
+<tr>
+<td>A.8.28</td>
+<td>Veilig coderen</td>
+<td>[Ja/Nee]</td>
+<td>[Status]</td>
+<td>[Ref]</td>
+</tr>
+<tr>
+<td>A.8.29</td>
+<td>Beveiligingstesten in ontwikkeling en acceptatie</td>
+<td>[Ja/Nee]</td>
+<td>[Status]</td>
+<td>[Ref]</td>
+</tr>
+<tr>
+<td>A.8.30</td>
+<td>Uitbestede ontwikkeling</td>
+<td>[Ja/Nee]</td>
+<td>[Status]</td>
+<td>[Ref]</td>
+</tr>
+<tr>
+<td>A.8.31</td>
+<td>Scheiding van ontwikkel-, test- en productieomgevingen</td>
+<td>[Ja/Nee]</td>
+<td>[Status]</td>
+<td>[Ref]</td>
+</tr>
+<tr>
+<td>A.8.32</td>
+<td>Wijzigingsbeheer</td>
+<td>[Ja/Nee]</td>
+<td>[Status]</td>
+<td>[Ref]</td>
+</tr>
+<tr>
+<td>A.8.33</td>
+<td>Testinformatie</td>
+<td>[Ja/Nee]</td>
+<td>[Status]</td>
+<td>[Ref]</td>
+</tr>
+<tr>
+<td>A.8.34</td>
+<td>Bescherming van informatiesystemen tijdens audittesten</td>
+<td>[Ja/Nee]</td>
+<td>[Status]</td>
+<td>[Ref]</td>
+</tr>
+</tbody>
+</table>
+<h2>4. Samenvatting</h2>
+<table>
+<thead>
+<tr>
+<th>Categorie</th>
+<th>Totaal controls</th>
+<th>Van toepassing</th>
+<th>Uitgesloten</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A.5 Organisatorisch</td>
+<td>37</td>
+<td>[Aantal]</td>
+<td>[Aantal]</td>
+</tr>
+<tr>
+<td>A.6 Persoonsgebonden</td>
+<td>8</td>
+<td>[Aantal]</td>
+<td>[Aantal]</td>
+</tr>
+<tr>
+<td>A.7 Fysiek</td>
+<td>14</td>
+<td>[Aantal]</td>
+<td>[Aantal]</td>
+</tr>
+<tr>
+<td>A.8 Technologisch</td>
+<td>34</td>
+<td>[Aantal]</td>
+<td>[Aantal]</td>
+</tr>
+<tr>
+<td><strong>Totaal</strong></td>
+<td><strong>93</strong></td>
+<td><strong>[Aantal]</strong></td>
+<td><strong>[Aantal]</strong></td>
+</tr>
+</tbody>
+</table>
+<h2>5. Versiebeheer</h2>
+<table>
+<thead>
+<tr>
+<th>Versie</th>
+<th>Datum</th>
+<th>Wijziging</th>
+<th>Auteur</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1.0</td>
+<td>[DD-MM-JJJJ]</td>
+<td>Initiële versie</td>
+<td>[Naam]</td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

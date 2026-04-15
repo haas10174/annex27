@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<title>15-fysiek-beveiligingsbeleid</title>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Sora', sans-serif;
+    color: #1E293B;
+    line-height: 1.7;
+    padding: 48px 56px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  h1 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #0F172A;
+    margin-bottom: 8px;
+    padding-bottom: 12px;
+    border-bottom: 3px solid #0D9488;
+  }
+  h2 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #0F172A;
+    margin-top: 32px;
+    margin-bottom: 12px;
+  }
+  h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #0D9488;
+    margin-top: 24px;
+    margin-bottom: 8px;
+  }
+  p { margin-bottom: 12px; font-size: 0.9rem; color: #475569; }
+  strong { color: #0F172A; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 0.82rem;
+  }
+  th {
+    background: #0F172A;
+    color: white;
+    padding: 10px 12px;
+    text-align: left;
+    font-weight: 600;
+  }
+  td {
+    padding: 8px 12px;
+    border-bottom: 1px solid #E2E8F0;
+    color: #475569;
+  }
+  tr:nth-child(even) td { background: #F8FAFC; }
+  tr:hover td { background: #F0FDFA; }
+  ul, ol { margin: 12px 0 12px 24px; font-size: 0.9rem; color: #475569; }
+  li { margin-bottom: 4px; }
+  code {
+    background: #F1F5F9;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.82rem;
+    color: #0D9488;
+  }
+  pre {
+    background: #0F172A;
+    color: #E2E8F0;
+    padding: 20px;
+    border-radius: 8px;
+    margin: 16px 0;
+    font-size: 0.8rem;
+    overflow-x: auto;
+  }
+  pre code { background: none; color: inherit; padding: 0; }
+  hr {
+    border: none;
+    border-top: 1px solid #E2E8F0;
+    margin: 24px 0;
+  }
+  .header-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #E2E8F0;
+  }
+  .logo {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #0F172A;
+  }
+  .logo span { color: #0D9488; }
+  .doc-meta {
+    font-size: 0.72rem;
+    color: #94A3B8;
+    text-align: right;
+  }
+  @media print {
+    body { padding: 24px 32px; }
+    h1 { font-size: 1.4rem; }
+  }
+</style>
+
+</head>
+<body>
+<div class="header-bar">
+  <div class="logo">annex<span>27</span></div>
+  <div class="doc-meta">ISO 27001:2022 Beleidspakket<br/>annex27.nl</div>
+</div>
+<h1>Fysiek Beveiligingsbeleid</h1>
+<p><strong>ISO 27001:2022 — A.7.1, A.7.2, A.7.3, A.7.4, A.7.7</strong></p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Documentnummer</strong></td>
+<td>ISMS-015</td>
+</tr>
+<tr>
+<td><strong>Versie</strong></td>
+<td>1.0</td>
+</tr>
+<tr>
+<td><strong>Classificatie</strong></td>
+<td>Intern</td>
+</tr>
+<tr>
+<td><strong>Eigenaar</strong></td>
+<td>[Naam Facilitair / CISO]</td>
+</tr>
+<tr>
+<td><strong>Goedgekeurd door</strong></td>
+<td>[Naam Directie]</td>
+</tr>
+<tr>
+<td><strong>Datum goedkeuring</strong></td>
+<td>[DD-MM-JJJJ]</td>
+</tr>
+<tr>
+<td><strong>Volgende review</strong></td>
+<td>[DD-MM-JJJJ]</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>1. Doel</h2>
+<p>Dit beleid beschrijft de maatregelen voor fysieke beveiliging van locaties, apparatuur en informatie van [Organisatienaam]. Fysieke beveiliging beschermt tegen ongeautoriseerde toegang, diefstal, schade en omgevingsdreigingen.</p>
+<h2>2. Beveiligingszones</h2>
+<table>
+<thead>
+<tr>
+<th>Zone</th>
+<th>Beschrijving</th>
+<th>Toegang</th>
+<th>Voorbeelden</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Zone 1 — Openbaar</strong></td>
+<td>Toegankelijk voor bezoekers en publiek</td>
+<td>Onbeperkt</td>
+<td>Receptie, wachtruimte, parkeerplaats</td>
+</tr>
+<tr>
+<td><strong>Zone 2 — Beperkt</strong></td>
+<td>Algemene kantoorruimte, alleen medewerkers en begeleide bezoekers</td>
+<td>Badge / sleutel</td>
+<td>Kantoorvloeren, vergaderruimtes</td>
+</tr>
+<tr>
+<td><strong>Zone 3 — Beveiligd</strong></td>
+<td>Ruimtes met gevoelige informatie of apparatuur</td>
+<td>Badge + registratie</td>
+<td>IT-werkruimtes, archiefruimtes</td>
+</tr>
+<tr>
+<td><strong>Zone 4 — Hoog beveiligd</strong></td>
+<td>Kritieke infrastructuur</td>
+<td>Badge + PIN/biometrie + logboek</td>
+<td>Serverruimte, kluisruimte</td>
+</tr>
+</tbody>
+</table>
+<h2>3. Fysieke toegangsbeveiliging (A.7.1, A.7.2)</h2>
+<h3>3.1 Toegangscontrole medewerkers</h3>
+<ul>
+<li>Toegang tot zone 2+ vereist een persoonlijke bedrijfsbadge of sleutel</li>
+<li>Badges zijn persoonlijk en niet-overdraagbaar</li>
+<li>Verlies van een badge wordt onmiddellijk gemeld; de badge wordt direct gedeactiveerd</li>
+<li>Tailgating (meeliften door een deur) is niet toegestaan</li>
+</ul>
+<h3>3.2 Bezoekers</h3>
+<table>
+<thead>
+<tr>
+<th>Stap</th>
+<th>Actie</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Bezoekers melden zich bij de receptie en worden geregistreerd (naam, bedrijf, contactpersoon, tijdstip)</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Bezoekers ontvangen een zichtbaar bezoekerspas</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Bezoekers worden te allen tijde begeleid in zone 2+</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Bezoekers hebben geen onbegeleide toegang tot zone 3 of 4</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Bij vertrek wordt de bezoekerspas ingeleverd en het tijdstip geregistreerd</td>
+</tr>
+</tbody>
+</table>
+<h3>3.3 Serverruimte / Zone 4</h3>
+<ul>
+<li>Toegang uitsluitend voor geautoriseerd IT-personeel</li>
+<li>Toegang wordt gelogd (badge + tijdstip)</li>
+<li>Bezoekers (bijv. onderhoudstechnici) alleen onder begeleiding en na goedkeuring CISO</li>
+<li>Deur is voorzien van automatische sluiting</li>
+</ul>
+<h2>4. Beveiliging van kantoren en faciliteiten (A.7.3)</h2>
+<ul>
+<li>Buitendeuren en ramen zijn voorzien van adequate sloten</li>
+<li>Alarmsysteem is actief buiten werktijd</li>
+<li>Waardevolle apparatuur (servers, netwerkapparatuur) staat in afsluitbare ruimtes</li>
+<li>Brandblussers en rookmelders zijn aanwezig en periodiek geïnspecteerd</li>
+</ul>
+<h2>5. Monitoring (A.7.4)</h2>
+<table>
+<thead>
+<tr>
+<th>Maatregel</th>
+<th>Locatie</th>
+<th>Bewaarperiode beelden</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Camerabewaking (indien aanwezig)</td>
+<td>Entree, serverruimte, parkeerplaats</td>
+<td>[30 dagen] conform AVG</td>
+</tr>
+<tr>
+<td>Toegangslogging (badge)</td>
+<td>Alle zones 2+</td>
+<td>Minimaal 1 jaar</td>
+</tr>
+<tr>
+<td>Inbraakdetectie / alarmsysteem</td>
+<td>Pand</td>
+<td>Meldingen: 1 jaar</td>
+</tr>
+</tbody>
+</table>
+<p>Camerabewaking geschiedt conform de AVG: medewerkers en bezoekers worden geïnformeerd via borden bij de ingang.</p>
+<h2>6. Clean Desk &amp; Clear Screen (A.7.7)</h2>
+<h3>6.1 Clean desk</h3>
+<ul>
+<li>Vertrouwelijke documenten worden aan het einde van de werkdag opgeborgen in een afsluitbare kast of lade</li>
+<li>Vergaderruimtes worden na gebruik gecontroleerd op achtergelaten documenten of whiteboardnotities</li>
+<li>Vertrouwelijke prints worden direct opgehaald bij de printer</li>
+<li>Prullenbakken bij werkplekken bevatten geen vertrouwelijke documenten (gebruik versnipperaar)</li>
+</ul>
+<h3>6.2 Clear screen</h3>
+<ul>
+<li>Werkstations worden vergrendeld bij het verlaten van de werkplek, ook bij korte afwezigheid</li>
+<li>Automatische schermvergrendeling is ingesteld op maximaal 5 minuten inactiviteit</li>
+<li>Schermen zijn zo gepositioneerd dat onbevoegden niet mee kunnen lezen (privacy-screens waar nodig)</li>
+</ul>
+<h2>7. Bescherming van apparatuur</h2>
+<ul>
+<li>Laptops worden niet onbeheerd achtergelaten in publieke ruimtes</li>
+<li>Apparatuur die buiten het pand wordt gebruikt, wordt beveiligd met encryptie (BitLocker / FileVault)</li>
+<li>Defecte opslagmedia (harde schijven, USB) worden veilig vernietigd voordat ze worden afgevoerd</li>
+</ul>
+<h2>8. Versiebeheer</h2>
+<table>
+<thead>
+<tr>
+<th>Versie</th>
+<th>Datum</th>
+<th>Wijziging</th>
+<th>Auteur</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1.0</td>
+<td>[DD-MM-JJJJ]</td>
+<td>Initiële versie</td>
+<td>[Naam]</td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

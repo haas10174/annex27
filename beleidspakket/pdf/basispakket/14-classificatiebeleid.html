@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<title>14-classificatiebeleid</title>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Sora', sans-serif;
+    color: #1E293B;
+    line-height: 1.7;
+    padding: 48px 56px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  h1 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #0F172A;
+    margin-bottom: 8px;
+    padding-bottom: 12px;
+    border-bottom: 3px solid #0D9488;
+  }
+  h2 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #0F172A;
+    margin-top: 32px;
+    margin-bottom: 12px;
+  }
+  h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #0D9488;
+    margin-top: 24px;
+    margin-bottom: 8px;
+  }
+  p { margin-bottom: 12px; font-size: 0.9rem; color: #475569; }
+  strong { color: #0F172A; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 0.82rem;
+  }
+  th {
+    background: #0F172A;
+    color: white;
+    padding: 10px 12px;
+    text-align: left;
+    font-weight: 600;
+  }
+  td {
+    padding: 8px 12px;
+    border-bottom: 1px solid #E2E8F0;
+    color: #475569;
+  }
+  tr:nth-child(even) td { background: #F8FAFC; }
+  tr:hover td { background: #F0FDFA; }
+  ul, ol { margin: 12px 0 12px 24px; font-size: 0.9rem; color: #475569; }
+  li { margin-bottom: 4px; }
+  code {
+    background: #F1F5F9;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.82rem;
+    color: #0D9488;
+  }
+  pre {
+    background: #0F172A;
+    color: #E2E8F0;
+    padding: 20px;
+    border-radius: 8px;
+    margin: 16px 0;
+    font-size: 0.8rem;
+    overflow-x: auto;
+  }
+  pre code { background: none; color: inherit; padding: 0; }
+  hr {
+    border: none;
+    border-top: 1px solid #E2E8F0;
+    margin: 24px 0;
+  }
+  .header-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #E2E8F0;
+  }
+  .logo {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #0F172A;
+  }
+  .logo span { color: #0D9488; }
+  .doc-meta {
+    font-size: 0.72rem;
+    color: #94A3B8;
+    text-align: right;
+  }
+  @media print {
+    body { padding: 24px 32px; }
+    h1 { font-size: 1.4rem; }
+  }
+</style>
+
+</head>
+<body>
+<div class="header-bar">
+  <div class="logo">annex<span>27</span></div>
+  <div class="doc-meta">ISO 27001:2022 Beleidspakket<br/>annex27.nl</div>
+</div>
+<h1>Classificatiebeleid</h1>
+<p><strong>ISO 27001:2022 — A.5.12, A.5.13</strong></p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Documentnummer</strong></td>
+<td>ISMS-014</td>
+</tr>
+<tr>
+<td><strong>Versie</strong></td>
+<td>1.0</td>
+</tr>
+<tr>
+<td><strong>Classificatie</strong></td>
+<td>Intern</td>
+</tr>
+<tr>
+<td><strong>Eigenaar</strong></td>
+<td>[Naam CISO / Verantwoordelijke]</td>
+</tr>
+<tr>
+<td><strong>Goedgekeurd door</strong></td>
+<td>[Naam Directie]</td>
+</tr>
+<tr>
+<td><strong>Datum goedkeuring</strong></td>
+<td>[DD-MM-JJJJ]</td>
+</tr>
+<tr>
+<td><strong>Volgende review</strong></td>
+<td>[DD-MM-JJJJ]</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>1. Doel</h2>
+<p>Dit beleid definieert de classificatieniveaus voor informatie binnen [Organisatienaam] en beschrijft hoe informatie per niveau moet worden behandeld, gelabeld, opgeslagen, gedeeld en vernietigd.</p>
+<h2>2. Classificatieniveaus</h2>
+<table>
+<thead>
+<tr>
+<th>Niveau</th>
+<th>Kleurcode</th>
+<th>Beschrijving</th>
+<th>Voorbeelden</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Openbaar</strong></td>
+<td>Groen</td>
+<td>Informatie die vrij beschikbaar is of mag zijn voor het publiek</td>
+<td>Website-inhoud, marketingmateriaal, persberichten</td>
+</tr>
+<tr>
+<td><strong>Intern</strong></td>
+<td>Geel</td>
+<td>Informatie die bedoeld is voor interne medewerkers; openbaarmaking is ongewenst maar niet schadelijk</td>
+<td>Interne nieuwsbrieven, procedures, organogrammen, vergadernotulen</td>
+</tr>
+<tr>
+<td><strong>Vertrouwelijk</strong></td>
+<td>Oranje</td>
+<td>Informatie waarvan openbaarmaking schade kan toebrengen aan de organisatie, klanten of partners</td>
+<td>Klantgegevens, contracten, financiële rapporten, persoonsgegevens, projectplannen</td>
+</tr>
+<tr>
+<td><strong>Geheim</strong></td>
+<td>Rood</td>
+<td>Informatie waarvan openbaarmaking ernstige schade kan toebrengen</td>
+<td>Wachtwoorden, encryptiesleutels, strategische plannen, M&amp;A-informatie, medische dossiers</td>
+</tr>
+</tbody>
+</table>
+<h2>3. Verantwoordelijkheden</h2>
+<table>
+<thead>
+<tr>
+<th>Rol</th>
+<th>Verantwoordelijkheid</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Informatie-eigenaar</strong></td>
+<td>Classificeert de informatie bij aanmaak of ontvangst</td>
+</tr>
+<tr>
+<td><strong>Gebruiker</strong></td>
+<td>Behandelt informatie conform het classificatieniveau</td>
+</tr>
+<tr>
+<td><strong>CISO</strong></td>
+<td>Bewaakt naleving, adviseert over classificatie bij twijfel</td>
+</tr>
+<tr>
+<td><strong>IT-beheer</strong></td>
+<td>Implementeert technische maatregelen per classificatieniveau</td>
+</tr>
+</tbody>
+</table>
+<h2>4. Behandeling per classificatieniveau</h2>
+<h3>4.1 Opslag</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Openbaar</th>
+<th>Intern</th>
+<th>Vertrouwelijk</th>
+<th>Geheim</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Onbeveiligde opslagmedia</td>
+<td>Toegestaan</td>
+<td>Niet aanbevolen</td>
+<td>Verboden</td>
+<td>Verboden</td>
+</tr>
+<tr>
+<td>Bedrijfsnetwerk / cloud (goedgekeurd)</td>
+<td>Toegestaan</td>
+<td>Toegestaan</td>
+<td>Toegestaan</td>
+<td>Toegestaan (met encryptie)</td>
+</tr>
+<tr>
+<td>Privéapparatuur</td>
+<td>Toegestaan</td>
+<td>Verboden</td>
+<td>Verboden</td>
+<td>Verboden</td>
+</tr>
+<tr>
+<td>USB / externe media</td>
+<td>Toegestaan</td>
+<td>Niet aanbevolen</td>
+<td>Alleen met encryptie</td>
+<td>Verboden</td>
+</tr>
+<tr>
+<td>Encryptie at rest</td>
+<td>Niet vereist</td>
+<td>Niet vereist</td>
+<td>Vereist</td>
+<td>Vereist</td>
+</tr>
+</tbody>
+</table>
+<h3>4.2 Verzending / delen</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Openbaar</th>
+<th>Intern</th>
+<th>Vertrouwelijk</th>
+<th>Geheim</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Onbeveiligde e-mail</td>
+<td>Toegestaan</td>
+<td>Toegestaan</td>
+<td>Verboden</td>
+<td>Verboden</td>
+</tr>
+<tr>
+<td>Beveiligde e-mail (versleuteld / beveiligde link)</td>
+<td>Toegestaan</td>
+<td>Toegestaan</td>
+<td>Toegestaan</td>
+<td>Toegestaan</td>
+</tr>
+<tr>
+<td>Goedgekeurde samenwerkingsplatformen</td>
+<td>Toegestaan</td>
+<td>Toegestaan</td>
+<td>Toegestaan</td>
+<td>Met extra toestemming CISO</td>
+</tr>
+<tr>
+<td>Publieke filesharing (WeTransfer, Google Drive privé)</td>
+<td>Toegestaan</td>
+<td>Verboden</td>
+<td>Verboden</td>
+<td>Verboden</td>
+</tr>
+<tr>
+<td>Printen</td>
+<td>Toegestaan</td>
+<td>Toegestaan</td>
+<td>Met direct ophalen</td>
+<td>Alleen op beveiligde printer</td>
+</tr>
+</tbody>
+</table>
+<h3>4.3 Vernietiging</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Openbaar</th>
+<th>Intern</th>
+<th>Vertrouwelijk</th>
+<th>Geheim</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Digitaal: normaal verwijderen</td>
+<td>Toegestaan</td>
+<td>Toegestaan</td>
+<td>Verboden</td>
+<td>Verboden</td>
+</tr>
+<tr>
+<td>Digitaal: permanent wissen</td>
+<td>N.v.t.</td>
+<td>N.v.t.</td>
+<td>Vereist</td>
+<td>Vereist</td>
+</tr>
+<tr>
+<td>Papier: recycling</td>
+<td>Toegestaan</td>
+<td>Toegestaan</td>
+<td>Verboden</td>
+<td>Verboden</td>
+</tr>
+<tr>
+<td>Papier: versnipperen (DIN 66399 P-3+)</td>
+<td>N.v.t.</td>
+<td>N.v.t.</td>
+<td>Vereist</td>
+<td>Vereist (P-5+)</td>
+</tr>
+</tbody>
+</table>
+<h2>5. Labeling (A.5.13)</h2>
+<h3>5.1 Digitale documenten</h3>
+<ul>
+<li>Classificatieniveau wordt vermeld in de koptekst of metadata van het document</li>
+<li>E-mails met vertrouwelijke of geheime informatie bevatten het classificatieniveau in het onderwerp: <code>[VERTROUWELIJK]</code> of <code>[GEHEIM]</code></li>
+<li>Bestanden worden opgeslagen in mappen die overeenkomen met het classificatieniveau</li>
+</ul>
+<h3>5.2 Fysieke documenten</h3>
+<ul>
+<li>Classificatieniveau wordt vermeld op de eerste pagina (rechtsboven)</li>
+<li>Vertrouwelijke en geheime documenten worden in afgesloten kasten bewaard</li>
+<li>Bij verzending: in verzegelde envelop met classificatielabel</li>
+</ul>
+<h3>5.3 Systemen</h3>
+<ul>
+<li>Systemen die vertrouwelijke of geheime informatie verwerken worden als zodanig geregistreerd in het Asset Register (ISMS-008)</li>
+</ul>
+<h2>6. Herclassificatie</h2>
+<ul>
+<li>Informatie wordt herclassificeerd wanneer de gevoeligheid wijzigt (bijv. na publicatie van eerder vertrouwelijke informatie)</li>
+<li>Herclassificatie wordt uitgevoerd door de informatie-eigenaar</li>
+<li>Verlaging van classificatie vereist goedkeuring van de CISO</li>
+</ul>
+<h2>7. Versiebeheer</h2>
+<table>
+<thead>
+<tr>
+<th>Versie</th>
+<th>Datum</th>
+<th>Wijziging</th>
+<th>Auteur</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1.0</td>
+<td>[DD-MM-JJJJ]</td>
+<td>Initiële versie</td>
+<td>[Naam]</td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

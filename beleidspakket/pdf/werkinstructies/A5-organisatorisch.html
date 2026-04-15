@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<title>A5-organisatorisch</title>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Sora', sans-serif;
+    color: #1E293B;
+    line-height: 1.7;
+    padding: 48px 56px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  h1 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #0F172A;
+    margin-bottom: 8px;
+    padding-bottom: 12px;
+    border-bottom: 3px solid #0D9488;
+  }
+  h2 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #0F172A;
+    margin-top: 32px;
+    margin-bottom: 12px;
+  }
+  h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #0D9488;
+    margin-top: 24px;
+    margin-bottom: 8px;
+  }
+  p { margin-bottom: 12px; font-size: 0.9rem; color: #475569; }
+  strong { color: #0F172A; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 0.82rem;
+  }
+  th {
+    background: #0F172A;
+    color: white;
+    padding: 10px 12px;
+    text-align: left;
+    font-weight: 600;
+  }
+  td {
+    padding: 8px 12px;
+    border-bottom: 1px solid #E2E8F0;
+    color: #475569;
+  }
+  tr:nth-child(even) td { background: #F8FAFC; }
+  tr:hover td { background: #F0FDFA; }
+  ul, ol { margin: 12px 0 12px 24px; font-size: 0.9rem; color: #475569; }
+  li { margin-bottom: 4px; }
+  code {
+    background: #F1F5F9;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.82rem;
+    color: #0D9488;
+  }
+  pre {
+    background: #0F172A;
+    color: #E2E8F0;
+    padding: 20px;
+    border-radius: 8px;
+    margin: 16px 0;
+    font-size: 0.8rem;
+    overflow-x: auto;
+  }
+  pre code { background: none; color: inherit; padding: 0; }
+  hr {
+    border: none;
+    border-top: 1px solid #E2E8F0;
+    margin: 24px 0;
+  }
+  .header-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #E2E8F0;
+  }
+  .logo {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #0F172A;
+  }
+  .logo span { color: #0D9488; }
+  .doc-meta {
+    font-size: 0.72rem;
+    color: #94A3B8;
+    text-align: right;
+  }
+  @media print {
+    body { padding: 24px 32px; }
+    h1 { font-size: 1.4rem; }
+  }
+</style>
+
+</head>
+<body>
+<div class="header-bar">
+  <div class="logo">annex<span>27</span></div>
+  <div class="doc-meta">ISO 27001:2022 Beleidspakket<br/>annex27.nl</div>
+</div>
+<h1>Werkinstructies — A.5 Organisatorische maatregelen</h1>
+<p>Korte, praktische instructies per Annex A control. Per control: wat het is, wat je moet doen, en hoe je bewijst dat je het doet.</p>
+<hr />
+<h2>A.5.1 — Beleid voor informatiebeveiliging</h2>
+<p><strong>Wat:</strong> Een formeel, door de directie goedgekeurd informatiebeveiligingsbeleid.
+<strong>Doen:</strong> Stel het beleid op (ISMS-002), laat het ondertekenen door de directie, communiceer het aan alle medewerkers, en review het jaarlijks.
+<strong>Bewijs:</strong> Goedgekeurd beleidsdocument met datum en handtekening, distributiebewijs (e-mail/intranet), reviewhistorie.</p>
+<hr />
+<h2>A.5.2 — Rollen en verantwoordelijkheden</h2>
+<p><strong>Wat:</strong> Duidelijke toewijzing van informatiebeveiligingsverantwoordelijkheden.
+<strong>Doen:</strong> Leg vast wie welke rol heeft (ISMS-004), communiceer dit, en zorg dat iedereen weet wat er van hem/haar verwacht wordt.
+<strong>Bewijs:</strong> Rolbeschrijvingen, RACI-matrix, organogram, ondertekende functieomschrijvingen.</p>
+<hr />
+<h2>A.5.3 — Scheiding van taken</h2>
+<p><strong>Wat:</strong> Conflicterende taken en verantwoordelijkheden scheiden om fraude of fouten te voorkomen.
+<strong>Doen:</strong> Zorg dat dezelfde persoon niet zowel een wijziging kan aanvragen als goedkeuren. Geen beheerder die ook auditor is van eigen werk.
+<strong>Bewijs:</strong> Procesbeschrijvingen met gescheiden goedkeuringsrollen, toegangsrechtenmatrix.</p>
+<hr />
+<h2>A.5.4 — Managementverantwoordelijkheden</h2>
+<p><strong>Wat:</strong> Management stimuleert actief naleving van het beveiligingsbeleid.
+<strong>Doen:</strong> Directie communiceert het belang van informatiebeveiliging, stelt middelen beschikbaar, en neemt deel aan de managementreview.
+<strong>Bewijs:</strong> Notulen managementreview, budgettoewijzing, directiecommunicatie over beveiliging.</p>
+<hr />
+<h2>A.5.5 — Contact met autoriteiten</h2>
+<p><strong>Wat:</strong> Relevante contactgegevens van autoriteiten bijhouden.
+<strong>Doen:</strong> Leg contactgegevens vast van AP, NCSC, politie en sectorale toezichthouders. Weet wanneer je ze moet bellen.
+<strong>Bewijs:</strong> Contactlijst in Incident Response Plan (ISMS-019), procedure voor meldplicht.</p>
+<hr />
+<h2>A.5.6 — Contact met speciale belangengroepen</h2>
+<p><strong>Wat:</strong> Deelname aan relevante beveiligingsgroepen en -forums.
+<strong>Doen:</strong> Abonneer op NCSC-waarschuwingen, overweeg deelname aan branche-ISAC of lokale security-community.
+<strong>Bewijs:</strong> Abonnementen op waarschuwingsdiensten, lidmaatschappen, ontvangen meldingen.</p>
+<hr />
+<h2>A.5.7 — Threat intelligence (nieuw 2022)</h2>
+<p><strong>Wat:</strong> Actief informatie verzamelen over cyberdreigingen die relevant zijn voor de organisatie.
+<strong>Doen:</strong> Monitor NCSC, CVE-databases en leveranciers-advisories. Beoordeel relevantie voor eigen omgeving.
+<strong>Bewijs:</strong> Threat intelligence procedure (ISMS-025), registratie van relevante dreigingen en ondernomen acties.</p>
+<hr />
+<h2>A.5.8 — Informatiebeveiliging in projectmanagement</h2>
+<p><strong>Wat:</strong> Beveiligingseisen meenemen in elk project.
+<strong>Doen:</strong> Neem informatiebeveiliging op als vast onderdeel van projectinitiatie en -planning. CISO reviewt beveiligingsaspecten bij grote projecten.
+<strong>Bewijs:</strong> Projectchecklists met beveiligingsparagraaf, CISO-review bij projectgoedkeuring.</p>
+<hr />
+<h2>A.5.9 — Inventarisatie van informatie en assets</h2>
+<p><strong>Wat:</strong> Een actueel register van alle informatie-assets.
+<strong>Doen:</strong> Registreer alle hardware, software, data en diensten met eigenaar en classificatie (ISMS-008).
+<strong>Bewijs:</strong> Asset register, periodieke inventarisatie-rapporten, eigenaarstoewijzingen.</p>
+<hr />
+<h2>A.5.10 — Acceptabel gebruik van informatie</h2>
+<p><strong>Wat:</strong> Regels voor het gebruik van informatie en IT-middelen.
+<strong>Doen:</strong> Stel een Acceptable Use Policy op (ISMS-011), laat elke medewerker ondertekenen.
+<strong>Bewijs:</strong> Getekende AUP per medewerker, bewijs van communicatie.</p>
+<hr />
+<h2>A.5.11 — Teruggave van assets</h2>
+<p><strong>Wat:</strong> Medewerkers leveren alle bedrijfsmiddelen in bij vertrek.
+<strong>Doen:</strong> Offboarding-checklist met retournering van laptop, badge, telefoon, sleutels, tokens.
+<strong>Bewijs:</strong> Getekende offboarding-checklist per vertrekkende medewerker (ISMS-009).</p>
+<hr />
+<h2>A.5.12 — Classificatie van informatie</h2>
+<p><strong>Wat:</strong> Informatie indelen in classificatieniveaus.
+<strong>Doen:</strong> Gebruik 4 niveaus: Openbaar, Intern, Vertrouwelijk, Geheim. Eigenaar classificeert bij aanmaak (ISMS-014).
+<strong>Bewijs:</strong> Classificatiebeleid, gelabelde documenten, classificatie in asset register.</p>
+<hr />
+<h2>A.5.13 — Labeling van informatie</h2>
+<p><strong>Wat:</strong> Informatie voorzien van het juiste classificatielabel.
+<strong>Doen:</strong> Digitaal: in koptekst of bestandsnaam. E-mail: [VERTROUWELIJK] in onderwerp. Fysiek: stempel of label op eerste pagina.
+<strong>Bewijs:</strong> Voorbeelden van gelabelde documenten, e-mails met classificatie in onderwerp.</p>
+<hr />
+<h2>A.5.14 — Informatieoverdracht</h2>
+<p><strong>Wat:</strong> Regels voor het veilig overdragen van informatie.
+<strong>Doen:</strong> Vertrouwelijke informatie alleen via beveiligde kanalen (versleutelde e-mail, goedgekeurde platforms). Geen WeTransfer of privé-e-mail.
+<strong>Bewijs:</strong> Beleid voor informatieoverdracht, logboek van overdrachten aan externe partijen.</p>
+<hr />
+<h2>A.5.15 — Toegangsbeveiliging</h2>
+<p><strong>Wat:</strong> Beleid voor het verlenen en beheren van toegang.
+<strong>Doen:</strong> Toegang op basis van need-to-know en least privilege (ISMS-012). Formeel aanvraagproces.
+<strong>Bewijs:</strong> Toegangsbeleid, aanvraagformulieren, periodieke reviews van toegangsrechten.</p>
+<hr />
+<h2>A.5.16 — Identiteitsbeheer</h2>
+<p><strong>Wat:</strong> Beheer van gebruikersidentiteiten gedurende de hele levenscyclus.
+<strong>Doen:</strong> Unieke accounts per persoon, geen gedeelde accounts, tijdige deactivering bij vertrek.
+<strong>Bewijs:</strong> Accountoverzicht, bewijs van deactivering na vertrek, geen gedeelde accounts.</p>
+<hr />
+<h2>A.5.17 — Authenticatie-informatie</h2>
+<p><strong>Wat:</strong> Veilige omgang met wachtwoorden en authenticatiegegevens.
+<strong>Doen:</strong> Sterk wachtwoordbeleid (ISMS-013), MFA verplicht, wachtwoordmanager gebruiken.
+<strong>Bewijs:</strong> Wachtwoordbeleid, MFA-configuratie, geen wachtwoorden in platte tekst.</p>
+<hr />
+<h2>A.5.18 — Toegangsrechten</h2>
+<p><strong>Wat:</strong> Toekenning, wijziging en intrekking van toegangsrechten.
+<strong>Doen:</strong> Formeel aanvraagproces, periodieke review (halfjaarlijks), intrekking bij functiewijziging of vertrek.
+<strong>Bewijs:</strong> Toegangsverzoeken met goedkeuring, review-rapporten, intrekkingsregistratie.</p>
+<hr />
+<h2>A.5.19 — Informatiebeveiliging in leveranciersrelaties</h2>
+<p><strong>Wat:</strong> Beveiligingseisen stellen aan leveranciers.
+<strong>Doen:</strong> Beoordeel leveranciers op beveiliging vóór samenwerking (ISMS-023, ISMS-024). NDA en VWO afsluiten.
+<strong>Bewijs:</strong> Leveranciersbeleid, getekende NDA's/VWO's, assessment-rapporten.</p>
+<hr />
+<h2>A.5.20 — Adressering van IB in leveranciersovereenkomsten</h2>
+<p><strong>Wat:</strong> Beveiligingsclausules opnemen in contracten.
+<strong>Doen:</strong> Contracten bevatten: geheimhouding, beveiligingseisen, incidentmelding, auditrecht, datalocatie.
+<strong>Bewijs:</strong> Contracten met beveiligingsclausules, verwerkersovereenkomsten.</p>
+<hr />
+<h2>A.5.21 — Beheer van IB in de ICT-toeleveringsketen</h2>
+<p><strong>Wat:</strong> Risico's in de ICT-keten beheersen.
+<strong>Doen:</strong> Beoordeel of leveranciers hun eigen leveranciers ook beveiligen. Eis transparantie over subverwerkers.
+<strong>Bewijs:</strong> Leveranciersbeoordeling met supply chain-vragen, subverwerkers-overzicht.</p>
+<hr />
+<h2>A.5.22 — Monitoring en review van leveranciersdiensten</h2>
+<p><strong>Wat:</strong> Leveranciers periodiek beoordelen op beveiligingsprestaties.
+<strong>Doen:</strong> SLA's monitoren, certificeringen controleren, incidenten bij leverancier evalueren.
+<strong>Bewijs:</strong> SLA-rapportages, herbeoordeling-resultaten, register van leveranciersincidenten.</p>
+<hr />
+<h2>A.5.23 — Informatiebeveiliging voor clouddiensten (nieuw 2022)</h2>
+<p><strong>Wat:</strong> Beveiligingseisen voor het gebruik van cloud.
+<strong>Doen:</strong> Alleen goedgekeurde clouddiensten. Beoordeling op datalocatie, encryptie, certificering (ISMS-026).
+<strong>Bewijs:</strong> Cloud security beleid, register van goedgekeurde diensten, verwerkersovereenkomsten.</p>
+<hr />
+<h2>A.5.24 t/m A.5.28 — Incidentmanagement</h2>
+<p><strong>Wat:</strong> Plannen, beoordelen, reageren, leren en bewijzen bij incidenten.
+<strong>Doen:</strong> Incident Response Plan opstellen en testen (ISMS-019). Incidenten registreren en evalueren.
+<strong>Bewijs:</strong> IRP, incidentregister, evaluatierapporten, testverslagen.</p>
+<hr />
+<h2>A.5.29 — Informatiebeveiliging tijdens verstoring</h2>
+<p><strong>Wat:</strong> Beveiliging handhaven ook tijdens calamiteiten.
+<strong>Doen:</strong> BCP bevat beveiligingsmaatregelen die ook in noodsituaties gelden (ISMS-020).
+<strong>Bewijs:</strong> BCP met beveiligingsparagraaf, testresultaten.</p>
+<hr />
+<h2>A.5.30 — ICT-gereedheid voor bedrijfscontinuïteit</h2>
+<p><strong>Wat:</strong> ICT-systemen kunnen tijdig hersteld worden.
+<strong>Doen:</strong> RPO/RTO vaststellen per systeem, backups testen, uitwijkprocedures documenteren.
+<strong>Bewijs:</strong> BCP met RPO/RTO, backup-testresultaten, failover-testverslagen.</p>
+<hr />
+<h2>A.5.31 — Wettelijke, statutaire en contractuele eisen</h2>
+<p><strong>Wat:</strong> Identificeer en voldoe aan alle toepasselijke wet- en regelgeving.
+<strong>Doen:</strong> Register bijhouden van toepasselijke wetten (AVG, NIS2, sectorspecifiek). Periodiek evalueren.
+<strong>Bewijs:</strong> Register van wet- en regelgeving, compliance-beoordeling.</p>
+<hr />
+<h2>A.5.32 — Intellectuele eigendomsrechten</h2>
+<p><strong>Wat:</strong> Respecteer IP-rechten en licenties.
+<strong>Doen:</strong> Alleen legitiem gelicenseerde software gebruiken. Geen illegale kopieën.
+<strong>Bewijs:</strong> Licentieoverzicht, software-inventarisatie met licentie-status.</p>
+<hr />
+<h2>A.5.33 — Bescherming van registraties</h2>
+<p><strong>Wat:</strong> Bescherm registraties tegen verlies, vernietiging en vervalsing.
+<strong>Doen:</strong> Bewaartermijnen naleven, toegang beperken, integriteit waarborgen.
+<strong>Bewijs:</strong> Retentiebeleid (ISMS-027), toegangscontrole op archieven.</p>
+<hr />
+<h2>A.5.34 — Privacy en bescherming van PII</h2>
+<p><strong>Wat:</strong> Persoonsgegevens beschermen conform AVG.
+<strong>Doen:</strong> AVG-beleid implementeren (ISMS-033), verwerkingsregister bijhouden, DPIA uitvoeren waar nodig.
+<strong>Bewijs:</strong> AVG-beleid, verwerkingsregister, DPIA's, VWO's.</p>
+<hr />
+<h2>A.5.35 — Onafhankelijke beoordeling van IB</h2>
+<p><strong>Wat:</strong> Periodieke onafhankelijke review van het ISMS.
+<strong>Doen:</strong> Interne audits door onafhankelijke auditor. Overweeg externe beoordeling.
+<strong>Bewijs:</strong> Interne auditrapportage (ISMS-021), eventuele externe auditresultaten.</p>
+<hr />
+<h2>A.5.36 — Naleving van beleid, regels en normen</h2>
+<p><strong>Wat:</strong> Controleer of beleid daadwerkelijk wordt nageleefd.
+<strong>Doen:</strong> Interne audits, management review, monitoring.
+<strong>Bewijs:</strong> Auditresultaten, management review notulen, correctieve maatregelen.</p>
+<hr />
+<h2>A.5.37 — Gedocumenteerde bedieningsprocedures</h2>
+<p><strong>Wat:</strong> Operationele procedures documenteren voor informatieverwerkende faciliteiten.
+<strong>Doen:</strong> Documenteer beheerhandelingen voor systemen, netwerk, backups etc.
+<strong>Bewijs:</strong> Operationele procedures, werkinstructies voor IT-beheer.</p>
+</body>
+</html>

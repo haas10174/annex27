@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<title>21-interne-audit</title>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Sora', sans-serif;
+    color: #1E293B;
+    line-height: 1.7;
+    padding: 48px 56px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  h1 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #0F172A;
+    margin-bottom: 8px;
+    padding-bottom: 12px;
+    border-bottom: 3px solid #0D9488;
+  }
+  h2 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #0F172A;
+    margin-top: 32px;
+    margin-bottom: 12px;
+  }
+  h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #0D9488;
+    margin-top: 24px;
+    margin-bottom: 8px;
+  }
+  p { margin-bottom: 12px; font-size: 0.9rem; color: #475569; }
+  strong { color: #0F172A; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 0.82rem;
+  }
+  th {
+    background: #0F172A;
+    color: white;
+    padding: 10px 12px;
+    text-align: left;
+    font-weight: 600;
+  }
+  td {
+    padding: 8px 12px;
+    border-bottom: 1px solid #E2E8F0;
+    color: #475569;
+  }
+  tr:nth-child(even) td { background: #F8FAFC; }
+  tr:hover td { background: #F0FDFA; }
+  ul, ol { margin: 12px 0 12px 24px; font-size: 0.9rem; color: #475569; }
+  li { margin-bottom: 4px; }
+  code {
+    background: #F1F5F9;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.82rem;
+    color: #0D9488;
+  }
+  pre {
+    background: #0F172A;
+    color: #E2E8F0;
+    padding: 20px;
+    border-radius: 8px;
+    margin: 16px 0;
+    font-size: 0.8rem;
+    overflow-x: auto;
+  }
+  pre code { background: none; color: inherit; padding: 0; }
+  hr {
+    border: none;
+    border-top: 1px solid #E2E8F0;
+    margin: 24px 0;
+  }
+  .header-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #E2E8F0;
+  }
+  .logo {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #0F172A;
+  }
+  .logo span { color: #0D9488; }
+  .doc-meta {
+    font-size: 0.72rem;
+    color: #94A3B8;
+    text-align: right;
+  }
+  @media print {
+    body { padding: 24px 32px; }
+    h1 { font-size: 1.4rem; }
+  }
+</style>
+
+</head>
+<body>
+<div class="header-bar">
+  <div class="logo">annex<span>27</span></div>
+  <div class="doc-meta">ISO 27001:2022 Beleidspakket<br/>annex27.nl</div>
+</div>
+<h1>Interne Audit Procedure</h1>
+<p><strong>ISO 27001:2022 — Clause 9.2</strong></p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Documentnummer</strong></td>
+<td>ISMS-021</td>
+</tr>
+<tr>
+<td><strong>Versie</strong></td>
+<td>1.0</td>
+</tr>
+<tr>
+<td><strong>Classificatie</strong></td>
+<td>Intern</td>
+</tr>
+<tr>
+<td><strong>Eigenaar</strong></td>
+<td>[Naam CISO / Verantwoordelijke]</td>
+</tr>
+<tr>
+<td><strong>Goedgekeurd door</strong></td>
+<td>[Naam Directie]</td>
+</tr>
+<tr>
+<td><strong>Datum goedkeuring</strong></td>
+<td>[DD-MM-JJJJ]</td>
+</tr>
+<tr>
+<td><strong>Volgende review</strong></td>
+<td>[DD-MM-JJJJ]</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>1. Doel</h2>
+<p>Deze procedure beschrijft hoe [Organisatienaam] interne audits van het ISMS plant, uitvoert en rapporteert. Interne audits controleren of het ISMS conform ISO 27001:2022 functioneert en effectief is.</p>
+<h2>2. Eisen (Clause 9.2)</h2>
+<p>Het interne auditprogramma:
+- Wordt gepland met inachtneming van het belang van de betrokken processen en resultaten van voorgaande audits
+- Definieert auditcriteria en scope voor elke audit
+- Selecteert auditors die objectiviteit en onpartijdigheid waarborgen (auditors auditen niet hun eigen werk)
+- Rapporteert resultaten aan het management</p>
+<h2>3. Auditprogramma</h2>
+<h3>3.1 Jaarlijks auditprogramma</h3>
+<p>Alle clausules en relevante Annex A controls worden binnen een cyclus van 12 maanden geauditeerd:</p>
+<table>
+<thead>
+<tr>
+<th>Periode</th>
+<th>Auditonderwerp</th>
+<th>Clausules / Controls</th>
+<th>Auditor</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Q1</td>
+<td>ISMS Governance &amp; Documentatie</td>
+<td>Clause 4, 5, 7.5</td>
+<td>[Naam]</td>
+</tr>
+<tr>
+<td>Q1</td>
+<td>Risicomanagement</td>
+<td>Clause 6.1, 8.2, 8.3</td>
+<td>[Naam]</td>
+</tr>
+<tr>
+<td>Q2</td>
+<td>Personeel &amp; Bewustwording</td>
+<td>A.6.1-A.6.8, trainingsregistratie</td>
+<td>[Naam]</td>
+</tr>
+<tr>
+<td>Q2</td>
+<td>Toegang &amp; Authenticatie</td>
+<td>A.5.15-A.5.18, A.8.2-A.8.5</td>
+<td>[Naam]</td>
+</tr>
+<tr>
+<td>Q3</td>
+<td>Technische maatregelen</td>
+<td>A.8.8, A.8.15, A.8.16, A.8.24</td>
+<td>[Naam]</td>
+</tr>
+<tr>
+<td>Q3</td>
+<td>Incidentmanagement &amp; Continuïteit</td>
+<td>A.5.24-A.5.30</td>
+<td>[Naam]</td>
+</tr>
+<tr>
+<td>Q4</td>
+<td>Fysieke beveiliging &amp; Classificatie</td>
+<td>A.7.1-A.7.7, A.5.12-A.5.13</td>
+<td>[Naam]</td>
+</tr>
+<tr>
+<td>Q4</td>
+<td>Prestatiemonitoring &amp; Verbetering</td>
+<td>Clause 9.1, 9.3, 10.1, 10.2</td>
+<td>[Naam]</td>
+</tr>
+</tbody>
+</table>
+<h3>3.2 Aanvullende audits</h3>
+<p>Ongeplande audits worden uitgevoerd na:
+- Ernstige beveiligingsincidenten
+- Significante organisatiewijzigingen
+- Bevindingen die directe opvolging vereisen</p>
+<h2>4. Auditproces</h2>
+<h3>4.1 Voorbereiding</h3>
+<table>
+<thead>
+<tr>
+<th>Stap</th>
+<th>Actie</th>
+<th>Verantwoordelijke</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Auditscope en -criteria vaststellen</td>
+<td>CISO</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Auditor(s) aanwijzen (onafhankelijk van geauditeerd gebied)</td>
+<td>CISO</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Auditchecklist opstellen op basis van clausules/controls</td>
+<td>Auditor</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Betrokken medewerkers informeren over planning</td>
+<td>CISO</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Relevante documentatie opvragen</td>
+<td>Auditor</td>
+</tr>
+</tbody>
+</table>
+<h3>4.2 Uitvoering</h3>
+<table>
+<thead>
+<tr>
+<th>Methode</th>
+<th>Beschrijving</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Documentreview</td>
+<td>Controleer of beleid, procedures en registraties actueel en volledig zijn</td>
+</tr>
+<tr>
+<td>Interviews</td>
+<td>Bespreek met medewerkers of zij het beleid kennen en naleven</td>
+</tr>
+<tr>
+<td>Observatie</td>
+<td>Controleer of praktijk overeenkomt met beleid (bijv. clean desk, schermvergrendeling)</td>
+</tr>
+<tr>
+<td>Technische controle</td>
+<td>Controleer configuraties, toegangsrechten, patchstatus, logs</td>
+</tr>
+<tr>
+<td>Steekproef</td>
+<td>Neem willekeurige samples van registraties (bijv. toegangsverzoeken, incidentmeldingen)</td>
+</tr>
+</tbody>
+</table>
+<h3>4.3 Bevindingen classificeren</h3>
+<table>
+<thead>
+<tr>
+<th>Classificatie</th>
+<th>Beschrijving</th>
+<th>Actie vereist</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Major non-conformiteit</strong></td>
+<td>Systeemfalen: een clausule-eis wordt niet nageleefd of een control ontbreekt volledig</td>
+<td>Correctieve maatregel met deadline, escalatie naar directie</td>
+</tr>
+<tr>
+<td><strong>Minor non-conformiteit</strong></td>
+<td>Gedeeltelijke naleving of incidenteel falen</td>
+<td>Correctieve maatregel met deadline</td>
+</tr>
+<tr>
+<td><strong>Observatie</strong></td>
+<td>Geen non-conformiteit, maar verbetermogelijkheid geïdentificeerd</td>
+<td>Aanbeveling, geen verplichte actie</td>
+</tr>
+<tr>
+<td><strong>Sterk punt</strong></td>
+<td>Goede praktijk die uitstijgt boven de norm-eis</td>
+<td>Documenteren en delen</td>
+</tr>
+</tbody>
+</table>
+<h2>5. Rapportage</h2>
+<h3>5.1 Auditrapport</h3>
+<p>Elk auditrapport bevat:</p>
+<table>
+<thead>
+<tr>
+<th>Onderdeel</th>
+<th>Inhoud</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Auditscope</td>
+<td>Welke clausules/controls zijn geauditeerd</td>
+</tr>
+<tr>
+<td>Auditcriteria</td>
+<td>Tegen welke eisen is getoetst</td>
+</tr>
+<tr>
+<td>Auditdatum en -duur</td>
+<td>Wanneer en hoe lang</td>
+</tr>
+<tr>
+<td>Auditor(s)</td>
+<td>Wie heeft de audit uitgevoerd</td>
+</tr>
+<tr>
+<td>Methoden</td>
+<td>Documentreview, interviews, observatie, technisch</td>
+</tr>
+<tr>
+<td>Bevindingen</td>
+<td>Non-conformiteiten, observaties, sterke punten</td>
+</tr>
+<tr>
+<td>Conclusie</td>
+<td>Algehele beoordeling van het geauditeerde gebied</td>
+</tr>
+<tr>
+<td>Correctieve maatregelen</td>
+<td>Vereiste acties met eigenaar en deadline</td>
+</tr>
+</tbody>
+</table>
+<h3>5.2 Rapportage aan management</h3>
+<ul>
+<li>Auditresultaten worden gerapporteerd aan de CISO en directie</li>
+<li>Samenvattende resultaten worden besproken in de managementreview</li>
+<li>Trend-analyse: vergelijking met voorgaande audits</li>
+</ul>
+<h2>6. Opvolging</h2>
+<ul>
+<li>Eigenaren van non-conformiteiten voeren correctieve maatregelen uit binnen de deadline</li>
+<li>CISO verifieert de effectiviteit van de correctieve maatregelen</li>
+<li>Onopgeloste non-conformiteiten worden geëscaleerd naar directie</li>
+</ul>
+<h2>7. Auditchecklist (template)</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Clausule / Control</th>
+<th>Eis</th>
+<th>Bevinding</th>
+<th>Bewijs</th>
+<th>Classificatie</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Clause 4.3</td>
+<td>ISMS scope is gedocumenteerd</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td>A.5.1</td>
+<td>Informatiebeveiligingsbeleid is goedgekeurd en gecommuniceerd</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>3</td>
+<td>A.5.17</td>
+<td>Wachtwoordbeleid wordt nageleefd</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>4</td>
+<td>Clause 6.1.2</td>
+<td>Risicobeoordeling is uitgevoerd in afgelopen 12 maanden</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2>8. Registraties</h2>
+<table>
+<thead>
+<tr>
+<th>Registratie</th>
+<th>Bewaartermijn</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Auditprogramma</td>
+<td>3 jaar</td>
+</tr>
+<tr>
+<td>Auditrapporten</td>
+<td>3 jaar</td>
+</tr>
+<tr>
+<td>Correctieve maatregelen en opvolging</td>
+<td>3 jaar</td>
+</tr>
+<tr>
+<td>Auditchecklists</td>
+<td>3 jaar</td>
+</tr>
+</tbody>
+</table>
+<h2>9. Versiebeheer</h2>
+<table>
+<thead>
+<tr>
+<th>Versie</th>
+<th>Datum</th>
+<th>Wijziging</th>
+<th>Auteur</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1.0</td>
+<td>[DD-MM-JJJJ]</td>
+<td>Initiële versie</td>
+<td>[Naam]</td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

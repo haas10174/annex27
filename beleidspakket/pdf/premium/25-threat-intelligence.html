@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<title>25-threat-intelligence</title>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Sora', sans-serif;
+    color: #1E293B;
+    line-height: 1.7;
+    padding: 48px 56px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  h1 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #0F172A;
+    margin-bottom: 8px;
+    padding-bottom: 12px;
+    border-bottom: 3px solid #0D9488;
+  }
+  h2 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #0F172A;
+    margin-top: 32px;
+    margin-bottom: 12px;
+  }
+  h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #0D9488;
+    margin-top: 24px;
+    margin-bottom: 8px;
+  }
+  p { margin-bottom: 12px; font-size: 0.9rem; color: #475569; }
+  strong { color: #0F172A; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 0.82rem;
+  }
+  th {
+    background: #0F172A;
+    color: white;
+    padding: 10px 12px;
+    text-align: left;
+    font-weight: 600;
+  }
+  td {
+    padding: 8px 12px;
+    border-bottom: 1px solid #E2E8F0;
+    color: #475569;
+  }
+  tr:nth-child(even) td { background: #F8FAFC; }
+  tr:hover td { background: #F0FDFA; }
+  ul, ol { margin: 12px 0 12px 24px; font-size: 0.9rem; color: #475569; }
+  li { margin-bottom: 4px; }
+  code {
+    background: #F1F5F9;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.82rem;
+    color: #0D9488;
+  }
+  pre {
+    background: #0F172A;
+    color: #E2E8F0;
+    padding: 20px;
+    border-radius: 8px;
+    margin: 16px 0;
+    font-size: 0.8rem;
+    overflow-x: auto;
+  }
+  pre code { background: none; color: inherit; padding: 0; }
+  hr {
+    border: none;
+    border-top: 1px solid #E2E8F0;
+    margin: 24px 0;
+  }
+  .header-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #E2E8F0;
+  }
+  .logo {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #0F172A;
+  }
+  .logo span { color: #0D9488; }
+  .doc-meta {
+    font-size: 0.72rem;
+    color: #94A3B8;
+    text-align: right;
+  }
+  @media print {
+    body { padding: 24px 32px; }
+    h1 { font-size: 1.4rem; }
+  }
+</style>
+
+</head>
+<body>
+<div class="header-bar">
+  <div class="logo">annex<span>27</span></div>
+  <div class="doc-meta">ISO 27001:2022 Beleidspakket<br/>annex27.nl</div>
+</div>
+<h1>Threat Intelligence Procedure</h1>
+<p><strong>ISO 27001:2022 — A.5.7 (nieuw in 2022)</strong></p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Documentnummer</strong></td>
+<td>ISMS-025</td>
+</tr>
+<tr>
+<td><strong>Versie</strong></td>
+<td>1.0</td>
+</tr>
+<tr>
+<td><strong>Classificatie</strong></td>
+<td>Intern</td>
+</tr>
+<tr>
+<td><strong>Eigenaar</strong></td>
+<td>[Naam CISO / Verantwoordelijke]</td>
+</tr>
+<tr>
+<td><strong>Goedgekeurd door</strong></td>
+<td>[Naam Directie]</td>
+</tr>
+<tr>
+<td><strong>Datum goedkeuring</strong></td>
+<td>[DD-MM-JJJJ]</td>
+</tr>
+<tr>
+<td><strong>Volgende review</strong></td>
+<td>[DD-MM-JJJJ]</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>1. Doel</h2>
+<p>Deze procedure beschrijft hoe [Organisatienaam] informatie over actuele cyberdreigingen verzamelt, analyseert en gebruikt om proactief beveiligingsmaatregelen te treffen. Threat intelligence voorkomt dat de organisatie verrast wordt door bekende aanvalsmethoden.</p>
+<h2>2. Bronnen</h2>
+<h3>2.1 Primaire bronnen</h3>
+<table>
+<thead>
+<tr>
+<th>Bron</th>
+<th>Type</th>
+<th>Frequentie monitoring</th>
+<th>Verantwoordelijke</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>NCSC</strong> (Nationaal Cyber Security Centrum)</td>
+<td>Waarschuwingen, adviezen, dreigingsbeelden</td>
+<td>Dagelijks</td>
+<td>CISO</td>
+</tr>
+<tr>
+<td><strong>CERT.be</strong> (Belgisch CSIRT)</td>
+<td>Waarschuwingen en incidentmeldingen</td>
+<td>Dagelijks</td>
+<td>CISO</td>
+</tr>
+<tr>
+<td><strong>CVE/NVD</strong> (National Vulnerability Database)</td>
+<td>Nieuwe kwetsbaarheden</td>
+<td>Dagelijks (geautomatiseerd)</td>
+<td>IT-beheer</td>
+</tr>
+<tr>
+<td><strong>Leveranciers-advisories</strong></td>
+<td>Beveiligingsupdates van gebruikte software</td>
+<td>Bij publicatie</td>
+<td>IT-beheer</td>
+</tr>
+<tr>
+<td><strong>Branche-ISAC</strong></td>
+<td>Sectorspecifieke dreigingsinformatie</td>
+<td>Wekelijks</td>
+<td>CISO</td>
+</tr>
+</tbody>
+</table>
+<h3>2.2 Aanvullende bronnen</h3>
+<table>
+<thead>
+<tr>
+<th>Bron</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ENISA (EU cybersecurity agency)</td>
+<td>Dreigingslandschap en best practices</td>
+</tr>
+<tr>
+<td>MITRE ATT&amp;CK</td>
+<td>Aanvalstechnieken en -tactieken</td>
+</tr>
+<tr>
+<td>OWASP</td>
+<td>Webapplicatie-kwetsbaarheden</td>
+</tr>
+<tr>
+<td>Cybersecurity nieuwsplatforms</td>
+<td>Actueel dreigingsnieuws (Bleeping Computer, The Record, Security.nl)</td>
+</tr>
+<tr>
+<td>Vendor threat reports</td>
+<td>Jaarlijkse dreigingsrapporten (CrowdStrike, Mandiant, Microsoft)</td>
+</tr>
+</tbody>
+</table>
+<h2>3. Proces</h2>
+<h3>3.1 Verzamelen</h3>
+<table>
+<thead>
+<tr>
+<th>Stap</th>
+<th>Actie</th>
+<th>Verantwoordelijke</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Abonneren op waarschuwingsdiensten (NCSC, CERT.be, leveranciers)</td>
+<td>CISO</td>
+</tr>
+<tr>
+<td>2</td>
+<td>RSS-feeds of e-mailnotificaties instellen voor CVE's relevant voor gebruikte technologieën</td>
+<td>IT-beheer</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Deelnemen aan branche-ISAC of kennisdelingsgroep (indien beschikbaar)</td>
+<td>CISO</td>
+</tr>
+</tbody>
+</table>
+<h3>3.2 Analyseren</h3>
+<p>Bij ontvangst van een dreigingsmelding:</p>
+<table>
+<thead>
+<tr>
+<th>Criterium</th>
+<th>Vraag</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Relevantie</td>
+<td>Gebruiken wij de getroffen technologie, software of dienst?</td>
+</tr>
+<tr>
+<td>Impact</td>
+<td>Wat is de potentiële impact als deze dreiging ons treft?</td>
+</tr>
+<tr>
+<td>Waarschijnlijkheid</td>
+<td>Wordt de kwetsbaarheid actief uitgebuit? Is er een exploit beschikbaar?</td>
+</tr>
+<tr>
+<td>Urgentie</td>
+<td>Hoe snel moeten wij handelen?</td>
+</tr>
+</tbody>
+</table>
+<h3>3.3 Handelen</h3>
+<table>
+<thead>
+<tr>
+<th>Urgentie</th>
+<th>Actie</th>
+<th>Tijdlijn</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Kritiek</strong> (actieve exploitatie van onze technologie)</td>
+<td>Onmiddellijke mitigatie, noodpatching, CISO+directie informeren</td>
+<td>Binnen uren</td>
+</tr>
+<tr>
+<td><strong>Hoog</strong> (kwetsbaarheid in onze technologie, exploit beschikbaar)</td>
+<td>Versneld patchproces activeren</td>
+<td>Binnen 48 uur</td>
+</tr>
+<tr>
+<td><strong>Midden</strong> (kwetsbaarheid in onze technologie, geen exploit bekend)</td>
+<td>Opnemen in regulier patchschema</td>
+<td>Conform patchbeleid</td>
+</tr>
+<tr>
+<td><strong>Laag</strong> (niet direct relevant maar informatief)</td>
+<td>Registreren en monitoren</td>
+<td>Geen directe actie</td>
+</tr>
+</tbody>
+</table>
+<h3>3.4 Registreren</h3>
+<p>Relevante dreigingsmeldingen worden geregistreerd:</p>
+<table>
+<thead>
+<tr>
+<th>Datum</th>
+<th>Bron</th>
+<th>Dreiging / CVE</th>
+<th>Relevantie</th>
+<th>Urgentie</th>
+<th>Actie ondernomen</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>[Datum]</td>
+<td>[Bron]</td>
+<td>[Beschrijving]</td>
+<td>[Ja/Nee]</td>
+<td>[K/H/M/L]</td>
+<td>[Actie]</td>
+<td>[Open/Afgehandeld]</td>
+</tr>
+</tbody>
+</table>
+<h2>4. Dreigingslandschap review</h2>
+<table>
+<thead>
+<tr>
+<th>Activiteit</th>
+<th>Frequentie</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Dagelijkse check van NCSC/CERT.be waarschuwingen</td>
+<td>Dagelijks</td>
+</tr>
+<tr>
+<td>Review van relevante CVE's</td>
+<td>Wekelijks</td>
+</tr>
+<tr>
+<td>Update dreigingslandschap voor managementreview</td>
+<td>Jaarlijks</td>
+</tr>
+<tr>
+<td>Evaluatie effectiviteit threat intelligence proces</td>
+<td>Jaarlijks</td>
+</tr>
+</tbody>
+</table>
+<h2>5. Versiebeheer</h2>
+<table>
+<thead>
+<tr>
+<th>Versie</th>
+<th>Datum</th>
+<th>Wijziging</th>
+<th>Auteur</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1.0</td>
+<td>[DD-MM-JJJJ]</td>
+<td>Initiële versie</td>
+<td>[Naam]</td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>
