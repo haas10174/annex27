@@ -278,26 +278,27 @@
     }
 
     .client-filters {
-      padding: 12px 16px;
+      padding: 0 12px;
       display: flex;
-      gap: 6px;
+      gap: 2px;
       border-bottom: 1px solid var(--border);
       overflow-x: auto;
     }
     .filter-btn {
       font-family: inherit;
       background: transparent;
-      border: 1px solid var(--border);
+      border: none;
       color: var(--text-muted);
-      padding: 6px 12px;
-      border-radius: 100px;
+      padding: 10px 10px;
       font-size: 0.75rem;
+      font-weight: 600;
       cursor: pointer;
       white-space: nowrap;
-      transition: all 0.15s;
+      border-bottom: 2px solid transparent;
+      transition: color 0.15s, border-color 0.15s;
     }
-    .filter-btn:hover { border-color: var(--border-hover); color: var(--text); }
-    .filter-btn.active { background: var(--accent); border-color: var(--accent); color: white; }
+    .filter-btn:hover { color: var(--text); }
+    .filter-btn.active { color: var(--accent-light); border-bottom-color: var(--accent-light); }
 
     .client-list {
       flex: 1;
