@@ -54,37 +54,46 @@
       min-height: 100vh;
     }
 
-    /* Global view switcher */
+    /* Global view switcher — vertical stacked nav in sidebar */
     .view-switch {
       display: flex;
-      gap: 4px;
-      padding: 10px 16px 0 16px;
+      flex-direction: column;
+      gap: 2px;
+      padding: 8px 10px;
       border-bottom: 1px solid var(--border);
     }
     .view-btn {
-      flex: 1;
       font-family: inherit;
       background: transparent;
       border: none;
       color: var(--text-muted);
-      padding: 10px 12px;
-      font-size: 0.78rem;
+      padding: 9px 12px;
+      font-size: 0.82rem;
       font-weight: 600;
       cursor: pointer;
-      border-bottom: 2px solid transparent;
-      transition: all 0.15s;
+      text-align: left;
+      border-left: 2px solid transparent;
+      border-radius: 4px;
+      transition: color 0.15s, background 0.15s, border-color 0.15s;
       position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
-    .view-btn:hover { color: var(--text); }
-    .view-btn.active { color: var(--accent-light); border-bottom-color: var(--accent-light); }
+    .view-btn:hover { color: var(--text); background: rgba(255,255,255,0.03); }
+    .view-btn.active {
+      color: var(--accent-light);
+      border-left-color: var(--accent-light);
+      background: var(--accent-bg);
+    }
     .view-btn .badge {
       margin-left: 6px;
       font-size: 0.65rem;
-      padding: 1px 6px;
+      padding: 1px 7px;
       border-radius: 10px;
       background: rgba(255,255,255,0.08);
     }
-    .view-btn.active .badge { background: var(--accent-bg); color: var(--accent-light); }
+    .view-btn.active .badge { background: rgba(13,148,136,0.25); color: var(--accent-light); }
 
     /* Full-width views (Inbox / Orders) */
     .view { display: none; }
