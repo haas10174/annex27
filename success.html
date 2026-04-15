@@ -158,24 +158,36 @@
 
 <script>
 (function () {
-  // Fire purchase event on success — dedupe via localStorage so reloads don't double-count
+  // Fire GA4 purchase event. Mollie redirect = /success?plan=X&value=TOTAL.
+  // Transaction ID komt uit de pending_order (gezet in bestellen.html vóór Mollie redirect).
   try {
     var params = new URLSearchParams(location.search);
-    var orderId = params.get('order') || params.get('id') || params.get('paymentId');
-    var plan = params.get('plan') || 'unknown';
-    var value = parseFloat(params.get('value') || params.get('amount') || '0');
-    if (!orderId) return;
-    var key = 'annex27_purchase_' + orderId;
-    if (localStorage.getItem(key)) return;
-    localStorage.setItem(key, '1');
+    var pending = {};
+    try { pending = JSON.parse(localStorage.getItem('annex27_pending_order') || '{}'); } catch (e) {}
+
+    var plan = params.get('plan') || pending.plan || 'unknown';
+    var value = parseFloat(params.get('value') || pending.value || '0');
+    if (!isFinite(value) || value <= 0) return;
+
+    // Transaction ID: pending ref > generated uit plan+value+datum (stabiel binnen sessie)
+    var txn = pending.ref || ('anx_' + plan + '_' + value + '_' + (pending.ts || Date.now()));
+
+    // Dedup — zelfde transactie-ID nooit 2x tracken
+    var dedupKey = 'annex27_purchase_' + txn;
+    if (localStorage.getItem(dedupKey)) return;
+    localStorage.setItem(dedupKey, '1');
+
     if (window.annex27Track) {
       window.annex27Track('purchase', {
-        transaction_id: orderId,
+        transaction_id: txn,
         currency: 'EUR',
-        value: isFinite(value) ? value : 0,
-        items: [{ item_id: plan, item_name: plan, quantity: 1, price: isFinite(value) ? value : 0 }]
+        value: value,
+        items: [{ item_id: plan, item_name: plan, quantity: 1, price: value }]
       });
     }
+
+    // Pending order is afgerond — opruimen
+    localStorage.removeItem('annex27_pending_order');
   } catch (e) {}
 })();
 </script>

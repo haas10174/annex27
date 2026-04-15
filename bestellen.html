@@ -461,6 +461,18 @@
         });
       }
 
+      // Save pending order zodat /success een stabiel transaction_id heeft
+      try {
+        var btwAmt = Math.round(selectedPrice * 0.21 * 100) / 100;
+        var totalAmt = Math.round((selectedPrice + btwAmt) * 100) / 100;
+        localStorage.setItem('annex27_pending_order', JSON.stringify({
+          ref: result.paymentId || ('anx_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8)),
+          plan: selectedPlan,
+          value: totalAmt,
+          ts: Date.now()
+        }));
+      } catch (_) {}
+
       // Redirect to Mollie checkout
       window.location.href = result.checkoutUrl;
     } catch (err) {

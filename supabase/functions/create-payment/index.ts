@@ -82,7 +82,7 @@ serve(async (req) => {
     // Honeypot check (extra server-side line of defense)
     if (body.website_url) {
       // Bot detected — return fake success without actually creating payment
-      return new Response(JSON.stringify({ checkoutUrl: 'https://annex27.nl/success.html', paymentId: 'blocked' }), { status: 200, headers });
+      return new Response(JSON.stringify({ checkoutUrl: 'https://annex27.nl/success', paymentId: 'blocked' }), { status: 200, headers });
     }
 
     const plan = sanitize(body.plan, 50);
@@ -123,7 +123,7 @@ serve(async (req) => {
         value: total.toFixed(2),
       },
       description: `Annex27 - ${product.name}`,
-      redirectUrl: `${siteUrl}/success.html?plan=${encodeURIComponent(plan)}`,
+      redirectUrl: `${siteUrl}/success?plan=${encodeURIComponent(plan)}&value=${total}`,
       webhookUrl: `${Deno.env.get('SUPABASE_URL')}/functions/v1/mollie-webhook`,
       metadata: {
         plan,
