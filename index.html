@@ -834,10 +834,37 @@
       stroke-width: 2.5;
     }
 
+    /* Mobile: rapport-pagina's NAAST elkaar (niet gestapeld) */
     @media (max-width: 768px) {
-      .report-stack { grid-template-columns: 1fr; gap: 24px; }
-      .report-page.cover { transform: rotate(-1.5deg); }
-      .report-page.content { transform: rotate(1deg); }
+      .report-stack { grid-template-columns: 1fr 1fr; gap: 10px; }
+      .report-page.cover { transform: rotate(-2deg) translateY(10px); }
+      .report-page.content { transform: rotate(1.5deg) translateY(-6px); }
+      .report-preview { padding: 0 8px; }
+      .report-cover-inner { padding: 9% 7% 6%; }
+      .report-content-inner { padding: 7% 6% 6%; }
+    }
+    @media (max-width: 480px) {
+      .report-stack { gap: 8px; }
+      .report-preview { padding: 0 4px; }
+      .report-cover-inner { padding: 8% 6% 5%; }
+      .report-content-inner { padding: 6% 5% 5%; }
+      .report-title { font-size: 0.78rem; margin-bottom: 10px; }
+      .report-meta { font-size: 0.48rem; margin-bottom: 8px; line-height: 1.6; }
+      .report-badge { font-size: 0.42rem; padding: 2px 6px; }
+      .report-logo { font-size: 0.6rem; }
+      .report-eyebrow { font-size: 0.42rem; margin-bottom: 6px; }
+      .report-footer-cover { font-size: 0.38rem; }
+      .report-label { font-size: 0.42rem; margin-bottom: 4px; }
+      .report-h2 { font-size: 0.68rem; margin-bottom: 8px; }
+      .report-summary-grid { gap: 3px; margin-bottom: 8px; }
+      .report-stat { padding: 4px 2px; }
+      .report-stat-num { font-size: 0.72rem; }
+      .report-stat-label { font-size: 0.36rem; }
+      .report-cat-row { gap: 3px; }
+      .report-cat-name { font-size: 0.44rem; }
+      .report-cat-pct { font-size: 0.44rem; }
+      .report-excerpt { font-size: 0.46rem; padding: 6px 8px; }
+      .report-excerpt-label { font-size: 0.44rem; }
     }
 
     /* ── TRUST BAR ────────────────────── */
@@ -1462,6 +1489,11 @@
       <div class="hero-proof-item"><strong>48u</strong> Lead Auditor review</div>
     </div>
 
+    <!-- ======================================================= -->
+    <!-- ISO COMPLIANCE SUMMARY [BOOKMARK v1]                    -->
+    <!-- Hero rapport-preview met cover + executive summary.      -->
+    <!-- Terug naar deze versie? Zoek op "ISO COMPLIANCE SUMMARY [BOOKMARK v1]" -->
+    <!-- ======================================================= -->
     <div class="report-preview">
       <div class="report-stack">
 
