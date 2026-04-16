@@ -2041,10 +2041,6 @@
         Berichten
         <span class="unread-badge" id="unreadBadge" style="display:none;"></span>
       </button>
-      <button class="sidebar-link" onclick="showView('facturen')" data-view="facturen" id="sidebarFacturen">
-        <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/><path d="M16 13H8M16 17H8M10 9H8"/></svg>
-        Facturen
-      </button>
       <button class="sidebar-link" onclick="showView('profile')" data-view="profile">
         <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
         Profiel
@@ -2788,11 +2784,7 @@ function renderQuickActions() {
         <div class="quick-action-title">Berichten</div>
         <div class="quick-action-desc">Contact met uw Lead Auditor</div>
       </div>
-      <div class="quick-action" onclick="showView('facturen')">
-        <div class="quick-action-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/><path d="M16 13H8M16 17H8M10 9H8"/></svg></div>
-        <div class="quick-action-title">Factuur &amp; rapport</div>
-        <div class="quick-action-desc">Downloads &amp; documenten</div>
-      </div>`;
+`;
   }
 }
 
@@ -2904,7 +2896,6 @@ function showView(name) {
   if (name === 'dashboard') { renderDashboard(); loadReports(); renderProgressTimer(); }
   if (name === 'gapanalyse') renderGapAnalyse();
   if (name === 'berichten') renderBerichten();
-  if (name === 'facturen') loadInvoices();
   // Close mobile sidebar
   document.getElementById('sidebar').classList.remove('open');
   document.getElementById('overlay').classList.remove('open');
