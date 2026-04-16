@@ -953,12 +953,12 @@
           <div class="ov-card">
             <div class="ov-card-head">
               <h3>Realtime bezoekers</h3>
-              <span class="ov-badge ov-pending">GA4 Data API nog niet gekoppeld</span>
+              <span id="ovRtBadge" class="ov-badge ov-pending">verbinden&hellip;</span>
             </div>
             <div class="ov-realtime">
               <div class="ov-rt-big" id="ovRtUsers">&mdash;</div>
               <div class="ov-rt-label">actieve gebruikers nu</div>
-              <p class="ov-rt-hint">Deze widget wordt in stage 2 gevuld via een Supabase Edge Function die de GA4 Data API pollt. Benodigd: Google Cloud service-account met "GA Viewer" rol op property <code>G-VWXHXN3KV2</code>.</p>
+              <div id="ovRtBreakdown" style="margin-top:14px;font-size:0.84rem;color:var(--text-muted);min-height:60px;"></div>
               <a href="https://analytics.google.com/analytics/web/#/p/realtime/overview" target="_blank" rel="noopener" class="ov-rt-link">Open GA4 Realtime &rarr;</a>
             </div>
           </div>
@@ -1421,6 +1421,7 @@ async function startApp() {
   loadLeadsCount();
   loadMailCount();
   loadInvoicesCount();
+  startGa4Widget();
   // Initial: active tab is Overzicht — verberg klant-filters/list
   const cf = document.querySelector('.client-filters'); if (cf) cf.style.display = 'none';
   const cl = document.getElementById('clientList'); if (cl) cl.style.display = 'none';
@@ -1660,7 +1661,6 @@ async function loadInvoicesAdmin() {
       </tr>`;
   }).join('');
   loadInvoicesCount();
-  startGa4Widget();
 }
 
 function updateInvTotal() {
@@ -2096,32 +2096,63 @@ async function startGa4Widget() {
 }
 async function loadGa4() {
   const el = document.getElementById('ga4Widget');
-  if (!el) return;
+  const ovUsers = document.getElementById('ovRtUsers');
+  const ovBadge = document.getElementById('ovRtBadge');
+  const ovBreak = document.getElementById('ovRtBreakdown');
+  const esc = (s) => String(s ?? '').replace(/[<>&]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]));
   try {
     const { data, error } = await sb.functions.invoke('ga4-realtime', { body: {} });
     if (error || data?.error) {
-      el.innerHTML = `<div style="font-size:0.78rem;color:var(--text-muted);">GA4 niet beschikbaar (${data?.error || error?.message || 'config'})</div>`;
+      const msg = data?.error || error?.message || 'config';
+      if (el) el.innerHTML = `<div style="font-size:0.78rem;color:var(--text-muted);">GA4 niet beschikbaar (${esc(msg)})</div>`;
+      if (ovUsers) ovUsers.textContent = '\u2014';
+      if (ovBadge) { ovBadge.textContent = 'GA4 fout'; ovBadge.className = 'ov-badge ov-pending'; }
+      if (ovBreak) ovBreak.innerHTML = `<span style="color:#fca5a5;">Fout: ${esc(msg)}</span>`;
       return;
     }
-    const esc = (s) => String(s ?? '').replace(/[<>&]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]));
     const top = (data.byPage || []).slice(0, 3);
-    el.innerHTML = `
-      <div style="display:flex;align-items:center;gap:14px;">
-        <div style="width:42px;height:42px;border-radius:50%;background:rgba(20,184,166,0.12);display:flex;align-items:center;justify-content:center;">
-          <span style="width:10px;height:10px;border-radius:50%;background:#14b8a6;animation:ga4pulse 1.6s infinite;"></span>
+    const countries = (data.byCountry || []).slice(0, 3);
+    // Sidebar widget
+    if (el) {
+      el.innerHTML = `
+        <div style="display:flex;align-items:center;gap:14px;">
+          <div style="width:42px;height:42px;border-radius:50%;background:rgba(20,184,166,0.12);display:flex;align-items:center;justify-content:center;">
+            <span style="width:10px;height:10px;border-radius:50%;background:#14b8a6;animation:ga4pulse 1.6s infinite;"></span>
+          </div>
+          <div>
+            <div style="font-family:'Sora',sans-serif;font-size:1.4rem;font-weight:800;color:#fff;line-height:1;">${data.activeUsers}</div>
+            <div style="font-size:0.74rem;color:var(--text-muted);letter-spacing:0.06em;text-transform:uppercase;margin-top:2px;">live bezoekers</div>
+          </div>
+          <div style="margin-left:auto;font-size:0.76rem;color:var(--text-muted);text-align:right;line-height:1.5;">
+            ${top.length ? top.map(t => `${esc(t.key)} <strong style="color:#fff;">${t.value}</strong>`).join('<br/>') : 'Geen actieve pagina&apos;s'}
+          </div>
         </div>
-        <div>
-          <div style="font-family:'Sora',sans-serif;font-size:1.4rem;font-weight:800;color:#fff;line-height:1;">${data.activeUsers}</div>
-          <div style="font-size:0.74rem;color:var(--text-muted);letter-spacing:0.06em;text-transform:uppercase;margin-top:2px;">live bezoekers</div>
-        </div>
-        <div style="margin-left:auto;font-size:0.76rem;color:var(--text-muted);text-align:right;line-height:1.5;">
-          ${top.length ? top.map(t => `${esc(t.key)} <strong style="color:#fff;">${t.value}</strong>`).join('<br/>') : 'Geen actieve pagina&apos;s'}
-        </div>
-      </div>
-      <style>@keyframes ga4pulse { 0%,100%{opacity:1;transform:scale(1);} 50%{opacity:0.5;transform:scale(1.4);} }</style>
-    `;
+        <style>@keyframes ga4pulse { 0%,100%{opacity:1;transform:scale(1);} 50%{opacity:0.5;transform:scale(1.4);} }</style>
+      `;
+    }
+    // Overview card
+    if (ovUsers) ovUsers.textContent = data.activeUsers;
+    if (ovBadge) {
+      ovBadge.innerHTML = '<span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#10b981;margin-right:6px;animation:ga4pulse 1.6s infinite;vertical-align:middle;"></span>live';
+      ovBadge.className = 'ov-badge';
+      ovBadge.style.cssText = 'background:rgba(16,185,129,0.12);color:#059669;border:1px solid rgba(16,185,129,0.3);';
+    }
+    if (ovBreak) {
+      const countryHtml = countries.length
+        ? countries.map(c => `<span style="display:inline-block;margin-right:14px;"><strong style="color:var(--text);">${esc(c.key)}</strong> ${c.value}</span>`).join('')
+        : '<span style="opacity:0.6;">Geen landen-data</span>';
+      const pageHtml = top.length
+        ? top.map(p => `<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(0,0,0,0.05);"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:75%;">${esc(p.key)}</span><strong style="color:var(--text);">${p.value}</strong></div>`).join('')
+        : '<div style="opacity:0.6;padding:6px 0;">Geen actieve pagina&apos;s</div>';
+      ovBreak.innerHTML = `
+        <div style="margin-bottom:10px;">${countryHtml}</div>
+        <div style="font-size:0.78rem;">${pageHtml}</div>
+      `;
+    }
   } catch (e) {
-    el.innerHTML = `<div style="font-size:0.78rem;color:var(--text-muted);">GA4 fout</div>`;
+    if (el) el.innerHTML = `<div style="font-size:0.78rem;color:var(--text-muted);">GA4 fout</div>`;
+    if (ovBadge) { ovBadge.textContent = 'GA4 fout'; ovBadge.className = 'ov-badge ov-pending'; }
+    if (ovBreak) ovBreak.innerHTML = `<span style="color:#fca5a5;">${esc(e.message || e)}</span>`;
   }
 }
 
