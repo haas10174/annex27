@@ -2104,34 +2104,102 @@ async function startGa4Widget() {
   ga4Timer = setInterval(loadGa4, 60000);
 }
 // City and country coordinates [lat, lon] for realtime markers
-// Cities = primary granularity; country center = fallback when GA4 returns "(not set)"
+// Cities = primary granularity; country center = fallback for "(not set)"
 const GA4_CITY_COORDS = {
-  // Belgium
+  // Belgium - Vlaanderen
   'Brussels': [50.8503, 4.3517], 'Antwerp': [51.2194, 4.4025], 'Antwerpen': [51.2194, 4.4025],
   'Ghent': [51.0543, 3.7174], 'Gent': [51.0543, 3.7174], 'Bruges': [51.2093, 3.2247],
-  'Brugge': [51.2093, 3.2247], 'Liege': [50.6326, 5.5797], 'Liège': [50.6326, 5.5797],
-  'Charleroi': [50.4108, 4.4446], 'Namur': [50.4674, 4.8718], 'Mons': [50.4542, 3.9514],
-  'Leuven': [50.8798, 4.7005], 'Mechelen': [51.0259, 4.4776], 'Hasselt': [50.9307, 5.3325],
+  'Brugge': [51.2093, 3.2247], 'Leuven': [50.8798, 4.7005], 'Mechelen': [51.0259, 4.4776],
+  'Aalst': [50.9367, 4.0397], 'Sint-Niklaas': [51.1654, 4.1414], 'Roeselare': [50.9447, 3.1226],
   'Kortrijk': [50.8275, 3.2649], 'Ostend': [51.2247, 2.9075], 'Oostende': [51.2247, 2.9075],
-  'Tournai': [50.6056, 3.3878], 'Genk': [50.9651, 5.5005], 'Aalst': [50.9367, 4.0397],
-  'Roeselare': [50.9447, 3.1226], 'Sint-Niklaas': [51.1654, 4.1414],
-  // Netherlands
+  'Turnhout': [51.3225, 4.9447], 'Geel': [51.1641, 4.9928], 'Mol': [51.1923, 5.1183],
+  'Lier': [51.1316, 4.5704], 'Herentals': [51.1791, 4.8333], 'Vilvoorde': [50.9281, 4.4258],
+  'Halle': [50.7325, 4.2378], 'Asse': [50.9098, 4.2069], 'Beveren': [51.2107, 4.2569],
+  'Knokke-Heist': [51.3464, 3.2906], 'Ieper': [50.8511, 2.8853], 'Veurne': [51.0697, 2.6669],
+  'Diksmuide': [51.0344, 2.8628], 'Eeklo': [51.1858, 3.5642], 'Deinze': [50.9839, 3.5311],
+  'Ninove': [50.8296, 4.0247], 'Geraardsbergen': [50.7686, 3.8758], 'Oudenaarde': [50.8489, 3.6064],
+  'Aalter': [51.0856, 3.4458], 'Lokeren': [51.1042, 3.9925], 'Dendermonde': [51.0294, 4.1019],
+  'Heist-op-den-Berg': [51.0775, 4.7239],
+  // Belgium - Limburg + Maasland
+  'Hasselt': [50.9307, 5.3325], 'Genk': [50.9651, 5.5005], 'Maasmechelen': [50.9667, 5.7000],
+  'Lommel': [51.2294, 5.3122], 'Beringen': [51.0481, 5.2306], 'Tongeren': [50.7806, 5.4644],
+  'Sint-Truiden': [50.8167, 5.1833], 'Bilzen': [50.8702, 5.5158], 'Diepenbeek': [50.9056, 5.4194],
+  'Houthalen': [51.0250, 5.3819], 'Houthalen-Helchteren': [51.0250, 5.3819],
+  'Diest': [50.9856, 5.0506], 'Pelt': [51.2244, 5.4178], 'Bree': [51.1411, 5.5994],
+  'Maaseik': [51.0986, 5.7858], 'Lanaken': [50.8889, 5.6494], 'Riemst': [50.8131, 5.6086],
+  'Heusden-Zolder': [51.0303, 5.2772], 'Halen': [50.9486, 5.1056],
+  // Belgium - Wallonia
+  'Liege': [50.6326, 5.5797], 'Liège': [50.6326, 5.5797], 'Charleroi': [50.4108, 4.4446],
+  'Namur': [50.4674, 4.8718], 'Mons': [50.4542, 3.9514], 'Tournai': [50.6056, 3.3878],
+  'Verviers': [50.5894, 5.8628], 'Eupen': [50.6286, 6.0386], 'Spa': [50.4925, 5.8628],
+  'La Louvière': [50.4789, 4.1853], 'Mouscron': [50.7444, 3.2086], 'Wavre': [50.7167, 4.6092],
+  'Nivelles': [50.5972, 4.3267], 'Waterloo': [50.7156, 4.3964], "Braine-l'Alleud": [50.6839, 4.3678],
+  'Marche-en-Famenne': [50.2275, 5.3431], 'Bastogne': [50.0006, 5.7186], 'Arlon': [49.6839, 5.8156],
+  'Dinant': [50.2603, 4.9111], 'Philippeville': [50.1956, 4.5444], 'Soignies': [50.5783, 4.0703],
+  'Ath': [50.6303, 3.7783],
+  // Netherlands - Randstad
   'Amsterdam': [52.3676, 4.9041], 'Rotterdam': [51.9244, 4.4777], 'The Hague': [52.0705, 4.3007],
-  "'s-Gravenhage": [52.0705, 4.3007], 'Den Haag': [52.0705, 4.3007],
-  'Utrecht': [52.0907, 5.1214], 'Eindhoven': [51.4416, 5.4697], 'Tilburg': [51.5555, 5.0913],
-  'Groningen': [53.2194, 6.5665], 'Almere': [52.3508, 5.2647], 'Breda': [51.5719, 4.7683],
-  'Nijmegen': [51.8126, 5.8372], 'Enschede': [52.2215, 6.8937], 'Apeldoorn': [52.2112, 5.9699],
-  'Haarlem': [52.3874, 4.6462], 'Arnhem': [51.9851, 5.8987], 'Zaanstad': [52.4391, 4.8295],
-  'Amersfoort': [52.1561, 5.3878], "'s-Hertogenbosch": [51.6978, 5.3037], 'Den Bosch': [51.6978, 5.3037],
-  'Maastricht': [50.8514, 5.6910], 'Leiden': [52.1601, 4.4970], 'Dordrecht': [51.8133, 4.6901],
-  'Zoetermeer': [52.0575, 4.4937], 'Zwolle': [52.5168, 6.0830], 'Delft': [52.0116, 4.3571],
-  // Common others
+  "'s-Gravenhage": [52.0705, 4.3007], 'Den Haag': [52.0705, 4.3007], 'Utrecht': [52.0907, 5.1214],
+  'Haarlem': [52.3874, 4.6462], 'Zaanstad': [52.4391, 4.8295], 'Amersfoort': [52.1561, 5.3878],
+  'Almere': [52.3508, 5.2647], 'Hilversum': [52.2292, 5.1669], 'Hoofddorp': [52.3025, 4.6892],
+  'Diemen': [52.3389, 4.9628], 'Leiden': [52.1601, 4.4970], 'Dordrecht': [51.8133, 4.6901],
+  'Zoetermeer': [52.0575, 4.4937], 'Delft': [52.0116, 4.3571], 'Gouda': [52.0114, 4.7106],
+  'Spijkenisse': [51.8456, 4.3294], 'Schiedam': [51.9197, 4.3886], 'Vlaardingen': [51.9123, 4.3417],
+  'Capelle aan den IJssel': [51.9292, 4.5764], 'Alkmaar': [52.6324, 4.7534], 'Hoorn': [52.6422, 5.0608],
+  'Purmerend': [52.5050, 4.9594], 'Lelystad': [52.5085, 5.4750], 'Veenendaal': [52.0264, 5.5586],
+  'Nieuwegein': [52.0297, 5.0903], 'Houten': [52.0322, 5.1683],
+  // Netherlands - Brabant + Limburg
+  'Eindhoven': [51.4416, 5.4697], 'Tilburg': [51.5555, 5.0913], 'Breda': [51.5719, 4.7683],
+  "'s-Hertogenbosch": [51.6978, 5.3037], 'Den Bosch': [51.6978, 5.3037], 'Helmond': [51.4816, 5.6611],
+  'Oss': [51.7642, 5.5181], 'Veldhoven': [51.4194, 5.4039], 'Geldrop': [51.4203, 5.5589],
+  'Best': [51.5097, 5.3911], 'Waalre': [51.3919, 5.4633], 'Bergen op Zoom': [51.4944, 4.2911],
+  'Roosendaal': [51.5306, 4.4653], 'Maastricht': [50.8514, 5.6910], 'Heerlen': [50.8882, 5.9795],
+  'Sittard': [50.9989, 5.8694], 'Roermond': [51.1942, 5.9872], 'Venlo': [51.3704, 6.1724],
+  // Netherlands - Oost
+  'Nijmegen': [51.8126, 5.8372], 'Arnhem': [51.9851, 5.8987], 'Apeldoorn': [52.2112, 5.9699],
+  'Enschede': [52.2215, 6.8937], 'Hengelo': [52.2658, 6.7903], 'Almelo': [52.3567, 6.6628],
+  'Doetinchem': [51.9650, 6.2889], 'Deventer': [52.2553, 6.1639], 'Zutphen': [52.1408, 6.1944],
+  'Zwolle': [52.5168, 6.0830],
+  // Netherlands - Noord
+  'Groningen': [53.2194, 6.5665], 'Assen': [52.9967, 6.5625], 'Hoogeveen': [52.7228, 6.4875],
+  'Emmen': [52.7858, 6.8975], 'Drachten': [53.1075, 6.0894], 'Heerenveen': [52.9608, 5.9197],
+  'Leeuwarden': [53.2014, 5.7997], 'Sneek': [53.0331, 5.6589],
+  // Netherlands - Zeeland
+  'Middelburg': [51.4988, 3.6107], 'Vlissingen': [51.4423, 3.5736], 'Goes': [51.5044, 3.8881],
+  'Terneuzen': [51.3358, 3.8281],
+  // International common
   'London': [51.5074, -0.1278], 'Paris': [48.8566, 2.3522], 'Berlin': [52.5200, 13.4050],
   'Cologne': [50.9375, 6.9603], 'Köln': [50.9375, 6.9603], 'Düsseldorf': [51.2277, 6.7735],
-  'Frankfurt': [50.1109, 8.6821], 'Munich': [48.1351, 11.5820], 'München': [48.1351, 11.5820],
-  'Madrid': [40.4168, -3.7038], 'Barcelona': [41.3851, 2.1734], 'Lisbon': [38.7223, -9.1393],
-  'Luxembourg': [49.6116, 6.1319],
+  'Aachen': [50.7753, 6.0839], 'Frankfurt': [50.1109, 8.6821], 'Munich': [48.1351, 11.5820],
+  'München': [48.1351, 11.5820], 'Madrid': [40.4168, -3.7038], 'Barcelona': [41.3851, 2.1734],
+  'Lisbon': [38.7223, -9.1393], 'Luxembourg': [49.6116, 6.1319], 'Lille': [50.6292, 3.0573],
+  'Strasbourg': [48.5734, 7.7521], 'Lyon': [45.7640, 4.8357],
 };
+
+// Async Nominatim fallback for unknown cities (cached in sessionStorage)
+async function ga4GeocodeCity(city, country) {
+  const key = `ga4geo:${country}:${city}`;
+  const cached = sessionStorage.getItem(key);
+  if (cached) {
+    if (cached === 'NULL') return null;
+    try { return JSON.parse(cached); } catch(_) { return null; }
+  }
+  try {
+    const q = encodeURIComponent(`${city}, ${country}`);
+    const r = await fetch(`https://nominatim.openstreetmap.org/search?q=${q}&format=json&limit=1`, {
+      headers: { 'Accept-Language': 'en' }
+    });
+    if (!r.ok) throw new Error('nominatim ' + r.status);
+    const data = await r.json();
+    if (!data.length) { sessionStorage.setItem(key, 'NULL'); return null; }
+    const coord = [parseFloat(data[0].lat), parseFloat(data[0].lon)];
+    sessionStorage.setItem(key, JSON.stringify(coord));
+    return coord;
+  } catch (e) {
+    sessionStorage.setItem(key, 'NULL');
+    return null;
+  }
+}
 const GA4_COUNTRY_FALLBACK = {
   'Netherlands': [52.1326, 5.2913], 'Belgium': [50.5039, 4.4699], 'Luxembourg': [49.8153, 6.1296],
   'Germany': [51.1657, 10.4515], 'France': [46.6034, 1.8883], 'United Kingdom': [54.7575, -2.7],
@@ -2155,43 +2223,73 @@ function ga4InitMap() {
   }).addTo(ga4Map);
   L.control.attribution({ prefix: false, position: 'bottomright' }).addAttribution('OSM &copy; CARTO').addTo(ga4Map);
 }
-function ga4RenderMarkers(byCity, byCountry) {
+async function ga4RenderMarkers(byCity, byCountry) {
   if (!ga4Map) return;
   ga4MapMarkers.forEach(m => ga4Map.removeLayer(m));
   ga4MapMarkers = [];
-  // Aggregate by location: city if known, else country fallback
-  const points = [];
+  const max = Math.max(1, ...(byCity || []).map(c => c.value), ...(byCountry || []).map(c => c.value));
+  const drawMarker = (coord, label, value, precision) => {
+    const radius = 8 + (value / max) * 14;
+    const marker = L.circleMarker(coord, {
+      radius, color: '#0d9488', weight: 2, fillColor: '#14b8a6', fillOpacity: 0.55,
+    }).addTo(ga4Map).bindTooltip(
+      `<strong>${label}</strong> &middot; ${value} bezoeker${value > 1 ? 's' : ''}` +
+      (precision === 'country' ? ' (land-niveau)' : precision === 'geocoded' ? '' : ''),
+      { direction: 'top' }
+    );
+    ga4MapMarkers.push(marker);
+    return marker;
+  };
+
+  const placedCoords = [];
+  const pendingGeocode = [];
   if (Array.isArray(byCity) && byCity.length) {
     byCity.forEach(({ country, city, value }) => {
       if (!value) return;
-      const cityCoord = city && city !== '(not set)' && city !== '(unknown)' ? GA4_CITY_COORDS[city] : null;
-      const coord = cityCoord || GA4_COUNTRY_FALLBACK[country];
-      if (!coord) return;
-      points.push({ coord, label: cityCoord ? city : country, value, isCity: !!cityCoord });
+      const isRealCity = city && city !== '(not set)' && city !== '(unknown)';
+      const cityCoord = isRealCity ? GA4_CITY_COORDS[city] : null;
+      if (cityCoord) {
+        drawMarker(cityCoord, city, value, 'city');
+        placedCoords.push(cityCoord);
+      } else if (isRealCity && GA4_COUNTRY_FALLBACK[country]) {
+        // Plot at country fallback now, async geocode and re-place
+        const fallback = GA4_COUNTRY_FALLBACK[country];
+        const m = drawMarker(fallback, `${city}, ${country}`, value, 'country');
+        placedCoords.push(fallback);
+        pendingGeocode.push({ marker: m, city, country, value });
+      } else if (GA4_COUNTRY_FALLBACK[country]) {
+        const fallback = GA4_COUNTRY_FALLBACK[country];
+        drawMarker(fallback, country, value, 'country');
+        placedCoords.push(fallback);
+      }
     });
-  } else {
-    (byCountry || []).forEach(({ key, value }) => {
+  } else if (Array.isArray(byCountry)) {
+    byCountry.forEach(({ key, value }) => {
       const coord = GA4_COUNTRY_FALLBACK[key];
       if (!coord || !value) return;
-      points.push({ coord, label: key, value, isCity: false });
+      drawMarker(coord, key, value, 'country');
+      placedCoords.push(coord);
     });
   }
-  if (!points.length) return;
-  const max = Math.max(1, ...points.map(p => p.value));
-  const bounds = [];
-  points.forEach(p => {
-    const radius = 8 + (p.value / max) * 14;
-    const marker = L.circleMarker(p.coord, {
-      radius, color: '#0d9488', weight: 2, fillColor: '#14b8a6', fillOpacity: 0.55,
-    }).addTo(ga4Map).bindTooltip(`<strong>${p.label}</strong> · ${p.value} bezoeker${p.value > 1 ? 's' : ''}${p.isCity ? '' : ' (land-niveau)'}`, { direction: 'top' });
-    ga4MapMarkers.push(marker);
-    bounds.push(p.coord);
-  });
-  // Adjust view to fit markers, but keep BENELUX as default if all close together
-  if (bounds.length === 1) {
-    ga4Map.setView(bounds[0], 7);
-  } else {
-    ga4Map.fitBounds(bounds, { padding: [30, 30], maxZoom: 8 });
+
+  if (placedCoords.length === 1) {
+    ga4Map.setView(placedCoords[0], 8);
+  } else if (placedCoords.length > 1) {
+    ga4Map.fitBounds(placedCoords, { padding: [30, 30], maxZoom: 8 });
+  }
+
+  // Async upgrade: geocode unknown cities and re-place their markers
+  for (const job of pendingGeocode) {
+    const coord = await ga4GeocodeCity(job.city, job.country);
+    if (!coord || !ga4Map) continue;
+    // Cache for next render
+    GA4_CITY_COORDS[job.city] = coord;
+    // Replace marker
+    if (ga4MapMarkers.includes(job.marker)) {
+      ga4Map.removeLayer(job.marker);
+      ga4MapMarkers = ga4MapMarkers.filter(m => m !== job.marker);
+    }
+    drawMarker(coord, `${job.city}, ${job.country}`, job.value, 'geocoded');
   }
 }
 
