@@ -882,8 +882,6 @@
   <aside class="sidebar">
     <div class="sidebar-header">
       <div class="brand">annex<span>27</span></div>
-      <span class="role-badge">Lead Auditor</span>
-      <div id="ga4Widget" style="margin-top:14px;padding:12px 14px;background:rgba(15,23,42,0.5);border:1px solid rgba(255,255,255,0.06);border-radius:10px;"></div>
     </div>
     <div class="view-switch">
       <button class="view-btn active" data-view="overview">Overzicht</button>
@@ -959,16 +957,12 @@
               <span id="ovRtBadge" class="ov-badge ov-pending">verbinden&hellip;</span>
             </div>
             <div class="ov-realtime">
-              <div style="display:flex;align-items:flex-start;gap:18px;flex-wrap:wrap;">
-                <div style="flex:0 0 auto;">
-                  <div class="ov-rt-big" id="ovRtUsers">&mdash;</div>
-                  <div class="ov-rt-label">actieve gebruikers nu</div>
-                  <div id="ovRtCountries" style="margin-top:12px;font-size:0.78rem;color:var(--text-muted);line-height:1.7;min-width:120px;"></div>
-                </div>
-                <div id="ovRtMap" style="flex:1 1 280px;min-width:240px;max-width:380px;height:280px;border-radius:12px;overflow:hidden;border:1px solid rgba(0,0,0,0.08);background:#f1f5f9;"></div>
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;">
+                <div class="ov-rt-big" id="ovRtUsers" style="margin:0;">&mdash;</div>
+                <div class="ov-rt-label" style="margin:0;padding-bottom:6px;">actieve gebruikers nu</div>
               </div>
-              <div id="ovRtPages" style="margin-top:14px;font-size:0.78rem;color:var(--text-muted);"></div>
-              <a href="https://analytics.google.com/analytics/web/#/p/realtime/overview" target="_blank" rel="noopener" class="ov-rt-link">Open GA4 Realtime &rarr;</a>
+              <div id="ovRtMap" style="width:100%;height:340px;border-radius:12px;overflow:hidden;border:1px solid rgba(0,0,0,0.08);background:#f1f5f9;"></div>
+              <a href="https://analytics.google.com/analytics/web/#/p/realtime/overview" target="_blank" rel="noopener" class="ov-rt-link" style="margin-top:14px;">Open GA4 Realtime &rarr;</a>
             </div>
           </div>
         </div>
@@ -1093,6 +1087,7 @@
           <button class="filter-btn active" data-order="all" onclick="setOrderFilter('all', this)">Alle</button>
           <button class="filter-btn" data-order="paid" onclick="setOrderFilter('paid', this)">Betaald</button>
           <button class="filter-btn" data-order="failed" onclick="setOrderFilter('failed', this)">Mislukt/afgebroken</button>
+          <button class="filter-btn" data-order="archived" onclick="setOrderFilter('archived', this)">Gearchiveerd</button>
           <button class="action-btn" onclick="loadOrders()" style="margin-left:auto;">
             <svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-6.2-8.55"/><polyline points="21 3 21 9 15 9"/></svg>
             Vernieuwen
@@ -1108,10 +1103,11 @@
                 <th>Bedrag</th>
                 <th>Status</th>
                 <th>Payment ID</th>
+                <th style="width:80px;">Acties</th>
               </tr>
             </thead>
             <tbody id="ordersBody">
-              <tr><td colspan="6" style="text-align:center;padding:40px;color:var(--text-muted);">Laden...</td></tr>
+              <tr><td colspan="7" style="text-align:center;padding:40px;color:var(--text-muted);">Laden...</td></tr>
             </tbody>
           </table>
         </div>
@@ -1144,6 +1140,10 @@
               Vernieuwen
             </button>
           </div>
+        </div>
+        <div style="display:flex;gap:8px;margin-bottom:16px;">
+          <button class="filter-btn active" onclick="setInvFilter('active', this)">Actief</button>
+          <button class="filter-btn" onclick="setInvFilter('archived', this)">Gearchiveerd</button>
         </div>
         <div style="overflow-x:auto;">
           <table class="orders-table" id="invoicesTable">
@@ -1462,19 +1462,21 @@ async function loadOverview() {
   const monthIso = monthStart.toISOString();
 
   try {
-    // Revenue this month (paid orders)
+    // Revenue this month (paid orders, excluding archived)
     const { data: paidOrders } = await sb.from('orders')
       .select('amount, created_at, plan, bedrijf, status')
       .eq('status', 'paid')
+      .is('archived_at', null)
       .gte('created_at', monthIso);
     const revMonth = (paidOrders || []).reduce((sum, o) => sum + (Number(o.amount) || 0), 0);
     document.getElementById('ovRevenueMonth').textContent = ovFormatEur(revMonth);
     document.getElementById('ovRevenueMonthSub').textContent = (paidOrders || []).length + ' betaalde order' + ((paidOrders || []).length === 1 ? '' : 's');
 
-    // Open orders (pending)
+    // Open orders (pending, excluding archived)
     const { count: openCount } = await sb.from('orders')
       .select('*', { count: 'exact', head: true })
-      .eq('status', 'pending');
+      .eq('status', 'pending')
+      .is('archived_at', null);
     document.getElementById('ovOpenOrders').textContent = openCount || 0;
 
     // Active clients
@@ -1486,9 +1488,10 @@ async function loadOverview() {
       .is('processed_at', null);
     document.getElementById('ovNewLeads').textContent = leadCount || 0;
 
-    // Latest 5 orders (any status)
+    // Latest 5 orders (any status, excluding archived)
     const { data: latestOrders } = await sb.from('orders')
       .select('payment_id, created_at, plan, bedrijf, amount, status')
+      .is('archived_at', null)
       .order('created_at', { ascending: false })
       .limit(5);
     const ovLO = document.getElementById('ovLatestOrders');
@@ -1574,8 +1577,7 @@ async function loadOverview() {
         + '</div>').join('');
     }
 
-    // GA4 Realtime placeholder
-    document.getElementById('ovRtUsers').textContent = '\u2014';
+    // GA4 Realtime widget refreshes itself via startGa4Widget interval — do not overwrite
   } catch (e) {
     console.error('loadOverview error:', e);
   }
@@ -1641,19 +1643,36 @@ const LEDGER = {
 
 async function loadInvoicesCount() {
   try {
-    const { count } = await sb.from('invoices').select('*', { count: 'exact', head: true });
+    const { count } = await sb.from('invoices').select('*', { count: 'exact', head: true }).is('archived_at', null);
     document.getElementById('facturenBadge').textContent = count || 0;
   } catch(e) {}
 }
 
+let invoicesData = [];
+let currentInvFilter = 'active'; // 'active' | 'archived'
 async function loadInvoicesAdmin() {
   const tbody = document.getElementById('invoicesAdminBody');
   tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:40px;color:var(--text-muted);">Laden...</td></tr>';
   const { data, error } = await sb.from('invoices').select('*').order('issued_at', { ascending: false });
   if (error) { tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:40px;color:var(--danger);">Kon facturen niet laden.</td></tr>'; return; }
-  if (!data.length) { tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:40px;color:var(--text-muted);">Nog geen facturen.</td></tr>'; return; }
+  invoicesData = data || [];
+  renderInvoicesAdmin();
+  loadInvoicesCount();
+}
+function setInvFilter(f, btn) {
+  currentInvFilter = f;
+  btn.parentElement.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderInvoicesAdmin();
+}
+function renderInvoicesAdmin() {
+  const tbody = document.getElementById('invoicesAdminBody');
+  const filtered = currentInvFilter === 'archived'
+    ? invoicesData.filter(i => i.archived_at)
+    : invoicesData.filter(i => !i.archived_at);
+  if (!filtered.length) { tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:40px;color:var(--text-muted);">${currentInvFilter==='archived'?'Geen gearchiveerde':'Nog geen'} facturen.</td></tr>`; return; }
   const esc = (s) => String(s ?? '').replace(/[<>&"]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c]));
-  tbody.innerHTML = data.map(inv => {
+  tbody.innerHTML = filtered.map(inv => {
     const d = new Date(inv.issued_at).toLocaleDateString('nl-NL', { day: '2-digit', month: '2-digit', year: 'numeric' });
     const statusColor = inv.status === 'paid' ? '#10b981' : '#0D9488';
     const regime = inv.btw_regime === 'standard' ? 'BTW 21%' : inv.btw_regime === 'reverse_charge' ? 'Verlegd' : 'Vrijgesteld';
@@ -1666,10 +1685,34 @@ async function loadInvoicesAdmin() {
         <td><strong>&euro;${Number(inv.total).toLocaleString('nl-NL', {minimumFractionDigits:2})}</strong></td>
         <td><span style="font-size:0.78rem;color:var(--text-muted);">${regime}</span></td>
         <td><span style="color:${statusColor};font-weight:600;font-size:0.82rem;text-transform:capitalize;">${esc(inv.status)}</span></td>
-        <td><a href="factuur.html?nr=${encodeURIComponent(inv.invoice_number)}" target="_blank" class="action-btn" style="font-size:0.76rem;">Bekijk / PDF</a></td>
+        <td style="white-space:nowrap;">
+          <a href="factuur.html?nr=${encodeURIComponent(inv.invoice_number)}" target="_blank" class="action-btn" style="font-size:0.76rem;margin-right:6px;">Bekijk / PDF</a>
+          ${inv.archived_at
+            ? `<button onclick="restoreInvoice('${esc(inv.invoice_number)}')" title="Herstellen"
+                style="background:rgba(20,184,166,0.1);color:#0d9488;border:1px solid rgba(20,184,166,0.3);border-radius:6px;padding:4px 10px;font-size:0.74rem;font-weight:600;cursor:pointer;">Herstel</button>`
+            : `<button onclick="archiveInvoice('${esc(inv.invoice_number)}')" title="Archiveer (blijft naslaanbaar)"
+                style="background:rgba(15,23,42,0.06);color:#475569;border:1px solid rgba(15,23,42,0.15);border-radius:6px;padding:4px 10px;font-size:0.74rem;font-weight:600;cursor:pointer;">Archiveer</button>`
+          }
+        </td>
       </tr>`;
   }).join('');
+}
+
+async function archiveInvoice(invoiceNumber) {
+  if (!confirm(`Factuur ${invoiceNumber} archiveren?\n\nBlijft naslaanbaar onder filter "Gearchiveerd".`)) return;
+  const { error } = await sb.from('invoices').update({ archived_at: new Date().toISOString() }).eq('invoice_number', invoiceNumber);
+  if (error) { alert('Archiveren mislukt: ' + error.message); return; }
+  loadInvoicesAdmin();
   loadInvoicesCount();
+  loadOverview();
+}
+async function restoreInvoice(invoiceNumber) {
+  if (!confirm(`Factuur ${invoiceNumber} herstellen?`)) return;
+  const { error } = await sb.from('invoices').update({ archived_at: null }).eq('invoice_number', invoiceNumber);
+  if (error) { alert('Herstellen mislukt: ' + error.message); return; }
+  loadInvoicesAdmin();
+  loadInvoicesCount();
+  loadOverview();
 }
 
 function updateInvTotal() {
@@ -2209,19 +2252,31 @@ const GA4_COUNTRY_FALLBACK = {
 
 let ga4Map = null;
 let ga4MapMarkers = [];
-function ga4InitMap() {
-  if (ga4Map || typeof L === 'undefined') return;
+function ga4WaitForLeaflet(maxWaitMs = 5000) {
+  return new Promise((resolve, reject) => {
+    const start = Date.now();
+    (function check() {
+      if (typeof L !== 'undefined') return resolve();
+      if (Date.now() - start > maxWaitMs) return reject(new Error('Leaflet niet geladen'));
+      setTimeout(check, 80);
+    })();
+  });
+}
+async function ga4InitMap() {
+  if (ga4Map) return ga4Map;
   const el = document.getElementById('ovRtMap');
-  if (!el) return;
+  if (!el) return null;
+  await ga4WaitForLeaflet();
   ga4Map = L.map(el, {
-    zoomControl: false, attributionControl: false, scrollWheelZoom: false,
+    zoomControl: true, attributionControl: false, scrollWheelZoom: false,
     dragging: true, keyboard: false, doubleClickZoom: false,
-  }).setView([51.0, 4.7], 6); // Centered on BENELUX
+  }).setView([51.0, 4.7], 6);
   L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
     maxZoom: 12, minZoom: 4,
-    attribution: '&copy; OSM &copy; CARTO',
   }).addTo(ga4Map);
   L.control.attribution({ prefix: false, position: 'bottomright' }).addAttribution('OSM &copy; CARTO').addTo(ga4Map);
+  setTimeout(() => ga4Map && ga4Map.invalidateSize(), 50);
+  return ga4Map;
 }
 async function ga4RenderMarkers(byCity, byCountry) {
   if (!ga4Map) return;
@@ -2294,70 +2349,37 @@ async function ga4RenderMarkers(byCity, byCountry) {
 }
 
 async function loadGa4() {
-  const el = document.getElementById('ga4Widget');
   const ovUsers = document.getElementById('ovRtUsers');
   const ovBadge = document.getElementById('ovRtBadge');
   const ovMap = document.getElementById('ovRtMap');
-  const ovCountries = document.getElementById('ovRtCountries');
-  const ovPages = document.getElementById('ovRtPages');
   const esc = (s) => String(s ?? '').replace(/[<>&]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]));
   try {
     const { data, error } = await sb.functions.invoke('ga4-realtime', { body: {} });
     if (error || data?.error) {
       const msg = data?.error || error?.message || 'config';
-      if (el) el.innerHTML = `<div style="font-size:0.78rem;color:var(--text-muted);">GA4 niet beschikbaar (${esc(msg)})</div>`;
       if (ovUsers) ovUsers.textContent = '\u2014';
-      if (ovBadge) { ovBadge.textContent = 'GA4 fout'; ovBadge.className = 'ov-badge ov-pending'; }
-      if (ovMap) { if (ga4Map) { ga4Map.remove(); ga4Map = null; ga4MapMarkers = []; } ovMap.innerHTML = `<div style="font-size:0.82rem;color:#fca5a5;padding:10px;">Fout: ${esc(msg)}</div>`; }
-      if (ovCountries) ovCountries.innerHTML = '';
-      if (ovPages) ovPages.innerHTML = '';
+      if (ovBadge) { ovBadge.textContent = 'GA4 fout'; ovBadge.className = 'ov-badge ov-pending'; ovBadge.style.cssText = ''; }
+      if (ovMap) { if (ga4Map) { ga4Map.remove(); ga4Map = null; ga4MapMarkers = []; } ovMap.innerHTML = `<div style="font-size:0.82rem;color:#dc2626;padding:14px;">Fout: ${esc(msg)}</div>`; }
       return;
     }
-    const top = (data.byPage || []).slice(0, 3);
-    const countries = (data.byCountry || []).slice(0, 3);
-    // Sidebar widget
-    if (el) {
-      el.innerHTML = `
-        <div style="display:flex;align-items:center;gap:14px;">
-          <div style="width:42px;height:42px;border-radius:50%;background:rgba(20,184,166,0.12);display:flex;align-items:center;justify-content:center;">
-            <span style="width:10px;height:10px;border-radius:50%;background:#14b8a6;animation:ga4pulse 1.6s infinite;"></span>
-          </div>
-          <div>
-            <div style="font-family:'Sora',sans-serif;font-size:1.4rem;font-weight:800;color:#fff;line-height:1;">${data.activeUsers}</div>
-            <div style="font-size:0.74rem;color:var(--text-muted);letter-spacing:0.06em;text-transform:uppercase;margin-top:2px;">live bezoekers</div>
-          </div>
-          <div style="margin-left:auto;font-size:0.76rem;color:var(--text-muted);text-align:right;line-height:1.5;">
-            ${top.length ? top.map(t => `${esc(t.key)} <strong style="color:#fff;">${t.value}</strong>`).join('<br/>') : 'Geen actieve pagina&apos;s'}
-          </div>
-        </div>
-        <style>@keyframes ga4pulse { 0%,100%{opacity:1;transform:scale(1);} 50%{opacity:0.5;transform:scale(1.4);} }</style>
-      `;
-    }
-    // Overview card
     if (ovUsers) ovUsers.textContent = data.activeUsers;
     if (ovBadge) {
       ovBadge.innerHTML = '<span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#10b981;margin-right:6px;animation:ga4pulse 1.6s infinite;vertical-align:middle;"></span>live';
       ovBadge.className = 'ov-badge';
       ovBadge.style.cssText = 'background:rgba(16,185,129,0.12);color:#059669;border:1px solid rgba(16,185,129,0.3);';
     }
-    ga4InitMap();
+    await ga4InitMap();
     ga4RenderMarkers(data.byCity, data.byCountry);
-    if (ovCountries) {
-      ovCountries.innerHTML = countries.length
-        ? countries.map(c => `<div style="display:flex;justify-content:space-between;align-items:center;padding:3px 0;"><span><span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#14b8a6;margin-right:8px;"></span>${esc(c.key)}</span><strong style="color:var(--text);font-variant-numeric:tabular-nums;">${c.value}</strong></div>`).join('')
-        : '<div style="opacity:0.6;">Geen landen-data</div>';
-    }
-    if (ovPages) {
-      ovPages.innerHTML = top.length
-        ? `<div style="font-weight:700;color:var(--text);font-size:0.74rem;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:6px;">Top pagina's</div>` +
-          top.map(p => `<div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(0,0,0,0.05);"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:80%;">${esc(p.key)}</span><strong style="color:var(--text);font-variant-numeric:tabular-nums;">${p.value}</strong></div>`).join('')
-        : '<div style="opacity:0.6;">Geen actieve pagina&apos;s</div>';
-    }
   } catch (e) {
-    if (el) el.innerHTML = `<div style="font-size:0.78rem;color:var(--text-muted);">GA4 fout</div>`;
-    if (ovBadge) { ovBadge.textContent = 'GA4 fout'; ovBadge.className = 'ov-badge ov-pending'; }
-    if (ovMap) { if (ga4Map) { ga4Map.remove(); ga4Map = null; ga4MapMarkers = []; } ovMap.innerHTML = `<div style="color:#fca5a5;font-size:0.82rem;padding:10px;">${esc(e.message || e)}</div>`; }
+    if (ovBadge) { ovBadge.textContent = 'GA4 fout'; ovBadge.className = 'ov-badge ov-pending'; ovBadge.style.cssText = ''; }
+    if (ovMap) { if (ga4Map) { ga4Map.remove(); ga4Map = null; ga4MapMarkers = []; } ovMap.innerHTML = `<div style="color:#dc2626;font-size:0.82rem;padding:14px;">${esc(e.message || e)}</div>`; }
   }
+}
+// Pulse animation (was previously injected with sidebar widget)
+if (!document.getElementById('ga4PulseStyle')) {
+  const s = document.createElement('style'); s.id = 'ga4PulseStyle';
+  s.textContent = '@keyframes ga4pulse { 0%,100%{opacity:1;transform:scale(1);} 50%{opacity:0.5;transform:scale(1.4);} }';
+  document.head.appendChild(s);
 }
 
 // ── INBOX (global messages across all clients) ──
@@ -2463,14 +2485,15 @@ async function loadOrdersCount() {
   try {
     const { count } = await sb.from('orders')
       .select('*', { count: 'exact', head: true })
-      .eq('status', 'paid');
+      .eq('status', 'paid')
+      .is('archived_at', null);
     document.getElementById('ordersBadge').textContent = count || 0;
   } catch(e) { /* silent */ }
 }
 
 async function loadOrders() {
   const body = document.getElementById('ordersBody');
-  body.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:40px;color:var(--text-muted);">Laden...</td></tr>';
+  body.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:40px;color:var(--text-muted);">Laden...</td></tr>';
 
   const { data, error } = await sb.from('orders')
     .select('*')
@@ -2478,7 +2501,7 @@ async function loadOrders() {
     .limit(500);
 
   if (error) {
-    body.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:40px;color:var(--danger);">Fout: ${esc(error.message)}</td></tr>`;
+    body.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:40px;color:var(--danger);">Fout: ${esc(error.message)}</td></tr>`;
     return;
   }
 
@@ -2486,6 +2509,29 @@ async function loadOrders() {
   renderOrderKpis();
   renderOrders();
   loadOrdersCount();
+}
+
+async function archiveOrder(orderId, label) {
+  if (!confirm(`Order archiveren: ${label}?\n\nDe order verdwijnt uit het overzicht maar blijft bewaard. Te zien onder filter "Gearchiveerd".`)) return;
+  const { error } = await sb.from('orders').update({ archived_at: new Date().toISOString() }).eq('id', orderId);
+  if (error) { alert('Archiveren mislukt: ' + error.message); return; }
+  const idx = ordersData.findIndex(o => o.id === orderId);
+  if (idx >= 0) ordersData[idx].archived_at = new Date().toISOString();
+  renderOrderKpis();
+  renderOrders();
+  loadOrdersCount();
+  loadOverview();
+}
+async function restoreOrder(orderId, label) {
+  if (!confirm(`Order herstellen: ${label}?`)) return;
+  const { error } = await sb.from('orders').update({ archived_at: null }).eq('id', orderId);
+  if (error) { alert('Herstellen mislukt: ' + error.message); return; }
+  const idx = ordersData.findIndex(o => o.id === orderId);
+  if (idx >= 0) ordersData[idx].archived_at = null;
+  renderOrderKpis();
+  renderOrders();
+  loadOrdersCount();
+  loadOverview();
 }
 
 function setOrderFilter(filter, btn) {
@@ -2496,7 +2542,8 @@ function setOrderFilter(filter, btn) {
 }
 
 function renderOrderKpis() {
-  const paid = ordersData.filter(o => o.status === 'paid');
+  const active = ordersData.filter(o => !o.archived_at);
+  const paid = active.filter(o => o.status === 'paid');
   const revenue = paid.reduce((sum, o) => sum + (parseFloat(o.amount) || 0), 0);
   const now = new Date();
   const thisMonth = paid.filter(o => {
@@ -2505,7 +2552,7 @@ function renderOrderKpis() {
     return d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth();
   });
   const monthRev = thisMonth.reduce((s,o) => s + (parseFloat(o.amount)||0), 0);
-  const failed = ordersData.filter(o => ['failed','canceled','expired'].includes(o.status)).length;
+  const failed = active.filter(o => ['failed','canceled','expired'].includes(o.status)).length;
 
   const fmtEur = (n) => new Intl.NumberFormat('nl-NL', { style:'currency', currency:'EUR', minimumFractionDigits: 0 }).format(n);
 
@@ -2519,19 +2566,25 @@ function renderOrderKpis() {
 
 function renderOrders() {
   const body = document.getElementById('ordersBody');
-  let filtered = ordersData;
-  if (currentOrderFilter === 'paid') filtered = filtered.filter(o => o.status === 'paid');
-  else if (currentOrderFilter === 'failed') filtered = filtered.filter(o => ['failed','canceled','expired'].includes(o.status));
+  let filtered;
+  if (currentOrderFilter === 'archived') filtered = ordersData.filter(o => o.archived_at);
+  else {
+    filtered = ordersData.filter(o => !o.archived_at);
+    if (currentOrderFilter === 'paid') filtered = filtered.filter(o => o.status === 'paid');
+    else if (currentOrderFilter === 'failed') filtered = filtered.filter(o => ['failed','canceled','expired'].includes(o.status));
+  }
 
   if (filtered.length === 0) {
-    body.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:40px;color:var(--text-muted);">Geen orders.</td></tr>';
+    body.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:40px;color:var(--text-muted);">Geen orders.</td></tr>';
     return;
   }
 
   const fmtDate = (d) => d ? new Date(d).toLocaleString('nl-NL', { day:'2-digit', month:'short', year:'2-digit', hour:'2-digit', minute:'2-digit' }) : '—';
   const fmtEur = (n) => new Intl.NumberFormat('nl-NL', { style:'currency', currency:'EUR' }).format(n || 0);
 
-  body.innerHTML = filtered.map(o => `
+  body.innerHTML = filtered.map(o => {
+    const label = `${o.bedrijf || o.naam || o.email || o.id} (${fmtEur(o.amount)})`.replace(/'/g, "\\'");
+    return `
     <tr ${o.user_id ? `style="cursor:pointer;" onclick="openClientFromInbox('${esc(o.user_id)}')"` : ''}>
       <td>${esc(fmtDate(o.paid_at || o.created_at))}</td>
       <td>
@@ -2542,8 +2595,18 @@ function renderOrders() {
       <td style="font-variant-numeric:tabular-nums;">${fmtEur(o.amount)}</td>
       <td><span class="status-pill ${esc(o.status||'pending')}">${esc(o.status||'pending')}</span></td>
       <td style="font-family:monospace;font-size:0.75rem;color:var(--text-dim);">${esc(o.payment_id || '')}</td>
+      <td onclick="event.stopPropagation()">
+        ${o.archived_at
+          ? `<button onclick="restoreOrder('${esc(o.id)}','${esc(label)}')" title="Terugplaatsen in actief overzicht"
+              style="background:rgba(20,184,166,0.1);color:#0d9488;border:1px solid rgba(20,184,166,0.3);border-radius:6px;padding:4px 10px;font-size:0.74rem;font-weight:600;cursor:pointer;">Herstel</button>`
+          : `<button onclick="archiveOrder('${esc(o.id)}','${esc(label)}')" title="Archiveer (blijft naslaanbaar)"
+              style="background:rgba(15,23,42,0.06);color:#475569;border:1px solid rgba(15,23,42,0.15);border-radius:6px;padding:4px 10px;font-size:0.74rem;font-weight:600;cursor:pointer;transition:all .15s;"
+              onmouseover="this.style.background='rgba(15,23,42,0.12)'"
+              onmouseout="this.style.background='rgba(15,23,42,0.06)'">Archiveer</button>`
+        }
+      </td>
     </tr>
-  `).join('');
+  `;}).join('');
 }
 
 async function loadControls() {
