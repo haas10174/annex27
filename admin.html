@@ -880,6 +880,7 @@
     <div class="sidebar-header">
       <div class="brand">annex<span>27</span></div>
       <span class="role-badge">Lead Auditor</span>
+      <div id="ga4Widget" style="margin-top:14px;padding:12px 14px;background:rgba(15,23,42,0.5);border:1px solid rgba(255,255,255,0.06);border-radius:10px;"></div>
     </div>
     <div class="view-switch">
       <button class="view-btn active" data-view="overview">Overzicht</button>
@@ -1227,22 +1228,44 @@
       </div>
     </div>
 
-    <!-- View: Mail (inbound info@annex27.nl) -->
+    <!-- View: Mail (inbound info@annex27.nl via Hostnet IMAP) -->
     <div class="view" id="viewMail">
       <div class="container-card" style="padding:24px;">
-        <div class="section-title-row" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+        <div class="section-title-row" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px;">
           <div>
             <h1 style="font-family:'Sora',sans-serif;font-size:1.3rem;font-weight:800;margin:0 0 4px;">Mail <span style="font-size:0.72rem;font-weight:600;color:var(--text-muted);letter-spacing:0.1em;text-transform:uppercase;">&middot; info@annex27.nl</span></h1>
-            <p style="color:var(--text-muted);font-size:0.88rem;margin:0;" id="mailSubtitle">Inbound mail van info@annex27.nl. Zie onderaan om de koppeling te activeren.</p>
+            <p style="color:var(--text-muted);font-size:0.88rem;margin:0;" id="mailSubtitle">Hostnet inbox &mdash; opgehaald via IMAP, beantwoord via SMTP.</p>
           </div>
-          <button class="action-btn" onclick="loadMail()">
-            <svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-6.2-8.55"/><polyline points="21 3 21 9 15 9"/></svg>
-            Vernieuwen
-          </button>
+          <div style="display:flex;gap:8px;">
+            <button class="action-btn" onclick="pollHostnetMail()" id="mailPollBtn">
+              <svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-6.2-8.55"/><polyline points="21 3 21 9 15 9"/></svg>
+              Inbox ophalen
+            </button>
+            <button class="action-btn" onclick="openComposeMail()">
+              <svg viewBox="0 0 24 24"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4z"/></svg>
+              Nieuwe mail
+            </button>
+          </div>
         </div>
         <div id="mailList" style="display:flex;flex-direction:column;gap:10px;">
           <div class="empty-state">Laden...</div>
         </div>
+      </div>
+    </div>
+
+    <!-- Mail compose modal -->
+    <div class="inv-modal" id="mailComposeModal" onclick="if(event.target===this)this.classList.remove('open')" style="display:none;position:fixed;inset:0;z-index:9999;align-items:center;justify-content:center;background:rgba(12,15,26,0.72);backdrop-filter:blur(6px);padding:24px;">
+      <div style="background:#fff;color:#0F172A;border-radius:16px;padding:32px;max-width:640px;width:100%;max-height:90vh;overflow-y:auto;position:relative;">
+        <button onclick="document.getElementById('mailComposeModal').classList.remove('open')" style="position:absolute;top:12px;right:12px;background:transparent;border:none;font-size:1.4rem;color:#64748b;cursor:pointer;">&times;</button>
+        <h3 style="font-family:'Sora',sans-serif;font-size:1.3rem;font-weight:800;margin-bottom:16px;" id="mailComposeTitle">Nieuwe mail</h3>
+        <form onsubmit="sendHostnetMail(event)" style="display:flex;flex-direction:column;gap:10px;">
+          <input type="hidden" id="mailReplyTo" value="" />
+          <div><label style="font-size:0.78rem;font-weight:600;">Aan</label><input type="email" id="mailTo" required style="width:100%;padding:10px 12px;border:1px solid #E5E5E5;border-radius:8px;font-family:inherit;" /></div>
+          <div><label style="font-size:0.78rem;font-weight:600;">Onderwerp</label><input type="text" id="mailSubject" required maxlength="500" style="width:100%;padding:10px 12px;border:1px solid #E5E5E5;border-radius:8px;font-family:inherit;" /></div>
+          <div><label style="font-size:0.78rem;font-weight:600;">Bericht</label><textarea id="mailText" required rows="10" style="width:100%;padding:10px 12px;border:1px solid #E5E5E5;border-radius:8px;font-family:inherit;resize:vertical;"></textarea></div>
+          <div id="mailSendError" style="display:none;padding:10px 12px;background:#FEF2F2;border:1px solid #FECACA;border-radius:8px;color:#DC2626;font-size:0.82rem;"></div>
+          <button type="submit" id="mailSendBtn" style="margin-top:8px;padding:12px;background:#0D9488;color:#fff;border:none;border-radius:10px;font-weight:700;cursor:pointer;">Verstuur</button>
+        </form>
       </div>
     </div>
 
@@ -1637,6 +1660,7 @@ async function loadInvoicesAdmin() {
       </tr>`;
   }).join('');
   loadInvoicesCount();
+  startGa4Widget();
 }
 
 function updateInvTotal() {
@@ -1986,6 +2010,116 @@ function renderMail() {
 async function openMail(id) {
   await sb.from('inbound_mail').update({ is_read: true }).eq('id', id);
   loadMail();
+}
+
+async function pollHostnetMail() {
+  const btn = document.getElementById('mailPollBtn');
+  const orig = btn.innerHTML;
+  btn.disabled = true;
+  btn.innerHTML = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg> Bezig...';
+  try {
+    const { data, error } = await sb.functions.invoke('mail-poll', { body: {} });
+    if (error) {
+      alert('Mail ophalen mislukt: ' + (error.message || error));
+    } else if (data?.error) {
+      alert('Mail ophalen mislukt: ' + data.error);
+    } else {
+      console.log('Mail-poll result:', data);
+      loadMail();
+    }
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = orig;
+  }
+}
+
+function openComposeMail(prefill) {
+  const m = document.getElementById('mailComposeModal');
+  document.getElementById('mailReplyTo').value = prefill?.in_reply_to || '';
+  document.getElementById('mailTo').value = prefill?.to || '';
+  document.getElementById('mailSubject').value = prefill?.subject || '';
+  document.getElementById('mailText').value = prefill?.text || '';
+  document.getElementById('mailComposeTitle').textContent = prefill?.in_reply_to ? 'Beantwoord mail' : 'Nieuwe mail';
+  document.getElementById('mailSendError').style.display = 'none';
+  m.classList.add('open');
+  m.style.display = 'flex';
+}
+
+function replyToMail(id) {
+  const m = mailData.find(x => x.id === id);
+  if (!m) return;
+  const subject = m.subject?.startsWith('Re:') ? m.subject : 'Re: ' + (m.subject || '');
+  const quoted = (m.body_text || '').split('\n').map(l => '> ' + l).join('\n');
+  openComposeMail({
+    to: m.from_email,
+    subject,
+    text: '\n\n--- Origineel bericht ---\nVan: ' + (m.from_name || m.from_email) + '\nDatum: ' + new Date(m.received_at).toLocaleString('nl-NL') + '\n\n' + quoted,
+    in_reply_to: m.message_id,
+  });
+}
+
+async function sendHostnetMail(e) {
+  e.preventDefault();
+  const btn = document.getElementById('mailSendBtn');
+  const errEl = document.getElementById('mailSendError');
+  errEl.style.display = 'none';
+  btn.disabled = true; btn.textContent = 'Versturen...';
+  const payload = {
+    to: document.getElementById('mailTo').value.trim(),
+    subject: document.getElementById('mailSubject').value.trim(),
+    text: document.getElementById('mailText').value.trim(),
+    in_reply_to: document.getElementById('mailReplyTo').value || null,
+  };
+  const { data, error } = await sb.functions.invoke('mail-send', { body: payload });
+  btn.disabled = false; btn.textContent = 'Verstuur';
+  if (error || data?.error) {
+    errEl.textContent = data?.error || error?.message || 'Onbekende fout';
+    errEl.style.display = 'block';
+    return;
+  }
+  document.getElementById('mailComposeModal').classList.remove('open');
+  document.getElementById('mailComposeModal').style.display = 'none';
+  e.target.reset();
+}
+
+// ── GA4 REALTIME WIDGET ──
+let ga4Timer = null;
+async function startGa4Widget() {
+  const el = document.getElementById('ga4Widget');
+  if (!el) return;
+  await loadGa4();
+  if (ga4Timer) clearInterval(ga4Timer);
+  ga4Timer = setInterval(loadGa4, 60000);
+}
+async function loadGa4() {
+  const el = document.getElementById('ga4Widget');
+  if (!el) return;
+  try {
+    const { data, error } = await sb.functions.invoke('ga4-realtime', { body: {} });
+    if (error || data?.error) {
+      el.innerHTML = `<div style="font-size:0.78rem;color:var(--text-muted);">GA4 niet beschikbaar (${data?.error || error?.message || 'config'})</div>`;
+      return;
+    }
+    const esc = (s) => String(s ?? '').replace(/[<>&]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]));
+    const top = (data.byPage || []).slice(0, 3);
+    el.innerHTML = `
+      <div style="display:flex;align-items:center;gap:14px;">
+        <div style="width:42px;height:42px;border-radius:50%;background:rgba(20,184,166,0.12);display:flex;align-items:center;justify-content:center;">
+          <span style="width:10px;height:10px;border-radius:50%;background:#14b8a6;animation:ga4pulse 1.6s infinite;"></span>
+        </div>
+        <div>
+          <div style="font-family:'Sora',sans-serif;font-size:1.4rem;font-weight:800;color:#fff;line-height:1;">${data.activeUsers}</div>
+          <div style="font-size:0.74rem;color:var(--text-muted);letter-spacing:0.06em;text-transform:uppercase;margin-top:2px;">live bezoekers</div>
+        </div>
+        <div style="margin-left:auto;font-size:0.76rem;color:var(--text-muted);text-align:right;line-height:1.5;">
+          ${top.length ? top.map(t => `${esc(t.key)} <strong style="color:#fff;">${t.value}</strong>`).join('<br/>') : 'Geen actieve pagina&apos;s'}
+        </div>
+      </div>
+      <style>@keyframes ga4pulse { 0%,100%{opacity:1;transform:scale(1);} 50%{opacity:0.5;transform:scale(1.4);} }</style>
+    `;
+  } catch (e) {
+    el.innerHTML = `<div style="font-size:0.78rem;color:var(--text-muted);">GA4 fout</div>`;
+  }
 }
 
 // ── INBOX (global messages across all clients) ──
