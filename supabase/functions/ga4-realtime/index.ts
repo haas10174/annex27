@@ -68,18 +68,26 @@ async function getAccessToken(): Promise<string> {
 
 async function realtime(propertyId: string, accessToken: string) {
   const url = `https://analyticsdata.googleapis.com/v1beta/properties/${propertyId}:runRealtimeReport`;
-  const body = {
+  // Two parallel reports: one with city-level breakdown, one with pages
+  const cityBody = {
     metrics: [{ name: 'activeUsers' }],
-    dimensions: [{ name: 'country' }, { name: 'unifiedScreenName' }],
+    dimensions: [{ name: 'country' }, { name: 'city' }],
+    limit: 50,
+  };
+  const pageBody = {
+    metrics: [{ name: 'activeUsers' }],
+    dimensions: [{ name: 'unifiedScreenName' }],
     limit: 10,
   };
-  const r = await fetch(url, {
+  const post = (b: unknown) => fetch(url, {
     method: 'POST',
     headers: { 'Authorization': `Bearer ${accessToken}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify(body),
+    body: JSON.stringify(b),
   });
-  if (!r.ok) throw new Error('GA4 API error: ' + (await r.text()));
-  return r.json();
+  const [cityResp, pageResp] = await Promise.all([post(cityBody), post(pageBody)]);
+  if (!cityResp.ok) throw new Error('GA4 city API error: ' + (await cityResp.text()));
+  if (!pageResp.ok) throw new Error('GA4 page API error: ' + (await pageResp.text()));
+  return { city: await cityResp.json(), page: await pageResp.json() };
 }
 
 serve(async (req) => {
@@ -92,22 +100,31 @@ serve(async (req) => {
     if (!propertyId) return new Response(JSON.stringify({ error: 'GA4_PROPERTY_ID not set' }), { status: 500, headers });
 
     const token = await getAccessToken();
-    const data = await realtime(propertyId, token);
+    const { city: cityData, page: pageData } = await realtime(propertyId, token);
 
-    const activeUsers = parseInt(data.rows?.[0]?.metricValues?.[0]?.value || '0', 10);
     const byCountry: Record<string, number> = {};
-    const byPage: Record<string, number> = {};
-    (data.rows || []).forEach((row: any) => {
+    const byCity: { country: string; city: string; value: number }[] = [];
+    let totalUsers = 0;
+    (cityData.rows || []).forEach((row: any) => {
       const country = row.dimensionValues?.[0]?.value || 'Unknown';
-      const page = row.dimensionValues?.[1]?.value || '/';
+      const city = row.dimensionValues?.[1]?.value || '(unknown)';
       const v = parseInt(row.metricValues?.[0]?.value || '0', 10);
       byCountry[country] = (byCountry[country] || 0) + v;
+      byCity.push({ country, city, value: v });
+      totalUsers += v;
+    });
+
+    const byPage: Record<string, number> = {};
+    (pageData.rows || []).forEach((row: any) => {
+      const page = row.dimensionValues?.[0]?.value || '/';
+      const v = parseInt(row.metricValues?.[0]?.value || '0', 10);
       byPage[page] = (byPage[page] || 0) + v;
     });
 
     return new Response(JSON.stringify({
-      activeUsers,
+      activeUsers: totalUsers,
       byCountry: Object.entries(byCountry).map(([k, v]) => ({ key: k, value: v })).sort((a, b) => b.value - a.value),
+      byCity: byCity.sort((a, b) => b.value - a.value),
       byPage: Object.entries(byPage).map(([k, v]) => ({ key: k, value: v })).sort((a, b) => b.value - a.value),
       ts: new Date().toISOString(),
     }), { headers });
