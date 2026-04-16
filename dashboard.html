@@ -996,43 +996,61 @@
       align-items: center;
       gap: 20px;
       padding: 22px 24px;
-      background: var(--surface);
-      border: 1px solid var(--border);
+      background: linear-gradient(180deg, #FFFFFF 0%, #FAFCFB 100%);
+      border: 1px solid #E7EBEA;
       border-radius: var(--radius-lg);
       cursor: pointer;
-      transition: all 0.25s;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
       text-decoration: none;
       color: inherit;
+      position: relative;
+      box-shadow: 0 1px 2px rgba(15,23,42,0.03), 0 4px 12px rgba(15,23,42,0.03);
+    }
+    .ga-module::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 3px;
+      background: transparent;
+      border-radius: var(--radius-lg) 0 0 var(--radius-lg);
+      transition: background .25s;
     }
     .ga-module:hover {
-      border-color: var(--accent);
-      box-shadow: 0 4px 16px rgba(13,148,136,0.08);
-      transform: translateY(-1px);
+      border-color: rgba(20,184,166,0.4);
+      box-shadow: 0 1px 2px rgba(13,148,136,0.06), 0 12px 32px rgba(13,148,136,0.1);
+      transform: translateY(-2px);
     }
+    .ga-module:hover::before { background: var(--accent); }
     .ga-module-num {
-      width: 48px; height: 48px;
-      border-radius: 50%;
-      background: var(--bg-alt, #F8FAFC);
-      border: 1px solid var(--border);
+      width: 52px; height: 52px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #F1FDFA 0%, #E6FAF5 100%);
+      border: 1px solid rgba(20,184,166,0.22);
       display: flex;
       align-items: center;
       justify-content: center;
       font-family: 'Sora', sans-serif;
-      font-weight: 700;
-      font-size: 0.85rem;
-      color: var(--text-muted);
+      font-weight: 800;
+      font-size: 0.88rem;
+      color: #0D9488;
       flex-shrink: 0;
       letter-spacing: 0.02em;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.8), 0 2px 4px rgba(13,148,136,0.08);
+      line-height: 1;
+      text-align: center;
+      padding: 0 4px;
     }
     .ga-module.completed .ga-module-num {
-      background: var(--accent);
-      border-color: var(--accent);
+      background: linear-gradient(135deg, #14b8a6 0%, #0D9488 100%);
+      border-color: #0D9488;
       color: white;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.2), 0 4px 10px rgba(13,148,136,0.3);
     }
     .ga-module.in-progress .ga-module-num {
-      background: var(--warning);
-      border-color: var(--warning);
+      background: linear-gradient(135deg, #FBBF24 0%, #D97706 100%);
+      border-color: #D97706;
       color: white;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.2), 0 4px 10px rgba(217,119,6,0.25);
     }
     .ga-module-body { flex: 1; }
     .ga-module-name {
@@ -3516,6 +3534,7 @@ function getControlInsight(ctrlId) {
 // Category -> letter prefix for display (e.g. "A.5 — Organisatorisch")
 function moduleLabel(cat) {
   const map = {
+    'ISMS Clausules': 'ISMS',
     'Organisatorisch': 'A.5',
     'Personeel': 'A.6',
     'Fysiek': 'A.7',
