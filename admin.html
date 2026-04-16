@@ -1474,9 +1474,9 @@ async function loadOverview() {
 
     // Latest 5 unread client messages
     const { data: unreadMsgs } = await sb.from('messages')
-      .select('body, created_at, user_id, sender_role, read_by_auditor')
+      .select('body, created_at, user_id, sender_role, is_read')
       .eq('sender_role', 'client')
-      .eq('read_by_auditor', false)
+      .eq('is_read', false)
       .order('created_at', { ascending: false })
       .limit(5);
     const ovUM = document.getElementById('ovUnreadMsgs');
@@ -1997,7 +1997,7 @@ async function loadInboxCount() {
     const { count } = await sb.from('messages')
       .select('*', { count: 'exact', head: true })
       .eq('sender_role', 'client')
-      .eq('read_by_auditor', false);
+      .eq('is_read', false);
     document.getElementById('inboxBadge').textContent = count || 0;
   } catch(e) { /* silent */ }
 }
@@ -2031,7 +2031,7 @@ function setInboxFilter(filter, btn) {
 function renderInbox() {
   const list = document.getElementById('inboxList');
   let filtered = inboxMessages;
-  if (currentInboxFilter === 'unread') filtered = filtered.filter(m => m.sender_role === 'client' && !m.read_by_auditor);
+  if (currentInboxFilter === 'unread') filtered = filtered.filter(m => m.sender_role === 'client' && !m.is_read);
   if (currentInboxFilter === 'attachment') filtered = filtered.filter(m => m.attachment_name);
 
   if (filtered.length === 0) {
@@ -2042,7 +2042,7 @@ function renderInbox() {
   const fmt = (d) => new Date(d).toLocaleString('nl-NL', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' });
   list.innerHTML = filtered.map(m => {
     const isClient = m.sender_role === 'client';
-    const unread = isClient && !m.read_by_auditor;
+    const unread = isClient && !m.is_read;
     const clientInfo = clients.find(c => c.user_id === m.user_id);
     const fromName = isClient
       ? (clientInfo ? (clientInfo.bedrijf || clientInfo.naam || clientInfo.email) : m.user_id.slice(0,8))
@@ -2070,7 +2070,7 @@ async function openClientFromInbox(userId) {
   document.getElementById('viewClients').classList.add('active');
 
   // Also mark client messages as read (best-effort)
-  sb.from('messages').update({ read_by_auditor: true })
+  sb.from('messages').update({ is_read: true })
     .eq('user_id', userId).eq('sender_role', 'client')
     .then(() => loadInboxCount(), () => {});
 
