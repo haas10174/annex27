@@ -44,7 +44,7 @@ RewriteRule ^([^.]+)$ $1.html [L]
   # Content Security Policy - strict allowlist
   # Note: 'unsafe-inline' for style needed for SVG and inline styling of dashboard
   # For script we keep unsafe-inline because all our JS is inline — can be tightened later with nonces
-  Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://tvqhxhoohzdzekcfzjuv.supabase.co https://api.mollie.com https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com; frame-ancestors 'none'; form-action 'self' https://*.mollie.com https://formsubmit.co; base-uri 'self'; object-src 'none'; upgrade-insecure-requests;"
+  Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://tvqhxhoohzdzekcfzjuv.supabase.co https://api.mollie.com https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com https://nominatim.openstreetmap.org; frame-ancestors 'none'; form-action 'self' https://*.mollie.com https://formsubmit.co; base-uri 'self'; object-src 'none'; upgrade-insecure-requests;"
 
   # Hide server fingerprinting
   Header unset Server
