@@ -2140,8 +2140,7 @@ async function sendHostnetMail(e) {
 // ── GA4 REALTIME WIDGET ──
 let ga4Timer = null;
 async function startGa4Widget() {
-  const el = document.getElementById('ga4Widget');
-  if (!el) return;
+  if (!document.getElementById('ovRtMap')) return;
   await loadGa4();
   if (ga4Timer) clearInterval(ga4Timer);
   ga4Timer = setInterval(loadGa4, 60000);
