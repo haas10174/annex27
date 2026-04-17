@@ -1531,7 +1531,7 @@ async function loadOverview() {
 
     // Latest 5 leads
     const { data: latestLeads } = await sb.from('waitlist')
-      .select('bedrijf, email, kind, created_at, processed_at')
+      .select('bedrijf, email, product, created_at, processed_at')
       .order('created_at', { ascending: false })
       .limit(5);
     const ovLL = document.getElementById('ovLatestLeads');
@@ -1542,7 +1542,7 @@ async function loadOverview() {
         const pending = !l.processed_at;
         return '<div class="ov-list-item">'
           + '<div class="ov-list-title">' + esc(l.bedrijf || l.email || '-') + '</div>'
-          + '<div class="ov-list-meta">' + esc(l.kind || 'lead') + ' &bull; ' + (pending ? '<span style="color:var(--warning);font-weight:600;">open</span>' : '<span style="color:var(--text-muted);">verwerkt</span>') + ' &bull; ' + ovTimeAgo(l.created_at) + '</div>'
+          + '<div class="ov-list-meta">' + esc(l.product || 'lead') + ' &bull; ' + (pending ? '<span style="color:var(--warning);font-weight:600;">open</span>' : '<span style="color:var(--text-muted);">verwerkt</span>') + ' &bull; ' + ovTimeAgo(l.created_at) + '</div>'
           + '</div>';
       }).join('');
     }
@@ -1554,7 +1554,7 @@ async function loadOverview() {
       meta: ovFormatEur(o.amount) + ' \u2022 ' + ovTimeAgo(o.created_at), ts: o.created_at
     }));
     (latestLeads || []).slice(0, 3).forEach(l => activity.push({
-      icon: '+', title: 'Nieuwe aanvraag ' + (l.kind || 'lead'),
+      icon: '+', title: 'Nieuwe aanvraag ' + (l.product || 'lead'),
       meta: (l.bedrijf || l.email || '-') + ' \u2022 ' + ovTimeAgo(l.created_at), ts: l.created_at
     }));
     (unreadMsgs || []).slice(0, 3).forEach(m => {
