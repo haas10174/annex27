@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <meta name="theme-color" content="#0D9488" />
+  <script src="/analytics.js"></script>
+  <title>Blog | ISO 27001 en NIS2 voor het MKB | Annex27</title>
+  <meta name="description" content="Praktische artikelen over ISO 27001, NIS2, AVG en cybersecurity-compliance voor MKB-bedrijven in Nederland en België. Geen ruis, alleen wat werkt." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://annex27.nl/blog" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    :root{--bg:#FAFAFA;--surface:#FFF;--border:#E5E5E5;--border-light:#F0F0F0;--text-primary:#0F172A;--text-secondary:#475569;--text-muted:#94A3B8;--accent:#0D9488;--accent-light:#CCFBF1;--dark:#0c0f1a;--radius:10px;--radius-lg:16px;}
+    body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text-secondary);line-height:1.7;-webkit-font-smoothing:antialiased;}
+    .container{max-width:1080px;margin:0 auto;padding:0 24px;}
+    nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(250,250,250,0.85);backdrop-filter:blur(16px);border-bottom:1px solid var(--border-light);height:64px;display:flex;align-items:center;padding:0 5%;}
+    .nav-inner{display:flex;align-items:center;justify-content:space-between;width:100%;max-width:1120px;margin:0 auto;}
+    .nav-logo{font-family:'Sora',sans-serif;font-size:1.4rem;font-weight:700;color:var(--text-primary);text-decoration:none;letter-spacing:-0.03em;}
+    .nav-logo span{color:var(--accent);}
+    .nav-back{display:inline-flex;align-items:center;gap:6px;font-size:0.85rem;color:var(--text-secondary);text-decoration:none;font-weight:500;}
+    .nav-back svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;}
+
+    .hero{padding:140px 0 56px;background:var(--dark);color:white;}
+    .eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:0.78rem;font-weight:600;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.14em;margin-bottom:18px;}
+    .eyebrow::before{content:'';width:24px;height:1px;background:#14b8a6;}
+    .hero h1{font-family:'Sora',sans-serif;font-size:clamp(2rem,4vw,2.8rem);font-weight:700;line-height:1.15;letter-spacing:-0.02em;margin-bottom:14px;}
+    .hero p{font-size:1.02rem;color:rgba(255,255,255,0.65);max-width:640px;}
+
+    .posts{padding:64px 0 96px;}
+    .posts-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px;}
+    .post{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:border-color .2s, box-shadow .2s;display:flex;flex-direction:column;}
+    .post:hover{border-color:var(--accent);box-shadow:0 8px 28px rgba(13,148,136,0.08);}
+    .post a{text-decoration:none;color:inherit;display:flex;flex-direction:column;height:100%;}
+    .post-cover{height:140px;background:linear-gradient(135deg,#0c0f1a 0%,#1e293b 100%);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.85);position:relative;overflow:hidden;}
+    .post-cover::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 20% 50%,rgba(20,184,166,0.18) 0%,transparent 60%);}
+    .post-cover .topic{position:relative;font-family:'Sora',sans-serif;font-size:1.6rem;font-weight:800;letter-spacing:-0.03em;}
+    .post-body{padding:24px;flex:1;display:flex;flex-direction:column;}
+    .post-meta{display:flex;gap:10px;font-size:0.74rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--accent);margin-bottom:10px;}
+    .post-meta .dot{color:var(--text-muted);}
+    .post-meta .date{color:var(--text-muted);}
+    .post h2{font-family:'Sora',sans-serif;font-size:1.16rem;font-weight:700;color:var(--text-primary);line-height:1.3;margin-bottom:8px;}
+    .post p{font-size:0.92rem;line-height:1.6;color:var(--text-secondary);}
+    .post-link{display:inline-flex;align-items:center;gap:6px;font-size:0.86rem;font-weight:600;color:var(--accent);margin-top:auto;padding-top:14px;}
+    .empty-soon{text-align:center;padding:64px 24px;color:var(--text-muted);font-size:0.92rem;background:var(--surface);border:1px dashed var(--border);border-radius:14px;}
+
+    footer{background:var(--surface);border-top:1px solid var(--border-light);padding:40px 0;font-size:0.84rem;color:var(--text-muted);}
+    footer .container{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
+    footer a{color:var(--text-secondary);text-decoration:none;}
+    footer a:hover{color:var(--text-primary);}
+
+    @media (max-width:760px){
+      .posts-grid{grid-template-columns:1fr;}
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">annex<span>27</span></a>
+    <a href="/" class="nav-back"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Terug naar home</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="container">
+    <div class="eyebrow"><span>Blog</span></div>
+    <h1>Compliance zonder consultancy-bullshit</h1>
+    <p>Praktische artikelen over ISO 27001, NIS2 en AVG voor het MKB in Nederland en België. Geen sales-talk, geen abstracte modellen — wat werkt en wat niet.</p>
+  </div>
+</section>
+
+<section class="posts">
+  <div class="container">
+    <div class="posts-grid">
+
+      <article class="post">
+        <a href="/blog/iso-27001-kosten-mkb">
+          <div class="post-cover"><div class="topic">€</div></div>
+          <div class="post-body">
+            <div class="post-meta"><span>Kostenanalyse</span><span class="dot">·</span><span class="date">15 apr 2026</span></div>
+            <h2>Wat kost ISO 27001 certificering voor een MKB-bedrijf?</h2>
+            <p>Volledige kostenbreakdown: voorbereiding, audit, jaarlijkse surveillance. Realistische bedragen voor MKB met 10-50 medewerkers in NL en BE.</p>
+            <span class="post-link">Lees artikel &rarr;</span>
+          </div>
+        </a>
+      </article>
+
+      <article class="post">
+        <a href="/blog/iso-27001-vs-soc-2">
+          <div class="post-cover"><div class="topic">vs</div></div>
+          <div class="post-body">
+            <div class="post-meta"><span>Vergelijking</span><span class="dot">·</span><span class="date">12 apr 2026</span></div>
+            <h2>ISO 27001 vs SOC 2: welke past bij een Nederlandse SaaS?</h2>
+            <p>De keuze hangt af van uw klanten en exportmarkt. Vergelijking op scope, audit-strengheid, kosten en wederzijdse erkenning.</p>
+            <span class="post-link">Lees artikel &rarr;</span>
+          </div>
+        </a>
+      </article>
+
+      <article class="post">
+        <a href="/blog/nis2-deadline-2026">
+          <div class="post-cover"><div class="topic">NIS2</div></div>
+          <div class="post-body">
+            <div class="post-meta"><span>Wetgeving</span><span class="dot">·</span><span class="date">8 apr 2026</span></div>
+            <h2>NIS2-deadline 2026: wat moet u nu doen?</h2>
+            <p>Concrete actielijst voor MKB-bedrijven die onder NIS2 vallen. BE: CCB-toezicht actief. NL: Cbw treedt in werking voorjaar 2026.</p>
+            <span class="post-link">Lees artikel &rarr;</span>
+          </div>
+        </a>
+      </article>
+
+      <article class="post" style="opacity:0.55;pointer-events:none;">
+        <div class="post-cover"><div class="topic">SoA</div></div>
+        <div class="post-body">
+          <div class="post-meta"><span>Methodologie</span><span class="dot">·</span><span class="date">binnenkort</span></div>
+          <h2>De 7 meest gemaakte fouten in een ISO 27001 SoA</h2>
+          <p>Statement of Applicability: waar gaat het vaak mis? Lessen uit honderden audits van MKB-bedrijven.</p>
+        </div>
+      </article>
+
+    </div>
+
+    <div class="empty-soon" style="margin-top:32px;">
+      Meer artikelen volgen. Suggestie? Mail <a href="mailto:info@annex27.nl" style="color:var(--accent);">info@annex27.nl</a>.
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <span>&copy; 2026 Annex27 &middot; KBO 1006.203.170</span>
+    <span>
+      <a href="/">Home</a> &middot;
+      <a href="/privacy">Privacybeleid</a> &middot;
+      <a href="/algemene-voorwaarden">Algemene voorwaarden</a> &middot;
+      <a href="/trust">Trust &amp; Security</a>
+    </span>
+  </div>
+</footer>
+
+</body>
+</html>
