@@ -38,15 +38,23 @@ async function fetchUnseen(host: string, port: number, user: string, pass: strin
   }
 
   async function send(tag: string, cmd: string) {
-    await conn.write(enc(`${tag} ${cmd}\r\n`));
+    await conn.write(enc.encode(`${tag} ${cmd}\r\n`));
     return readUntil((l) => l.startsWith(tag + ' OK') || l.startsWith(tag + ' BAD') || l.startsWith(tag + ' NO'));
   }
 
   // Greeting
   await readUntil((l) => l.startsWith('* OK'));
-  // LOGIN
-  const loginRes = await send('a1', `LOGIN ${user} "${pass.replace(/"/g, '\\"')}"`);
-  if (!loginRes.some((l) => l.startsWith('a1 OK'))) throw new Error('IMAP LOGIN failed');
+  // LOGIN — quote both user and pass; escape quotes/backslashes per RFC 3501
+  const escapeImap = (s: string) => s.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+  const loginRes = await send('a1', `LOGIN "${escapeImap(user)}" "${escapeImap(pass)}"`);
+  if (!loginRes.some((l) => l.startsWith('a1 OK'))) {
+    // Fallback: AUTHENTICATE PLAIN
+    const auth = btoa(`\u0000${user}\u0000${pass}`);
+    const authRes = await send('a1b', `AUTHENTICATE PLAIN ${auth}`);
+    if (!authRes.some((l) => l.startsWith('a1b OK'))) {
+      throw new Error('IMAP LOGIN failed (LOGIN + PLAIN both rejected)');
+    }
+  }
   // SELECT INBOX
   await send('a2', 'SELECT INBOX');
   // SEARCH UNSEEN
@@ -57,7 +65,7 @@ async function fetchUnseen(host: string, port: number, user: string, pass: strin
   const messages: { uid: string; raw: string }[] = [];
   for (const id of ids.slice(0, 25)) {
     // FETCH RFC822
-    await conn.write(enc(`a4-${id} FETCH ${id} (BODY.PEEK[])\r\n`));
+    await conn.write(enc.encode(`a4-${id} FETCH ${id} (BODY.PEEK[])\r\n`));
     let bodyAcc = '';
     let inBody = false;
     let bodyLength = 0;
