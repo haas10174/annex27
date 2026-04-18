@@ -81,11 +81,48 @@ serve(async (req) => {
     const klantBedrijf = klant.user_metadata?.bedrijf || '';
     const klantSector = klant.user_metadata?.sector || klant.user_metadata?.sectorLabel || 'Algemeen';
 
-    // Fetch gap_analyse answers + findings
+    // Fetch gap_analyse answers (PAID dashboard gap-analyse — NIET de publieke quickscan)
+    // Data-structuur: { "A.5.1_0": "3", "A.5.1_1": "2", "A.5.2_0": "4", ..., "evidence_notes_A.5.1": "..." }
     const { data: gapRow } = await sb.from('gap_analyse').select('answers, updated_at').eq('user_id', targetUserId).maybeSingle();
-    const answers = gapRow?.answers || {};
+    const rawAnswers: Record<string, any> = gapRow?.answers || {};
 
     const { data: findings } = await sb.from('auditor_findings').select('control_id, severity, finding, recommendation, reviewed_evidence').eq('user_id', targetUserId);
+
+    // Herstructureren: group per control_id, compute CMMI-avg + status
+    interface CtrlAnalysis {
+      control_id: string;
+      sub_answers: { q_index: number; value: string; label: string }[];
+      avg_score: number | null;  // gemiddeld CMMI (0-4), null als alleen nvt
+      all_nvt: boolean;
+      claimed: boolean;  // waar voor >=1 sub-antwoord >=2 (in ontwikkeling of hoger)
+      max_claimed: number;
+      note: string;
+    }
+    const cmmiLabel: Record<string, string> = { '0': 'Niet aanwezig', '1': 'Gepland', '2': 'In ontwikkeling', '3': 'Geïmplementeerd', '4': 'Geoptimaliseerd', 'nvt': 'Niet van toepassing' };
+    const controlMap: Record<string, CtrlAnalysis> = {};
+    const evNotesMap: Record<string, string> = {};
+    for (const [key, raw] of Object.entries(rawAnswers)) {
+      const value = String(raw);
+      if (key.startsWith('evidence_notes_')) { evNotesMap[key.replace('evidence_notes_', '')] = value; continue; }
+      // key format: A.5.1_0 → control_id=A.5.1, sub=0
+      const m = key.match(/^([A-C]\.\d+\.?\d*)_(\d+)$/);
+      if (!m) continue;
+      const ctrlId = m[1];
+      const qIdx = parseInt(m[2], 10);
+      if (!controlMap[ctrlId]) {
+        controlMap[ctrlId] = { control_id: ctrlId, sub_answers: [], avg_score: null, all_nvt: false, claimed: false, max_claimed: 0, note: '' };
+      }
+      controlMap[ctrlId].sub_answers.push({ q_index: qIdx, value, label: cmmiLabel[value] || value });
+    }
+    // Post-process: avg_score, claimed, note
+    for (const c of Object.values(controlMap)) {
+      const numeric = c.sub_answers.filter(s => s.value !== 'nvt').map(s => parseInt(s.value, 10)).filter(n => !isNaN(n));
+      c.avg_score = numeric.length ? Math.round((numeric.reduce((a, b) => a + b, 0) / numeric.length) * 10) / 10 : null;
+      c.all_nvt = c.sub_answers.length > 0 && c.sub_answers.every(s => s.value === 'nvt');
+      c.max_claimed = numeric.length ? Math.max(...numeric) : 0;
+      c.claimed = c.max_claimed >= 2;
+      c.note = evNotesMap[c.control_id] || '';
+    }
 
     // Fetch most recent order for this user
     const { data: order } = await sb.from('orders').select('id, plan, amount, paid_at').eq('user_id', targetUserId).order('created_at', { ascending: false }).limit(1).maybeSingle();
@@ -113,7 +150,26 @@ serve(async (req) => {
     // Build multimodal content for Claude
     const contentParts: any[] = [];
 
-    // Add klant context text
+    // Per-control evidence mapping (filenames op folder-basis: evidence/<user_id>/<control_id>/<file>)
+    const evidencePerControl: Record<string, string[]> = {};
+    for (const f of evidenceFiles) {
+      const ctrl = f.path.split('/')[1] || 'onbekend';
+      if (!evidencePerControl[ctrl]) evidencePerControl[ctrl] = [];
+      evidencePerControl[ctrl].push(f.name);
+    }
+
+    // Build per-control human-readable summary
+    const ctrlList = Object.values(controlMap).sort((a, b) => a.control_id.localeCompare(b.control_id, undefined, { numeric: true }));
+    const ctrlSummary = ctrlList.length ? ctrlList.map(c => {
+      const subs = c.sub_answers.map(s => `Q${s.q_index + 1}=${s.value}(${s.label})`).join(', ');
+      const ev = evidencePerControl[c.control_id] || [];
+      const evStr = ev.length ? `\n  Evidence (${ev.length}): ${ev.slice(0, 5).join(', ')}${ev.length > 5 ? '...' : ''}` : '\n  Evidence: geen aangeleverd';
+      const noteStr = c.note ? `\n  Klant-toelichting: "${c.note.slice(0, 300)}"` : '';
+      const statusTag = c.all_nvt ? '[N.v.t.]' : !c.claimed ? '[GEEN BASIS]' : c.avg_score && c.avg_score >= 3 ? '[OK]' : '[GAP]';
+      return `${c.control_id} ${statusTag} avg=${c.avg_score ?? 'n.v.t.'} max=${c.max_claimed}\n  Sub-vragen: ${subs}${evStr}${noteStr}`;
+    }).join('\n\n') : '(Geen ingevulde antwoorden in gap-analyse gevonden)';
+
+    // Add klant context text (gap-analyse uit klant-dashboard, niet quickscan)
     contentParts.push({
       type: 'text',
       text: `**Klantprofiel:**
@@ -121,21 +177,30 @@ serve(async (req) => {
 - Bedrijf: ${klantBedrijf}
 - Sector: ${klantSector}
 - Order: ${order?.plan || 'onbekend'} (€${order?.amount || '?'}, betaald op ${order?.paid_at || '?'})
+- Gap-analyse laatst bijgewerkt: ${gapRow?.updated_at || 'onbekend'}
 
-**Quickscan-antwoorden (30+ vragen):**
-\`\`\`json
-${JSON.stringify(answers, null, 2)}
+**Gap-analyse resultaten per Annex A control** (gescoord op CMMI-schaal 0-4, ingevuld door klant in dashboard):
+
+Legenda status-tags:
+- \`[OK]\` — gemiddelde claim ≥3 (geïmplementeerd of geoptimaliseerd)
+- \`[GAP]\` — gemiddelde claim 2 of lager (in ontwikkeling / gepland / niet aanwezig)
+- \`[GEEN BASIS]\` — klant claimde niets boven niveau 1 (geen maatregel in praktijk)
+- \`[N.v.t.]\` — klant heeft control expliciet uitgezonderd
+
+Legenda CMMI-waarden per sub-vraag:
+\`0\`=Niet aanwezig · \`1\`=Gepland · \`2\`=In ontwikkeling · \`3\`=Geïmplementeerd · \`4\`=Geoptimaliseerd · \`nvt\`=Niet van toepassing
+
+\`\`\`
+${ctrlSummary}
 \`\`\`
 
 **Eerdere auditor-bevindingen (${findings?.length || 0}):**
-\`\`\`json
-${JSON.stringify(findings || [], null, 2)}
-\`\`\`
+${findings && findings.length ? findings.map((f: any) => `- ${f.control_id} (${f.severity}): ${f.finding}`).join('\n') : '(geen)'}
 
 **Overige bewijsvoering-bestanden (niet-image, filenames alleen):**
 ${otherFiles.map(f => `- ${f.name} (${Math.round(f.size/1024)}KB)`).join('\n') || '(geen)'}
 
-**Image-bewijsvoering (${imageFiles.length} afbeeldingen meegezonden voor visuele analyse):**
+**Image-bewijsvoering** (${imageFiles.length} afbeeldingen meegestuurd voor visuele analyse, zie hieronder):
 `
     });
 
