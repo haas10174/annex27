@@ -1053,14 +1053,8 @@
       max-width: 320px;
       margin: 0 auto;
     }
-    /* Animated score ring for step 3 */
-    /* r=18 → circumference = 2 * PI * 18 = 113.1 */
-    /* 82% fill → dashoffset = 113.1 * (1 - 0.82) = 20.4 */
-    @keyframes scoreRing {
-      0% { stroke-dashoffset: 113.1; }
-      60% { stroke-dashoffset: 20.4; }
-      100% { stroke-dashoffset: 20.4; }
-    }
+    /* Animated score ring for step 3 (fills 0→100%, then morphs into check) */
+    /* r=18 → circumference = 2 * PI * 18 ≈ 113.1 */
     .step-score-ring circle.track {
       fill: none;
       stroke: rgba(13, 148, 136, 0.15);
@@ -1075,21 +1069,32 @@
       stroke-dashoffset: 113.1;
       transform: rotate(-90deg);
       transform-origin: center;
-      animation: scoreRing 2.2s cubic-bezier(0.4, 0, 0.2, 1) 0.4s forwards;
+      transition: stroke-dashoffset 2s cubic-bezier(0.4, 0, 0.2, 1);
     }
+    .step-score-ring.done circle.fill { stroke-dashoffset: 0; }
     .step-score-num {
       font-family: 'Sora', sans-serif;
-      font-size: 13px;
+      font-size: 14px;
       font-weight: 800;
       fill: var(--text-primary);
       letter-spacing: -0.02em;
+      transition: opacity 0.3s ease;
     }
-    .step-score-label {
-      font-family: 'Inter', sans-serif;
-      font-size: 5px;
-      font-weight: 600;
-      fill: var(--accent);
-      letter-spacing: 0.05em;
+    .step-score-ring.done .step-score-num { opacity: 0; }
+    .step-score-check {
+      fill: none;
+      stroke: var(--accent);
+      stroke-width: 3.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-dasharray: 22;
+      stroke-dashoffset: 22;
+      transition: stroke-dashoffset 0.45s ease 0.15s, opacity 0.2s ease 0.15s;
+      opacity: 0;
+    }
+    .step-score-ring.done .step-score-check {
+      stroke-dashoffset: 0;
+      opacity: 1;
     }
     @media (max-width: 768px) {
       .steps {
@@ -1829,12 +1834,12 @@
       </div>
       <div class="step">
         <div class="step-icon-wrap">
-          <!-- Animated compliance score ring -->
-          <svg viewBox="0 0 48 48" class="step-score-ring" aria-hidden="true">
+          <!-- Animated compliance score ring: counts 0 → 100%, then morphs into check -->
+          <svg viewBox="0 0 48 48" class="step-score-ring" id="stepScoreRing" aria-hidden="true">
             <circle class="track" cx="24" cy="24" r="18"/>
             <circle class="fill" cx="24" cy="24" r="18"/>
-            <text x="24" y="26" text-anchor="middle" class="step-score-num" stroke="none">82</text>
-            <text x="24" y="33" text-anchor="middle" class="step-score-label" stroke="none">%</text>
+            <text x="24" y="29" text-anchor="middle" class="step-score-num" id="stepScoreNum" stroke="none">0</text>
+            <path class="step-score-check" d="M16 24.5 L22 30 L33 18.5"/>
           </svg>
           <div class="step-num-badge">3</div>
         </div>
@@ -2332,6 +2337,33 @@
     });
   }, { threshold: 0.1 });
   document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
+
+  // Step 3 score ring — counts 0→100% over 2s, then morphs into check
+  (function(){
+    const ring = document.getElementById('stepScoreRing');
+    const num = document.getElementById('stepScoreNum');
+    if (!ring || !num) return;
+    let fired = false;
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting && !fired) {
+          fired = true;
+          ring.classList.add('done');
+          const duration = 2000;
+          const start = performance.now();
+          function tick(now) {
+            const t = Math.min((now - start) / duration, 1);
+            const eased = 1 - Math.pow(1 - t, 3);
+            num.textContent = Math.round(eased * 100);
+            if (t < 1) requestAnimationFrame(tick);
+          }
+          requestAnimationFrame(tick);
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.4 });
+    io.observe(ring);
+  })();
 
   // Nav shadow on scroll
   window.addEventListener('scroll', () => {
