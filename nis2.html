@@ -129,6 +129,7 @@
       .grid-3{grid-template-columns:1fr;}
       .scope-grid{grid-template-columns:1fr;}
       .obligations{grid-template-columns:1fr;}
+      .meld-grid{grid-template-columns:1fr !important;}
     }
   </style>
 </head>
@@ -154,16 +155,19 @@
         </div>
       </div>
       <div class="hero-card">
-        <div class="hero-card-eyebrow">Op de hoogte blijven</div>
-        <h3>NIS2-pakket waitlist</h3>
-        <p style="font-size:0.84rem;color:rgba(255,255,255,0.6);margin-bottom:14px;">Beleidstemplates + risico-register + incident-respons procedures, NIS2-conform. Beperkt aanbod bij launch.</p>
-        <form id="nis2WaitForm" onsubmit="return submitNis2Wait(event)">
-          <input type="text" name="bedrijf" placeholder="Bedrijfsnaam" required />
-          <input type="email" name="email" placeholder="E-mailadres" required />
-          <button type="submit">Plaats op waitlist</button>
-        </form>
-        <div id="nis2WaitSuccess" class="hero-card-success">&#10003; U staat op de waitlist. We mailen zodra het pakket beschikbaar is.</div>
-        <div class="hero-card-foot">Geen spam. Eén mail bij launch. <a href="/privacy" style="color:rgba(255,255,255,0.5);text-decoration:underline;">Privacybeleid</a>.</div>
+        <div class="hero-card-eyebrow" style="color:#5eead4;">NIS2 Readiness pakket</div>
+        <h3 style="margin-bottom:6px;">€995 <span style="font-size:0.78rem;font-weight:500;color:rgba(255,255,255,0.55);">eenmalig</span></h3>
+        <p style="font-size:0.85rem;color:rgba(255,255,255,0.65);margin-bottom:14px;line-height:1.55;">Volledige scan langs alle 10 Art. 21-maatregelen + meldingsplicht-workflow + bestuurssnotities + ISO 27001 ↔ NIS2 mapping. Gereviewd door DNV Lead Auditor.</p>
+        <ul style="list-style:none;padding:0;margin:0 0 18px;font-size:0.84rem;color:rgba(255,255,255,0.75);">
+          <li style="padding:4px 0;display:flex;gap:8px;align-items:flex-start;"><span style="color:#5eead4;font-weight:700;">✓</span> Self-assessment per maatregel (~45 vragen)</li>
+          <li style="padding:4px 0;display:flex;gap:8px;align-items:flex-start;"><span style="color:#5eead4;font-weight:700;">✓</span> Gap-rapport + concrete remediatie</li>
+          <li style="padding:4px 0;display:flex;gap:8px;align-items:flex-start;"><span style="color:#5eead4;font-weight:700;">✓</span> Meldingsplicht-templates (24u/72u/1mnd)</li>
+          <li style="padding:4px 0;display:flex;gap:8px;align-items:flex-start;"><span style="color:#5eead4;font-weight:700;">✓</span> Bestuursverklaring-template</li>
+          <li style="padding:4px 0;display:flex;gap:8px;align-items:flex-start;"><span style="color:#5eead4;font-weight:700;">✓</span> Persoonlijke review door Lead Auditor</li>
+        </ul>
+        <a href="/bestellen?plan=nis2" style="display:block;text-align:center;background:#14b8a6;color:white;padding:13px 22px;border-radius:10px;font-weight:600;text-decoration:none;font-size:0.94rem;margin-bottom:8px;">Start NIS2 Readiness →</a>
+        <a href="#scope" style="display:block;text-align:center;background:transparent;color:rgba(255,255,255,0.7);padding:10px;font-size:0.85rem;text-decoration:none;">Eerst checken of u onder NIS2 valt</a>
+        <div class="hero-card-foot" style="margin-top:14px;">Marktconform: TCC €1.250 · Compleye €1.600 · consultancy €8k+</div>
       </div>
     </div>
   </div>
@@ -266,26 +270,115 @@
   </div>
 </section>
 
+<section>
+  <div class="container">
+    <div class="label">Stap 4: meldingsplicht</div>
+    <h2 class="section-title">Drie meldingen, drie deadlines</h2>
+    <p class="section-lead">Bij een significant cyberincident moet u in drie stappen rapporteren aan de toezichthouder. De klok start zodra u op de hoogte bent — niet zodra de oorzaak bekend is.</p>
+
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:8px;" class="meld-grid">
+      <div style="background:var(--surface);border:1px solid var(--border);border-left:4px solid #dc2626;border-radius:10px;padding:22px;">
+        <div style="font-size:0.72rem;font-weight:700;color:#dc2626;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px;">Binnen 24 uur</div>
+        <h3 style="font-family:'Sora',sans-serif;font-size:1.05rem;color:var(--text-primary);margin-bottom:8px;">Vroege waarschuwing</h3>
+        <p style="font-size:0.88rem;line-height:1.6;">Indicatie dat het incident kwaadwillig is of grensoverschrijdend gevolgen kan hebben. Geen oorzaakanalyse vereist — wel datum, type en initiële impact.</p>
+      </div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-left:4px solid #D97706;border-radius:10px;padding:22px;">
+        <div style="font-size:0.72rem;font-weight:700;color:#D97706;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px;">Binnen 72 uur</div>
+        <h3 style="font-family:'Sora',sans-serif;font-size:1.05rem;color:var(--text-primary);margin-bottom:8px;">Meldingsrapport</h3>
+        <p style="font-size:0.88rem;line-height:1.6;">Update met initiële beoordeling van impact, ernst en indicatoren van compromittering (IOCs). Status van mitigaties die u al hebt genomen.</p>
+      </div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--accent);border-radius:10px;padding:22px;">
+        <div style="font-size:0.72rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px;">Binnen 1 maand</div>
+        <h3 style="font-family:'Sora',sans-serif;font-size:1.05rem;color:var(--text-primary);margin-bottom:8px;">Eindrapport</h3>
+        <p style="font-size:0.88rem;line-height:1.6;">Volledige analyse: oorzaak, impact, lessons learned, structurele maatregelen. Bij langlopende incidenten: voortgangsrapport + uiteindelijk eindrapport.</p>
+      </div>
+    </div>
+
+    <div class="callout" style="background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:10px;padding:18px 22px;margin-top:24px;">
+      <strong style="color:var(--text-primary);">Aan wie meldt u?</strong> In 🇧🇪 aan <strong>CCB</strong> via <a href="https://atwork.ccb.belgium.be" target="_blank" rel="noopener" style="color:var(--accent);">atwork.ccb.belgium.be</a> + sectorale toezichthouder. In 🇳🇱 aan <strong>NCSC-NL/CSIRT</strong> + <strong>RDI</strong>. Het NIS2-pakket levert u kant-en-klare meldingstemplates voor beide jurisdicties — geen paniek-tijd zoeken naar wie u moet bellen.
+    </div>
+  </div>
+</section>
+
 <section class="alt">
   <div class="container">
-    <div class="label">Hoe Annex27 helpt</div>
-    <h2 class="section-title">Van NIS2-onzekerheid naar concrete actielijst</h2>
-    <p class="section-lead">Beide producten leveren u direct bruikbare output, niet weer een pdf met algemene adviezen.</p>
+    <div class="label">Stap 5: bestuursaansprakelijkheid</div>
+    <h2 class="section-title">Bestuurders zijn persoonlijk aansprakelijk</h2>
+    <p class="section-lead">NIS2 maakt de directie expliciet verantwoordelijk voor cybersecurity. Niet meer "dat ligt bij IT" — bestuursleden moeten passende maatregelen goedkeuren, toezicht houden, en zelf training volgen.</p>
 
     <div class="grid-3">
       <div class="card">
-        <h3>1. Gratis quickscan</h3>
-        <p>13 vragen, 5 minuten. Indicatie of u onder NIS2 valt + welke 9 ISO 27001-controls al de NIS2-eisen dekken.</p>
-        <p style="margin-top:12px;"><a href="/gap-analyse" style="color:var(--accent);font-weight:600;text-decoration:none;">Start nu →</a></p>
-      </div>
-      <div class="card" style="border-color:var(--accent);">
-        <h3>2. Volledige gap-analyse — €349</h3>
-        <p>Alle 93 Annex A controls + NIS2-mapping. Per control: status, gap, concrete actie. Persoonlijke review door Lead Auditor binnen 48u.</p>
-        <p style="margin-top:12px;"><a href="/bestellen?plan=gap" style="color:var(--accent);font-weight:600;text-decoration:none;">Bestellen →</a></p>
+        <h3>Goedkeuringsplicht</h3>
+        <p>Het bestuur moet de Art. 21-maatregelen <em>actief</em> goedkeuren. Niet impliciet via een ondertekende beleidsverklaring, maar gedocumenteerd in een directiebesluit met datum, scope en budget.</p>
       </div>
       <div class="card">
-        <h3>3. NIS2-beleidspakket</h3>
-        <p>Komt binnenkort. Beleidstemplates + risicoregister + incident-response procedures, NIS2-conform en sector-aware. Plaats nu op de waitlist (boven aan deze pagina).</p>
+        <h3>Trainingsplicht</h3>
+        <p>Bestuursleden moeten zelf cybersecurity-training volgen. Geen "intro security 101" maar specifiek over risicobeoordeling, incident-respons en supply chain management. Aantoonbaar via certificaten of deelnemerlogs.</p>
+      </div>
+      <div class="card">
+        <h3>Persoonlijke aansprakelijkheid</h3>
+        <p>Bij verzuim kunnen bestuurders persoonlijk worden aangesproken — naast organisatorische boetes tot <strong>€10M of 2% omzet</strong>. Een bestuursverklaring + due-diligence-log is de eerste verdedigingslinie.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="label">ISO 27001 ↔ NIS2 mapping</div>
+    <h2 class="section-title">Heeft u ISO 27001? Dan dekt u 9 van de 10.</h2>
+    <p class="section-lead">De goede nieuws: ISO 27001:2022 dekt het overgrote deel van Art. 21 al af. De dekking-tabel:</p>
+
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-top:12px;">
+      <table style="width:100%;border-collapse:collapse;font-size:0.9rem;">
+        <thead>
+          <tr style="background:#F8FAFC;">
+            <th style="text-align:left;padding:14px 18px;font-weight:700;color:var(--text-primary);border-bottom:1px solid var(--border);">NIS2 Art. 21 maatregel</th>
+            <th style="text-align:left;padding:14px 18px;font-weight:700;color:var(--text-primary);border-bottom:1px solid var(--border);">ISO 27001 controls</th>
+            <th style="text-align:center;padding:14px 18px;font-weight:700;color:var(--text-primary);border-bottom:1px solid var(--border);width:80px;">Dekking</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td style="padding:11px 18px;border-bottom:1px solid var(--border-light);">1. Risicoanalyse + infosec-beleid</td><td style="padding:11px 18px;border-bottom:1px solid var(--border-light);color:var(--text-muted);font-size:0.84rem;">A.5.1 · Cl. 6.1.2</td><td style="padding:11px 18px;border-bottom:1px solid var(--border-light);text-align:center;color:#10B981;font-weight:700;">✓</td></tr>
+          <tr><td style="padding:11px 18px;border-bottom:1px solid var(--border-light);">2. Incidentbehandeling</td><td style="padding:11px 18px;border-bottom:1px solid var(--border-light);color:var(--text-muted);font-size:0.84rem;">A.5.24-27</td><td style="padding:11px 18px;border-bottom:1px solid var(--border-light);text-align:center;color:#10B981;font-weight:700;">✓</td></tr>
+          <tr><td style="padding:11px 18px;border-bottom:1px solid var(--border-light);">3. Bedrijfscontinuïteit + crisismanagement</td><td style="padding:11px 18px;border-bottom:1px solid var(--border-light);color:var(--text-muted);font-size:0.84rem;">A.5.29-30 · A.8.13-14</td><td style="padding:11px 18px;border-bottom:1px solid var(--border-light);text-align:center;color:#10B981;font-weight:700;">✓</td></tr>
+          <tr><td style="padding:11px 18px;border-bottom:1px solid var(--border-light);">4. Supply chain security</td><td style="padding:11px 18px;border-bottom:1px solid var(--border-light);color:var(--text-muted);font-size:0.84rem;">A.5.19-23</td><td style="padding:11px 18px;border-bottom:1px solid var(--border-light);text-align:center;color:#10B981;font-weight:700;">✓</td></tr>
+          <tr><td style="padding:11px 18px;border-bottom:1px solid var(--border-light);">5. Beveiliging bij aanschaf/ontwikkeling</td><td style="padding:11px 18px;border-bottom:1px solid var(--border-light);color:var(--text-muted);font-size:0.84rem;">A.8.25-30</td><td style="padding:11px 18px;border-bottom:1px solid var(--border-light);text-align:center;color:#10B981;font-weight:700;">✓</td></tr>
+          <tr><td style="padding:11px 18px;border-bottom:1px solid var(--border-light);">6. Effectiviteitsbeoordeling</td><td style="padding:11px 18px;border-bottom:1px solid var(--border-light);color:var(--text-muted);font-size:0.84rem;">Cl. 9.1-9.3</td><td style="padding:11px 18px;border-bottom:1px solid var(--border-light);text-align:center;color:#10B981;font-weight:700;">✓</td></tr>
+          <tr><td style="padding:11px 18px;border-bottom:1px solid var(--border-light);">7. Cyberhygiëne + training</td><td style="padding:11px 18px;border-bottom:1px solid var(--border-light);color:var(--text-muted);font-size:0.84rem;">A.6.3</td><td style="padding:11px 18px;border-bottom:1px solid var(--border-light);text-align:center;color:#10B981;font-weight:700;">✓</td></tr>
+          <tr><td style="padding:11px 18px;border-bottom:1px solid var(--border-light);">8. Cryptografiebeleid</td><td style="padding:11px 18px;border-bottom:1px solid var(--border-light);color:var(--text-muted);font-size:0.84rem;">A.8.24</td><td style="padding:11px 18px;border-bottom:1px solid var(--border-light);text-align:center;color:#10B981;font-weight:700;">✓</td></tr>
+          <tr><td style="padding:11px 18px;border-bottom:1px solid var(--border-light);">9. HR + access + assets</td><td style="padding:11px 18px;border-bottom:1px solid var(--border-light);color:var(--text-muted);font-size:0.84rem;">A.6 · A.8.2-3 · A.5.9</td><td style="padding:11px 18px;border-bottom:1px solid var(--border-light);text-align:center;color:#10B981;font-weight:700;">✓</td></tr>
+          <tr><td style="padding:11px 18px;">10. Bestuursaansprakelijkheid + meldingsplicht</td><td style="padding:11px 18px;color:var(--text-muted);font-size:0.84rem;">geen direct equivalent</td><td style="padding:11px 18px;text-align:center;color:#D97706;font-weight:700;">⚠ uniek</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p style="margin-top:18px;font-size:0.92rem;color:var(--text-muted);">Het NIS2 Readiness-pakket vult de gap (#10) automatisch met meldingsplicht-workflow + bestuursverklaring-template. Heeft u nog geen ISO 27001? Dan is de combinatie <strong>Gap-analyse (€795) + NIS2 Readiness (€995)</strong> de snelste route.</p>
+  </div>
+</section>
+
+<section class="alt">
+  <div class="container">
+    <div class="label">Hoe Annex27 helpt</div>
+    <h2 class="section-title">Van NIS2-onzekerheid naar audit-ready</h2>
+    <p class="section-lead">Drie producten die u kiest op basis van uw startpunt. Alles eenmalig, geen abonnement.</p>
+
+    <div class="grid-3">
+      <div class="card">
+        <h3>Gratis quickscan</h3>
+        <p>15 vragen, 5 minuten. Compliance-indicatie + sectorprofiel. Géén verplichting, gewoon om te zien hoe ver u staat.</p>
+        <p style="margin-top:14px;"><a href="/gap-analyse" style="color:var(--accent);font-weight:600;text-decoration:none;">Start gratis →</a></p>
+      </div>
+      <div class="card" style="border-color:var(--accent);position:relative;">
+        <div style="position:absolute;top:-10px;right:16px;background:var(--accent);color:white;padding:3px 10px;border-radius:99px;font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;">Voor NIS2</div>
+        <h3>NIS2 Readiness — €995</h3>
+        <p>Volledige scan langs alle 10 Art. 21-maatregelen + meldingsplicht-workflow + bestuursverklaring + ISO ↔ NIS2 mapping. Lead Auditor review.</p>
+        <p style="margin-top:14px;"><a href="/bestellen?plan=nis2" style="color:var(--accent);font-weight:600;text-decoration:none;">Direct bestellen →</a></p>
+      </div>
+      <div class="card">
+        <h3>NIS2 + ISO Bundle — €1.495</h3>
+        <p>NIS2 Readiness <em>plus</em> volledige ISO 27001 gap-analyse. Slimste route als u nog geen ISO-traject heeft. Bespaar €295 t.o.v. los.</p>
+        <p style="margin-top:14px;"><a href="mailto:info@annex27.nl?subject=NIS2%2BISO%20bundle" style="color:var(--accent);font-weight:600;text-decoration:none;">Bundel aanvragen →</a></p>
       </div>
     </div>
   </div>
@@ -293,11 +386,11 @@
 
 <section class="cta-section">
   <div class="container">
-    <h2>Begin vandaag, bespaar vorderingen morgen</h2>
-    <p>Toezichthouders gaan eerst boetes uitdelen aan bedrijven die <em>niets</em> hebben aangetoond. Een gap-analyse is uw eerste verdedigingslinie.</p>
+    <h2>Wachten kost meer dan handelen.</h2>
+    <p>Toezichthouders beginnen handhaving bij organisaties die <em>niets</em> hebben aangetoond. €995 vandaag is goedkoper dan €10M morgen.</p>
     <div class="cta-row">
-      <a href="/gap-analyse" class="btn-primary-light">Start gratis quickscan</a>
-      <a href="/bestellen?plan=gap" class="btn-ghost-light">Direct gap-analyse — €349</a>
+      <a href="/bestellen?plan=nis2" class="btn-primary-light">Start NIS2 Readiness — €995</a>
+      <a href="/gap-analyse" class="btn-ghost-light">Eerst gratis quickscan</a>
     </div>
   </div>
 </section>
