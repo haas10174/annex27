@@ -1645,24 +1645,28 @@ function visiblePhases() {
 // Alle vragen gebruiken de CMMI-maturity rubric (Niet aanwezig → Gemeten). Kwantitatieve profiel-vragen zijn
 // weggelaten omdat de antwoordopties niet passen.
 const questions = [
-  // Phase 1: Governance & beleid — 2 kernvragen
+  // Phase 1: Governance & beleid — 3 kernvragen
   { phase:'gov', cat:'org', catLabel:'Governance & beleid', q:'Heeft uw organisatie een formeel informatiebeveiligingsbeleid, goedgekeurd door directie?', weight:3, controls:['A.5.1'] },
   { phase:'gov', cat:'org', catLabel:'Governance & beleid', q:'Voert u periodiek een risicobeoordeling uit voor informatiebeveiliging?', weight:3, controls:['Cl.6.1.2'] },
+  { phase:'gov', cat:'org', catLabel:'Governance & beleid', q:'Zijn rollen en verantwoordelijkheden voor informatiebeveiliging vastgelegd (bv. RACI)?', weight:2, controls:['A.5.2'] },
 
-  // Phase 3: Personeel — 1 kernvraag
+  // Phase 3: Personeel — 2 kernvragen
   { phase:'hr', cat:'hr', catLabel:'Personeel', q:'Ontvangen medewerkers periodiek bewustzijnstraining over informatiebeveiliging?', weight:3, controls:['A.6.3'] },
+  { phase:'hr', cat:'hr', catLabel:'Personeel', q:'Worden toegangsrechten direct ingetrokken bij uitdiensttreding of functiewijziging?', weight:2, controls:['A.6.5'] },
 
   // Phase 4: Fysiek & assets — 1 kernvraag
   { phase:'phys', cat:'phys', catLabel:'Fysiek & assets', q:'Zijn alle informatie-assets (apparatuur, data, software) in kaart gebracht in een asset-register?', weight:2, controls:['A.5.9','A.8.10'] },
 
-  // Phase 5: Technische controls — 3 kernvragen
+  // Phase 5: Technische controls — 4 kernvragen
   { phase:'tech', cat:'tech', catLabel:'Technische controls', q:'Wordt toegang tot kritieke systemen beschermd met multi-factor authenticatie (MFA)?', weight:3, controls:['A.8.5'] },
   { phase:'tech', cat:'tech', catLabel:'Technische controls', q:'Worden gegevens versleuteld bij verzending (TLS) en opslag (AES)?', weight:3, controls:['A.8.24'] },
   { phase:'tech', cat:'tech', catLabel:'Technische controls', q:'Heeft u een vulnerability management proces met patch-deadlines?', weight:2, controls:['A.8.8'] },
+  { phase:'tech', cat:'tech', catLabel:'Technische controls', q:'Worden security-events centraal gelogd en gemonitord?', weight:2, controls:['A.8.15','A.8.16'] },
 
-  // Phase 6: Operationeel — 2 kernvragen
+  // Phase 6: Operationeel — 3 kernvragen
   { phase:'ops', cat:'ops', catLabel:'Operationeel', q:'Heeft u een incident response plan met rollen en escalatiepaden?', weight:3, controls:['A.5.24'] },
   { phase:'ops', cat:'ops', catLabel:'Operationeel', q:'Wordt de restore-functie van uw backups periodiek getest?', weight:2, controls:['A.8.13'] },
+  { phase:'ops', cat:'ops', catLabel:'Operationeel', q:'Heeft u een leveranciersregister met DPA\u2019s/verwerkersovereenkomsten voor kritieke verwerkers?', weight:3, controls:['A.5.19','A.5.20'] },
 
   // Phase 7: Sector-light (1 vraag per sector — high-level, geen diepgang)
   { phase:'saas',     cat:'tech', sector:'saas',     catLabel:'SaaS',         q:'Is de data van uw klanten in uw multi-tenant platform logisch van elkaar geïsoleerd?', weight:2, controls:['A.8.22'] },
