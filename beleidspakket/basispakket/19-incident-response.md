@@ -119,48 +119,75 @@ Binnen 2 weken na afsluiting van het incident:
 
 ### 5.0 Flowchart — wanneer, aan wie, binnen welke termijn
 
-```
-              ┌──────────────────────────────────┐
-              │   INCIDENT GEDETECTEERD (T+0)    │
-              └─────────────────┬────────────────┘
-                                │
-              ┌─────────────────▼────────────────┐
-              │ Classificatie door CISO           │
-              │ (zie §3 Incidentclassificatie)    │
-              └─────────────────┬────────────────┘
-                                │
-        ┌───────────────────────┼──────────────────────┐
-        │                       │                      │
-        ▼                       ▼                      ▼
-  ┌──────────────┐      ┌─────────────────┐    ┌─────────────────┐
-  │ PERSOONSDATA │      │ NIS2-INCIDENT   │    │ STRAFBAAR FEIT  │
-  │   betrokken? │      │   (significant)  │    │ (hack/afpers.) │
-  └──────┬───────┘      └────────┬────────┘    └────────┬────────┘
-         │ Ja                    │ Ja                    │ Ja
-         ▼                       ▼                       ▼
-  ╔════════════╗      ╔═════════════════════╗   ╔═════════════════╗
-  ║ AP (NL) of ║      ║ VROEGMELDING T+24u  ║   ║ Politie —       ║
-  ║ GBA (BE)   ║      ║ → CSIRT             ║   ║ aangifte in     ║
-  ║ binnen 72u ║      ║   BE: CCB           ║   ║ overleg met     ║
-  ║ (AVG art.33)║     ║   NL: RDI/NCSC      ║   ║ directie +      ║
-  ╚═════╦══════╝      ╚══════════╦══════════╝   ║ juridisch       ║
-        │                        │                ╚═════════════════╝
-        │                        ▼
-        │             ╔═════════════════════╗
-        │             ║ NOTIFICATIE T+72u   ║
-        │             ║ → CSIRT (uitgebreid)║
-        │             ║ aard + impact       ║
-        │             ║ + cross-border      ║
-        │             ╚══════════╦══════════╝
-        │                        │
-        ▼                        ▼
-  ┌──────────────┐      ╔═════════════════════╗
-  │ Betrokkenen  │      ║ EINDVERSLAG T+1 mnd ║
-  │ informeren   │      ║ → CSIRT definitief  ║
-  │ bij HOOG     │      ║ oorzaak +           ║
-  │ risico       │      ║ maatregelen         ║
-  └──────────────┘      ╚═════════════════════╝
-```
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 640" width="100%" style="max-width:720px;display:block;margin:16pt auto;">
+  <defs>
+    <marker id="arrInc" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#94A3B8"/>
+    </marker>
+  </defs>
+  <!-- T+0 Detect -->
+  <rect x="250" y="10" width="220" height="54" rx="10" fill="#0F172A"/>
+  <text x="360" y="34" text-anchor="middle" fill="#FFFFFF" font-family="Inter, Helvetica, Arial" font-size="12" font-weight="700">INCIDENT GEDETECTEERD</text>
+  <text x="360" y="52" text-anchor="middle" fill="#CBD5E1" font-family="Inter, Helvetica, Arial" font-size="10">T+0 · automatisch of melding</text>
+  <line x1="360" y1="64" x2="360" y2="94" stroke="#94A3B8" stroke-width="1.5" marker-end="url(#arrInc)"/>
+  <!-- Classify -->
+  <rect x="250" y="96" width="220" height="54" rx="10" fill="#0D9488"/>
+  <text x="360" y="120" text-anchor="middle" fill="#FFFFFF" font-family="Inter, Helvetica, Arial" font-size="12" font-weight="700">Classificatie door CISO</text>
+  <text x="360" y="138" text-anchor="middle" fill="#CCFBF1" font-family="Inter, Helvetica, Arial" font-size="10">§3 Incidentclassificatie</text>
+  <!-- Split line -->
+  <line x1="360" y1="150" x2="360" y2="180" stroke="#94A3B8" stroke-width="1.5"/>
+  <line x1="120" y1="180" x2="600" y2="180" stroke="#94A3B8" stroke-width="1.5"/>
+  <!-- Column AVG -->
+  <line x1="120" y1="180" x2="120" y2="204" stroke="#94A3B8" stroke-width="1.5" marker-end="url(#arrInc)"/>
+  <rect x="30" y="208" width="180" height="54" rx="8" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.2"/>
+  <text x="120" y="230" text-anchor="middle" fill="#0F172A" font-family="Inter, Helvetica, Arial" font-size="11" font-weight="700">PERSOONSDATA betrokken?</text>
+  <text x="120" y="250" text-anchor="middle" fill="#64748B" font-family="Inter, Helvetica, Arial" font-size="10">AVG / Datalek</text>
+  <line x1="120" y1="262" x2="120" y2="296" stroke="#94A3B8" stroke-width="1.5" marker-end="url(#arrInc)"/>
+  <text x="132" y="282" fill="#0F766E" font-family="Inter, Helvetica, Arial" font-size="9" font-weight="700">Ja</text>
+  <rect x="30" y="300" width="180" height="74" rx="8" fill="#FFF7ED" stroke="#F97316" stroke-width="1.5"/>
+  <text x="120" y="322" text-anchor="middle" fill="#9A3412" font-family="Inter, Helvetica, Arial" font-size="11" font-weight="700">Melding toezichthouder</text>
+  <text x="120" y="340" text-anchor="middle" fill="#7C2D12" font-family="Inter, Helvetica, Arial" font-size="10">AP (NL) / GBA (BE)</text>
+  <text x="120" y="358" text-anchor="middle" fill="#7C2D12" font-family="Inter, Helvetica, Arial" font-size="10">binnen 72u · AVG art. 33</text>
+  <line x1="120" y1="374" x2="120" y2="430" stroke="#94A3B8" stroke-width="1.5" marker-end="url(#arrInc)"/>
+  <rect x="30" y="434" width="180" height="58" rx="8" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.2"/>
+  <text x="120" y="458" text-anchor="middle" fill="#0F172A" font-family="Inter, Helvetica, Arial" font-size="11" font-weight="700">Betrokkenen informeren</text>
+  <text x="120" y="476" text-anchor="middle" fill="#64748B" font-family="Inter, Helvetica, Arial" font-size="10">bij HOOG risico · art. 34</text>
+  <!-- Column NIS2 -->
+  <line x1="360" y1="180" x2="360" y2="204" stroke="#94A3B8" stroke-width="1.5" marker-end="url(#arrInc)"/>
+  <rect x="270" y="208" width="180" height="54" rx="8" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.2"/>
+  <text x="360" y="230" text-anchor="middle" fill="#0F172A" font-family="Inter, Helvetica, Arial" font-size="11" font-weight="700">NIS2-INCIDENT</text>
+  <text x="360" y="250" text-anchor="middle" fill="#64748B" font-family="Inter, Helvetica, Arial" font-size="10">significant / grensoverschr.</text>
+  <line x1="360" y1="262" x2="360" y2="296" stroke="#94A3B8" stroke-width="1.5" marker-end="url(#arrInc)"/>
+  <text x="372" y="282" fill="#0F766E" font-family="Inter, Helvetica, Arial" font-size="9" font-weight="700">Ja</text>
+  <rect x="270" y="300" width="180" height="70" rx="8" fill="#ECFDF5" stroke="#10B981" stroke-width="1.5"/>
+  <text x="360" y="322" text-anchor="middle" fill="#065F46" font-family="Inter, Helvetica, Arial" font-size="11" font-weight="700">VROEGMELDING · T+24u</text>
+  <text x="360" y="340" text-anchor="middle" fill="#065F46" font-family="Inter, Helvetica, Arial" font-size="10">BE: CCB · NL: CSIRT/RDI</text>
+  <text x="360" y="357" text-anchor="middle" fill="#065F46" font-family="Inter, Helvetica, Arial" font-size="10">indicatie + impact</text>
+  <line x1="360" y1="370" x2="360" y2="404" stroke="#94A3B8" stroke-width="1.5" marker-end="url(#arrInc)"/>
+  <rect x="270" y="408" width="180" height="70" rx="8" fill="#FEF3C7" stroke="#D97706" stroke-width="1.5"/>
+  <text x="360" y="430" text-anchor="middle" fill="#78350F" font-family="Inter, Helvetica, Arial" font-size="11" font-weight="700">NOTIFICATIE · T+72u</text>
+  <text x="360" y="448" text-anchor="middle" fill="#78350F" font-family="Inter, Helvetica, Arial" font-size="10">uitgebreid · IOCs</text>
+  <text x="360" y="465" text-anchor="middle" fill="#78350F" font-family="Inter, Helvetica, Arial" font-size="10">+ cross-border gevolgen</text>
+  <line x1="360" y1="478" x2="360" y2="512" stroke="#94A3B8" stroke-width="1.5" marker-end="url(#arrInc)"/>
+  <rect x="270" y="516" width="180" height="70" rx="8" fill="#E0F2FE" stroke="#0EA5E9" stroke-width="1.5"/>
+  <text x="360" y="538" text-anchor="middle" fill="#075985" font-family="Inter, Helvetica, Arial" font-size="11" font-weight="700">EINDVERSLAG · T+1 mnd</text>
+  <text x="360" y="556" text-anchor="middle" fill="#075985" font-family="Inter, Helvetica, Arial" font-size="10">oorzaak · lessons learned</text>
+  <text x="360" y="573" text-anchor="middle" fill="#075985" font-family="Inter, Helvetica, Arial" font-size="10">+ structurele maatregelen</text>
+  <!-- Column Criminal -->
+  <line x1="600" y1="180" x2="600" y2="204" stroke="#94A3B8" stroke-width="1.5" marker-end="url(#arrInc)"/>
+  <rect x="510" y="208" width="180" height="54" rx="8" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.2"/>
+  <text x="600" y="230" text-anchor="middle" fill="#0F172A" font-family="Inter, Helvetica, Arial" font-size="11" font-weight="700">STRAFBAAR FEIT</text>
+  <text x="600" y="250" text-anchor="middle" fill="#64748B" font-family="Inter, Helvetica, Arial" font-size="10">hack / afpersing / fraude</text>
+  <line x1="600" y1="262" x2="600" y2="296" stroke="#94A3B8" stroke-width="1.5" marker-end="url(#arrInc)"/>
+  <text x="612" y="282" fill="#0F766E" font-family="Inter, Helvetica, Arial" font-size="9" font-weight="700">Ja</text>
+  <rect x="510" y="300" width="180" height="74" rx="8" fill="#FEE2E2" stroke="#DC2626" stroke-width="1.5"/>
+  <text x="600" y="322" text-anchor="middle" fill="#7F1D1D" font-family="Inter, Helvetica, Arial" font-size="11" font-weight="700">Politie · aangifte</text>
+  <text x="600" y="340" text-anchor="middle" fill="#7F1D1D" font-family="Inter, Helvetica, Arial" font-size="10">in overleg met directie</text>
+  <text x="600" y="358" text-anchor="middle" fill="#7F1D1D" font-family="Inter, Helvetica, Arial" font-size="10">+ juridisch adviseur</text>
+  <!-- Legend -->
+  <line x1="30" y1="610" x2="690" y2="610" stroke="#E2E8F0" stroke-width="1"/>
+  <text x="30" y="628" fill="#64748B" font-family="Inter, Helvetica, Arial" font-size="9" font-style="italic">De drie sporen lopen parallel — één incident kan meerdere meldplichten triggeren.</text>
+</svg>
 
 ### 5.1 Autoriteit Persoonsgegevens (AVG-datalek)
 

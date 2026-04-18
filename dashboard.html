@@ -3026,7 +3026,7 @@ function renderDocuments() {
     }
     html += `<div class="doc-item">
       <span class="doc-name">${doc.name}</span>
-      <button class="doc-download" onclick="downloadDoc('${doc.file}')">
+      <button class="doc-download" onclick="downloadDocLegacy('${doc.file}')">
         <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
         Download
       </button>
@@ -3035,7 +3035,7 @@ function renderDocuments() {
   document.getElementById('docList').innerHTML = html;
 }
 
-async function downloadDoc(file) {
+async function downloadDocLegacy(file) {
   // Visual feedback
   const btns = document.querySelectorAll('.doc-download');
   const clickedBtn = Array.from(btns).find(b => b.getAttribute('onclick')?.includes(file));
@@ -4526,9 +4526,20 @@ async function downloadDoc(pakketKey, file) {
   const filePath = pakketKey + '/' + file;
   try {
     const { data, error } = await sb.functions.invoke('get-document-url', { body: { file: filePath } });
-    if (error || data?.error) { alert('Download mislukt: ' + (data?.error || error?.message || 'onbekend')); return; }
-    if (data?.url) window.open(data.url, '_blank');
-    else alert('Geen signed URL terug.');
+    if (error || data?.error) {
+      alert('Download mislukt: ' + (data?.error || error?.message || 'onbekend'));
+      return;
+    }
+    if (!data?.url) { alert('Geen signed URL terug.'); return; }
+    // <a download> werkt wel na await (window.open wordt geblokkeerd)
+    const a = document.createElement('a');
+    a.href = data.url;
+    a.download = file.split('/').pop() || file;
+    a.target = '_blank';
+    a.rel = 'noopener noreferrer';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
   } catch (e) {
     alert('Download fout: ' + e.message);
   }

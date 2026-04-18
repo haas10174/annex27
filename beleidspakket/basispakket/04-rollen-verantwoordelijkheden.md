@@ -20,28 +20,38 @@ Dit document definieert de rollen, verantwoordelijkheden en bevoegdheden met bet
 
 ## 2. Organisatiestructuur informatiebeveiliging
 
-```
-┌─────────────────────────────────┐
-│          Directie / MT          │
-│   Eindverantwoordelijk ISMS     │
-└──────────────┬──────────────────┘
-               │
-┌──────────────▼──────────────────┐
-│   CISO / IS-verantwoordelijke   │
-│   Operationeel verantwoordelijk │
-└──────────────┬──────────────────┘
-               │
-    ┌──────────┼──────────┐
-    ▼          ▼          ▼
-┌────────┐ ┌────────┐ ┌────────┐
-│IT-beheer│ │Leidingge│ │HR      │
-│         │ │venden   │ │        │
-└────────┘ └────────┘ └────────┘
-               │
-    ┌──────────▼──────────┐
-    │  Alle medewerkers   │
-    └─────────────────────┘
-```
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 420" width="100%" style="max-width:600px;display:block;margin:16pt auto;">
+  <defs>
+    <marker id="arrOrg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#94A3B8"/>
+    </marker>
+  </defs>
+  <rect x="200" y="12" width="200" height="58" rx="10" fill="#0F172A"/>
+  <text x="300" y="36" text-anchor="middle" fill="#FFFFFF" font-family="Inter, Helvetica, Arial" font-size="13" font-weight="700">Directie / MT</text>
+  <text x="300" y="56" text-anchor="middle" fill="#CBD5E1" font-family="Inter, Helvetica, Arial" font-size="10">Eindverantwoordelijk ISMS</text>
+  <line x1="300" y1="70" x2="300" y2="100" stroke="#94A3B8" stroke-width="1.5" marker-end="url(#arrOrg)"/>
+  <rect x="200" y="102" width="200" height="58" rx="10" fill="#0D9488"/>
+  <text x="300" y="126" text-anchor="middle" fill="#FFFFFF" font-family="Inter, Helvetica, Arial" font-size="13" font-weight="700">CISO</text>
+  <text x="300" y="146" text-anchor="middle" fill="#CCFBF1" font-family="Inter, Helvetica, Arial" font-size="10">Operationeel verantwoordelijk</text>
+  <line x1="300" y1="160" x2="300" y2="200" stroke="#94A3B8" stroke-width="1.5"/>
+  <line x1="90" y1="200" x2="510" y2="200" stroke="#94A3B8" stroke-width="1.5"/>
+  <line x1="90" y1="200" x2="90" y2="224" stroke="#94A3B8" stroke-width="1.5" marker-end="url(#arrOrg)"/>
+  <rect x="20" y="228" width="140" height="56" rx="8" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.2"/>
+  <text x="90" y="252" text-anchor="middle" fill="#0F172A" font-family="Inter, Helvetica, Arial" font-size="12" font-weight="600">IT-beheer</text>
+  <text x="90" y="268" text-anchor="middle" fill="#64748B" font-family="Inter, Helvetica, Arial" font-size="10">Technische maatregelen</text>
+  <line x1="300" y1="200" x2="300" y2="224" stroke="#94A3B8" stroke-width="1.5" marker-end="url(#arrOrg)"/>
+  <rect x="230" y="228" width="140" height="56" rx="8" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.2"/>
+  <text x="300" y="252" text-anchor="middle" fill="#0F172A" font-family="Inter, Helvetica, Arial" font-size="12" font-weight="600">Leidinggevenden</text>
+  <text x="300" y="268" text-anchor="middle" fill="#64748B" font-family="Inter, Helvetica, Arial" font-size="10">Naleving binnen team</text>
+  <line x1="510" y1="200" x2="510" y2="224" stroke="#94A3B8" stroke-width="1.5" marker-end="url(#arrOrg)"/>
+  <rect x="440" y="228" width="140" height="56" rx="8" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.2"/>
+  <text x="510" y="252" text-anchor="middle" fill="#0F172A" font-family="Inter, Helvetica, Arial" font-size="12" font-weight="600">HR</text>
+  <text x="510" y="268" text-anchor="middle" fill="#64748B" font-family="Inter, Helvetica, Arial" font-size="10">Screening + training</text>
+  <line x1="300" y1="284" x2="300" y2="330" stroke="#94A3B8" stroke-width="1.5" marker-end="url(#arrOrg)"/>
+  <rect x="170" y="332" width="260" height="56" rx="10" fill="#F8FAFC" stroke="#0D9488" stroke-width="1.5"/>
+  <text x="300" y="356" text-anchor="middle" fill="#0F172A" font-family="Inter, Helvetica, Arial" font-size="13" font-weight="700">Alle medewerkers</text>
+  <text x="300" y="374" text-anchor="middle" fill="#0F766E" font-family="Inter, Helvetica, Arial" font-size="10">Naleven beleid · incidenten melden</text>
+</svg>
 
 ## 3. Rolbeschrijvingen
 
