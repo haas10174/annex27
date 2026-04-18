@@ -1,0 +1,19 @@
+{
+  "pagina": "DNV © 2023",
+  "type": "content",
+  "hoofdstuk": "Toepassingsgebied en inhoud van het ISMS",
+  "transcriptie": "Petten\n\nToepassingsgebied en inhoud van het ISMS\n\nBij het opzetten van het ISMS is de eerste stap het definiëren van het toepassingsgebied (scope) en de grenzen. Dit zorgt ervoor dat alle bedrijfsprocessen die door het ISMS moeten worden afgedekt, zijn opgenomen.\n\nHet toepassingsgebied en het managementsysteem voor informatiebeveiliging vaststellen\n\nDe organisatie moet de grenzen en de toepasbaarheid van het ISMS bepalen, zodra het organisatiekennengebied, BIJ het verstellen van dit toepassingsgebied moet de organisatie: en kwesties, zoals genoemd in clause 4.1 en 4.2 gedoeld) verwijzingen naar het intern zijn organisaties (issues);\n\na) de in 4.1 genoemde externe en interne kwesties bekijken (issues);\nb) de in 4.2 genoemde eisen (hetzicht verrijgen in de behoeften en verwachtingen van belanghebbenden);\nc) vastleggen van en documenteren van gemarkeerde gedeelten, de doel door de organisatie worden gebruikt.\n\nHet toepassingsgebied moet als gedocumenteerde informatie beschikbaar zijn.\n\nISO 27001:2022 paragraaf 4.3\n\nB) het bepaalt van het toepassingsgebied moet de aard van de activiteiten kort worden gedocumenteerd. De 1e stede locates wear het bedrjif actief is, moeten worden geindetificeerd. Belangrijke bedrjifsmiddelen van de organisatie, zoals kritieke hardware, databases, applicatiesoftware, communicatieapparatuur en de belangrijke gebruikte technologie moeten worden vermeld.\n\nDe regelsgeving en contractuele verplichtingen moeten zijn om informatie bescherming die de software van de organisatie beinvloeden te verlijken tussen reiten.\n\nHet kan zijn dat de organisatie bepaalde bedrijfsmiddelen of -processen wil uitsluiten van het toepassingsgebied wat het ISMS. De organisatie moet dan kunnen verantwoorden dat deze uitsluiting geen invloed heeft op haar vermogen of informatieveiligde te bieden en dat dit kan worden bewstigd door het resultaat van een risicobeoordering.",
+  "kernconcepten": [
+    "Toepassingsgebied ISMS",
+    "ISO 27001:2022 paragraaf 4.3",
+    "Grenzen van het ISMS",
+    "Externe en interne kwesties",
+    "Belanghebbenden",
+    "Gedocumenteerde informatie",
+    "Risicobeoordering",
+    "Uitsluiten van bedrijfsmiddelen"
+  ],
+  "_source": "Foto 18-04-2026, 18 39 26.jpg",
+  "_input_tokens": 1897,
+  "_output_tokens": 768
+}

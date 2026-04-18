@@ -1,0 +1,21 @@
+{
+  "pagina": "niet zichtbaar",
+  "type": "diagram",
+  "hoofdstuk": "Wat houdt het auditproces in?",
+  "transcriptie": "Dit is een procesdiagram dat het auditproces visualiseert met een groot vraagteken centraal en drie hoofdfasen die ervan uitgaan:\n\n1. PLANNING (links, grijs): Deze fase omvat de volgende elementen:\n- Communicatie\n- Checklist opstellen\n- Planning gesprekken\n- Ophelien\n- Documentenonderzoek\n- Ophelien\n- Checklist\n- Scope\n\n2. RAPPORTAGE (onder, groen): Deze fase omvat:\n- Auditproces (centraal label)\n- Eindbespreking\n- Bewijzen en vastleggingen\n- Te beoordelen processen\n- Bezoeken\n- Talenkennis\n- Categorieën van bevindingen\n- Verslaglegging\n- Observatie\n- Afdeling\n- Stichten van vertrouwen\n- Surveys\n- Ei\n- Observatie\n- Afdeling\n\n3. UITVOERING (rechts, blauw): Deze fase omvat:\n- Openingsbijeenkomst\n- Begrijpen context\n- Formele processen\n- Interviews en documentatie\n- Vervoer\n- Audittrail\n- Accommodatie\n- Management-briefing\n- Tonen\n- Informatie\n- Tijdmanagement\n- B\n- Observaties\n- Interviews en observaties\n- Observaties van geïdentificeerde criteria\n- Info verzamelen\n- Aantekengen maken\n\nDe drie fasen zijn verbonden via gebogen pijlen die rond het centrale vraagteken lopen, wat suggereert dat het een cyclisch of iteratief proces is.",
+  "kernconcepten": [
+    "Auditproces",
+    "Planning",
+    "Rapportage",
+    "Uitvoering",
+    "Openingsbijeenkomst",
+    "Eindbespreking",
+    "Documentenonderzoek",
+    "Interviews",
+    "Observaties",
+    "Verslaglegging"
+  ],
+  "_source": "Foto 18-04-2026, 18 38 55.jpg",
+  "_input_tokens": 1897,
+  "_output_tokens": 587
+}

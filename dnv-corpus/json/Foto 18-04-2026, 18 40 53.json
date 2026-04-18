@@ -1,0 +1,19 @@
+{
+  "pagina": "Pagina 29 van 112",
+  "type": "tabel",
+  "hoofdstuk": "Niet zichtbaar op deze pagina",
+  "transcriptie": "Dit is een tabel met genummerde rijen (5.26 t/m 7.5) die verschillende aspecten van informatiebeveiliging en auditering behandelt.\n\n| Nummer | Onderwerp |\n|--------|----------|\n| 5.26 | Reageren op informatiebeveiligingsincidenten |\n| 5.27 | Leren van informatiebeveiligingsincidenten |\n| 5.28 | Verzamelen van bewijsmateriaal |\n| 5.29 | Informatiebeveiliging tijdens een verstoring |\n| 5.30 | ICT-gereedheid voor bedrijfscontinuïteit |\n| 5.31 | Wettelijke, statutaire, regelgevende en contractuele eisen |\n| 5.32 | Intellectuele eigendomsrechten |\n| 5.33 | Beschermen van registraties |\n| 5.34 | Privacy en bescherming van persoonsgegevens |\n| 5.35 | Onafhankelijke beoordeling van informatiebeveiliging |\n| 5.36 | Naleving van beleid, regels en normen voor informatiebeveiliging |\n| 5.37 | Gedocumenteerde procedures |\n| 6 | Mensgerichte beheersmaatregelen (GROEN GEMARKEERD) |\n| 6.1 | Screening |\n| 6.2 | Arbeidsovereenkomst |\n| 6.3 | Bewustwording, opleiding en training op informatiebeveiliging |\n| 6.4 | Disciplinaire procedure |\n| 6.5 | Verantwoordelijkheden na beëindiging of wijziging van het dienstverband |\n| 6.6 | Vertrouwelijkheids- of geheimhoudingsovereenkomsten |\n| 6.7 | Werken op afstand |\n| 6.8 | Melden van informatiebeveiligingsgebeurtenissen |\n| 7 | Fysieke beheermaatregelen (GROEN GEMARKEERD) |\n| 7.1 | Fysieke beheersgrenzen |\n| 7.2 | Fysieke beveiligingszone |\n| 7.3 | Beveiligen van kantoren, ruimten en faciliteiten |\n| 7.4 | Monitoren van de fysieke beveiliging |\n| 7.5 | Beschermen tegen fysieke en omgevingsbedreigingen |\n\nDe rijen 6 en 7 zijn groen gemarkeerd als hoofdcategorieën.",
+  "kernconcepten": [
+    "Mensgerichte beheersmaatregelen",
+    "Fysieke beheermaatregelen",
+    "Informatiebeveiligingsincidenten",
+    "Privacy en persoonsgegevens",
+    "Bedrijfscontinuïteit",
+    "Naleving",
+    "Bewustwording en training",
+    "Fysieke beveiliging"
+  ],
+  "_source": "Foto 18-04-2026, 18 40 53.jpg",
+  "_input_tokens": 1897,
+  "_output_tokens": 849
+}

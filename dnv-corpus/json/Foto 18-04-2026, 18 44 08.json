@@ -1,0 +1,18 @@
+{
+  "pagina": "18-19",
+  "type": "content",
+  "hoofdstuk": "De elementen van informatiebeveiliging / Informatiebeveiliging (1/2)",
+  "transcriptie": "De elementen van informatiebeveiliging\n\nVertrouwelijkheid - eigenschap van informatie dat deze alleen ter kennis van en toegankelijk is voor daartoe geautoriseerde personen.\nISO 27000:2018, paragraaf 3.10\n\nIntegriteit - eigenschap van juistheid en volledigheid\nISO 27000:2018, paragraaf 3.36\n\nBeschikbaarheid - eigenschap van toegankelijk en bruikbaar te zijn op het verzoek van een daartoe bevoegde entiteit.\nISO 27000:2018, paragraaf 3.7\n\n---\n\nInformatiebeveiliging (1/2)\n\nInformatiesysteem\ngenereer bescherming tegen geheimhouding middelen van diensten, informatietechnologische-middelen of anderlijk door vervoer meer rende componenten\nISO 27000:2022, paragraaf 3.1.17\n\nPersoonlijk Identificeerbare Informatie PII\nals informatie die al dan niet voor zich zelf vervolgens gebruikt worden verlaten de informatiedeling kan identificeren een natuurlijk person op basis van algemene informatie of direct of indirect kan natuurlijke person is\nISO 27000:2022, paragraaf 3.1.12",
+  "kernconcepten": [
+    "Vertrouwelijkheid",
+    "Integriteit",
+    "Beschikbaarheid",
+    "CIA-triade",
+    "Informatiesysteem",
+    "PII - Persoonlijk Identificeerbare Informatie",
+    "ISO 27000 definities"
+  ],
+  "_source": "Foto 18-04-2026, 18 44 08.jpg",
+  "_input_tokens": 1897,
+  "_output_tokens": 471
+}

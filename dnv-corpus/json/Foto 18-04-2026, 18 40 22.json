@@ -1,0 +1,26 @@
+{
+  "pagina": "onbekend",
+  "type": "content",
+  "hoofdstuk": "ISO/IEC 27002:2022",
+  "transcriptie": "ISO/IEC 27002:2022\n\nPraktrichtlijn voor het managementsysteem voor informatiebeveiliging.\n\nDeze internationale norm stelt richtlijnen aan algemene principes vast voor het initiëren, implementeren, onderhouden en verbeteren van het informatiebeveiligingsmanagement binnen in een organisatie\n\nDeze norm bevat 4 hoofdstukken over beveiligingsmaatregelen met in totaal 93 beheersmaatrregelen.\nDe hoofdstukken zijn als volgt:\n\nHoofdstuk 5: Organisatorische beheersmaatregelen (37 beheersmaatregelen)\nHoofdstuk 6: Menselijke beheersmaatregelen (8 beheersmaatregelen)\nHoofdstuk 7: Fysieke beheersmaatregelen (14 beheersmaatregelen)\nHoofdstuk 8: Technologische beheersmaatregelen (34 beheersmaatregelen)\n\nAan de beheersmaatregel zijn ook verschillende attributen toegekend voor eenvoudigere classificatie en behersing:\n\n- Type beheersmaatregel: Detectief, Corrigerend (herstelt of verminderen (beperken) de impact van een incident),\n- Preventief Corrigerend (probeer van het risico iets met betrekking tot het zich\n- er hoe de beheersmaatregelen tot één ondergenomen kan betrekking en verbeterd\n- voorzien van een informatiebeveiligingsplan beschrijven, Herstel (voorbereiding en herstel correctie van normale bedrijfsvericheden)\n- Informatiebeveiliging Integriteit, Beschikbaarheid\n- Domein van cyberveiligheid: Identificeren, Beschermen, Detecteren, Reageren, Herstellen (verband met NIST\n- tussen persoonsmaatregelen en in ISO/IEC 27110 beschreven CS concepten informatiebescheming,\n- Operationele capaciteiten: Governance, beheer van Assets, Identiteits- en informatiebeschermig,\n- Personeelsbeveiliging: Fysieke beveiliging, beheer van systeem- en netwerkbeveiliging\n- Tegenstrijdigheid Beveiligingseveiliging: Relaties ten Applications en softwarebeveiliging, Juridisch en\n- Beveiligingsdomeinbeveiligheid in leverancierseties, Configuratie van compliance, Juridisch en\n- drieëngericht aan beheerder van informatiebeveiligingsgebeurtenissen en Boetsing van informatiebeveiliging\n- gebeurtenisgebeurtenissen Boetsing van informatiebeveiliging en continuïteit,\n- (perspectief van persoonsgegevens(persoonsgegevens)\n- Beveiligingsdomein Governance en Ecosystem: Bescherming Verleiding Veerkracht\n(informatiebeveiliging (informatieveiligheidsbeveiliging)(informatiebeveiliging)\n\nDe layout voor elke beheersmaatregel omvat het volgende:\n- Beheersmaatregel titiel: korte naam van de beheersmaatregel.\n- Attribuut tabel: Attribuut tabel het de waar(de)(s) zien van elke attribuut voor de gegeven\n- beheersmaatregel.\n- Doel: waarom de beheersmaatregel geïmplementeerd moet worden.\n- Richtlijn: hoe de beheersing uitleg kan worden geïmplementeerd en uitgevoerd.\n- Andere informatie: Tekst met uitleg of referenties naar andere gerelateerde documenten.",
+  "kernconcepten": [
+    "ISO/IEC 27002:2022",
+    "93 beheersmaatregelen",
+    "4 hoofdstukken",
+    "Organisatorische beheersmaatregelen",
+    "Menselijke beheersmaatregelen",
+    "Fysieke beheersmaatregelen",
+    "Technologische beheersmaatregelen",
+    "Attributen",
+    "Type beheersmaatregel",
+    "Preventief",
+    "Detectief",
+    "Corrigerend",
+    "Informatiebeveiliging",
+    "Cybersecurity domeinen",
+    "NIST framework"
+  ],
+  "_source": "Foto 18-04-2026, 18 40 22.jpg",
+  "_input_tokens": 1897,
+  "_output_tokens": 1164
+}

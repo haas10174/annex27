@@ -1,0 +1,18 @@
+{
+  "pagina": "onbekend",
+  "type": "diagram",
+  "hoofdstuk": "ISO 27001 - De eisen",
+  "transcriptie": "ISO 31000 - Risicomanagement – Principes en richtlijnen\n\nISO 27035 - Informatiebeveiliging, Cyberbeveiliging en Beveiligingstechniek – Beheer van informatiebeveiligingsincidenten\n\nISO 27001 - De eisen\n\nHet diagram toont de structuur van ISO 27001 met de volgende secties:\n\nSectie 0: Inleiding\n\nSectie 1: Toepassingsgebied\n\n0.1 Algemeen - Informalizeer/verkennen voor inhame en externe partijen - Hang af van de omvang, aard en structuur van elke organisatie - Niet constant, verandert in de loop der tijd\n\n0.2 Compatibiliteit met andere managementsystemen - Bijlage SL van ISO/IEC Directives\n\nSectie 2: Normatieve verwijzingen\n\nSectie 3: Termen en definities\n\nSectie 4-10: Eisen\n4. Context van de organisatie\n5. Leiderschap\n6. Planning\n7. Ondersteuning\n8. Uitvoering\n9. Evaluatie van de prestaties\n10. Verbetering\n\nDe volgende elementen zijn verbonden aan de hoofdstructuur:\n- Gebruik de laatste versie van de ISO 27000-norm\n- Raadpleeg ISO/IEC 27000\n- Bijlage A (normatief): Referentiebeheersmaatregelen - maatregelen\n- Bijlage SL van ISO/IEC Directives\n\nRechtsboven staat: DNV © 2023",
+  "kernconcepten": [
+    "ISO 27001 structuur",
+    "High Level Structure (HLS)",
+    "Bijlage A beheersmaatregelen",
+    "ISO 27000 normenfamilie",
+    "Compatibiliteit managementsystemen",
+    "Bijlage SL",
+    "Tien hoofdsecties (4-10)"
+  ],
+  "_source": "Foto 18-04-2026, 18 40 36.jpg",
+  "_input_tokens": 1897,
+  "_output_tokens": 608
+}

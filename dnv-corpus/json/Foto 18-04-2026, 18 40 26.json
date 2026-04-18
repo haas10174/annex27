@@ -1,0 +1,18 @@
+{
+  "pagina": "29",
+  "type": "content",
+  "hoofdstuk": "5 Organisatorische beheersmaatregelen",
+  "transcriptie": "5 Organisatorische beheersmaatregelen\n\n5.1 Beleidsregels voor informatiebeveiliging\n\n| Type beheersmaatregelen | Informatiebeveiligingsmaatregelen - managementsysteem en cybersecurity | Cybersecurity concepten | Operationele capaciteiten | Beveiligingsdomeinen | Informatiemacht en Eco-systeem #Werkfactoren |\n|---|---|---|---|---|---|\n| #Preventief | #Kernwillekeur | #Identificeren | #Governante | | |\n| | #Beveiligingsthema | | | | |\n| | #Interactiethema | | | | |\n\nISO 27002:2006 heeft richtlijnen voor Certificerande Instellingen die de ISMS systelemen van organisaties audiren\n\nISO 9011:2011 biedt auditrichtlijnen voor zowel (kwaliteits)- als milieumanagementsystemen en kan ook voor managementsystemen voor informatieleveiliging worden gebruikt.\n\nBehandel de auditprincipes, het managen van een auditprograrnma, auditactiviteiten en de competentie en evaluatie van auditors.",
+  "kernconcepten": [
+    "Beleidsregels voor informatiebeveiliging",
+    "Type beheersmaatregelen",
+    "ISO 27002:2006",
+    "ISO 9011:2011",
+    "ISMS systemen",
+    "Auditrichtlijnen",
+    "Certificerende instellingen"
+  ],
+  "_source": "Foto 18-04-2026, 18 40 26.jpg",
+  "_input_tokens": 1897,
+  "_output_tokens": 457
+}

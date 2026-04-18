@@ -1,0 +1,23 @@
+{
+  "pagina": "70 van 112",
+  "type": "tabel",
+  "hoofdstuk": "Deelnemersmateriaal 2024 - Training Auditor / Lead Auditor ISMS ISO 27001:2022 - Rev.7",
+  "transcriptie": "DNV © 2023\n\nDit is een tabel met technische beheersmaatregelen uit de ISO 27000-reeks. De tabel heeft genummerde rijen van 7-6 tot en met 8-17.\n\n| Nr | Beheersmaatregel |\n|-----|------------------|\n| 7-6 | Werken in beveiligde gebieden |\n| 7-7 | Clear desk en clear screen |\n| 7-8 | Plaatsen van het beschermen van apparatuur |\n| 7-9 | Beveiliging van bedrijfsmiddelen buiten het terrein |\n| 7-10 | Opslagmedia |\n| 7-11 | Nutsvoorzieningen |\n| 7-12 | Beveiliging van bekabeling |\n| 7-13 | Onderhoud van apparatuur |\n| 7-14 | Veilig verwijderen of hergebruiken van apparatuur |\n| 8 | Technologische beheersmaatregelen |\n| 8-1 | Gebruikersapparatuur |\n| 8-2 | Speciale toegangsrechten |\n| 8-3 | Beperking tot toegang tot informatie |\n| 8-4 | Toegangsbeveiliging tot broncode |\n| 8-5 | Beveiligde authenticatie |\n| 8-6 | Capaciteitsbeheer |\n| 8-7 | Bescherming tegen malware |\n| 8-8 | Beheer van technische kwetsbaarheden |\n| 8-9 | Configuratiebeheer |\n| 8-10 | Wissen van informatie |\n| 8-11 | Maskeren van gegevens |\n| 8-12 | Voorkomen van gegevenslekken (Data Leakage Prevention) |\n| 8-13 | Back-up van informatie |\n| 8-14 | Redundantie van informatieverwerkende faciliteiten |\n| 8-15 | Logging |\n| 8-16 | Monitoren van activiteiten |\n| 8-17 | Kloksynchronisatie |\n\nRij 8 (Technologische beheersmaatregelen) is gemarkeerd met een groene achtergrondkleur.",
+  "kernconcepten": [
+    "Technologische beheersmaatregelen",
+    "Beveiligde gebieden",
+    "Gebruikersapparatuur",
+    "Toegangsbeveiliging",
+    "Authenticatie",
+    "Malware bescherming",
+    "Configuratiebeheer",
+    "Data Leakage Prevention",
+    "Back-up",
+    "Logging",
+    "Monitoring",
+    "ISO 27001 Annex A"
+  ],
+  "_source": "Foto 18-04-2026, 18 40 57.jpg",
+  "_input_tokens": 1897,
+  "_output_tokens": 816
+}

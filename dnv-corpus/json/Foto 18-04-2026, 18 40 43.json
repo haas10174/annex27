@@ -1,0 +1,20 @@
+{
+  "pagina": "Pagina 67 van 112",
+  "type": "content",
+  "hoofdstuk": "Implementatie van beheersmaatregelen",
+  "transcriptie": "Implementatie van beheersmaatregelen\n\nEen beheersmaatregel is een wettelijke waarom waarin wordt beschreven wat er met de implementatie van beheersmaatregelen moet worden bereikt\n\nBeheersmaatregelen zijn middelen om risico's te beheersen, met inbegrip van beleidsmaatregelen, procedures, richtlijnen, best practices en organisatiestructuren van administratieve, technische, bestuurlijke of juridische aard.\n\nDe beheersrichtslijnen en -maatregelen zijn gebaseerd op de resultaten en conclusies van de risico-analyseprocces-, wet- en regelgevingsprocessen, contractuele eisen en de bedrijfsmissen van de organisatie ten aanzien van informatiebeveilig\n\nDe in tabel A.1 vermelde beheersmaatregelen zijn rechtstreeks afgeleid van die van de organisatie(stukkens 5 tot en met 8 van ISO/IEC 27002:2022. De lijsten in tabel A.1 zijn niet uitputtend en een organisatie kan aanvullende beheersmaatregelen als noodzakelijk zoals in 6.1.3 van ISO/IEC 27001:2022 genoemd, en kunnen deze tabel mogelijk uitbreiden zonder dat het nodig is om tabel A.1 zelf uit te breiden\n\nbeheerssystemen uitdeze tabel moeten worden geselecteerd als onderdeel van het in 6.1.3 beschreven ISMS-proces.\n\nDe hoofdstukken 5 tot en met 8 van ISO/IEC 27002:2022 bieden implementatieadviezen en richtlijnen voor best practices ter ondersteuning van de punten A.5 tot en met A.8 vermelde de beheersmaatregelen.\n\nHoofdstuk 5: Organisatorische beheersmaatregelen (37)\nHoofdstuk 6: Mensgerichte beheersmaatregelen (8)\nHoofdstuk 7: Fysieke beheersmaatregelen (14)\nHoofdstuk 8: Technologische beheersmaatregelen (34)",
+  "kernconcepten": [
+    "Beheersmaatregelen",
+    "ISO/IEC 27002:2022",
+    "Tabel A.1",
+    "Risico-analyse",
+    "Implementatierichtlijnen",
+    "Organisatorische beheersmaatregelen",
+    "Mensgerichte beheersmaatregelen",
+    "Fysieke beheersmaatregelen",
+    "Technologische beheersmaatregelen"
+  ],
+  "_source": "Foto 18-04-2026, 18 40 43.jpg",
+  "_input_tokens": 1897,
+  "_output_tokens": 724
+}

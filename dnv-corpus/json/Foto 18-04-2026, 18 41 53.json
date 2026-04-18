@@ -1,0 +1,18 @@
+{
+  "pagina": "niet zichtbaar",
+  "type": "diagram",
+  "hoofdstuk": "Een audit uitvoeren",
+  "transcriptie": "Dit is een proces-diagram in de vorm van een groot cijfer '2' dat de auditfasen weergeeft. Links bovenaan staat 'Hoofdstuk 6 - Een audit uitvoeren'. Het diagram toont drie hoofdfasen:\n\n1. PLANNING (donkerblauw, bovenste deel): Deze fase omvat branches voor 'Communiceren', 'Openen - IJsbreken' en 'UITVOERING'. Vanuit uitvoering komen takken zoals 'Scope en doelen van de organisatie', 'Programma's en basisregels', 'Auditcriteria', 'Vertical', 'Horizontal', 'Liasse', 'Steekproeftechniek', 'Tijdsmanagement', 'Vragen', 'Luisteren', 'Aantekeningentechniek', 'Observeren', 'Verifiëren', 'Info verzamelen' en 'Aantekeningen maken'.\n\n2. FOLLOW-UP (middelste deel, grijs): Deze fase bevat takken voor 'Planning checklist', 'Checklists voorstellen', 'Documenten en Schema', 'Regels', 'Context'.\n\n3. RAPPORTAGE (onderste deel, lichtgroen): Deze fase toont 'Auditproces' centraal met uitlopende takken zoals 'Eindbijeenkomst', 'Samenvatting', 'Schrijven van een afsluitend', 'Bevinding', 'Afwijking', 'Observatie', 'EH', 'Categorisatie van bevindingen', 'Verbetermaatregelen uitnemen', 'Categorisatie van bevindingen' en 'Afwijking'.\n\nOnderaan links staat in groen 'In dit hoofdstuk bestaat we aandacht aan het volprinte:' gevolgd door drie bullets:\n- Een opzettingsbijeenkomst voorzitten\n- Begrip van Verbale en non-verbale communicatie\n- Een audit uitvoeren",
+  "kernconcepten": [
+    "Auditproces",
+    "Planning",
+    "Follow-up",
+    "Rapportage",
+    "Uitvoering",
+    "Auditfasen",
+    "ISO 27001 audit workflow"
+  ],
+  "_source": "Foto 18-04-2026, 18 41 53.jpg",
+  "_input_tokens": 1897,
+  "_output_tokens": 624
+}

@@ -2524,6 +2524,8 @@ function bindTabs() {
 // ── RAPPORT UPLOAD/RELEASE (admin) ──
 let selectedClientReports = [];
 
+let currentDraft = null;
+
 async function loadRapportPanel() {
   const container = document.getElementById('rapportContainer');
   if (!currentClient?.user_id) {
@@ -2531,9 +2533,13 @@ async function loadRapportPanel() {
     return;
   }
   container.innerHTML = '<div class="empty-state">Laden...</div>';
-  const { data, error } = await sb.from('reports').select('*').eq('user_id', currentClient?.user_id).order('created_at', { ascending: false });
-  if (error) { container.innerHTML = '<div class="empty-state">Kon rapporten niet laden.</div>'; return; }
-  selectedClientReports = data || [];
+  const [rapports, drafts] = await Promise.all([
+    sb.from('reports').select('*').eq('user_id', currentClient.user_id).order('created_at', { ascending: false }),
+    sb.from('report_drafts').select('*').eq('user_id', currentClient.user_id).order('generated_at', { ascending: false }).limit(1)
+  ]);
+  if (rapports.error) { container.innerHTML = '<div class="empty-state">Kon rapporten niet laden.</div>'; return; }
+  selectedClientReports = rapports.data || [];
+  currentDraft = (drafts.data || [])[0] || null;
   renderRapportPanel();
 }
 
@@ -2559,19 +2565,225 @@ function renderRapportPanel() {
     `;
   }).join('');
 
+  // AI draft section
+  let aiBlock = '';
+  if (!currentDraft) {
+    aiBlock = `
+      <div style="background:linear-gradient(135deg,#0c0f1a 0%,#1e293b 100%);color:#fff;border-radius:14px;padding:28px;margin-bottom:24px;">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
+          <span style="font-size:1.4rem;">\uD83E\uDD16</span>
+          <h3 style="font-family:'Sora',sans-serif;font-size:1.15rem;margin:0;">AI-gegenereerd rapport</h3>
+          <span style="font-size:0.7rem;background:rgba(20,184,166,0.2);color:#5eead4;padding:3px 9px;border-radius:99px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;">Opus 4.7</span>
+        </div>
+        <p style="color:rgba(255,255,255,0.7);font-size:0.9rem;margin:0 0 18px;max-width:620px;line-height:1.55;">
+          Genereer een eerste draft van het gap-analyse rapport op basis van de quickscan-antwoorden, aangeleverde bewijsvoering (foto's + bestanden) en eerdere auditor-bevindingen. Claude leest evidence visueel en schrijft in jouw stijl.
+        </p>
+        <button onclick="generateAIDraft()" id="genDraftBtn" style="background:#14b8a6;color:#fff;border:none;padding:11px 22px;border-radius:10px;font-weight:700;font-size:0.9rem;cursor:pointer;display:inline-flex;align-items:center;gap:8px;">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          Genereer AI-draft
+        </button>
+        <div id="genDraftStatus" style="margin-top:12px;font-size:0.82rem;color:rgba(255,255,255,0.5);display:none;"></div>
+      </div>`;
+  } else {
+    const s = currentDraft.sections || {};
+    const released = !!currentDraft.released_at;
+    const costStr = currentDraft.cost_usd ? '$'+Number(currentDraft.cost_usd).toFixed(3) : '?';
+    const genOn = currentDraft.generated_at ? new Date(currentDraft.generated_at).toLocaleString('nl-NL') : '';
+    aiBlock = `
+      <div style="background:#fff;border:1px solid var(--border);border-radius:14px;padding:24px;margin-bottom:24px;">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;flex-wrap:wrap;">
+          <span style="font-size:1.3rem;">\uD83E\uDD16</span>
+          <h3 style="font-family:'Sora',sans-serif;font-size:1.1rem;margin:0;">AI-draft rapport</h3>
+          <span style="font-size:0.68rem;background:${released?'rgba(16,185,129,0.12)':'rgba(251,191,36,0.15)'};color:${released?'#059669':'#92400e'};padding:3px 9px;border-radius:99px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;">${released?'Vrijgegeven':'Draft'}</span>
+          <span style="margin-left:auto;font-size:0.75rem;color:var(--text-muted);">Gegenereerd ${esc(genOn)} · ${esc(currentDraft.model||'')} · ${costStr}</span>
+        </div>
+
+        <div style="display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap;">
+          <button onclick="generateAIDraft(true)" style="background:rgba(15,23,42,0.06);color:#475569;border:1px solid rgba(15,23,42,0.15);border-radius:8px;padding:7px 14px;font-size:0.78rem;font-weight:600;cursor:pointer;">Opnieuw genereren</button>
+          ${released
+            ? '<button onclick="unreleaseDraft()" style="background:rgba(220,38,38,0.08);color:#dc2626;border:1px solid rgba(220,38,38,0.2);border-radius:8px;padding:7px 14px;font-size:0.78rem;font-weight:600;cursor:pointer;">Intrekken</button>'
+            : '<button onclick="releaseDraft()" style="background:#0D9488;color:#fff;border:none;border-radius:8px;padding:7px 16px;font-size:0.78rem;font-weight:700;cursor:pointer;">Vrijgeven aan klant</button>'}
+          <button onclick="previewDraftAsClient()" style="background:rgba(15,23,42,0.04);color:#0F172A;border:1px solid var(--border);border-radius:8px;padding:7px 14px;font-size:0.78rem;font-weight:600;cursor:pointer;">Preview klant-view</button>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:16px;">
+          ${renderDraftSection('Executive summary', 'executive_summary', s.executive_summary||'')}
+          ${renderDraftSection('Score-samenvatting', 'score_summary', s.score_summary||'')}
+          ${renderCategorySection(s.findings_by_category||{})}
+          ${renderPriorities(s.top_priorities||[])}
+          ${renderDetailedFindings(s.detailed_findings||[])}
+          ${renderDraftSection('AI-disclosure (ondertekening)', 'disclosure', s.disclosure||'')}
+        </div>
+      </div>`;
+  }
+
   container.innerHTML = `
-    <div style="margin-bottom:18px;">
-      <label style="display:inline-flex;align-items:center;gap:8px;padding:10px 16px;background:#0D9488;color:#fff;border-radius:10px;cursor:pointer;font-weight:600;font-size:0.88rem;">
-        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-        Upload PDF-rapport
-        <input type="file" accept="application/pdf" onchange="uploadReport(this)" style="display:none;" />
-      </label>
-      <span style="margin-left:12px;font-size:0.8rem;color:var(--text-muted);">Max 50MB, alleen PDF. Upload → klik "Vrijgeven" om de klant toegang te geven.</span>
-    </div>
-    <div style="display:flex;flex-direction:column;gap:10px;">
-      ${rows || '<div class="empty-state" style="padding:32px;text-align:center;color:var(--text-muted);">Nog geen rapporten voor deze klant.</div>'}
+    ${aiBlock}
+    <div style="border-top:1px solid var(--border-light);padding-top:20px;">
+      <h4 style="font-size:0.9rem;margin:0 0 10px;color:var(--text-secondary);">Handmatige PDF-upload (legacy / extern rapport)</h4>
+      <div style="margin-bottom:16px;">
+        <label style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:rgba(15,23,42,0.06);color:#0F172A;border:1px solid var(--border);border-radius:8px;cursor:pointer;font-weight:600;font-size:0.82rem;">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          Upload PDF-rapport
+          <input type="file" accept="application/pdf" onchange="uploadReport(this)" style="display:none;" />
+        </label>
+        <span style="margin-left:10px;font-size:0.76rem;color:var(--text-muted);">Max 50MB, alleen PDF.</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        ${rows || '<div style="padding:18px;text-align:center;color:var(--text-muted);font-size:0.85rem;">Geen handmatige uploads.</div>'}
+      </div>
     </div>
   `;
+}
+
+function renderDraftSection(title, key, value) {
+  const esc = (s) => String(s ?? '').replace(/[<>&"]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c]));
+  return `
+    <div class="draft-section">
+      <label style="font-size:0.74rem;font-weight:800;letter-spacing:0.06em;text-transform:uppercase;color:var(--accent);margin-bottom:6px;display:block;">${esc(title)}</label>
+      <textarea oninput="updateDraftField('${key}', this.value)" style="width:100%;min-height:100px;padding:12px;border:1px solid var(--border);border-radius:8px;font-family:inherit;font-size:0.9rem;line-height:1.6;resize:vertical;">${esc(value)}</textarea>
+    </div>`;
+}
+
+function renderCategorySection(fbc) {
+  const esc = (s) => String(s ?? '').replace(/[<>&"]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c]));
+  const keys = Object.keys(fbc);
+  if (!keys.length) return '';
+  return `
+    <div class="draft-section">
+      <label style="font-size:0.74rem;font-weight:800;letter-spacing:0.06em;text-transform:uppercase;color:var(--accent);margin-bottom:8px;display:block;">Bevindingen per categorie</label>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        ${keys.map(k => `
+          <div style="background:var(--bg-warm);padding:12px 14px;border-radius:8px;">
+            <div style="font-weight:700;font-size:0.84rem;margin-bottom:4px;color:var(--text-primary);">${esc(k)}</div>
+            <textarea oninput="updateCategoryField('${esc(k)}', this.value)" style="width:100%;min-height:60px;padding:8px;border:1px solid var(--border);border-radius:6px;font-family:inherit;font-size:0.86rem;line-height:1.55;resize:vertical;background:#fff;">${esc(fbc[k]||'')}</textarea>
+          </div>`).join('')}
+      </div>
+    </div>`;
+}
+
+function renderPriorities(list) {
+  const esc = (s) => String(s ?? '').replace(/[<>&"]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c]));
+  return `
+    <div class="draft-section">
+      <label style="font-size:0.74rem;font-weight:800;letter-spacing:0.06em;text-transform:uppercase;color:var(--accent);margin-bottom:6px;display:block;">Top prioriteiten (5)</label>
+      <textarea oninput="updatePrioritiesField(this.value)" placeholder="1 per regel" style="width:100%;min-height:120px;padding:12px;border:1px solid var(--border);border-radius:8px;font-family:inherit;font-size:0.88rem;line-height:1.6;resize:vertical;">${esc(list.join('\n'))}</textarea>
+    </div>`;
+}
+
+function renderDetailedFindings(arr) {
+  const esc = (s) => String(s ?? '').replace(/[<>&"]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c]));
+  return `
+    <div class="draft-section">
+      <label style="font-size:0.74rem;font-weight:800;letter-spacing:0.06em;text-transform:uppercase;color:var(--accent);margin-bottom:8px;display:block;">Detailed findings (${arr.length})</label>
+      <div style="display:flex;flex-direction:column;gap:10px;max-height:380px;overflow-y:auto;padding-right:4px;">
+        ${arr.map((f,i) => `
+          <div style="background:var(--bg-warm);padding:12px;border-radius:8px;border-left:3px solid ${f.status==='critical'?'#dc2626':f.status==='gap'?'#D97706':'#059669'};">
+            <div style="display:flex;justify-content:space-between;gap:8px;margin-bottom:6px;flex-wrap:wrap;">
+              <strong style="font-size:0.84rem;font-family:'Sora',sans-serif;">${esc(f.control_id||'?')}</strong>
+              <span style="font-size:0.7rem;font-weight:700;padding:2px 8px;border-radius:99px;background:${f.status==='critical'?'rgba(220,38,38,0.12)':f.status==='gap'?'rgba(217,119,6,0.12)':'rgba(16,185,129,0.12)'};color:${f.status==='critical'?'#dc2626':f.status==='gap'?'#D97706':'#059669'};text-transform:uppercase;">${esc(f.status||'?')}</span>
+            </div>
+            <div style="font-size:0.82rem;margin-bottom:6px;"><strong>Finding:</strong> ${esc(f.finding||'')}</div>
+            <div style="font-size:0.82rem;color:var(--text-secondary);"><strong>Aanbeveling:</strong> ${esc(f.recommendation||'')}</div>
+          </div>`).join('')}
+      </div>
+    </div>`;
+}
+
+async function generateAIDraft(regenerate) {
+  if (!currentClient?.user_id) return;
+  if (regenerate && !confirm('Bestaande draft overschrijven?')) return;
+  const btn = document.getElementById('genDraftBtn');
+  const status = document.getElementById('genDraftStatus');
+  if (btn) { btn.disabled = true; btn.textContent = 'Genereren...'; }
+  if (status) { status.style.display = 'block'; status.textContent = 'Claude Opus analyseert quickscan + evidence... (10-30 sec)'; }
+
+  const { data, error } = await sb.functions.invoke('generate-report', { body: { user_id: currentClient.user_id } });
+  if (error || data?.error) {
+    alert('Generatie mislukt: ' + (data?.error || error?.message || 'onbekend'));
+    if (btn) { btn.disabled = false; btn.textContent = 'Genereer AI-draft'; }
+    return;
+  }
+  loadRapportPanel();
+}
+
+let draftDirty = false;
+let draftSaveTimer = null;
+function updateDraftField(key, value) {
+  if (!currentDraft) return;
+  currentDraft.sections[key] = value;
+  draftDirty = true;
+  if (draftSaveTimer) clearTimeout(draftSaveTimer);
+  draftSaveTimer = setTimeout(persistDraftChanges, 800);
+}
+function updateCategoryField(cat, value) {
+  if (!currentDraft) return;
+  if (!currentDraft.sections.findings_by_category) currentDraft.sections.findings_by_category = {};
+  currentDraft.sections.findings_by_category[cat] = value;
+  draftDirty = true;
+  if (draftSaveTimer) clearTimeout(draftSaveTimer);
+  draftSaveTimer = setTimeout(persistDraftChanges, 800);
+}
+function updatePrioritiesField(text) {
+  if (!currentDraft) return;
+  currentDraft.sections.top_priorities = text.split('\n').map(l => l.trim()).filter(Boolean);
+  draftDirty = true;
+  if (draftSaveTimer) clearTimeout(draftSaveTimer);
+  draftSaveTimer = setTimeout(persistDraftChanges, 800);
+}
+async function persistDraftChanges() {
+  if (!currentDraft || !draftDirty) return;
+  const { error } = await sb.from('report_drafts').update({ sections: currentDraft.sections, status: 'edited' }).eq('id', currentDraft.id);
+  if (!error) draftDirty = false;
+}
+
+async function releaseDraft() {
+  if (!currentDraft) return;
+  if (!confirm('Vrijgeven aan klant? Hij/zij ziet dan het rapport in het dashboard.')) return;
+  await persistDraftChanges();
+  const { error } = await sb.from('report_drafts').update({
+    status: 'released', released_at: new Date().toISOString(), released_by: currentUser.id
+  }).eq('id', currentDraft.id);
+  if (error) { alert('Vrijgeven mislukt: ' + error.message); return; }
+  loadRapportPanel();
+}
+
+async function unreleaseDraft() {
+  if (!currentDraft) return;
+  if (!confirm('Rapport intrekken? Klant kan het niet meer zien.')) return;
+  await sb.from('report_drafts').update({ status: 'edited', released_at: null, released_by: null }).eq('id', currentDraft.id);
+  loadRapportPanel();
+}
+
+function previewDraftAsClient() {
+  if (!currentDraft) return;
+  const s = currentDraft.sections || {};
+  const esc = (str) => String(str ?? '').replace(/[<>&]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]));
+  const w = window.open('', '_blank');
+  if (!w) { alert('Popup geblokkeerd.'); return; }
+  w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Rapport preview — ${esc(currentClient.bedrijf||'Klant')}</title>
+    <style>body{font-family:-apple-system,system-ui,sans-serif;max-width:780px;margin:40px auto;padding:0 24px;color:#0F172A;line-height:1.7;}
+    h1{font-size:1.8rem;margin-bottom:8px;}h2{font-size:1.2rem;margin-top:32px;color:#0D9488;}h3{font-size:1rem;margin-top:20px;}
+    .meta{color:#64748b;font-size:0.9rem;margin-bottom:32px;}
+    .disclosure{margin-top:48px;padding:14px;background:#f8fafc;border-left:3px solid #0D9488;font-size:0.85rem;color:#475569;}
+    .priority{padding:10px 14px;background:#f0fdfa;border-radius:8px;margin-bottom:6px;}
+    .finding{padding:14px;background:#fff;border:1px solid #e5e5e5;border-left:4px solid #D97706;border-radius:8px;margin-bottom:10px;}
+    .finding.critical{border-left-color:#dc2626;}.finding.ok{border-left-color:#059669;}
+    .ctrl{font-weight:700;font-size:0.9rem;}
+    </style></head><body>
+    <h1>Gap-analyse Rapport — ${esc(currentClient.bedrijf||'Klant')}</h1>
+    <div class="meta">Lead Auditor: Raoul Haas · Opgesteld ${new Date().toLocaleDateString('nl-NL')}</div>
+    <h2>Samenvatting</h2><p>${esc(s.executive_summary||'')}</p>
+    <h2>Score &amp; context</h2><p>${esc(s.score_summary||'')}</p>
+    <h2>Bevindingen per categorie</h2>
+    ${Object.entries(s.findings_by_category||{}).map(([k,v])=>`<h3>${esc(k)}</h3><p>${esc(v)}</p>`).join('')}
+    <h2>Top prioriteiten</h2>
+    ${(s.top_priorities||[]).map(p=>`<div class="priority">${esc(p)}</div>`).join('')}
+    <h2>Detailed findings</h2>
+    ${(s.detailed_findings||[]).map(f=>`<div class="finding ${esc(f.status||'')}"><div class="ctrl">${esc(f.control_id)} — ${esc((f.status||'').toUpperCase())}</div><p><strong>Bevinding:</strong> ${esc(f.finding||'')}</p><p><strong>Aanbeveling:</strong> ${esc(f.recommendation||'')}</p></div>`).join('')}
+    <div class="disclosure">${esc(s.disclosure||'Dit rapport is opgesteld door Lead Auditor Raoul Haas, met AI-geassisteerde analyse van uw bewijsvoering.')}</div>
+    </body></html>`);
+  w.document.close();
 }
 
 async function uploadReport(input) {

@@ -1,0 +1,20 @@
+{
+  "pagina": "onbekend",
+  "type": "tabel",
+  "hoofdstuk": "Weekplanning",
+  "transcriptie": "# WEEKPLANNING\n\n| Tijd | Onderwerp |\n|------|----------|\n| 8_18 | Gebruik van speciële systeem/hulpmiddelen |\n| 8_19 | Installeren van software op operationele systemen |\n| 8_20 | Beveiliging netwerkcomenten |\n| 8_21 | Beveiliging van netwerkdiensten |\n| 8_22 | Netweksegmentatie |\n| 8_23 | Toepassen van webfilters |\n| 8_24 | Gebruik van cryptografie |\n| 8_25 | Beveiligen tijdens de ontwikkelcyclus |\n| 8_26 | Toepassingsveiligheidseisen |\n| 8_27 | Principes voor de engineering van beveiligde systemen en systeemarchitecturen |\n| 8_28 | Veilig coderen |\n| 8_29 | Testen van de beveiliging tijdens de ontwikkeling en acceptatie |\n| 8_30 | Uitbestede systeenontwikkeling |\n| 8_31 | Scheiding van ontwikkel-, test- en productieomgevingen |\n| 8_32 | Wijzigingsbeheer |\n| 8_33 | Testgegevens |\n| 8_34 | Bescherming van informatiesystemen tijdens het uitvoeren van audits |\n\nDNV © 2023\n\nDoeltreffendheidshandboek Training Auditor Lead Auditor ISMS ISO 27001:2022 - Rev.7\nDeelnemer/cursusgroep:\nDatum: 1*",
+  "kernconcepten": [
+    "Netwerkbeveiliging",
+    "Cryptografie",
+    "Veilig coderen",
+    "Systeemontwikkeling",
+    "Wijzigingsbeheer",
+    "Segmentatie",
+    "Toepassingsbeveiliging",
+    "Testgegevens",
+    "Uitbesteding"
+  ],
+  "_source": "Foto 18-04-2026, 18 40 59.jpg",
+  "_input_tokens": 1897,
+  "_output_tokens": 576
+}

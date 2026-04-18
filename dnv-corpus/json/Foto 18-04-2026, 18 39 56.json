@@ -1,0 +1,23 @@
+{
+  "pagina": "onbekend",
+  "type": "content",
+  "hoofdstuk": "Identificatie van Risico's",
+  "transcriptie": "Identificatie van Risico's\n\nIdentificeer informatiebehoeftes\n• Identificeer risico's van het bedrijfsmiddel\n• Identificeer de basis van de gebruikte aanpak\n• Genoeg impact, waarschijnlijkheid\n\nOF:\n\nIdentificeer de betreigingen voor deze bedrijfsmiddelen\nIdentificeer de kwetsbaarheden die door de betreigingen kunnen worden misbruikt\nIdentificeer de impact op de bedrijfsmiddelen als gevolg van het verlies van:\n• Geheimhouding\n• Integriteit\n• Beschikbaarheid\n\nVaarschijnlijkheid\n\nkans dat er iets gebeurt\n\nOPMERKING 1 in de terminologie van het risicomamagement wordt de term 'waarschijnlijkheid' Engels 'likelihood' doorgaans gebruik om te verwijzen naar de kans dat iets gebeurt, welke objectief dan wel subjectief, kwantitatief dan wel kwalitatief kan worden uitgedrukt, en kan worden omschreven met algemene termen of wiskundig (met een frequentie of een kans in een bepaald tijdspanne).\n\nOPMERKING 2 De Engelse term 'likelihood' heeft in sommige talen geen direct equivalent, in plaats daarvan wordt vaak gewoon het woord 'probability' gebruikt. In het Engels wordt in de terminologie van het risicomagement echter een verschil gemaakt tussen 'probability' en 'likelihood', waarbij 'probability' een kwantitatief meetbare waarschijnlijkheidswaarde is.\n\nGebruik dezelfde manier van de terminologie, gebruikend voor Engels en Nederlands beschreven in het Nederlands beschreven van het Engels. In het Nederlands beschreven als 'probability' en voelen we dit probleem in de praktijk niet.\n\nwaarchijnlijker' - voor zover verschillende meer waarschijnlijker' of 'het Engels term 'likelihood' is positief of negatief wordt gebruikt.\n\nOPMERKING 1 Een gebeuren kan zijn of niet zijn, of kan een positief effect hebben of negatief effect hebben.\nOPMERKING 2 Een gevolg dan zeker of onzeker zijn en kan een positief or negatief effect hebben.\nOPMERKING 3 De gevolgen kunnen kwalitatief worden uitgedruk.\nOPMERKING 4 Aanwezelijke gevolgen kunnen resulteren door domino-effecten.\n\nresultaten van een gebeurtenis die van invloed is op de doelstellingen\n\nGevolg\n\nOPMERKING 1 Een gebeurtenis kan leiden tot een reeks gevolgen.\nOPMERKING 2 Een gevolg dan zeker of onzeker zijn en kan een positief or negatief effect op de doelstellingen hebben.\nOPMERKING 3 De gevolgen kunnen kwalitatief worden uitgedrukt.\nOPMERKING 4 Aanwezelijke gevolgen kunnen resulteren door domino-effecten.\n\nISO 31000:2018 Cl 3.7\n\nISO 31000:2018 Cl 3.6",
+  "kernconcepten": [
+    "Identificatie van risico's",
+    "Bedrijfsmiddelen",
+    "Waarschijnlijkheid",
+    "Likelihood vs Probability",
+    "Gevolg",
+    "Impact",
+    "Bedreigingen",
+    "Kwetsbaarheden",
+    "Geheimhouding",
+    "Integriteit",
+    "Beschikbaarheid",
+    "ISO 31000:2018"
+  ],
+  "_source": "Foto 18-04-2026, 18 39 56.jpg",
+  "_input_tokens": 1897,
+  "_output_tokens": 982
+}

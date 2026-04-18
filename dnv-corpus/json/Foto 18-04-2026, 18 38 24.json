@@ -1,0 +1,21 @@
+{
+  "pagina": "31 van 112",
+  "type": "diagram",
+  "hoofdstuk": "Optioneel",
+  "transcriptie": "Dit is een diagram met de titel 'Optioneel' linksboven. Het diagram toont verschillende auditfasen en hun relaties:\n\nOnderin staan de volgende elementen naast elkaar:\n- Pre-audit\n- Documentatie-beoordeling (fase 1)\n- Initieel bezoek (fase 1)\n- Initiele audit (fase 2)\n- Periodieke audits\n- Hercertificatie-audit\n\nBovenin het diagram staan twee gele vakken met de tekst 'Follow-up bezoek', die verbonden zijn met de initiële audit en periodieke audits door verticale lijnen.\n\nEr zijn handgeschreven aantekeningen op het diagram:\n- 'withal aanplossingen' (bij een pijl van documentatiebeoordeling)\n- 'Dilane lease loon oran' (bij een pijl naar initieel bezoek)\n- '2 maanden afstand' (boven de twee Follow-up bezoek vakken)\n\nEr is een stippellijn die loopt van Pre-audit door het gehele diagram.\nEr is ook een stippellijn rechts van Periodieke audits.\n\nHet centrum-ondergedeelte van het schema wordt aangeduid als 'Het certificatieproces' (links in het diagram).",
+  "kernconcepten": [
+    "Pre-audit",
+    "Documentatiebeoordeling",
+    "Initieel bezoek",
+    "Initiele audit",
+    "Periodieke audits",
+    "Hercertificatie-audit",
+    "Follow-up bezoek",
+    "Certificatieproces",
+    "Fase 1",
+    "Fase 2"
+  ],
+  "_source": "Foto 18-04-2026, 18 38 24.jpg",
+  "_input_tokens": 1897,
+  "_output_tokens": 464
+}
