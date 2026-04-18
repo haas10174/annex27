@@ -212,7 +212,7 @@ De auditproces bestaat uit verschillende fasen:
    - Risicobeoordeling
    - Auditplan
 
-2. RAPPORTAGE
+2. RAPPORTAGEwww
    - Rapportage audit
    - Presentatie bevindingen
    - Verbetering van bevindingen
