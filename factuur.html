@@ -320,6 +320,7 @@ function fmt(n) { return '\u20AC ' + Number(n).toLocaleString('nl-NL', { minimum
           <div class="line">
             info@annex27.nl<br/>
             KBO 1006.203.170<br/>
+            IBAN: BE28 7310 7616 8920<br/>
             ${data.btw_regime === 'none' ? 'Kleine onderneming &mdash; vrijgesteld van BTW (Art. 56bis WBTW)' : 'BTW: BE ' + (data.seller_btw || 'in aanvraag')}
           </div>
         </div>
@@ -408,7 +409,9 @@ function fmt(n) { return '\u20AC ' + Number(n).toLocaleString('nl-NL', { minimum
     <div class="footer">
       <div>
         <div class="label">Betaalwijze</div>
-        ${data.status === 'paid' ? '<strong style="color:#10b981;">Betaald</strong><br/>via Mollie' : 'Reeds voldaan via Mollie / verwacht uiterlijk ' + esc(dueFmt)}
+        ${data.status === 'paid'
+          ? '<strong style="color:#10b981;">Betaald</strong><br/>via Mollie'
+          : 'Open. Te voldoen via Mollie of overschrijving:<br/><strong>BE28 7310 7616 8920</strong><br/><span style="color:var(--muted);">o.v.v. ' + esc(data.invoice_number || '') + '</span>'}
       </div>
       <div>
         <div class="label">Vervaldatum</div>
