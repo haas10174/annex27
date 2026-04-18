@@ -1605,15 +1605,20 @@ function confirmSector() {
   renderCatBars();
 }
 
-// Fase-indeling voor wizard (6 standaard + 1 optionele sector-fase)
+// Fase-indeling voor wizard (6 standaard + 1 conditionele sector-fase per sector)
 const phases = [
-  { id: 'profiel', label: 'Profiel' },
-  { id: 'gov',     label: 'Governance & beleid' },
-  { id: 'hr',      label: 'Personeel' },
-  { id: 'phys',    label: 'Fysiek & assets' },
-  { id: 'tech',    label: 'Technische controls' },
-  { id: 'ops',     label: 'Operationeel' },
-  { id: 'saas',    label: 'SaaS-specifiek', sector: 'saas' },
+  { id: 'profiel',   label: 'Profiel' },
+  { id: 'gov',       label: 'Governance & beleid' },
+  { id: 'hr',        label: 'Personeel' },
+  { id: 'phys',      label: 'Fysiek & assets' },
+  { id: 'tech',      label: 'Technische controls' },
+  { id: 'ops',       label: 'Operationeel' },
+  { id: 'saas',      label: 'SaaS-specifiek',       sector: 'saas' },
+  { id: 'it',        label: 'IT-dienstverlener',    sector: 'it' },
+  { id: 'zorg',      label: 'Zorg-specifiek',       sector: 'zorg' },
+  { id: 'overheid',  label: 'Overheid (BIO)',       sector: 'overheid' },
+  { id: 'bouw',      label: 'Bouw-specifiek',       sector: 'bouw' },
+  { id: 'overig',    label: 'MKB extra',            sector: 'overig' },
 ];
 
 // Helper: filter vragen op de huidige gekozen sector (sector-specifieke fases worden alleen getoond
@@ -1674,6 +1679,36 @@ const questions = [
   { phase:'saas', cat:'ops', sector:'saas', catLabel:'SaaS — Subprocessors', q:'Heeft u een actueel register van alle (sub)verwerkers en cloudproviders met getekende DPA\u2019s en jaarlijkse beveiligingsbeoordeling?', weight:3, controls:['A.5.19','A.5.20','A.5.21','A.5.23'], hint:'Denk aan: subprocessor-lijst publiekelijk (Trust-center), DPA\u2019s per verwerker, audit-rapportages (SOC 2 / ISO 27001) van cloudproviders.' },
   { phase:'saas', cat:'tech', sector:'saas', catLabel:'SaaS — API security', q:'Heeft u geformaliseerde API-security maatregelen (authenticatie, rate-limiting, OWASP API Top 10 check)?', weight:3, controls:['A.8.2','A.8.5','A.8.9','A.8.15'], hint:'Denk aan: API-gateway configuratie, rate-limit-rules per endpoint, OWASP API-security scan rapport, JWT/OAuth flow documentatie.' },
   { phase:'saas', cat:'tech', sector:'saas', catLabel:'SaaS — Secure SDLC', q:'Heeft u een gedocumenteerd secure software development lifecycle (code-review, SAST/DAST, secret-scanning, dependency mgmt)?', weight:3, controls:['A.8.25','A.8.28','A.8.29','A.8.30'], hint:'Denk aan: PR-template met security-checklist, SAST-rapport (SonarQube/Snyk), secret-scanning (TruffleHog), Dependabot-alerts overzicht.' },
+
+  // Phase 7b: IT-dienstverlener / MSP — 4 vragen
+  { phase:'it', cat:'tech', sector:'it', catLabel:'MSP — Klantomgeving-isolatie', q:'Hoe voorkomt u dat data of systemen van klant A bereikbaar zijn vanuit de omgeving van klant B?', weight:3, controls:['A.8.20','A.8.22','A.5.23'], hint:'Denk aan: netwerksegmentatie per klant, separate credentials + secret stores, firewall-rules tussen klantomgevingen.' },
+  { phase:'it', cat:'tech', sector:'it', catLabel:'MSP — Privileged access management', q:'Hoe beheert u admin-sessies naar klantomgevingen (jump-host, PAM-tooling, session-recording)?', weight:3, controls:['A.8.2','A.5.17','A.8.15'], hint:'Denk aan: PAM-tool (BeyondTrust, CyberArk, Teleport), bastion-configuratie, session-logs met video-opname.' },
+  { phase:'it', cat:'ops', sector:'it', catLabel:'MSP — SLA & incident-communicatie', q:'Zijn contractuele meldingstermijnen naar klanten geformaliseerd en getest (bv. bij datalek binnen 24u)?', weight:3, controls:['A.5.24','A.5.29','A.5.19'], hint:'Denk aan: SLA-bijlage met meldingstermijnen, communicatiesjablonen per incident-type, getrainde incidentmanager.' },
+  { phase:'it', cat:'tech', sector:'it', catLabel:'MSP — Cross-client change management', q:'Heeft u een change-proces dat voorkomt dat een wijziging bij klant A onbedoeld klant B raakt?', weight:3, controls:['A.8.32','A.8.31','A.8.8'], hint:'Denk aan: per-klant deployment-pipelines, staging-testing tussen klanten, blast-radius-assessment bij elke change.' },
+
+  // Phase 7c: Zorg — 4 vragen
+  { phase:'zorg', cat:'org', sector:'zorg', catLabel:'Zorg — NEN-7510 compliance', q:'Past uw organisatie NEN-7510 toe als aanvulling op ISO 27001 (verplicht voor NL-zorg)?', weight:3, controls:['A.5.31','A.5.34'], hint:'Denk aan: NEN-7510 gap-analyse, specifieke zorg-controls gedocumenteerd, self-assessment of externe audit.' },
+  { phase:'zorg', cat:'tech', sector:'zorg', catLabel:'Zorg — Patiëntdossier-toegang', q:'Is alle toegang tot patiëntdossiers gelogd, doel-gebonden en periodiek gereviewd (need-to-know)?', weight:3, controls:['A.8.15','A.8.3','A.8.12'], hint:'Denk aan: access-logs met patiënt-ID + doel, maandelijkse audit van abnormale toegang, Break-the-Glass procedures.' },
+  { phase:'zorg', cat:'tech', sector:'zorg', catLabel:'Zorg — Zorgverlener-authenticatie', q:'Gebruiken zorgverleners sterke authenticatie (UZI-pas, SSO, MFA) en bestaat er een break-glass procedure?', weight:3, controls:['A.8.5','A.5.17'], hint:'Denk aan: UZI-pas-implementatie, SSO-configuratie, break-glass procedure met post-hoc audit.' },
+  { phase:'zorg', cat:'phys', sector:'zorg', catLabel:'Zorg — Medische hulpmiddelen (IoMT)', q:'Zijn medische hulpmiddelen (IoMT, monitoring, beeldapparatuur) in het asset-register + gescheiden netwerk?', weight:3, controls:['A.5.9','A.8.20','A.8.25'], hint:'Denk aan: asset-register inclusief medische devices, VLAN-segmentatie, vendor-patch-contracten.' },
+
+  // Phase 7d: Overheid — 4 vragen (BIO-framework)
+  { phase:'overheid', cat:'org', sector:'overheid', catLabel:'Overheid — BIO-compliance', q:'Past u de Baseline Informatiebeveiliging Overheid (BIO) volledig toe?', weight:3, controls:['A.5.31'], hint:'Denk aan: BIO self-assessment (CIP-tool), BIV-classificatie per informatiesysteem, ENSIA-rapportage.' },
+  { phase:'overheid', cat:'tech', sector:'overheid', catLabel:'Overheid — Burgerdata-beveiliging', q:'Zijn BSN en andere burgerdata extra beveiligd (autorisatie, logging, versleuteling) conform Wet BRP?', weight:3, controls:['A.5.34','A.8.12','A.8.24'], hint:'Denk aan: BSN-gebruik alleen bij rechtvaardiging, logging per burger-opvraag, encryption at-rest met aparte key.' },
+  { phase:'overheid', cat:'ops', sector:'overheid', catLabel:'Overheid — Ketenverantwoordelijkheid', q:'Hebt u DPA\u2019s/bewerkersovereenkomsten met ketenpartijen (GBA, UWV, Belastingdienst, etc.)?', weight:3, controls:['A.5.19','A.5.20','A.5.21'], hint:'Denk aan: bewerkersovereenkomsten per keten-partner, audit-rechten, meldingsketen bij incidenten.' },
+  { phase:'overheid', cat:'ops', sector:'overheid', catLabel:'Overheid — WOO-audit trail', q:'Kunt u per informatieverzoek (WOO) aantonen welke documenten zijn opgezocht, door wie, wanneer?', weight:3, controls:['A.8.15','A.5.33'], hint:'Denk aan: zoek-logboek per WOO-verzoek, retentiebeleid voor audit-trails, aparte workflow-systeem voor WOO.' },
+
+  // Phase 7e: Bouw — 4 vragen
+  { phase:'bouw', cat:'tech', sector:'bouw', catLabel:'Bouw — OT/IT-integratie', q:'Zijn operationele technologie (BMS, bouwmachines, sensoren) gescheiden van kantoor-IT en in het asset-register?', weight:3, controls:['A.8.20','A.5.9','A.8.31'], hint:'Denk aan: OT-netwerk gescheiden, asset-register inclusief bouwmachines + BMS, firewall OT↔IT.' },
+  { phase:'bouw', cat:'ops', sector:'bouw', catLabel:'Bouw — Subcontractor-security', q:'Zijn onderaannemers en externe partijen met toegang tot projectdata contractueel en technisch geborgd?', weight:3, controls:['A.5.19','A.5.20'], hint:'Denk aan: onderaannemer-contracten met security-clausules, access-controls per project, NDA\u2019s.' },
+  { phase:'bouw', cat:'phys', sector:'bouw', catLabel:'Bouw — Fysieke beveiliging bouwplaats', q:'Zijn tijdelijke kantoren, gereedschap en apparatuur op de bouwplaats adequaat fysiek beveiligd?', weight:3, controls:['A.7.1','A.7.2','A.7.4'], hint:'Denk aan: afsluitbare site-container, cameratoezicht, inventarisatie gereedschap + laptops per week.' },
+  { phase:'bouw', cat:'tech', sector:'bouw', catLabel:'Bouw — BIM-data bescherming', q:'Zijn BIM-modellen, architectuur- en ontwerpfiles geclassificeerd en versleuteld opgeslagen?', weight:3, controls:['A.5.12','A.8.12','A.8.24'], hint:'Denk aan: classificatie per project, versleutelde BIM-server/cloud, toegang per rol + IP-restricties.' },
+
+  // Phase 7f: Overig / MKB-algemeen — 4 universele MKB-diepvragen
+  { phase:'overig', cat:'ops', sector:'overig', catLabel:'MKB — Cloud-stack inventaris', q:'Heeft u een actueel overzicht van alle SaaS-tooling die uw organisatie gebruikt (shadow-IT meegerekend)?', weight:3, controls:['A.5.23','A.8.10'], hint:'Denk aan: SaaS-register (20-50 tools typisch), finance-data als bron (terugkerende betalingen), toegangs-review per tool.' },
+  { phase:'overig', cat:'tech', sector:'overig', catLabel:'MKB — Thuiswerk / BYOD', q:'Is thuiswerk geformaliseerd (VPN, endpoint hardening, BYOD-regels)?', weight:3, controls:['A.7.9','A.8.1','A.8.7'], hint:'Denk aan: thuiswerkbeleid, MDM/Intune voor corporate devices, VPN-configuratie, BYOD-contractclausule.' },
+  { phase:'overig', cat:'tech', sector:'overig', catLabel:'MKB — E-mail security', q:'Zijn SPF, DKIM en DMARC volledig ingesteld voor uw maildomein + phishing-awareness getest?', weight:3, controls:['A.8.7','A.6.3','A.8.20'], hint:'Denk aan: DMARC-rapport (policy=reject), recente phishing-test met rapportage, email-security gateway.' },
+  { phase:'overig', cat:'org', sector:'overig', catLabel:'MKB — Data-classificatie', q:'Is alle bedrijfsdata geclassificeerd (publiek / intern / vertrouwelijk / geheim) met bijbehorende regels?', weight:3, controls:['A.5.12','A.5.13','A.8.12'], hint:'Denk aan: classificatie-beleid, labels op documenten, DLP-regels per classificatie-niveau.' },
 ];
 
 // CMMI-5-punts maturity-rubric
