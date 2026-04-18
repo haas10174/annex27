@@ -1,0 +1,22 @@
+{
+  "pagina": "25-26",
+  "type": "content",
+  "hoofdstuk": "Technologische beheersmaatregelen – A.8",
+  "transcriptie": "Technologische beheersmaatregelen – A.8\n\n8.1 Gebruiksapparatuur\n8.2 Speciale toegangsrechten\n8.3 Beperking toegang tot informatie\n8.4 Toegangsbeveiliging op broncode\n8.5 Beveiligde authenticatie\n8.6 Capaciteitsbeheer\n8.7 Bescherming tegen malware\n8.8 Beheer van technische kwetsbaarheden\n8.9 Configuratiebeheer - Nieuw\n8.10 Wissen van informatie - Nieuw\n8.11 Maskeren van gegevens - Nieuw\n8.12 Voorkomen van gegevenslekken (Data Leakage Prevention) - Nieuw\n8.13 Back-up van informatie\n8.14 Redundantie van informatie verwerkende faciliteiten\n8.15 Logging\n8.16 Monitoren van activiteiten - Nieuw\n8.17 Kloksynchronisatie\n\nTechnologische beheersmaatregelen – A.8\n\n8.18 Gebruik van speciale systeemhulpmiddelen\n8.19 Installeren van software op operationele systemen\n8.20 Beveiliging netwerkcomponenten\n8.21 Beveiliging van netwerkdiensten\n8.22 Netwerksegmentatie\n8.23 Toepassen van webfilters - Nieuw\n8.24 Gebruik van cryptografie\n8.25 Beveiligen tijdens de ontwikkelcyclus\n8.26 Toepassingsbeveiligingseisen\n8.27 Principes voor de engineering van beveiligde systemen en systeemarchitecturen\n8.28 Veilig coderen - Nieuw\n8.29 Testen van de beveiliging tijdens de ontwikkeling en acceptatie\n8.30 Uitbestede systeemontwikkeling\n8.31 Scheiding van ontwikkel-, test- en productieomgevingen\n8.32 Wijzigingsbeheer\n8.33 Testgegevens\n8.34 Bescherming van informatiesystemen tijdens het uitvoeren van audits",
+  "kernconcepten": [
+    "Technologische beheersmaatregelen",
+    "ISO 27001 Annex A.8",
+    "Toegangsbeveiliging",
+    "Configuratiebeheer",
+    "Data Leakage Prevention",
+    "Netwerksegmentatie",
+    "Cryptografie",
+    "Secure development",
+    "Veilig coderen",
+    "Wijzigingsbeheer",
+    "Nieuwe controls 2022"
+  ],
+  "_source": "IMG_5159.jpg",
+  "_input_tokens": 1897,
+  "_output_tokens": 766
+}

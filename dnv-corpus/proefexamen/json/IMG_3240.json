@@ -1,0 +1,12 @@
+{
+  "type": "mix",
+  "vraag_nummer": "4",
+  "vraag_tekst": "Waar van toepassing geeft het werkwoord aan welke actie wordt vereist en hoe diepgaand het antwoord op de vraag moet zijn. De woorden 'leg uit', 'noem op', 'beschrijf' zijn dikgedrukt weergegeven. De student dient zeker te stellen dat de betekenis van deze termen duidelijk zijn (zie volgende bladzijde). Wanneer er een opsomming wordt gemaakt waar een uitleg gevraagd is, wordt het volledige aantal punten niet toegekend. Andersom is het een tijdverspilling om gedetailleerde uitleg te geven waar gevraagd wordt om een opsomming.",
+  "antwoord_opties": [],
+  "correct_antwoord": "",
+  "handgeschreven_notities": "[Er zijn handgeschreven notities zichtbaar in de linkermarge, maar deze zijn niet leesbaar genoeg om met zekerheid te transcriberen - mogelijk een vinkje of symbool]",
+  "context": "Instructies voor kandidaten - examentechniek en tijdsbeheer. De pagina bevat informatie over: (1) examenduur van 2 uur zonder extra leestijd, (2) maximumscore van 90 punten met minimaal 63 punten (70%) nodig om te slagen, (3) punten per vraag worden tussen haakjes weergegeven, (4) formuleren van antwoorden op uitgereikt examenpapier, (5) verwijzingen naar ISO/IEC 27001 laatste versie, (6) ISMS informatiebeveiliging management systeem indien van toepassing, (7) tijdsbeheer per onderdeel: a) Lezen instructies - 5 min, b) Onderdeel 1 - 15 min, c) Onderdeel 2 - 20 min, d) Onderdeel 3 - 40 min, e) Onderdeel 4 - 40 min, totaal 120 minuten. Sectie 4 legt uit hoe werkwoorden zoals 'leg uit', 'noem op', 'beschrijf' (dikgedrukt) aangeven welke diepgang van antwoord vereist is.",
+  "_source": "IMG_3240.jpg",
+  "_input_tokens": 1929,
+  "_output_tokens": 594
+}

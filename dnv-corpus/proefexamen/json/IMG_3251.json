@@ -1,0 +1,12 @@
+{
+  "type": "examenvraag",
+  "vraag_nummer": "3.3",
+  "vraag_tekst": "U voert een ISO/IEC 27001 audit uit bij een bedrijf dat radiocommunicatiesystemen voor noodhulpdiensten maakt. Het systeem bevat 'smart' geprogrammeerde handsets met ingebouwde encryptie die veilige communicatiediensten ondersteunen. De volgende activiteit op uw auditplan is het testlaboratorium van de organisatie waar de radiohandsets getest worden.\n\nSchets in een checklijst hoe u deze audit uit zou voeren door een lijst van tien audit verificatiepunten op te stellen. Identificeer voor elk verificatiepunt voorbeelden van het auditbewijs dat u zou willen verzamelen en geef de van toepassing zijnde ISO/IEC 27001 paragraaf of Annex A referentie.",
+  "antwoord_opties": [],
+  "correct_antwoord": "",
+  "handgeschreven_notities": "[Er zijn geen zichtbare handgeschreven notities op deze pagina - alleen lege lijnen voor het antwoord]",
+  "context": "Praktijkopdracht: opstellen auditchecklijst voor testlaboratorium bij bedrijf dat radiocommunicatiesystemen voor noodhulpdiensten maakt - verificatiepunten met auditbewijs en ISO 27001 referenties (10 punten)",
+  "_source": "IMG_3251.jpg",
+  "_input_tokens": 1929,
+  "_output_tokens": 381
+}

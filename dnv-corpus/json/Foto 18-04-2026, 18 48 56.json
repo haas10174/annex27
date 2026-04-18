@@ -1,0 +1,20 @@
+{
+  "pagina": "11-12",
+  "type": "content",
+  "hoofdstuk": "Definities / Wat is een risico?",
+  "transcriptie": "Pagina 11:\n\nWat is een risico?\n\nEffect van onzekerheid op de doelstellingen\n\nMaarschijnlijkheid x Effect\n\nKans x Impact\n\n[Afbeelding toont een persoon die klimt met klimuitrusting, waarbij verschillende risicofactoren zichtbaar zijn zoals touwen, karabijnhaken en beschermende uitrusting]\n\nPagina 12:\n\nDefinities\n\nInformatiebeveiligingrisiсo\n\nRisico is het effect van onzekerheid op doelstellingen. Het risico van informatiebeveiliging voortvloeit uit de kans van een event gecombineerd met de gevolgen, de waarschijnlijkheid en de impact, de kans van onzekerheid maal het effect van die onzekerheid.\n\nDreiging → potentiële oorzaak van een ongewenst incident, dat kan leiden tot schade aan een systeem of organisatie.\n\nKwetsbaarheid → zwakte van een bedrijfsmiddel of maatregel die door een of meer bedreigingen kan worden uitgebuit.\n\nRef ISO 27000h & 27002\n\n04 Module 3\n© DNV Business Assurance B.V.",
+  "kernconcepten": [
+    "Risico",
+    "Effect van onzekerheid",
+    "Waarschijnlijkheid x Effect",
+    "Kans x Impact",
+    "Informatiebeveiligingrisiсo",
+    "Dreiging",
+    "Kwetsbaarheid",
+    "ISO 27000",
+    "ISO 27002"
+  ],
+  "_source": "Foto 18-04-2026, 18 48 56.jpg",
+  "_input_tokens": 1897,
+  "_output_tokens": 464
+}

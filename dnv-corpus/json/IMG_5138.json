@@ -1,0 +1,18 @@
+{
+  "pagina": "10 (pagina 19-20 in document)",
+  "type": "diagram",
+  "hoofdstuk": "04 Module 3",
+  "transcriptie": "Risicobeoordeling – Beheer van risico's en kansen\n\nFlowdiagram met vier stappen:\n1. Bepaal de criteria voor risicoanvaarding\n2. Identificeert informatiebeveiligings-risico's\n3. Analyseert de informatiebeveiligings-risico's\n4. Evalueert de informatiebeveiligings-risico's\n\nRisicobehandeling – Beheer van risico's en kansen\n\nFlowdiagram met vijf stappen:\n1. Selecteer passende risicobehandelingsopties\n2. Bepaal alle beheersmaatregelen\n3. Vergelijk de beheersmaatregelen\n4. Stel een verklaring van toepasselijkheid op (deze stap is gemarkeerd in groen)\n5. Formuleer een risicobehandelingsplan\n\n© DNV Business Assurance B.V.\n04 Module 3",
+  "kernconcepten": [
+    "Risicobeoordeling",
+    "Risicobehandeling",
+    "Informatiebeveiligingsrisico's",
+    "Risicoanvaarding criteria",
+    "Beheersmaatregelen",
+    "Verklaring van toepasselijkheid",
+    "Risicobehandelingsplan"
+  ],
+  "_source": "IMG_5138.jpg",
+  "_input_tokens": 1897,
+  "_output_tokens": 413
+}

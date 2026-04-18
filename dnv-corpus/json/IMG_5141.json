@@ -1,0 +1,22 @@
+{
+  "pagina": "27-28",
+  "type": "content",
+  "hoofdstuk": "Module 3",
+  "transcriptie": "Beveiligingsniveau\n\nDiagram toont twee boxen aan de top: links 'Bedrijfsbehoeften' (blauw) en rechts 'Dreiging, Kwetsbaarheid Waarschijnlijkheid & Gevolg = Risico' (rood/oranje). Beide boxen hebben pijlen naar beneden die samenkomen in één box: 'Behoefte aan bescherming' (blauw).\n\n---\n\nRisicobehandeling\n\nWaarschijnlijkheid\n\nDiagram toont een matrix met twee assen:\n- Verticale as: Waarschijnlijkheid (Laag, Gemiddeld, Hoog)\n- Horizontale as: Gevolg (Laag, Gemiddeld, Hoog)\n\nIn de matrix staan symbolen:\n- Groen vierkant met S (laag-laag positie)\n- Geel vierkant met ? (gemiddeld-gemiddeld positie)\n- Oranje vierkant met ! (gemiddeld-hoog positie, net onder rode zone)\n- Rode vierkanten (hoog-gemiddeld en hoog-hoog posities)\n\nRechts van de matrix staat:\n→ Beperking van het risico met bestaande beheersmaatregelen, regels en documentatie.\n\nMogelijke beperking van het risico met aanvullende beheersmaatregels, regels en documentatie.\n\nOnderaan: Brutorisico -/- Beheersmaatregelen = Netto- of restrisico",
+  "kernconcepten": [
+    "Beveiligingsniveau",
+    "Bedrijfsbehoeften",
+    "Behoefte aan bescherming",
+    "Risicobehandeling",
+    "Waarschijnlijkheid",
+    "Gevolg",
+    "Risicoматrix",
+    "Brutorisico",
+    "Beheersmaatregelen",
+    "Netto-risico",
+    "Restrisico"
+  ],
+  "_source": "IMG_5141.jpg",
+  "_input_tokens": 1897,
+  "_output_tokens": 564
+}

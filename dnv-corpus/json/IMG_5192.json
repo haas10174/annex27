@@ -1,0 +1,19 @@
+{
+  "pagina": "1",
+  "type": "content",
+  "hoofdstuk": "Het auditproces",
+  "transcriptie": "Het auditproces\n\nDe auditproces bestaat uit verschillende fasen:\n\n1. PLANNING\n   - Auditopdracht\n   - Auditdoel en -scope\n   - Auditvereisten\n   - Risicobeoordeling\n   - Auditplan\n\n2. RAPPORTAGE\n   - Rapportage audit\n   - Presentatie bevindingen\n   - Verbetering van bevindingen\n\n3. UITVOERING\n   - Opening meeting\n   - Informatieverzameling\n   - Documentbeoordeling\n   - Interviews\n   - Closing meeting\n\n4. FOLLOW-UP\n   - Verbetering/correctie maatregelen\n   - Verificatie van implementatie\n   - Rapportage\n\nHet diagram toont deze vier fasen in een cyclisch proces met een centraal element genaamd 'Auditproces'.\n\nRechter pagina:\n\nTraining Auditor / Lead Auditor Informatiebeveiligingsmanagementsysteem\nGebaseerd op ISO/IEC 27001:2022 norm\nModule 1: Opsporen en bijhouden van een privacykeurmerk\n\nDe rechter pagina toont een visuele weergave van een netwerk met verschillende gekoppelde knooppunten, verbindingen en kubussen die een ISMS-structuur representeren. Het diagram gebruikt kleuren zoals blauw, oranje en verschillende tinten om verschillende elementen en hun onderlinge relaties weer te geven.",
+  "kernconcepten": [
+    "auditproces",
+    "planning",
+    "uitvoering",
+    "rapportage",
+    "follow-up",
+    "ISO 27001:2022",
+    "ISMS",
+    "Lead Auditor training"
+  ],
+  "_source": "IMG_5192.jpg",
+  "_input_tokens": 1897,
+  "_output_tokens": 506
+}

@@ -1,0 +1,20 @@
+{
+  "pagina": "17-18",
+  "type": "content",
+  "hoofdstuk": "ISO/IEC 27002:2022",
+  "transcriptie": "ISO/IEC 27002:2022\n\nDe indeling van elke beheersmaatregel bevat het volgende:\n\n— Titel van de beheersmaatregel: Korte naam van de beheersmaatregel;\n\n— Attribuuttabel: Een tabel toont de waarde(n) van elk attribuut voor de beheersmaatregel in kwestie;\n\n— Beheersmaatregel: Wat de beheersmaatregel is;\n\n— Doel: Waarom de beheersmaatregel behoort te worden geïmplementeerd;\n\n— Richtlijn: Hoe de beheersmaatregel behoort te worden geïmplementeerd;\n\n— Overige informatie: Tekst met uitleg of verwijzingen naar andere gerelateerde documenten.\n\n5.18 Toegangsrechten\n\nVoorbeeld weergave maatregel in 27002\n\n| Type beheersmaatregel | Informatie-beveiligings-eigenschappen | Cybersecurity-concepten | Operationele capaciteiten | Beveiligings-domeinen |\n|---|---|---|---|---|\n| #Preventief | #Vertrouwelijkheid #Integriteit #Beschikbaarheid | #Beschermen | #Identiteit-_en_toegangsbeheer | #Bescherming |\n\n---\n\nBijlage A\n&\nISO 27002",
+  "kernconcepten": [
+    "ISO/IEC 27002:2022 structuur",
+    "Beheersmaatregel indeling",
+    "Attribuuttabel",
+    "Toegangsrechten (5.18)",
+    "Preventieve beheersmaatregelen",
+    "Cybersecurity concepten",
+    "Operationele capaciteiten",
+    "Beveiligingsdomeinen",
+    "Bijlage A relatie met ISO 27002"
+  ],
+  "_source": "IMG_5155.jpg",
+  "_input_tokens": 1897,
+  "_output_tokens": 566
+}

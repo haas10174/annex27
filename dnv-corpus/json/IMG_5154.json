@@ -1,0 +1,21 @@
+{
+  "pagina": "8",
+  "type": "content",
+  "hoofdstuk": "ISO/IEC 27001 & 27002 - Information Security, Cybersecurity and Privacy Protection",
+  "transcriptie": "ISO/IEC 27001 & 27002\nInformation Security, Cybersecurity and Privacy Protection — Information Security Controls\n\n15\n\nStructuur – ISO/IEC 27001:2022\n\nInformatiebeveiliging, cybersecurity en bescherming van privacy\n\nEisen voor managementsysteem voor informatiebeveiliging\n\nParagraaf 1 t/m 10 volgens Harmonized Structure\n\nBijlage A met 93 beheersmaatregelen:\nA5 → 37 Organisatorische maatregelen\nA6 → 8 Mensgerichte maatregelen\nA7 → 14 Fysieke beheersmaatregelen\nA8 → 34 Technologische beheersmaatregelen\n\n16\n\n05 Module 4\n© DNV Business Assurance B.V.",
+  "kernconcepten": [
+    "ISO/IEC 27001:2022",
+    "ISO/IEC 27002",
+    "Information Security Controls",
+    "Harmonized Structure",
+    "Bijlage A - 93 beheersmaatregelen",
+    "Organisatorische maatregelen (A5)",
+    "Mensgerichte maatregelen (A6)",
+    "Fysieke beheersmaatregelen (A7)",
+    "Technologische beheersmaatregelen (A8)",
+    "Managementsysteem voor informatiebeveiliging"
+  ],
+  "_source": "IMG_5154.jpg",
+  "_input_tokens": 1897,
+  "_output_tokens": 457
+}

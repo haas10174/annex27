@@ -1,0 +1,12 @@
+{
+  "type": "examenvraag",
+  "vraag_nummer": "3.2",
+  "vraag_tekst": "Rekening houdend met de eisen van paragraaf 10.2 van ISO/IEC 27001: beschrijf in termen van maximaal twee reeks of illustreer met behulp van een diagram hoe het proces van corrigerende maatregelen er uitziet. Begin bij het geven van een afwijking door een auditor en eindig bij het afsluiten van de bevinding. Identificeer voor elk element van het proces wie er verantwoordelijk is en identificeer waar in het proces van corrigerende maatregelen beslissingen moeten worden genomen.",
+  "antwoord_opties": [],
+  "correct_antwoord": "",
+  "handgeschreven_notities": "",
+  "context": "Proces van corrigerende maatregelen volgens ISO/IEC 27001 paragraaf 10.2 - beschrijven van het proces vanaf afwijking door auditor tot afsluiting bevinding, inclusief verantwoordelijkheden en beslismomenten",
+  "_source": "IMG_3250.jpg",
+  "_input_tokens": 1929,
+  "_output_tokens": 282
+}

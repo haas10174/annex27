@@ -1,0 +1,21 @@
+{
+  "pagina": "31-32",
+  "type": "content",
+  "hoofdstuk": "Groepswerk en Selectie van beheersdoelstellingen en -maatregelen",
+  "transcriptie": "Pagina 31:\n\nGroepswerk\n\nSelecteer 2-3 risico's, identificeer waarde, dreiging, kwetsbaarheid, waarschijnlijkheid, gevolgen, risicoclassificatie en voorgestelde risicobehandeling.\n\nU kunt voor de niveaus de termen laag, gemiddeld en hoog gebruiken.\n\nWerk het uit op uitgereikte flipover en presenteer het aan de andere groepen.\n\n(Oefening 4 – pagina 55)\n\n[Afbeelding: Puzzelstukjes in blauw]\n\nPagina 32:\n\nSelectie van beheersdoelstellingen en -maatregelen\n\n[Diagram met drie hoofdblokken verbonden met pijlen:]\n\nBlok 1 (blauw):\n✓ Identificatie van risico's\n✓ Risicoanalyse\n✓ Risico-evaluatie\n} Risicobeoordeling\n\nPijl naar beneden\n\nBlok 2 (blauw):\n✓ Risicobeperking\n✓ Risicomijding\n✓ Risico-overdracht\n✓ Risicoanvaarding\n} Risicobehandeling\n\nSelectie van beheersmaatregelen (totaal 93) uit bijlage A (gerelateerd aan ISO/IEC 27002)\n\nPijl naar rechts\n\nBlok 3 (blauw):\n✓ Risico tot een aanvaardbaar niveau terugbrengen\n✓ Aan wettelijke eisen voldoen\n✓ Aan de eisen van toezichthouders voldoen\n✓ Aan contractuele eisen voldoen",
+  "kernconcepten": [
+    "Groepswerk risicobeoordeling",
+    "Identificatie waarde, dreiging, kwetsbaarheid",
+    "Risicoclassificatie",
+    "Risicobehandeling",
+    "Risicobeoordeling (identificatie, analyse, evaluatie)",
+    "Risicobehandeling (beperking, mijding, overdracht, aanvaarding)",
+    "Beheersmaatregelen ISO/IEC 27002",
+    "Bijlage A (93 maatregelen)",
+    "Aanvaardbaar risiconiveau",
+    "Compliance (wettelijk, contractueel, toezichthouders)"
+  ],
+  "_source": "IMG_5143.jpg",
+  "_input_tokens": 1897,
+  "_output_tokens": 724
+}

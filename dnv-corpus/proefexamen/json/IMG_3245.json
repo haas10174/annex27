@@ -1,0 +1,15 @@
+{
+  "type": "examenvraag",
+  "vraag_nummer": "2.2",
+  "vraag_tekst": "ISO/IEC 27001 vereist van het topmanagement dat zij bewijs leveren van haar leiderschap en betrokkenheid bij de ontwikkeling en implementatie van het managementsysteem voor informatiebeveiliging.",
+  "antwoord_opties": [
+    "a) Geef een korte beschrijving van een methode die u zou kunnen gebruiken om betrokkenheid van het topmanagement te evalueren. (2 punten)",
+    "b) Geef drie voorbeelden van auditbewijs dat u zou verzamelen als onderdeel van uw evaluatie van betrokkenheid van het topmanagement. (3 punten)"
+  ],
+  "correct_antwoord": "",
+  "handgeschreven_notities": "",
+  "context": "ISO/IEC 27001 - Leiderschap en betrokkenheid van topmanagement - Auditmethoden en bewijsverzameling",
+  "_source": "IMG_3245.jpg",
+  "_input_tokens": 1929,
+  "_output_tokens": 271
+}

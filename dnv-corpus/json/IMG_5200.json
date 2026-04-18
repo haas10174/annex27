@@ -1,0 +1,18 @@
+{
+  "pagina": "9",
+  "type": "content",
+  "hoofdstuk": "13. Module 4 - Legenda en B.V.",
+  "transcriptie": "Groep 1\n\nGreeting! – Togpare (no)\n\n• Kas een observatie\n• Wat is de grondrorzaak van deze observatie?\n• Welke ongepaste maatregelenouden kunnen worden genomen?\n• Hoe zou jij rapporteren?\n\nBasis-onzaalanalyse van DNV\n\n[DIAGRAM: Een flowchart met 5 niveaus van boven naar beneden, verbonden met pijlen. De niveaus bevatten:\n\nNiveau 1 (bovenste): Bevat vakken voor 'Incident', 'Gebeurtenis', 'Near Miss', 'Resultaat'\n\nNiveau 2: Bevat vakken voor 'Onmiddellijke oorzaken', 'Sub-standaard handelingen', 'Sub-standaard omstandigheden'\n\nNiveau 3: Bevat vakken voor 'Onderliggende oorzaken', 'Persoonlijke factoren', 'Werk factoren'\n\nNiveau 4: Bevat vakken voor 'Basis oorzaken', 'Management systemen', 'Organisatie factoren'\n\nNiveau 5 (onderste): Bevat vakken voor 'Gebrek aan controle', 'Adequaat Programma', 'Program Standaarden', 'Naleving'\n\nEr zijn rode pijlen die van boven naar beneden door de niveaus lopen, wat de causale relatie aangeeft.]",
+  "kernconcepten": [
+    "Oorzaakanalyse",
+    "Root cause analysis",
+    "Incident onderzoek",
+    "Basis-oorzaalanalyse DNV",
+    "Onmiddellijke oorzaken",
+    "Onderliggende oorzaken",
+    "Management systemen"
+  ],
+  "_source": "IMG_5200.jpg",
+  "_input_tokens": 1897,
+  "_output_tokens": 509
+}

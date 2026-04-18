@@ -1,0 +1,26 @@
+{
+  "pagina": "21-22",
+  "type": "content",
+  "hoofdstuk": "Organisatorische beheersmaatregelen – A.5",
+  "transcriptie": "Organisatorische beheersmaatregelen – A.5\n\n5.1 Beleidsregels voor informatiebeveiliging\n5.2 Rollen en verantwoordelijkheden bij informatiebeveiliging\n5.3 Functiescheiding\n5.4 Managementverantwoordelijkheden\n5.5 Contact met overheidsinstanties\n5.6 Contact met speciale belangengroepen\n5.7 Informatie en analyses over dreigingen - Nieuw\n5.8 Informatiebeveiliging in projectbeheer\n5.9 Inventariseren van informatie en andere gerelateerde bedrijfsmiddelen\n5.10 Aanvaard gebruik van informatie en andere gerelateerde bedrijfsmiddelen\n5.11 Retourneren van bedrijfsmiddelen\n5.12 Classificeren van informatie\n5.13 Labelen van informatie\n5.14 Overdragen van informatie\n5.15 Toegangsbeveiliging\n5.16 Identiteitsbeheer\n5.17 Beheren van authenticatie informatie\n5.18 Toegangsrechten\n\n---\n\nOrganisatorische beheersmaatregelen – A.5\n\n5.19 Informatiebeveiliging van leveranciersrelaties\n5.20 Adresseren van informatiebeveiliging in leveranciersovereenkomsten\n5.21 Beheren van informatiebeveiliging in de ICT-keten\n5.22 Monitoren, beoordelen en het beheren van wijzigingen op leveranciersdiensten\n5.23 Informatiebeveiliging voor het gebruik van clouddiensten - Nieuw\n5.24 Plannen en voorbereiden van het beheer van informatiebeveiligingsincidenten\n5.25 Beoordelen van en besluiten over informatiebeveiligingsgebeurtenissen\n5.26 Reageren op informatiebeveiligingsincidenten\n5.27 Leren van informatiebeveiligingsincidenten\n5.28 Verzamelen van bewijsmateriaal\n5.29 Informatiebeveiliging tijdens een verstoring\n5.30 ICT-gereedheid voor bedrijfscontinuïteit - Nieuw\n5.31 Wettelijke, statutaire, regelgevende en contractuele eisen\n5.32 Intellectuele eigendomsrechten\n5.33 Beschermen van registraties\n5.34 Privacy en bescherming van persoonsgegevens\n5.35 Onafhankelijke beoordeling van informatiebeveiliging\n5.36 Naleving van beleid, regels en normen voor informatiebeveiliging\n5.37 Gedocumenteerde bedieningsprocedures",
+  "kernconcepten": [
+    "A.5 Organisatorische beheersmaatregelen",
+    "Beleidsregels informatiebeveiliging",
+    "Rollen en verantwoordelijkheden",
+    "Functiescheiding",
+    "Dreigingsanalyse",
+    "Classificatie van informatie",
+    "Toegangsbeheer",
+    "Identiteitsbeheer",
+    "Leveranciersbeheer",
+    "ICT-keten beveiliging",
+    "Clouddiensten beveiliging",
+    "Incidentmanagement",
+    "Bedrijfscontinuïteit",
+    "Privacy en persoonsgegevens",
+    "Naleving en compliance"
+  ],
+  "_source": "IMG_5157.jpg",
+  "_input_tokens": 1897,
+  "_output_tokens": 975
+}

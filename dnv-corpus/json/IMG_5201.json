@@ -1,0 +1,17 @@
+{
+  "pagina": "10",
+  "type": "content",
+  "hoofdstuk": "Hematopoiesis",
+  "transcriptie": "Groep 2\n\n* Tests een aanwijzing\n* Vraag sta: groeiobjek naar viaze aWijking?\n* Vraag sta: ongehendle maligniteit Zowden kunnen worden geïdentificeerd?\n* Hoe zei u dit utivoeren?\n\n* Opelling: - begint (110)\n\nHematopoiesis\n\nHet diagram toont het proces van hematopoiesis (bloedcelvorming) met drie hoofdtakken:\n\n1. LYMPHOIDtak:\n- Leidt tot Lymfocyten\n- Verdeelt zich in B-cellen en T-cellen\n- B-cellen differentiëren tot Plasmacellen\n- Produceren Antilichamen\n\n2. PLANNING (centrale tak):\n- Verbindt de verschillende differentiatieprocessen\n- Centraal gelegen in het diagram\n\n3. RAPPORTAGE tak:\n- Leidt tot verschillende celtypen\n- Bevat meerdere differentiatierichtingen\n\n4. UITVOERING tak:\n- Bevat verschillende celtypen\n- Meerdere eindstadia van celdifferentiatie\n\nHet diagram illustreert hoe alle bloedcellen ontstaan uit een gemeenschappelijke stamcel (Auditroes) en zich vervolgens specialiseren in verschillende richtingen.",
+  "kernconcepten": [
+    "Hematopoiesis",
+    "Lymphoid differentiatie",
+    "Planning",
+    "Rapportage",
+    "Uitvoering",
+    "Celdifferentiatie"
+  ],
+  "_source": "IMG_5201.jpg",
+  "_input_tokens": 1897,
+  "_output_tokens": 457
+}

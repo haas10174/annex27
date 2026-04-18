@@ -1,0 +1,17 @@
+{
+  "pagina": "1",
+  "type": "content",
+  "hoofdstuk": "Module 5 - DNV Business Assurance BV",
+  "transcriptie": "Module 5\n\nDNV Business Assurance BV\n\nHet auditproces\n\nHet auditproces bestaat uit verschillende fasen:\n\nRAPPORTAGE:\n- Audit bevindingen\n- Auditrapport\n- Verificatie van correctieve maatregelen\n- Herstelaudit indien nodig\n\nAuditfasen:\n\nPLANNING:\n- Vaststellen auditdoelstellingen\n- Bepalen auditscope\n- Vaststellen auditcriteria\n- Samenstellen auditteam\n- Opstellen auditplan\n\nFOLLOW-UP:\n- Evaluatie correctieve maatregelen\n- Verificatie effectiviteit\n- Herstelaudit indien nodig\n\nUITVOERING:\n- Openingsmeeting\n- Verzamelen en verificeren van informatie\n- Audit bevindingen\n- Slotmeeting\n- Rapportage\n\nHet diagram toont een circulair proces waarbij de verschillende auditfasen met elkaar verbonden zijn via een centraal element genaamd 'Auditproces'. De pijlen tonen de volgorde en relaties tussen de verschillende fasen.",
+  "kernconcepten": [
+    "Auditproces",
+    "Rapportage",
+    "Planning",
+    "Follow-up",
+    "Uitvoering",
+    "Auditfasen"
+  ],
+  "_source": "IMG_5178.jpg",
+  "_input_tokens": 1897,
+  "_output_tokens": 432
+}

@@ -1,0 +1,16 @@
+{
+  "pagina": "6",
+  "type": "content",
+  "hoofdstuk": "Module 5",
+  "transcriptie": "Documentatiebeoordeling\n\n• Voer een documentatieaudit uit op de ISMS-documentatie van GetRich Bank\n• Bepaal in hoeverre de documentatie voldoet aan de eisen van ISO/IEC 27001:2022\n• Beperk uzelf tot de procedures die aan uw team zijn toegewezen\n• Bereid feedback voor\n\n(Oefening 3 – pagina 81)\n\n[Afbeelding: twee maskers, één met een droevige gezichtsuitdrukking en één met een blije gezichtsuitdrukking]\n\n---\n\nMulti-Site\n\n| | Dag 1 | Dag 2 | Dag 3 | Dag 4 |\n|---|---|---|---|---|\n| Teamleider | Hoofdkantoor | Site 2 | Hoofdkantoor | Hoofdkantoor |\n| Auditor 1 | Hoofdkantoor | Site 3 | Site 5 | Hoofdkantoor |\n| Auditor 2 | Site 1 | Site 4 | Site 6 | Site 6 |\n\n06 Module 5\n© DNV Business Assurance B.V.",
+  "kernconcepten": [
+    "Documentatiebeoordeling",
+    "ISMS-documentatie",
+    "ISO/IEC 27001:2022",
+    "Multi-Site audit planning",
+    "Auditteam verdeling"
+  ],
+  "_source": "IMG_5172.jpg",
+  "_input_tokens": 1897,
+  "_output_tokens": 421
+}

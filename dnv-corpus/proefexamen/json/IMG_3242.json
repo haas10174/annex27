@@ -1,0 +1,12 @@
+{
+  "type": "examenvraag",
+  "vraag_nummer": "1.1, 1.2, 1.3",
+  "vraag_tekst": "Sectie één – Vijf vragen die ieder twee punten waard zijn\n\n1.1 Een zeer belangrijke eis aan interne audits is dat zij objectief en onpartijdig zijn.\n\nBeschrijf het verschil tussen objectiviteit en onpartijdigheid in deze context. (2 punten)\n\n1.2 Leg uit, in de context van auditeren, wat het verschil is tussen betogend (argumentative) zijn en assertief zijn. (2 punten)\n\n1.3 De mate van het naleven van wet- en regelgeving is een maatstaf voor de prestatie van een informatiebeveiligingsmanagementsysteem.\n\nNoem twee methodes die een organisatie kan gebruiken om te bepalen in welke mate zij wet- en regelgeving naleven. (2 punten)",
+  "antwoord_opties": [],
+  "correct_antwoord": "",
+  "handgeschreven_notities": "",
+  "context": "Auditing begrippen en principes: objectiviteit vs onpartijdigheid, argumentatief vs assertief gedrag, en methoden om naleving van wet- en regelgeving te meten in een ISMS context",
+  "_source": "IMG_3242.jpg",
+  "_input_tokens": 1929,
+  "_output_tokens": 352
+}

@@ -1,0 +1,12 @@
+{
+  "type": "examenvraag",
+  "vraag_nummer": "3.1",
+  "vraag_tekst": "Tijdens een routinematige jaarlijkse audit, informeert de organisatie die u auditeert dat zij geen ontwerpwerkzaamheden meer doen. Deze werkzaamheden zijn nu uitbesteed aan een subcontractor.\n\nGeef vier voorbeelden van auditbewijs waar u naar zou zoeken om overeenstemming te bepalen van het huidige systeem met ISO/IEC 27001, gegeven de informatie die u zojuist hebt ontvangen.\n\nEN\n\nIdentificeer de paragra(a)f(en) van ISO/IEC 27001 die betrekking hebben op deze situatie, voor elk van uw voorbeelden.\n\n(2 punten voor elk voorbeeld en 0,5 punt voor het vaststellen van de paragra(a)f(en) van ISO/IEC 27001 die relevant zijn voor elk van de vier voorbeelden = totaal 10 punten)",
+  "antwoord_opties": [],
+  "correct_antwoord": "",
+  "handgeschreven_notities": "[geen handgeschreven notities zichtbaar op deze pagina]",
+  "context": "Auditbewijs verzamelen bij uitbesteding van ontwerpwerkzaamheden - koppeling maken tussen auditbevindingen en specifieke paragrafen van ISO/IEC 27001 - toepassing van norm bij gewijzigde organisatiestructuur (outsourcing)",
+  "_source": "IMG_3248.jpg",
+  "_input_tokens": 1929,
+  "_output_tokens": 401
+}

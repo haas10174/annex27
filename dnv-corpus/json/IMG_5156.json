@@ -1,0 +1,20 @@
+{
+  "pagina": "19-20",
+  "type": "content",
+  "hoofdstuk": "Module 4 - Beheersmaatregelen implementatie",
+  "transcriptie": "Pagina 19:\n\nBeheersmaatregelen implementatie\n\nISO 27001 Bijlage/Annex. A\nBeheersmaatregelen\n\nA.5 Organisatorische beheersmaatregelen\n37 maatregelen\n\nA.6 Mengerichte beheersmaatregelen\n8 maatregelen\n\nA.7 Fysieke beheersmaatregelen\n14 maatregelen\n\nA.8 Technologische beheersmaatregelen\n34 maatregelen\n\nISO 97002 Richtlijnen\nImplementatie adviezen/richtlijnen\n\n5 Organisatorische beheersmaatregelen\n\n6 Mengerichte beheersmaatregelen\n\n7 Fysieke beheersmaatregelen\n\n8 Technologische beheersmaatregelen\n\nPagina 20:\n\nMaatregelen om het risiconiveau te beïnvloeden\n\nBeheersmaatregel\n\nmiddelen voor risicobeheer met inbegrip van beleid, procedures, richtlijnen of organisatorische structuren, die van administratieve, technische, beheers- of juridische aard kunnen zijn.",
+  "kernconcepten": [
+    "Annex A beheersmaatregelen",
+    "ISO 27001 Bijlage A structuur",
+    "Organisatorische beheersmaatregelen (37)",
+    "Mengerichte beheersmaatregelen (8)",
+    "Fysieke beheersmaatregelen (14)",
+    "Technologische beheersmaatregelen (34)",
+    "ISO 27002 implementatie richtlijnen",
+    "Definitie beheersmaatregel",
+    "Risicobeheer middelen"
+  ],
+  "_source": "IMG_5156.jpg",
+  "_input_tokens": 1897,
+  "_output_tokens": 556
+}

@@ -1,0 +1,15 @@
+{
+  "type": "examenvraag",
+  "vraag_nummer": "2.3",
+  "vraag_tekst": "Een positieve eigenschap van een auditor is diplomatiek zijn.",
+  "antwoord_opties": [
+    "a) Verklaar de betekenis van 'diplomatiek' en geef een voorbeeld om aan te geven hoe een auditor diplomatiek zou kunnen zijn. (3 punten)",
+    "b) Beschrijf kort wat het effect op een audit zou kunnen zijn van niet-diplomatiek zijn. (2 punten)"
+  ],
+  "correct_antwoord": "",
+  "handgeschreven_notities": "",
+  "context": "Auditeurvaardigheden - diplomatiek gedrag en communicatie tijdens audits",
+  "_source": "IMG_3246.jpg",
+  "_input_tokens": 1929,
+  "_output_tokens": 197
+}

@@ -1,0 +1,17 @@
+{
+  "pagina": "2",
+  "type": "content",
+  "hoofdstuk": "Module 4",
+  "transcriptie": "Pagina 3:\n\nBelangrijkste doel van een ISMS\n\nEen ISMS stelt een organisatie in staat om:\n\n✓te voldoen aan de informatiebeveiligingseisen van klanten en andere belanghebbenden;\n\n✓de plannen en activiteiten van een organisatie verbeteren;\n\n✓te voldoen aan de informatiebeveiligingsdoelstellingen van de organisatie;\n\n✓te voldoen aan voorschriften, wetgeving en industriële mandaten; en\n\n✓informatiemiddelen te beheren op een georganiseerde manier die voortdurende verbetering en aanpassing aan de huidige doelstellingen van de organisatie vergemakkelijkt.\n\n[Afbeelding toont een digitaal hangslot met binaire codes en digitale beveiliging symboliek]\n\nPagina 4:\n\nAuditeerbare norm versus richtlijnen\n\nAuditeerbare norm:\n• een standaardspecificatie op basis waarvan een onafhankelijke audit kan worden uitgevoerd\n• ISO 27001 bevat eisen\n\nRichtlijnen:\n• richtlijnen voor het implementeren van algemeen aanvaarde beheersmaatregelen\n• ISO 27002 geeft inzicht en duiding c.q 'een gebruiksaanwijzing' voor de maatregelen\n\n05 Module 4\n© DNV Business Assurance B.V.",
+  "kernconcepten": [
+    "ISMS doelstellingen",
+    "Informatiebeveiligingseisen",
+    "Auditeerbare norm versus richtlijnen",
+    "ISO 27001 eisen",
+    "ISO 27002 beheersmaatregelen",
+    "Voortdurende verbetering"
+  ],
+  "_source": "IMG_5148.jpg",
+  "_input_tokens": 1897,
+  "_output_tokens": 526
+}

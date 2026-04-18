@@ -1,0 +1,28 @@
+{
+  "pagina": "15-16",
+  "type": "content",
+  "hoofdstuk": "04 Module 3",
+  "transcriptie": "Basisaanpak\n\n• Doel van de basisbescherming is het definiëren van een minimum aantal waarborgen. Eenmaal gedefinieerd kunnen deze op uniforme wijze worden toegepast op verschillende informatiesystemen die worden beschouwd als systemen met een laag risico.\n\n• Bronnen van maatregelen zijn bijvoorbeeld:\n  • Internationale en nationale normalisatie-instituten\n  • Normen of aanbevelingen voor de sector\n  • Een ander bedrijf, bij voorkeur met dezelfde bedrijfsdoelstellingen\n  • Eigen baseline\n\n[Afbeelding: Een honkbalveld van bovenaf gezien met groen gras en bruine lopen/bases]\n\n15\n\nGedetailleerde aanpak\n\n• Identificeer informatierisico's\n\n• Identificeer of het risico wordt veroorzaakt door het proces, de kans, het bedrijfsmiddel etc.\n\n• Identificeer op basis van de gekozen aanpak:\n  • Gevolg, impact, waarschijnlijkheid\n\nOF\n\n• Identificeer de bedreigingen voor de bedrijfsmiddelen\n\n• Identificeer de kwetsbaarheden die door de bedreigingen kunnen worden misbruikt\n\n• Identificeer de impact op de bedrijfsmiddelen als gevolg van het verlies van vertrouwelijkheid, integriteit, beschikbaarheid\n\n• OF EEN ANDERE METHODE\n\n• Identificeer de eigenaar van het risico\n\n• Identificeer risico's die moeten worden aangepakt, verkrijg goedkeuring\n\n• Behandel het risico\n\n[Afbeelding: Een ei met daarop het woord 'risk' geschreven]\n\n16\n\n04 Module 3\n© DNV Business Assurance B.V.\n\n8",
+  "kernconcepten": [
+    "Basisaanpak",
+    "Basisbescherming",
+    "Minimum aantal waarborgen",
+    "Bronnen van maatregelen",
+    "Baseline",
+    "Gedetailleerde aanpak",
+    "Informatierisico's",
+    "Bedreigingen",
+    "Kwetsbaarheden",
+    "Impact",
+    "Gevolg",
+    "Waarschijnlijkheid",
+    "Risico-eigenaar",
+    "Risicobehandeling",
+    "Vertrouwelijkheid",
+    "Integriteit",
+    "Beschikbaarheid"
+  ],
+  "_source": "IMG_5136.jpg",
+  "_input_tokens": 1897,
+  "_output_tokens": 689
+}

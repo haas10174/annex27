@@ -1,0 +1,19 @@
+{
+  "pagina": "3",
+  "type": "content",
+  "hoofdstuk": "05 Module 4",
+  "transcriptie": "Bronnen van eisen\n\nBelangrijke bronnen van informatiebeveiligingseisen:\n✓ Risicobeoordeling bedrijfsstrategie en -doelstellingen van de organisatie\n✓ Wettelijke, statutaire, regelgevende en contractuele vereisten\n✓ Principes, doelstellingen en bedrijfsvereisten\n\n[Afbeelding: Een schap met gekleurde ordners en een hamer, symboliserend documentatie en regelgeving]\n\nISO 27001 – De eisen\n\n[Diagram beschrijving: Een stroomschema met de volgende secties van boven naar beneden:]\n\nSectie 0 Inleiding:\n- 0.1 Algemeen: Informatiebeveiligheid voor interne en externe partijen; blijvf af van de omvang, aard en structuur van elke organisatie; Niet constant, verandert in de loop der tijd\n- 0.2 Compatibiliteit met andere managementsystemen: Bijlage SL van ISO/IEC Directives; Toepassingsgebied\n\nSectie 1 Normatieve verwijzingen: Gebruik de laatste versie van de ISO 27000-norm\n\nSectie 2 Termen en definities: Raadpleeg ISO/IEC 27000\n\nSectie 3 Context van de organisatie (met opsomming: 4 Context van de organisatie, 5 Leiderschap, 6 Planning, 7 Ondersteuning, 8 Uitvoering, 9 Evaluatie van de prestaties, 10 Verbetering)\n\nSectie 4-10 Eisen\n\nBijlage: Bijlage A (normatief) – Beheersmaatregelen\n\nDNV © 2023",
+  "kernconcepten": [
+    "Bronnen van eisen ISO 27001",
+    "Risicobeoordeling",
+    "Wettelijke en contractuele vereisten",
+    "Structuur ISO 27001",
+    "Normative verwijzingen",
+    "Bijlage A beheersmaatregelen",
+    "Context van de organisatie",
+    "ISMS eisen"
+  ],
+  "_source": "IMG_5149.jpg",
+  "_input_tokens": 1897,
+  "_output_tokens": 627
+}

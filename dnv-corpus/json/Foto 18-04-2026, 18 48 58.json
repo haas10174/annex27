@@ -1,0 +1,18 @@
+{
+  "pagina": "13 en 14",
+  "type": "content",
+  "hoofdstuk": "Risico analyse",
+  "transcriptie": "Pagina 13:\n\nDefinities\n\nRisicobeoordeling\nOverall proces van risico-identificatie, risico-analyses en risico-evaluatie\n\nRisico analyse\nProces om de aard van het risico te begrijpen en het risiconiveau te bepalen\n\nRisico evaluatie\nProces van vergelijking van de resultaten van de risicoanalyse met de risico criteria om te bepalen of het risico en/of de omvang ervan aanvaardbaar of tolereerbaar is\n\nRef: ISO 27000 & 27002\n\nPagina 14:\n\nRisico analyse - overzicht\n\nRisicobeoordeling hoofdlijnen\n\nEen gedetailleerde risicobeoordeling uitvoeren\n\nBasissaanpak kan toereikend zijn\n\nHet diagram toont een stroomschema met:\n- Bovenaan een rode balk: \"Een gedetailleerde risicobeoordeling uitvoeren → A\"\n- Daaronder vier blauwe vakken in een kolom:\n  1. Een doorlopend beheer van risico's uitvoeren en het proces bewaken\n  2. Een op grond van het beleidskader geïdentificeerde risico's in behandeling nemen om de veiligheid van de informatie te garanderen\n  3. Het bereiken van het passende beschermingsniveau van informatie binnen de organisatie\n  4. Een procedure vaststellen om passend beleid, procedures, technische activiteiten, plannen of procedures te documenteren of aanvullen\n- Een pijl naar beneden naar een blauwe balk: \"Basissaanpak kan toereikend zijn\"\n\n04 Module 3\n© DNV Business Assurance B.V.",
+  "kernconcepten": [
+    "Risicobeoordeling",
+    "Risico analyse",
+    "Risico evaluatie",
+    "Gedetailleerde risicobeoordeling",
+    "Basissaanpak",
+    "ISO 27000",
+    "ISO 27002"
+  ],
+  "_source": "Foto 18-04-2026, 18 48 58.jpg",
+  "_input_tokens": 1897,
+  "_output_tokens": 582
+}

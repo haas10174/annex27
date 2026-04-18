@@ -1,0 +1,19 @@
+{
+  "pagina": "25-26",
+  "type": "content",
+  "hoofdstuk": "Risico prioritering en classificatie",
+  "transcriptie": "Risico prioritering\n\nHoe groot is de waarschijnlijkheid dat een dreiging zich voordoet?\nHoe groot zijn de gevolgen als de dreiging zich voordoet?\n\nWaarschijnlijkheid vs Gevolg matrix:\n- Verticale as: Waarschijnlijkheid (Laag, Gemiddeld, Hoog)\n- Horizontale as: Gevolg (Laag, Gemiddeld, Hoog)\n- In de matrix zijn 7 genummerde items (1-7) gepositioneerd op verschillende punten:\n  * Item 6: Laag waarschijnlijkheid, Laag gevolg\n  * Item 5: Gemiddeld waarschijnlijkheid, Gemiddeld gevolg\n  * Item 1: Gemiddeld waarschijnlijkheid, Hoog gevolg\n  * Item 2: Hoog waarschijnlijkheid, Gemiddeld gevolg\n  * Item 7: Hoog waarschijnlijkheid, Hoog gevolg\n  * Item 3: Hoog waarschijnlijkheid, Hoog gevolg\n  * Item 4: (positie niet exact beschreven)\n\nRisico classificatie\n\nDe risicomatrix toont vier kwadranten met kleuren en classificaties:\n\n| Waarschijnlijkheid | Gevolg Laag | Gevolg Gemiddeld | Gevolg Hoog |\n|-------------------|-------------|------------------|-------------|\n| Hoog | Gemiddeld risico (geel) - item 2 | Gemiddeld risico (geel) - item 2 | Hoog risico (rood) - items 3, 1 |\n| Laag | Laag risico (groen) - item 6 | Gemiddeld risico (geel) | Gemiddeld risico (geel) |\n\nKleurcodering:\n- Groen: Laag risico\n- Geel: Gemiddeld risico\n- Rood: Hoog risico",
+  "kernconcepten": [
+    "Risico prioritering",
+    "Waarschijnlijkheid",
+    "Gevolg",
+    "Risicomatrix",
+    "Risico classificatie",
+    "Hoog risico",
+    "Gemiddeld risico",
+    "Laag risico"
+  ],
+  "_source": "IMG_5140.jpg",
+  "_input_tokens": 1897,
+  "_output_tokens": 659
+}

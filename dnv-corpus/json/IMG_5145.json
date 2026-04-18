@@ -1,0 +1,17 @@
+{
+  "pagina": "35-36",
+  "type": "oefening",
+  "hoofdstuk": "Quiz 3",
+  "transcriptie": "Quiz 3\n\nThe quiz bevat 10 meerkeuze vragen.\n\nU heeft 15 minuten om de quiz te beantwoorden.\n\n---\n\nBeste antwoorden voor Quiz 3\n\n1. Een kwetsbaarheid kan worden gedefinieerd als\n   a. Een mogelijke oorzaak voor een incident dat kan leiden tot schade aan een systeem of organisatie\n   b. Een zwakte van een bedrijfsmiddel (asset) of groep van bedrijfsmiddelen, die kan worden uitgebuit door een of meer bedreigingen\n   c. A en B zijn beide goed\n   d. Geen van bovenstaande antwoorden\n\n2. Een open archiefkast kan het best omschreven worden als een\n   a. Bedreiging\n   b. Kwetsbaarheid\n   c. Informatiemiddel\n   d. Al bovenstaande antwoorden\n\n3. Een e-mail is een soort van\n   a. Softwaremiddel\n   b. Informatiemiddel\n   c. Dienst\n   d. Al bovenstaande antwoorden\n\n4. Welke van onderstaande antwoorden is een bepalende reden voor uitsluitng van bepaalde delen van een bedrijf uit het toepassingsgebied van het ISMS?\n   a. Het is lastig om het ISMS te implementeren in een bepaalde locatie, omdat daar geen senior manager met ervaring in informatiebeveiliging aanwezig is\n   b. De afdeling ligt ver weg, maar de afdeling behandelt wel kritische bedrijfsinformatie en is verbonden met het netwerk van het hoofdkantoor\n   c. Uitsluiting van het bedrijfsonderdeel of de locatie zal geen effect hebben op het vermogen van de organisatie om informatiebeveiliging te leveren, op basis van de resultaten van een risicobeoordering\n   d. Alle nieuwe medewerkers worden onderden van het beveiligingsbeleid en na 6 of 12 maanden een vast dienstverband krijgen",
+  "kernconcepten": [
+    "Quiz meerkeuze vragen",
+    "Kwetsbaarheid definitie",
+    "Bedreiging vs kwetsbaarheid",
+    "Bedrijfsmiddelen classificatie",
+    "ISMS toepassingsgebied",
+    "Uitsluiting criteria"
+  ],
+  "_source": "IMG_5145.jpg",
+  "_input_tokens": 1897,
+  "_output_tokens": 662
+}

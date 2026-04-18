@@ -1,0 +1,21 @@
+{
+  "pagina": "14 (slides 29-30)",
+  "type": "content",
+  "hoofdstuk": "Opties voor risicobehandeling en Risicobehandeling - Duiding typering ISO/IEC 27002",
+  "transcriptie": "Slide 29:\n\nOpties voor risicobehandeling\n\nDiagram toont vier opties in volgorde van boven naar beneden:\n- Risicobeperking\n- Risicovermijding\n- Risico-overdracht\n- Risicoaanvaarding\n\nSlide 30:\n\nRisicobehandeling – Duiding typering ISO/IEC 27002\n\nDiagram toont Risicobehandeling onderverdeeld in drie categorieën:\n- Preventief (groene balk)\n- Detectief (blauwe balk)\n- Correctief (oranje balk)\n\nOnderaan staat: Maatregelen kunnen handmatig of geautomatiseerd zijn\n\n04 Module 3\n© DNV Business Assurance B.V.",
+  "kernconcepten": [
+    "Risicobeperking",
+    "Risicovermijding",
+    "Risico-overdracht",
+    "Risicoaanvaarding",
+    "ISO/IEC 27002",
+    "Preventieve maatregelen",
+    "Detectieve maatregelen",
+    "Correctieve maatregelen",
+    "Geautomatiseerde maatregelen",
+    "Handmatige maatregelen"
+  ],
+  "_source": "IMG_5142.jpg",
+  "_input_tokens": 1897,
+  "_output_tokens": 401
+}
