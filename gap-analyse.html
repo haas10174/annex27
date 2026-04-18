@@ -1728,6 +1728,13 @@ const categories = {
   tech: { label: 'Technische controls',   tip: { low: 'Technische basismaatregelen ontbreken.', mid: 'Deels ingericht — encryptie, MFA en logging verdienen aandacht.', high: 'Sterke technische maatregelen.' }},
   ops:  { label: 'Operationeel',          tip: { low: 'Operationele controls ontbreken — kritiek voor certificering.', mid: 'Bewustzijn aanwezig maar niet getest of gedocumenteerd.', high: 'Goed gedocumenteerd operationeel beheer.' }},
 };
+// Actieve (gefilterde) vragen + fases worden gezet in confirmSector() op basis van selectedSector.
+// Voor initiële laad geven we default-waardes zodat niets crasht voordat sector gekozen is.
+let activeQuestions = questions;
+let activePhases = phases;
+let current = 0;
+let answers = new Array(questions.length).fill(null);
+
 // Vul afgeleide velden (count, weightTotal) — wordt herberekend na sectorkeuze (incl. sector-specifieke vragen)
 function recomputeCategoryTotals() {
   Object.keys(categories).forEach(catKey => {
@@ -1739,13 +1746,6 @@ function recomputeCategoryTotals() {
 }
 // Initieel met alle vragen (voor het geval sector niet gekozen is)
 recomputeCategoryTotals();
-
-// Actieve (gefilterde) vragen + fases worden gezet in confirmSector() op basis van selectedSector.
-// Voor initiële laad geven we default-waardes zodat niets crasht voordat sector gekozen is.
-let activeQuestions = questions;
-let activePhases = phases;
-let current = 0;
-let answers = new Array(questions.length).fill(null);
 
 // Circumferences
 const liveCirc = 2 * Math.PI * 60;  // 376.99

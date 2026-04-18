@@ -1,0 +1,1765 @@
+{
+  "total_controls": 114,
+  "total_specific": 19,
+  "total_default": 95,
+  "by_control": {
+    "A.5.1": {
+      "name": "Beleid voor informatiebeveiliging",
+      "cat": "Organisatorisch",
+      "questions": [
+        {
+          "q": "Is er een formeel informatiebeveiligingsbeleid dat is goedgekeurd door de directie?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt het beleid minimaal jaarlijks gereviewed en gecommuniceerd aan alle medewerkers?",
+          "type": "impl"
+        },
+        {
+          "q": "Bevat het beleid duidelijke verwijzingen naar de ISMS-scope, doelstellingen en verantwoordelijkheden?",
+          "type": "content"
+        }
+      ],
+      "source": "specific"
+    },
+    "A.5.2": {
+      "name": "Rollen en verantwoordelijkheden",
+      "cat": "Organisatorisch",
+      "questions": [
+        {
+          "q": "Zijn alle informatiebeveiligingsrollen (CISO, IT-beheer, management) formeel vastgelegd?",
+          "type": "doc"
+        },
+        {
+          "q": "Is er een RACI-matrix die verantwoordelijkheden per proces beschrijft?",
+          "type": "impl"
+        }
+      ],
+      "source": "specific"
+    },
+    "A.5.3": {
+      "name": "Scheiding van taken",
+      "cat": "Organisatorisch",
+      "questions": [
+        {
+          "q": "Is scheiding van taken formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt scheiding van taken actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "A.5.4": {
+      "name": "Managementverantwoordelijkheden",
+      "cat": "Organisatorisch",
+      "questions": [
+        {
+          "q": "Is managementverantwoordelijkheden formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt managementverantwoordelijkheden actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "A.5.5": {
+      "name": "Contact met autoriteiten",
+      "cat": "Organisatorisch",
+      "questions": [
+        {
+          "q": "Is contact met autoriteiten formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt contact met autoriteiten actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "A.5.6": {
+      "name": "Contact met speciale belangengroepen",
+      "cat": "Organisatorisch",
+      "questions": [
+        {
+          "q": "Is contact met speciale belangengroepen formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt contact met speciale belangengroepen actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "A.5.7": {
+      "name": "Threat intelligence",
+      "cat": "Organisatorisch",
+      "questions": [
+        {
+          "q": "Wordt er actief threat intelligence verzameld (NCSC, CVE-databases, leveranciers)?",
+          "type": "impl"
+        },
+        {
+          "q": "Is er een proces om dreigingsmeldingen te beoordelen op relevantie voor uw organisatie?",
+          "type": "proc"
+        },
+        {
+          "q": "Worden relevante dreigingen geregistreerd en worden maatregelen geïnitieerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "specific"
+    },
+    "A.5.8": {
+      "name": "IB in projectmanagement",
+      "cat": "Organisatorisch",
+      "questions": [
+        {
+          "q": "Is ib in projectmanagement formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt ib in projectmanagement actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "A.5.9": {
+      "name": "Inventarisatie van assets",
+      "cat": "Organisatorisch",
+      "questions": [
+        {
+          "q": "Is er een actueel register van alle informatie-assets (hardware, software, data, diensten)?",
+          "type": "doc"
+        },
+        {
+          "q": "Heeft elk asset een aangewezen eigenaar?",
+          "type": "impl"
+        },
+        {
+          "q": "Wordt het register minimaal jaarlijks geactualiseerd?",
+          "type": "proc"
+        }
+      ],
+      "source": "specific"
+    },
+    "A.5.10": {
+      "name": "Acceptabel gebruik",
+      "cat": "Organisatorisch",
+      "questions": [
+        {
+          "q": "Is acceptabel gebruik formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt acceptabel gebruik actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "A.5.11": {
+      "name": "Teruggave van assets",
+      "cat": "Organisatorisch",
+      "questions": [
+        {
+          "q": "Is teruggave van assets formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt teruggave van assets actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "A.5.12": {
+      "name": "Classificatie van informatie",
+      "cat": "Organisatorisch",
+      "questions": [
+        {
+          "q": "Is classificatie van informatie formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt classificatie van informatie actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "A.5.13": {
+      "name": "Labeling van informatie",
+      "cat": "Organisatorisch",
+      "questions": [
+        {
+          "q": "Is labeling van informatie formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt labeling van informatie actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "A.5.14": {
+      "name": "Informatieoverdracht",
+      "cat": "Organisatorisch",
+      "questions": [
+        {
+          "q": "Is informatieoverdracht formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt informatieoverdracht actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "A.5.15": {
+      "name": "Toegangsbeveiliging",
+      "cat": "Organisatorisch",
+      "questions": [
+        {
+          "q": "Is er een formeel toegangsbeleid op basis van need-to-know en least privilege?",
+          "type": "doc"
+        },
+        {
+          "q": "Worden toegangsrechten formeel aangevraagd, goedgekeurd en geregistreerd?",
+          "type": "proc"
+        },
+        {
+          "q": "Worden toegangsrechten periodiek gereviewed (minimaal halfjaarlijks)?",
+          "type": "impl"
+        }
+      ],
+      "source": "specific"
+    },
+    "A.5.16": {
+      "name": "Identiteitsbeheer",
+      "cat": "Organisatorisch",
+      "questions": [
+        {
+          "q": "Is identiteitsbeheer formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt identiteitsbeheer actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "A.5.17": {
+      "name": "Authenticatie-informatie",
+      "cat": "Organisatorisch",
+      "questions": [
+        {
+          "q": "Is er een wachtwoordbeleid met eisen aan lengte, complexiteit en MFA?",
+          "type": "doc"
+        },
+        {
+          "q": "Is MFA geïmplementeerd op alle bedrijfskritieke applicaties?",
+          "type": "impl"
+        },
+        {
+          "q": "Wordt het gebruik van een wachtwoordmanager verplicht gesteld?",
+          "type": "impl"
+        }
+      ],
+      "source": "specific"
+    },
+    "A.5.18": {
+      "name": "Toegangsrechten",
+      "cat": "Organisatorisch",
+      "questions": [
+        {
+          "q": "Is toegangsrechten formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt toegangsrechten actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "A.5.19": {
+      "name": "IB in leveranciersrelaties",
+      "cat": "Organisatorisch",
+      "questions": [
+        {
+          "q": "Is ib in leveranciersrelaties formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt ib in leveranciersrelaties actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "A.5.20": {
+      "name": "IB in leveranciersovereenkomsten",
+      "cat": "Organisatorisch",
+      "questions": [
+        {
+          "q": "Is ib in leveranciersovereenkomsten formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt ib in leveranciersovereenkomsten actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "A.5.21": {
+      "name": "ICT-toeleveringsketen",
+      "cat": "Organisatorisch",
+      "questions": [
+        {
+          "q": "Is ict-toeleveringsketen formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt ict-toeleveringsketen actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "A.5.22": {
+      "name": "Monitoring leveranciersdiensten",
+      "cat": "Organisatorisch",
+      "questions": [
+        {
+          "q": "Is monitoring leveranciersdiensten formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt monitoring leveranciersdiensten actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "A.5.23": {
+      "name": "Clouddiensten beveiliging",
+      "cat": "Organisatorisch",
+      "questions": [
+        {
+          "q": "Is er een beleid voor het gebruik van clouddiensten met selectiecriteria?",
+          "type": "doc"
+        },
+        {
+          "q": "Worden alleen goedgekeurde clouddiensten gebruikt (geen shadow IT)?",
+          "type": "impl"
+        },
+        {
+          "q": "Is de datalocatie (EU/EER) gewaarborgd en zijn verwerkersovereenkomsten afgesloten?",
+          "type": "proc"
+        }
+      ],
+      "source": "specific"
+    },
+    "A.5.24": {
+      "name": "Incidentmanagement planning",
+      "cat": "Organisatorisch",
+      "questions": [
+        {
+          "q": "Is er een gedocumenteerd incident response plan met duidelijke escalatieprocedure?",
+          "type": "doc"
+        },
+        {
+          "q": "Weten alle medewerkers hoe en waar zij beveiligingsincidenten moeten melden?",
+          "type": "impl"
+        },
+        {
+          "q": "Wordt het incident response plan minimaal jaarlijks getest (tabletop of simulatie)?",
+          "type": "proc"
+        }
+      ],
+      "source": "specific"
+    },
+    "A.5.25": {
+      "name": "Beoordeling IB-gebeurtenissen",
+      "cat": "Organisatorisch",
+      "questions": [
+        {
+          "q": "Is beoordeling ib-gebeurtenissen formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt beoordeling ib-gebeurtenissen actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "A.5.26": {
+      "name": "Respons op incidenten",
+      "cat": "Organisatorisch",
+      "questions": [
+        {
+          "q": "Is respons op incidenten formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt respons op incidenten actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "A.5.27": {
+      "name": "Leren van incidenten",
+      "cat": "Organisatorisch",
+      "questions": [
+        {
+          "q": "Is leren van incidenten formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt leren van incidenten actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "A.5.28": {
+      "name": "Verzameling van bewijsmateriaal",
+      "cat": "Organisatorisch",
+      "questions": [
+        {
+          "q": "Is verzameling van bewijsmateriaal formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt verzameling van bewijsmateriaal actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "A.5.29": {
+      "name": "IB tijdens verstoring",
+      "cat": "Organisatorisch",
+      "questions": [
+        {
+          "q": "Is er een business continuity plan met RPO/RTO per kritiek systeem?",
+          "type": "doc"
+        },
+        {
+          "q": "Worden backup-hersteltesten periodiek uitgevoerd en gedocumenteerd?",
+          "type": "impl"
+        },
+        {
+          "q": "Is er een uitwijkprocedure voor het geval de primaire locatie of systemen uitvallen?",
+          "type": "proc"
+        }
+      ],
+      "source": "specific"
+    },
+    "A.5.30": {
+      "name": "ICT-gereedheid bedrijfscontinuïteit",
+      "cat": "Organisatorisch",
+      "questions": [
+        {
+          "q": "Is ict-gereedheid bedrijfscontinuïteit formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt ict-gereedheid bedrijfscontinuïteit actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "A.5.31": {
+      "name": "Wettelijke vereisten",
+      "cat": "Organisatorisch",
+      "questions": [
+        {
+          "q": "Is wettelijke vereisten formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt wettelijke vereisten actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "A.5.32": {
+      "name": "Intellectuele eigendomsrechten",
+      "cat": "Organisatorisch",
+      "questions": [
+        {
+          "q": "Is intellectuele eigendomsrechten formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt intellectuele eigendomsrechten actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "A.5.33": {
+      "name": "Bescherming van registraties",
+      "cat": "Organisatorisch",
+      "questions": [
+        {
+          "q": "Is bescherming van registraties formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt bescherming van registraties actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "A.5.34": {
+      "name": "Privacy en PII",
+      "cat": "Organisatorisch",
+      "questions": [
+        {
+          "q": "Is privacy en pii formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt privacy en pii actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "A.5.35": {
+      "name": "Onafhankelijke beoordeling IB",
+      "cat": "Organisatorisch",
+      "questions": [
+        {
+          "q": "Is onafhankelijke beoordeling ib formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt onafhankelijke beoordeling ib actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "A.5.36": {
+      "name": "Naleving beleid en normen",
+      "cat": "Organisatorisch",
+      "questions": [
+        {
+          "q": "Is naleving beleid en normen formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt naleving beleid en normen actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "A.5.37": {
+      "name": "Gedocumenteerde procedures",
+      "cat": "Organisatorisch",
+      "questions": [
+        {
+          "q": "Is gedocumenteerde procedures formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt gedocumenteerde procedures actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "A.6.1": {
+      "name": "Screening",
+      "cat": "Personeel",
+      "questions": [
+        {
+          "q": "Worden medewerkers gescreend bij indiensttreding (identiteit, diploma, VOG)?",
+          "type": "proc"
+        },
+        {
+          "q": "Is de screening proportioneel aan het niveau van toegang tot informatie?",
+          "type": "impl"
+        }
+      ],
+      "source": "specific"
+    },
+    "A.6.2": {
+      "name": "Arbeidsvoorwaarden",
+      "cat": "Personeel",
+      "questions": [
+        {
+          "q": "Is arbeidsvoorwaarden formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt arbeidsvoorwaarden actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "A.6.3": {
+      "name": "Bewustwording en training",
+      "cat": "Personeel",
+      "questions": [
+        {
+          "q": "Ontvangen alle medewerkers jaarlijks een verplichte awareness-training?",
+          "type": "impl"
+        },
+        {
+          "q": "Worden phishing-simulaties uitgevoerd (minimaal 2x per jaar)?",
+          "type": "impl"
+        },
+        {
+          "q": "Wordt het deelnamepercentage en de toetsscore bijgehouden?",
+          "type": "proc"
+        }
+      ],
+      "source": "specific"
+    },
+    "A.6.4": {
+      "name": "Disciplinair proces",
+      "cat": "Personeel",
+      "questions": [
+        {
+          "q": "Is disciplinair proces formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt disciplinair proces actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "A.6.5": {
+      "name": "Verantwoordelijkheden bij beëindiging",
+      "cat": "Personeel",
+      "questions": [
+        {
+          "q": "Is verantwoordelijkheden bij beëindiging formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt verantwoordelijkheden bij beëindiging actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "A.6.6": {
+      "name": "Geheimhoudingsovereenkomsten",
+      "cat": "Personeel",
+      "questions": [
+        {
+          "q": "Is geheimhoudingsovereenkomsten formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt geheimhoudingsovereenkomsten actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "A.6.7": {
+      "name": "Werken op afstand",
+      "cat": "Personeel",
+      "questions": [
+        {
+          "q": "Is werken op afstand formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt werken op afstand actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "A.6.8": {
+      "name": "Rapportage IB-gebeurtenissen",
+      "cat": "Personeel",
+      "questions": [
+        {
+          "q": "Is rapportage ib-gebeurtenissen formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt rapportage ib-gebeurtenissen actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "A.7.1": {
+      "name": "Fysieke beveiligingsperimeters",
+      "cat": "Fysiek",
+      "questions": [
+        {
+          "q": "Zijn er gedefinieerde beveiligingszones met passende toegangscontrole?",
+          "type": "impl"
+        },
+        {
+          "q": "Worden bezoekers geregistreerd en begeleid in beveiligde zones?",
+          "type": "proc"
+        }
+      ],
+      "source": "specific"
+    },
+    "A.7.2": {
+      "name": "Fysieke toegang",
+      "cat": "Fysiek",
+      "questions": [
+        {
+          "q": "Is fysieke toegang formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt fysieke toegang actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "A.7.3": {
+      "name": "Beveiliging kantoren en faciliteiten",
+      "cat": "Fysiek",
+      "questions": [
+        {
+          "q": "Is beveiliging kantoren en faciliteiten formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt beveiliging kantoren en faciliteiten actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "A.7.4": {
+      "name": "Fysieke beveiligingsmonitoring",
+      "cat": "Fysiek",
+      "questions": [
+        {
+          "q": "Is fysieke beveiligingsmonitoring formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt fysieke beveiligingsmonitoring actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "A.7.5": {
+      "name": "Bescherming tegen omgevingsdreigingen",
+      "cat": "Fysiek",
+      "questions": [
+        {
+          "q": "Is bescherming tegen omgevingsdreigingen formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt bescherming tegen omgevingsdreigingen actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "A.7.6": {
+      "name": "Werken in beveiligde zones",
+      "cat": "Fysiek",
+      "questions": [
+        {
+          "q": "Is werken in beveiligde zones formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt werken in beveiligde zones actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "A.7.7": {
+      "name": "Clear desk en clear screen",
+      "cat": "Fysiek",
+      "questions": [
+        {
+          "q": "Is er een clean desk / clear screen beleid?",
+          "type": "doc"
+        },
+        {
+          "q": "Is automatische schermvergrendeling ingesteld op maximaal 5 minuten?",
+          "type": "impl"
+        }
+      ],
+      "source": "specific"
+    },
+    "A.7.8": {
+      "name": "Plaatsing apparatuur",
+      "cat": "Fysiek",
+      "questions": [
+        {
+          "q": "Is plaatsing apparatuur formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt plaatsing apparatuur actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "A.7.9": {
+      "name": "Beveiliging assets buiten terrein",
+      "cat": "Fysiek",
+      "questions": [
+        {
+          "q": "Is beveiliging assets buiten terrein formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt beveiliging assets buiten terrein actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "A.7.10": {
+      "name": "Opslagmedia",
+      "cat": "Fysiek",
+      "questions": [
+        {
+          "q": "Is opslagmedia formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt opslagmedia actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "A.7.11": {
+      "name": "Ondersteunende nutsvoorzieningen",
+      "cat": "Fysiek",
+      "questions": [
+        {
+          "q": "Is ondersteunende nutsvoorzieningen formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt ondersteunende nutsvoorzieningen actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "A.7.12": {
+      "name": "Beveiliging bekabeling",
+      "cat": "Fysiek",
+      "questions": [
+        {
+          "q": "Is beveiliging bekabeling formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt beveiliging bekabeling actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "A.7.13": {
+      "name": "Onderhoud apparatuur",
+      "cat": "Fysiek",
+      "questions": [
+        {
+          "q": "Is onderhoud apparatuur formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt onderhoud apparatuur actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "A.7.14": {
+      "name": "Veilige verwijdering apparatuur",
+      "cat": "Fysiek",
+      "questions": [
+        {
+          "q": "Is veilige verwijdering apparatuur formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt veilige verwijdering apparatuur actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "A.8.1": {
+      "name": "Gebruikersapparatuur",
+      "cat": "Technologie",
+      "questions": [
+        {
+          "q": "Is gebruikersapparatuur formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt gebruikersapparatuur actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "A.8.2": {
+      "name": "Geprivilegieerde toegangsrechten",
+      "cat": "Technologie",
+      "questions": [
+        {
+          "q": "Is geprivilegieerde toegangsrechten formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt geprivilegieerde toegangsrechten actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "A.8.3": {
+      "name": "Beperking toegang tot informatie",
+      "cat": "Technologie",
+      "questions": [
+        {
+          "q": "Is beperking toegang tot informatie formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt beperking toegang tot informatie actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "A.8.4": {
+      "name": "Toegang tot broncode",
+      "cat": "Technologie",
+      "questions": [
+        {
+          "q": "Is toegang tot broncode formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt toegang tot broncode actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "A.8.5": {
+      "name": "Beveiligde authenticatie",
+      "cat": "Technologie",
+      "questions": [
+        {
+          "q": "Is multi-factor authenticatie (MFA) verplicht voor alle externe toegang en beheerdersaccounts?",
+          "type": "impl"
+        },
+        {
+          "q": "Worden accounts automatisch vergrendeld na herhaalde mislukte inlogpogingen?",
+          "type": "impl"
+        }
+      ],
+      "source": "specific"
+    },
+    "A.8.6": {
+      "name": "Capaciteitsbeheer",
+      "cat": "Technologie",
+      "questions": [
+        {
+          "q": "Is capaciteitsbeheer formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt capaciteitsbeheer actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "A.8.7": {
+      "name": "Bescherming tegen malware",
+      "cat": "Technologie",
+      "questions": [
+        {
+          "q": "Is bescherming tegen malware formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt bescherming tegen malware actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "A.8.8": {
+      "name": "Beheer technische kwetsbaarheden",
+      "cat": "Technologie",
+      "questions": [
+        {
+          "q": "Worden systemen periodiek gescand op kwetsbaarheden (minimaal maandelijks)?",
+          "type": "impl"
+        },
+        {
+          "q": "Worden kritieke patches binnen 48 uur geïnstalleerd?",
+          "type": "proc"
+        },
+        {
+          "q": "Is er een proces voor noodpatching bij actief uitgebuite kwetsbaarheden?",
+          "type": "proc"
+        }
+      ],
+      "source": "specific"
+    },
+    "A.8.9": {
+      "name": "Configuratiebeheer",
+      "cat": "Technologie",
+      "questions": [
+        {
+          "q": "Is configuratiebeheer formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt configuratiebeheer actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "A.8.10": {
+      "name": "Verwijdering van informatie",
+      "cat": "Technologie",
+      "questions": [
+        {
+          "q": "Is verwijdering van informatie formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt verwijdering van informatie actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "A.8.11": {
+      "name": "Datamaskering",
+      "cat": "Technologie",
+      "questions": [
+        {
+          "q": "Is datamaskering formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt datamaskering actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "A.8.12": {
+      "name": "Preventie gegevenslekken",
+      "cat": "Technologie",
+      "questions": [
+        {
+          "q": "Is preventie gegevenslekken formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt preventie gegevenslekken actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "A.8.13": {
+      "name": "Back-up van informatie",
+      "cat": "Technologie",
+      "questions": [
+        {
+          "q": "Worden dagelijks geautomatiseerde backups gemaakt van alle kritieke data?",
+          "type": "impl"
+        },
+        {
+          "q": "Wordt de 3-2-1 backup-strategie gehanteerd (3 kopieën, 2 media, 1 off-site)?",
+          "type": "impl"
+        },
+        {
+          "q": "Worden backup-hersteltesten minimaal halfjaarlijks uitgevoerd?",
+          "type": "proc"
+        }
+      ],
+      "source": "specific"
+    },
+    "A.8.14": {
+      "name": "Redundantie faciliteiten",
+      "cat": "Technologie",
+      "questions": [
+        {
+          "q": "Is redundantie faciliteiten formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt redundantie faciliteiten actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "A.8.15": {
+      "name": "Logging",
+      "cat": "Technologie",
+      "questions": [
+        {
+          "q": "Worden authenticatie-, autorisatie- en systeemgebeurtenissen gelogd?",
+          "type": "impl"
+        },
+        {
+          "q": "Worden logs beschermd tegen wijziging en minimaal 12 maanden bewaard?",
+          "type": "proc"
+        },
+        {
+          "q": "Is er centraal logbeheer (SIEM of vergelijkbaar)?",
+          "type": "impl"
+        }
+      ],
+      "source": "specific"
+    },
+    "A.8.16": {
+      "name": "Monitoringactiviteiten",
+      "cat": "Technologie",
+      "questions": [
+        {
+          "q": "Is monitoringactiviteiten formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt monitoringactiviteiten actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "A.8.17": {
+      "name": "Kloksynchronisatie",
+      "cat": "Technologie",
+      "questions": [
+        {
+          "q": "Is kloksynchronisatie formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt kloksynchronisatie actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "A.8.18": {
+      "name": "Geprivilegieerde hulpprogramma's",
+      "cat": "Technologie",
+      "questions": [
+        {
+          "q": "Is geprivilegieerde hulpprogramma's formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt geprivilegieerde hulpprogramma's actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "A.8.19": {
+      "name": "Software op operationele systemen",
+      "cat": "Technologie",
+      "questions": [
+        {
+          "q": "Is software op operationele systemen formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt software op operationele systemen actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "A.8.20": {
+      "name": "Netwerkbeveiliging",
+      "cat": "Technologie",
+      "questions": [
+        {
+          "q": "Is netwerkbeveiliging formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt netwerkbeveiliging actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "A.8.21": {
+      "name": "Beveiliging netwerkdiensten",
+      "cat": "Technologie",
+      "questions": [
+        {
+          "q": "Is beveiliging netwerkdiensten formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt beveiliging netwerkdiensten actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "A.8.22": {
+      "name": "Segmentatie van netwerken",
+      "cat": "Technologie",
+      "questions": [
+        {
+          "q": "Is segmentatie van netwerken formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt segmentatie van netwerken actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "A.8.23": {
+      "name": "Webfiltering",
+      "cat": "Technologie",
+      "questions": [
+        {
+          "q": "Is webfiltering formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt webfiltering actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "A.8.24": {
+      "name": "Gebruik van cryptografie",
+      "cat": "Technologie",
+      "questions": [
+        {
+          "q": "Worden gegevens versleuteld bij transport (TLS 1.2+) en bij opslag (AES-256)?",
+          "type": "impl"
+        },
+        {
+          "q": "Is er een sleutelbeheerproces met periodieke rotatie?",
+          "type": "proc"
+        }
+      ],
+      "source": "specific"
+    },
+    "A.8.25": {
+      "name": "Veilige ontwikkellevenscyclus",
+      "cat": "Technologie",
+      "questions": [
+        {
+          "q": "Is veilige ontwikkellevenscyclus formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt veilige ontwikkellevenscyclus actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "A.8.26": {
+      "name": "Beveiligingseisen applicaties",
+      "cat": "Technologie",
+      "questions": [
+        {
+          "q": "Is beveiligingseisen applicaties formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt beveiligingseisen applicaties actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "A.8.27": {
+      "name": "Veilige systeemarchitectuur",
+      "cat": "Technologie",
+      "questions": [
+        {
+          "q": "Is veilige systeemarchitectuur formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt veilige systeemarchitectuur actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "A.8.28": {
+      "name": "Veilig coderen",
+      "cat": "Technologie",
+      "questions": [
+        {
+          "q": "Is veilig coderen formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt veilig coderen actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "A.8.29": {
+      "name": "Beveiligingstesten",
+      "cat": "Technologie",
+      "questions": [
+        {
+          "q": "Is beveiligingstesten formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt beveiligingstesten actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "A.8.30": {
+      "name": "Uitbestede ontwikkeling",
+      "cat": "Technologie",
+      "questions": [
+        {
+          "q": "Is uitbestede ontwikkeling formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt uitbestede ontwikkeling actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "A.8.31": {
+      "name": "Scheiding omgevingen",
+      "cat": "Technologie",
+      "questions": [
+        {
+          "q": "Is scheiding omgevingen formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt scheiding omgevingen actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "A.8.32": {
+      "name": "Wijzigingsbeheer",
+      "cat": "Technologie",
+      "questions": [
+        {
+          "q": "Worden wijzigingen aan IT-systemen gecontroleerd doorgevoerd via een change management proces?",
+          "type": "proc"
+        },
+        {
+          "q": "Bevat elke change request een risicobeoordeling en rollback-plan?",
+          "type": "proc"
+        }
+      ],
+      "source": "specific"
+    },
+    "A.8.33": {
+      "name": "Testinformatie",
+      "cat": "Technologie",
+      "questions": [
+        {
+          "q": "Is testinformatie formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt testinformatie actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "A.8.34": {
+      "name": "Bescherming tijdens audittesten",
+      "cat": "Technologie",
+      "questions": [
+        {
+          "q": "Is bescherming tijdens audittesten formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt bescherming tijdens audittesten actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "C.4.1": {
+      "name": "Context van de organisatie — interne en externe factoren",
+      "cat": "ISMS Clausules",
+      "questions": [
+        {
+          "q": "Is context van de organisatie — interne en externe factoren formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt context van de organisatie — interne en externe factoren actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "C.4.2": {
+      "name": "Behoeften en verwachtingen van belanghebbenden",
+      "cat": "ISMS Clausules",
+      "questions": [
+        {
+          "q": "Is behoeften en verwachtingen van belanghebbenden formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt behoeften en verwachtingen van belanghebbenden actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "C.4.3": {
+      "name": "Scope van het ISMS",
+      "cat": "ISMS Clausules",
+      "questions": [
+        {
+          "q": "Is scope van het isms formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt scope van het isms actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "C.5.1": {
+      "name": "Leiderschap en commitment van de directie",
+      "cat": "ISMS Clausules",
+      "questions": [
+        {
+          "q": "Is leiderschap en commitment van de directie formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt leiderschap en commitment van de directie actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "C.5.2": {
+      "name": "Informatiebeveiligingsbeleid",
+      "cat": "ISMS Clausules",
+      "questions": [
+        {
+          "q": "Is informatiebeveiligingsbeleid formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt informatiebeveiligingsbeleid actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "C.5.3": {
+      "name": "Rollen, verantwoordelijkheden en bevoegdheden",
+      "cat": "ISMS Clausules",
+      "questions": [
+        {
+          "q": "Is rollen, verantwoordelijkheden en bevoegdheden formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt rollen, verantwoordelijkheden en bevoegdheden actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "C.6.1": {
+      "name": "Risicobeoordeling en risicobehandeling",
+      "cat": "ISMS Clausules",
+      "questions": [
+        {
+          "q": "Is risicobeoordeling en risicobehandeling formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt risicobeoordeling en risicobehandeling actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "C.6.2": {
+      "name": "Informatiebeveiligingsdoelstellingen en planning",
+      "cat": "ISMS Clausules",
+      "questions": [
+        {
+          "q": "Is informatiebeveiligingsdoelstellingen en planning formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt informatiebeveiligingsdoelstellingen en planning actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "C.7.1": {
+      "name": "Middelen voor het ISMS",
+      "cat": "ISMS Clausules",
+      "questions": [
+        {
+          "q": "Is middelen voor het isms formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt middelen voor het isms actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "C.7.2": {
+      "name": "Competentie van ISMS-betrokkenen",
+      "cat": "ISMS Clausules",
+      "questions": [
+        {
+          "q": "Is competentie van isms-betrokkenen formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt competentie van isms-betrokkenen actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "C.7.3": {
+      "name": "Bewustwording bij alle medewerkers",
+      "cat": "ISMS Clausules",
+      "questions": [
+        {
+          "q": "Is bewustwording bij alle medewerkers formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt bewustwording bij alle medewerkers actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "C.7.4": {
+      "name": "Communicatie over informatiebeveiliging",
+      "cat": "ISMS Clausules",
+      "questions": [
+        {
+          "q": "Is communicatie over informatiebeveiliging formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt communicatie over informatiebeveiliging actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "C.7.5": {
+      "name": "Gedocumenteerde informatie en documentbeheer",
+      "cat": "ISMS Clausules",
+      "questions": [
+        {
+          "q": "Is gedocumenteerde informatie en documentbeheer formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt gedocumenteerde informatie en documentbeheer actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "C.8.1": {
+      "name": "Operationele planning en beheersing",
+      "cat": "ISMS Clausules",
+      "questions": [
+        {
+          "q": "Is operationele planning en beheersing formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt operationele planning en beheersing actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "C.8.2": {
+      "name": "Uitvoering risicobeoordeling",
+      "cat": "ISMS Clausules",
+      "questions": [
+        {
+          "q": "Is uitvoering risicobeoordeling formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt uitvoering risicobeoordeling actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "C.8.3": {
+      "name": "Uitvoering risicobehandeling",
+      "cat": "ISMS Clausules",
+      "questions": [
+        {
+          "q": "Is uitvoering risicobehandeling formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt uitvoering risicobehandeling actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "C.9.1": {
+      "name": "Monitoring, meting, analyse en evaluatie",
+      "cat": "ISMS Clausules",
+      "questions": [
+        {
+          "q": "Is monitoring, meting, analyse en evaluatie formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt monitoring, meting, analyse en evaluatie actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "C.9.2": {
+      "name": "Interne audit",
+      "cat": "ISMS Clausules",
+      "questions": [
+        {
+          "q": "Is interne audit formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt interne audit actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "C.9.3": {
+      "name": "Managementreview",
+      "cat": "ISMS Clausules",
+      "questions": [
+        {
+          "q": "Is managementreview formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt managementreview actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "C.10.1": {
+      "name": "Non-conformiteiten en correctieve maatregelen",
+      "cat": "ISMS Clausules",
+      "questions": [
+        {
+          "q": "Is non-conformiteiten en correctieve maatregelen formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt non-conformiteiten en correctieve maatregelen actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    },
+    "C.10.2": {
+      "name": "Continue verbetering",
+      "cat": "ISMS Clausules",
+      "questions": [
+        {
+          "q": "Is continue verbetering formeel gedocumenteerd en goedgekeurd?",
+          "type": "doc"
+        },
+        {
+          "q": "Wordt continue verbetering actief toegepast en periodiek geëvalueerd?",
+          "type": "impl"
+        }
+      ],
+      "source": "default"
+    }
+  }
+}
