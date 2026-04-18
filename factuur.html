@@ -277,7 +277,7 @@ function fmt(n) { return '\u20AC ' + Number(n).toLocaleString('nl-NL', { minimum
   // Ensure logged in (required for RLS)
   const { data: { session } } = await sb.auth.getSession();
   if (!session) {
-    sheet.innerHTML = '<div class="error">Log in om deze factuur te bekijken. <a href="portal.html?next=factuur.html?nr=' + encodeURIComponent(nr) + '" style="color:#0D9488;">Klik hier om in te loggen</a>.</div>';
+    sheet.innerHTML = '<div class="error">Log in om deze factuur te bekijken. <a href="/portal" style="color:#0D9488;">Klik hier om in te loggen</a> en open dan deze pagina opnieuw.</div>';
     return;
   }
 

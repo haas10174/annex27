@@ -1974,6 +1974,28 @@ function submitLead(e) {
   };
   localStorage.setItem('annex27_lead', JSON.stringify(lead));
 
+  // Persist lead in Supabase waitlist table — fire-and-forget (don't block UX on network)
+  try {
+    const SB_URL = 'https://tvqhxhoohzdzekcfzjuv.supabase.co';
+    const SB_KEY = 'sb_publishable_-a0bntwsGr8mR9xROgJTzQ_Gylt8ZSo';
+    fetch(SB_URL + '/rest/v1/waitlist', {
+      method: 'POST',
+      headers: {
+        'apikey': SB_KEY,
+        'Authorization': 'Bearer ' + SB_KEY,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify({
+        product: 'quickscan',
+        naam: lead.naam || '',
+        bedrijf: lead.bedrijf || '',
+        email: (lead.email || '').toLowerCase().trim(),
+        bericht: `Sector: ${lead.sectorLabel} | Score: ${lead.score}% | Quickscan voltooid op ${lead.date}`
+      })
+    }).catch(() => { /* silent — leadsuccess UI shows regardless */ });
+  } catch (err) { /* silent */ }
+
   // Enrich the "Bestellen & direct starten" link with personalization params
   const params = new URLSearchParams({
     plan: 'gap',

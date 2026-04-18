@@ -354,26 +354,49 @@
   <div class="portal-form-wrap">
     <div class="portal-form-inner">
 
-      <h2 style="font-size:1.3rem;font-weight:700;color:var(--text-primary);margin-bottom:8px;">Inloggen</h2>
-      <p style="font-size:0.88rem;color:var(--text-muted);margin-bottom:28px;">Log in met de gegevens die u van ons heeft ontvangen.</p>
+      <!-- Login form -->
+      <div id="loginPanel">
+        <h2 style="font-size:1.3rem;font-weight:700;color:var(--text-primary);margin-bottom:8px;">Inloggen</h2>
+        <p style="font-size:0.88rem;color:var(--text-muted);margin-bottom:28px;">Log in met de gegevens die u van ons heeft ontvangen.</p>
 
-      <div class="form-error" id="loginError"></div>
-      <form onsubmit="handleLogin(event)">
-        <div class="form-group">
-          <label class="form-label">E-mailadres</label>
-          <input class="form-input" type="email" id="loginEmail" required />
-        </div>
-        <div class="form-group">
-          <label class="form-label">Wachtwoord</label>
-          <input class="form-input" type="password" id="loginPassword" required />
-        </div>
-        <div class="form-forgot">
-          <a href="#" onclick="handleForgotClick(event)">Wachtwoord vergeten?</a>
-        </div>
-        <button type="submit" class="form-submit" id="loginBtn">Inloggen</button>
-      </form>
+        <div class="form-error" id="loginError"></div>
+        <form onsubmit="handleLogin(event)">
+          <div class="form-group">
+            <label class="form-label">E-mailadres</label>
+            <input class="form-input" type="email" id="loginEmail" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Wachtwoord</label>
+            <input class="form-input" type="password" id="loginPassword" required />
+          </div>
+          <div class="form-forgot">
+            <a href="#" onclick="handleForgotClick(event)">Wachtwoord vergeten?</a>
+          </div>
+          <button type="submit" class="form-submit" id="loginBtn">Inloggen</button>
+        </form>
 
-      <div class="form-success" id="forgotSuccess" style="margin-top:16px;"></div>
+        <div class="form-success" id="forgotSuccess" style="margin-top:16px;"></div>
+      </div>
+
+      <!-- Recovery panel — shown when user clicks reset-link from mail -->
+      <div id="recoveryPanel" style="display:none;">
+        <h2 style="font-size:1.3rem;font-weight:700;color:var(--text-primary);margin-bottom:8px;">Nieuw wachtwoord instellen</h2>
+        <p style="font-size:0.88rem;color:var(--text-muted);margin-bottom:28px;">Kies een nieuw wachtwoord voor uw Annex27-account. Minimaal 8 tekens.</p>
+
+        <div class="form-error" id="recoveryError"></div>
+        <div class="form-success" id="recoverySuccess"></div>
+        <form onsubmit="handleSetNewPassword(event)">
+          <div class="form-group">
+            <label class="form-label">Nieuw wachtwoord</label>
+            <input class="form-input" type="password" id="newPassword" required minlength="8" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Herhaal wachtwoord</label>
+            <input class="form-input" type="password" id="newPasswordConfirm" required minlength="8" />
+          </div>
+          <button type="submit" class="form-submit" id="newPasswordBtn">Wachtwoord opslaan</button>
+        </form>
+      </div>
 
       <div class="back-link">
         <a href="/">&larr; Terug naar annex27.nl</a>
@@ -388,11 +411,51 @@
   const SUPABASE_KEY = 'sb_publishable_-a0bntwsGr8mR9xROgJTzQ_Gylt8ZSo';
   const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  // Check if already logged in
+  // Detect Supabase recovery flow — when user opens the reset-link from mail
+  // Supabase sends them to: /portal#access_token=...&type=recovery&...
+  // The supabase-js client picks this up automatically and fires PASSWORD_RECOVERY event.
+  let isRecoveryFlow = false;
+  sb.auth.onAuthStateChange((event) => {
+    if (event === 'PASSWORD_RECOVERY') {
+      isRecoveryFlow = true;
+      document.getElementById('loginPanel').style.display = 'none';
+      document.getElementById('recoveryPanel').style.display = 'block';
+    }
+  });
+
+  // Check if already logged in (skip when in recovery flow — gebruiker moet eerst nieuw ww instellen)
   (async () => {
-    const { data: { session } } = await sb.auth.getSession();
-    if (session) window.location.href = '/dashboard';
+    // Korte wachttijd zodat onAuthStateChange recovery-event kan firen
+    setTimeout(async () => {
+      if (isRecoveryFlow) return;
+      const { data: { session } } = await sb.auth.getSession();
+      if (session) window.location.href = '/dashboard';
+    }, 200);
   })();
+
+  async function handleSetNewPassword(e) {
+    e.preventDefault();
+    const errEl = document.getElementById('recoveryError');
+    const successEl = document.getElementById('recoverySuccess');
+    const btn = document.getElementById('newPasswordBtn');
+    errEl.classList.remove('visible');
+    successEl.classList.remove('visible');
+
+    const pw = document.getElementById('newPassword').value;
+    const pw2 = document.getElementById('newPasswordConfirm').value;
+    if (pw !== pw2) { showError('recoveryError', 'Wachtwoorden komen niet overeen.'); return; }
+    if (pw.length < 8) { showError('recoveryError', 'Minimaal 8 tekens.'); return; }
+
+    btn.disabled = true; btn.textContent = 'Opslaan...';
+    const { error } = await sb.auth.updateUser({ password: pw });
+    if (error) {
+      showError('recoveryError', 'Wachtwoord opslaan mislukt: ' + error.message);
+      btn.disabled = false; btn.textContent = 'Wachtwoord opslaan';
+      return;
+    }
+    showSuccess('recoverySuccess', 'Wachtwoord opgeslagen. U wordt doorgestuurd naar het dashboard...');
+    setTimeout(() => { window.location.href = '/dashboard'; }, 1500);
+  }
 
   function showError(id, msg) {
     const el = document.getElementById(id);
