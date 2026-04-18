@@ -4498,7 +4498,10 @@ async function renderDocumenten() {
                 <div style="font-size:0.72rem;color:var(--text-muted);">${escapeHtml(d.cat)} &middot; ${escapeHtml(d.file)}</div>
               </div>
               ${access
-                ? `<button onclick="downloadDoc('${escapeAttr(key)}','${escapeAttr(d.file)}')" style="background:var(--accent);color:#fff;border:none;border-radius:8px;padding:6px 14px;font-size:0.78rem;font-weight:600;cursor:pointer;">Download</button>`
+                ? `<div style="display:flex;gap:6px;">
+                    <button onclick="downloadDoc('${escapeAttr(key)}','${escapeAttr(d.file.replace(/\.docx$/, '.pdf'))}')" title="Lezen / archiveren" style="background:var(--accent);color:#fff;border:none;border-radius:8px;padding:6px 12px;font-size:0.75rem;font-weight:600;cursor:pointer;">PDF</button>
+                    <button onclick="downloadDoc('${escapeAttr(key)}','${escapeAttr(d.file)}')" title="Bewerkbare versie (Word)" style="background:transparent;color:var(--accent);border:1px solid var(--accent);border-radius:8px;padding:5px 11px;font-size:0.75rem;font-weight:600;cursor:pointer;">Word</button>
+                   </div>`
                 : `<span style="color:#94a3b8;font-size:1.1rem;">\uD83D\uDD12</span>`}
             </div>`).join('')}
         </div>
