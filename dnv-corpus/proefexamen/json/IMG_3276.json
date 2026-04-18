@@ -1,0 +1,12 @@
+{
+  "type": "case study",
+  "vraag_nummer": "",
+  "vraag_tekst": "GetRich Bank\n\nVanwege dit feit besloot het management in oktober 2021, op basis van een studio van DM Consultants Inc., de IT-infrastructuur te verplaatsen naar de cloud.\n\nDM Consultants adviseerde om alle infrastructuur binnen 6 maanden naar de cloud te verplaatsen en ook een Disaster Recovery instantie op te zetten.\n\nGetRich Bank sloot zich aan bij Microsoft Azure als Cloud Service Provider op basis van de selectieprocedure.\n\nNadat het project was gestart, werd halverwege besloten dat de DR-installatie uit kostenoverweigingen kon wachten en dat alleen de primaire toepassingen en databasesectiva naar de clouddienstverlener zouden worden verplaatst.\n\nDe Federal Reserve maakte in haar auditverslag van juli 2022 een negatieve bevinding op dit gebrek aan Disaster Recovery en legde de bank een boete van 20 miljoen dollar op. De DR-setup is nu aan de gang.\n\nAangezien geen van de bestaande werknemers ervaring had met de cloud, werd besloten de encryptiesleutels voor de cloud-toegang door de cloud-dienstverlener te laten beheren. Ook de root-toegang tot de Servers en de Database ligt bij de Cloud Service Provider.\n\nDe Cloud Service Provider is verzocht maandelijkse monitoringverslagen te verstrekken, maar heeft op basis daarvan geen maatregelen genomen.",
+  "antwoord_opties": [],
+  "correct_antwoord": "",
+  "handgeschreven_notities": "",
+  "context": "Case study GetRich Bank - cloud migratie, disaster recovery, encryptiebeheer en compliance issues met Federal Reserve audit",
+  "_source": "IMG_3276.jpg",
+  "_input_tokens": 1929,
+  "_output_tokens": 469
+}

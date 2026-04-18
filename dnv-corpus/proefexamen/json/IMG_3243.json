@@ -1,0 +1,18 @@
+{
+  "type": "examenvraag",
+  "vraag_nummer": "1.4",
+  "vraag_tekst": "Paragraaf 6.1.3 van de ISO/IEC 27001 vereist dat er passende opties voor het behandelen van informatiebeveiligingsrisico's worden gekozen en geïmplementeerd. Beschrijf kort twee van de vier belangrijkste opties voor risicobehandeling die kunnen worden toegepast bij een risico.",
+  "antwoord_opties": [],
+  "correct_antwoord": "",
+  "handgeschreven_notities": "[geen handgeschreven notities zichtbaar op deze pagina - alleen lege schrijflijnen voor het antwoord]",
+  "context": "ISO 27001 clause 6.1.3 - risicobehandeling opties (risk treatment options: avoid, accept, transfer, mitigate)",
+  "punten": "2 punten",
+  "extra_info": {
+    "vraag_nummer_2": "1.5",
+    "vraag_tekst_2": "Identificeer twee manieren waarop een auditor kan verifiëren dat overeengekomen corrigerende maatregelen effectief zijn geïmplementeerd.",
+    "punten_2": "2 punten"
+  },
+  "_source": "IMG_3243.jpg",
+  "_input_tokens": 1929,
+  "_output_tokens": 338
+}

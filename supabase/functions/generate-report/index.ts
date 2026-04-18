@@ -184,13 +184,45 @@ Geef **ALLEEN JSON** terug (geen markdown-codeblock, geen uitleg buiten de JSON)
 Voor \`detailed_findings\`: baseer je alleen op Annex A controls waar je evidence voor zag of waar de klant een antwoord op gaf. Liever 10-15 gefundeerde bevindingen dan 93 oppervlakkige.`
     });
 
-    const systemPrompt = `Je bent Raoul Haas, ervaren ISO 27001 Lead Auditor gecertificeerd via DNV. Je stijl: direct, bewijsgericht, geen consultancy-bullshit. Je schrijft in vloeiend Nederlands met concrete voorbeelden. Je benoemt gaps expliciet maar constructief. Je sluit aan bij de methodiek van DNV Training Auditor/Lead Auditor ISMS ISO 27001:2022 — steekproefneming, evidence-gebaseerde conclusies, scheiding tussen observatie en aanbeveling. Je rapport is bedoeld om de klant klaar te stomen voor een formele certificeringsaudit bij een geaccrediteerde instelling.
+    // Load DNV RAG-corpus uit Supabase Storage (prompt-cached voor cost-savings)
+    let dnvCorpus = '';
+    let dnvExamen = '';
+    try {
+      const [corp, exam] = await Promise.all([
+        sb.storage.from('rag-corpus').download('DNV-CORPUS.md'),
+        sb.storage.from('rag-corpus').download('DNV-EXAMEN.md'),
+      ]);
+      if (corp.data) dnvCorpus = await corp.data.text();
+      if (exam.data) dnvExamen = await exam.data.text();
+    } catch (e) {
+      console.warn('RAG-corpus load failed (continuing without):', e);
+    }
+
+    const systemStyle = `Je bent Raoul Haas, ervaren ISO 27001 Lead Auditor gecertificeerd via DNV. Je stijl: direct, bewijsgericht, geen consultancy-bullshit. Je schrijft in vloeiend Nederlands met concrete voorbeelden. Je benoemt gaps expliciet maar constructief. Je sluit aan bij de methodiek van DNV Training Auditor/Lead Auditor ISMS ISO 27001:2022 — steekproefneming, evidence-gebaseerde conclusies, scheiding tussen observatie en aanbeveling. Je rapport is bedoeld om de klant klaar te stomen voor een formele certificeringsaudit bij een geaccrediteerde instelling.
 
 Belangrijk:
 - Nooit verzinnen wat er in evidence staat — alleen rapporteren wat je werkelijk ziet/leest.
 - Bij ontbrekende evidence: markeer expliciet als "geen evidence aangeleverd".
 - Houd toon persoonlijk: gebruik "u" (niet "je") naar klant toe, en schrijf alsof je naast ze zit.
-- Lengte: executive summary 3-5 zinnen, findings per categorie 2-4 zinnen, detailed_findings beperkt tot 10-15 meest relevante.`;
+- Lengte: executive summary 3-5 zinnen, findings per categorie 2-4 zinnen, detailed_findings beperkt tot 10-15 meest relevante.
+- Gebruik terminologie + methodologie zoals beschreven in de DNV-cursus die je hieronder als referentiemateriaal krijgt.`;
+
+    // Structured system-messages met prompt caching voor RAG-corpus (dag-cache)
+    const systemBlocks: any[] = [{ type: 'text', text: systemStyle }];
+    if (dnvCorpus) {
+      systemBlocks.push({
+        type: 'text',
+        text: '\n\n# DNV Cursus — Training Auditor / Lead Auditor ISMS ISO 27001:2022 (referentiemateriaal voor methodologie + stijl)\n\n' + dnvCorpus,
+        cache_control: { type: 'ephemeral' }
+      });
+    }
+    if (dnvExamen) {
+      systemBlocks.push({
+        type: 'text',
+        text: '\n\n# DNV Proefexamen met Raoul\'s eigen aantekeningen (referentiemateriaal voor auditor-denktrant)\n\n' + dnvExamen,
+        cache_control: { type: 'ephemeral' }
+      });
+    }
 
     // Call Anthropic
     const anthropicResp = await fetch('https://api.anthropic.com/v1/messages', {
@@ -203,7 +235,7 @@ Belangrijk:
       body: JSON.stringify({
         model: MODEL,
         max_tokens: 8000,
-        system: systemPrompt,
+        system: systemBlocks,
         messages: [{ role: 'user', content: contentParts }]
       })
     });
@@ -227,10 +259,16 @@ Belangrijk:
       return new Response(JSON.stringify({ error: 'JSON-parse mislukt', raw: rawText.slice(0, 1000) }), { status: 500, headers });
     }
 
-    const inputTokens = anthropicData.usage?.input_tokens || 0;
-    const outputTokens = anthropicData.usage?.output_tokens || 0;
-    // Opus 4: $15/M input + $75/M output
-    const costUsd = Math.round(((inputTokens * 15 + outputTokens * 75) / 1000000) * 10000) / 10000;
+    const usage = anthropicData.usage || {};
+    const inputTokens = usage.input_tokens || 0;
+    const cacheCreate = usage.cache_creation_input_tokens || 0;
+    const cacheRead = usage.cache_read_input_tokens || 0;
+    const outputTokens = usage.output_tokens || 0;
+    // Opus 4.5 pricing: input $15/M · cache-create $18.75/M · cache-read $1.50/M · output $75/M
+    const costUsd = Math.round(
+      ((inputTokens * 15 + cacheCreate * 18.75 + cacheRead * 1.5 + outputTokens * 75) / 1000000) * 10000
+    ) / 10000;
+    console.log(`Usage: in=${inputTokens} cache_create=${cacheCreate} cache_read=${cacheRead} out=${outputTokens} cost=$${costUsd}`);
 
     // Insert draft
     const { data: inserted, error: insErr } = await sb.from('report_drafts').insert({

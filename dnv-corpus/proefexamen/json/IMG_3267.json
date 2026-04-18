@@ -1,0 +1,12 @@
+{
+  "type": "mix",
+  "vraag_nummer": "",
+  "vraag_tekst": "",
+  "antwoord_opties": [],
+  "correct_antwoord": "",
+  "handgeschreven_notities": "Logo/tekening rechtsboven lijkt op een schild of badge met oranje/rode omlijning",
+  "context": "GetRich Bank casestudy - organisatiebeschrijving en organogram voor ISMS ISO 27001 audit-oefening",
+  "_source": "IMG_3267.jpg",
+  "_input_tokens": 1929,
+  "_output_tokens": 442
+}

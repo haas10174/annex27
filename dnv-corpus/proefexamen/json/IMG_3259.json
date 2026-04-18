@@ -1,0 +1,12 @@
+{
+  "type": "examenvraag",
+  "vraag_nummer": "",
+  "vraag_tekst": "Auditsituatie twee:\n\n• Geef uw reden(en) waarom u denkt dat er nog onvoldoende bewijs is om uw bevindingen als afwijking te rapporteren.\n\n• Beschrijf hoe u verder zou gaan onderzoeken om overeenstemming of afwijking van de eisen vast te stellen. Noem auditpaden die u zou volgen en specifieke voorbeelden van auditbewijs dat u zou zoeken en waarom.",
+  "antwoord_opties": [],
+  "correct_antwoord": "",
+  "handgeschreven_notities": "[De pagina bevat lege lijnen voor antwoorden - geen handgeschreven notities zichtbaar op deze scan]",
+  "context": "Auditonderzoeksformulier - documenteren van auditsituaties waarbij nog onvoldoende bewijs is om een afwijking te rapporteren. Eerste vraag max. 2 punten. Vier auditpaden die u zou volgen, inclusief het bewijs dat u zoekt en waarom (Max. 2 punten voor ieder auditpad). Dit betreft pagina 25 van 31 van het CQI and IRCA ISMS NL Specimen examination paper, October 2022, voor certified course 2564.",
+  "_source": "IMG_3259.jpg",
+  "_input_tokens": 1929,
+  "_output_tokens": 361
+}

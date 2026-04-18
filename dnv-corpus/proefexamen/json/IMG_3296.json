@@ -1,0 +1,12 @@
+{
+  "type": "handgeschreven-notitie",
+  "vraag_nummer": "",
+  "vraag_tekst": "",
+  "antwoord_opties": [],
+  "correct_antwoord": "",
+  "handgeschreven_notities": "Auditplan → altijd voor elk audit\n- inzicht in scope (criteria)\n- auditteam\n- timing\n- datum\n\nAuditprogramma → procedure audits\n- procedure jaren\n- psico gebaseerd\n- dynamisch → weekbewegen mot historie\nRegel:\n'D' √ = 3,3 ≈ 4 beroeken vestigingen\n\n2 dagen = 2 auditoren (1LA/1A)\nclosement meeting reduce day\n\nAudit paden → vragen\n\n→ alle auditoos by opening\n→ bedrijfsvoering wat je zie",
+  "context": "Auditplanning en auditprogramma — verschil tussen auditplan (per audit) en auditprogramma (procedure over meerdere jaren), risico-gebaseerde planning, berekeningsregel voor aantal bezoeken aan vestigingen, audit methodiek (paden/vragen), opening meeting procedures",
+  "_source": "IMG_3296.jpg",
+  "_input_tokens": 1929,
+  "_output_tokens": 323
+}

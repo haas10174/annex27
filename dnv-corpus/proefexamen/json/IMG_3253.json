@@ -1,0 +1,12 @@
+{
+  "type": "examenvraag",
+  "vraag_nummer": "4.1",
+  "vraag_tekst": "In een ruimte die bestemd is voor de verwijdering van defecte en overtollige IT-apparatuur, onderzoekt u de verwijderingenregistratie voor asset nummer 1234, een laptop PC. U ziet dat in de laatste inspectieregistratie het woord 'OK' is geschreven naast de verklaring dat alle informatie veilig van het apparaat is verwijderd. De registratie laat zien dat deze laptop is verkocht door de organisatie aan een medewerker, voor privégebruik. Wanneer u hierraar vraagt, legt hij uit dat bruikbare apparatuur intern wordt verkocht en dat de opbrengsten naar een aangewezen goed doel gaan. U vraagt om de laptop in werking te zien, om te zien of de informatie inderdaad is verwijderd zoals in de registratie staat. De manager start de laptop op, waar Microsoft Windows XP® als besturingssysteem op blijkt te staan, zonder licentie van de organisatie. Bij nadere inspectie van File Explorer lijkt het bestandssysteem leeg te zijn. Als u denkt dat er voldoende bewijs is om uw bevindingen als afwijking te rapporteren: Vul het afwijkingsrapport op de volgende pagina in. Of Vul het audit-onderzoeksformulier op de pagina erna in als u denkt dat er nog niet voldoende bewijs is",
+  "antwoord_opties": [],
+  "correct_antwoord": "",
+  "handgeschreven_notities": "",
+  "context": "Auditsituatie betreffende verwijdering van IT-apparatuur en informatiebeheer - asset management en secure disposal volgens ISO 27001. Vraag vraagt om keuze tussen afwijkingsrapport (non-conformiteit) of audit-onderzoeksformulier (meer onderzoek nodig)",
+  "_source": "IMG_3253.jpg",
+  "_input_tokens": 1929,
+  "_output_tokens": 511
+}

@@ -1,0 +1,12 @@
+{
+  "type": "examenvraag",
+  "vraag_nummer": "4.3",
+  "vraag_tekst": "Tijdens een audit bij een verzekeringsmaatschappij vraagt u aan de Training Manager of u de trainingsregistraties zien van drie mensen die op de afdeling Schadebehandeling werken. In de registraties ziet u dat zij alle drie de cursus 'Behandelen van klantinformatie' hebben gevolgd. De Training Manager legt uit dat de cursus gericht is op bewustwording op het gebied van operationele informatiebeveiliginspraktijken.\n\nU vraagt de Training Manager hoe de drie medewerkers de training hebben geëvalueerd en hij vertelt u: \"We vragen iedereen die deelneemt aan een training om een enquête in te vullen over hoe leuk of de training leuk vonden, hoe nuttig ze de training vonden en hoe goed de trainer was. Deze informatie helpt ons beslissen of we andere medewerkers deze training willen laten doen\".\n\nU bekijkt de enquêtes die zijn ingevuld door de drie personen die de training opgevolgd hebben. Alle drie gaven hoge scores voor hoe leuk en nuttig ze de training vonden. Alle drie gaven ze ook een voldoende score voor de trainer.\n\nAls u denkt dat er voldoende bewijs is om uw bevindingen als afwijking te rapporteren:\n• Vul het afwijkingsrapport op de volgende pagina in.\n\nOf\n\n• Vul het audit-onderzoeksformulier op de pagina erna in als u denkt dat er nog niet voldoende bewijs is",
+  "antwoord_opties": [],
+  "correct_antwoord": "",
+  "handgeschreven_notities": "",
+  "context": "Auditsituatie drie - evaluatie van trainingseffectiviteit volgens ISO 27001:2022. De auditor moet beoordelen of de organisatie voldoende bewijs heeft van effectieve trainingsevaluatie (niet alleen tevredenheid maar ook competentie/effectiviteit). Dit test kennis van clause 7.2 (Competence) en de vereiste om effectiviteit van trainingen te evalueren.",
+  "_source": "IMG_3260.jpg",
+  "_input_tokens": 1929,
+  "_output_tokens": 576
+}

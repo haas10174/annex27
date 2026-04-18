@@ -1,0 +1,12 @@
+{
+  "type": "examenvraag",
+  "vraag_nummer": "",
+  "vraag_tekst": "ISO/IEC 27001 paragraaf en eis (Max. 1 punt):",
+  "antwoord_opties": [],
+  "correct_antwoord": "",
+  "handgeschreven_notities": "",
+  "context": "documenteren van auditbevindingen - verwijzen naar ISO/IEC 27001 paragraaf en eis. Opmerking: Voor algehele duidelijkheid van uw antwoord wordt 1 punt toegekend. OF Geef uw antwoord op de volgende pagina",
+  "_source": "IMG_3255.jpg",
+  "_input_tokens": 1929,
+  "_output_tokens": 175
+}

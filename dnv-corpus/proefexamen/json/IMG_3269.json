@@ -1,0 +1,12 @@
+{
+  "type": "leeg",
+  "vraag_nummer": "",
+  "vraag_tekst": "",
+  "antwoord_opties": [],
+  "correct_antwoord": "",
+  "handgeschreven_notities": "",
+  "context": "GetRich Bank - Overzicht van afdelingen en processen (casus/achtergrondmateriaal voor examen)",
+  "_source": "IMG_3269.jpg",
+  "_input_tokens": 1929,
+  "_output_tokens": 308
+}

@@ -1,0 +1,12 @@
+{
+  "type": "examenvraag",
+  "vraag_nummer": "",
+  "vraag_tekst": "Auditsituatie 3 - IRCA ISMS AUDIT - AFWIJKINGSRAPPORT\n\nVoor het correct identificeren van de auditsituatie als afwijking (2 punten)\nOmschrijving van de afwijking (Max. 3 punten):\n\nRelevant bewijs (Max. 3 punten):",
+  "antwoord_opties": [],
+  "correct_antwoord": "",
+  "handgeschreven_notities": "[geen handgeschreven notities zichtbaar op deze pagina - de pagina bevat alleen lege lijnen voor het invullen van antwoorden]",
+  "context": "Afwijkingsrapport structuur - Het documenteren van een audit non-conformiteit volgens IRCA ISMS Audit standaard. De kandidaat moet een auditsituatie identificeren als afwijking, een omschrijving geven (max 3 punten), en relevant bewijs aanleveren (max 3 punten). Totaal 2+3+3=8 punten mogelijk voor deze vraag.",
+  "_source": "IMG_3261.jpg",
+  "_input_tokens": 1929,
+  "_output_tokens": 302
+}

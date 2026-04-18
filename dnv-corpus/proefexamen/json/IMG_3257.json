@@ -1,0 +1,15 @@
+{
+  "type": "examenvraag",
+  "vraag_nummer": "4.2",
+  "vraag_tekst": "U auditeert de afdeling Facilities Management (FM) in een organisatie die kantoorruimtes en faciliteiten biedt en onderhoudt voor een grote organisatie, waaronder ook de fysieke beveiligingsmaatregelen.\n\nZe hebben momenteel te maken met een ernstige klacht van een operationele directeur: personeel kwam vanmorgen niet aan bij het werk om daar te ontdekken dat niemand het gebouw in kon met hun ID-pasjes. Tijdskritieke klant-ondersteunende diensten moesten worden uitgesteld totdat een FM-engineer toegang forceerde en handmatig de toegangscontroles opliep.\n\nU merkt op dat deze gebeurtenis samenvalt met de nachtelijke vervanging van een beveiligingscamerasysteem; dit systeem is verbonden met de WAN en wordt gemonitord vanuit de centrale controlekamer van FM. De ID-pas toegangscontroles worden ook centraal gemonitord via de WAN-verbinding. IT-Servicemonteurs ter plaatse hebben moeite met het achterhalen van de onderliggende oorzaak, maar hun speculatie is dat de standaard netwerkinstellingen van het beveiligingscamerasysteem conflicteren met die van het deurtoegangscontrolesysteem.\n\nU bekijkt Wijzigingsbeheerdocument X134 van 3 maanden geleden en merkt op dat IT Services en Corporate Security worden vermeld als 'Nvt' op de lijst van beoordelaars. U bevestigt met de Facilities Manager dat deze revisie de laatst geldende versie is van het Wijzigingsbeheerdocument en dat IT Services en Corporate Security de geplande wijziging niet hebben beoordeeld.\n\nU vraagt de Facilities Manager waarom zij niet betrokken waren bij de wijziging. Hij antwoordt dat dat niet echt nodig was omdat de verandering van het beveiligingscamerasysteem technisch gezien niet complex was. \"Het oude systeem is losgekoppeld van het netwerk en het nieuwe systeem is gewoon aangesloten, net zoals je een nieuwe PC aansluit\". Hij wijst er verder nog op dat de toegangscontrole van de deur 'veilig faalde' en ongeoorloofde toegang tot het gebouw voorkwam.",
+  "antwoord_opties": [
+    "Vul het afwijkingsrapport op de volgende pagina in.",
+    "Vul het audit-onderzoeksformulier op de pagina erna in als u denkt dat er nog niet voldoende bewijs is"
+  ],
+  "correct_antwoord": "",
+  "handgeschreven_notities": "",
+  "context": "Auditsituatie twee - Facilities Management - beoordeling van een incident met toegangscontrole, wijzigingsbeheer, en bepalen of er voldoende bewijs is voor een afwijking. De auditor moet beslissen tussen het direct rapporteren van een afwijking of verder onderzoek doen.",
+  "_source": "IMG_3257.jpg",
+  "_input_tokens": 1929,
+  "_output_tokens": 799
+}

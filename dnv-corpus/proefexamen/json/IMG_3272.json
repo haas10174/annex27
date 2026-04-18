@@ -1,0 +1,12 @@
+{
+  "type": "leeg",
+  "vraag_nummer": "",
+  "vraag_tekst": "Dit is een pagina uit een case study / scenario beschrijving van GetRich Bank, geen examenvraag. De tekst beschrijft verschillende afdelingen:\n\n7. Marketing en Klantenservice - Johan leidt marketing, met focus op online kanalen. Cindy geeft IT-trainingen. Marcy en Stacy behandelen klachten.\n\n8. Financiën - Chris is CFO, bijgestaan door senior accountants. Malcolm is beheerder van financiële documenten, rapporteert aan Chris. Zorgt voor naleving regelgeving SOX en BASEL.\n\n9. Informatietechnologie (IT) - Peter is Chief Information Officer.\n\na. IT-systeem en netwerk ondersteunend team - Steven leidt deze afdeling, ondersteund door James en Jason voor installatie, onderhoud en probleemoplossing van systemen en netwerkcomponenten. Drukste team, bezig met ondersteunen en oplossen problemen alle afdelingen. Calls houdt virusuitbraken en spam bij. Eén systeembeheerder (Jason) is goed in het leren van nieuwe technologie, onlangs probeerde hij L0phtcrack uit.",
+  "antwoord_opties": [],
+  "correct_antwoord": "",
+  "handgeschreven_notities": "Geen handgeschreven notities zichtbaar op deze pagina",
+  "context": "Case study beschrijving GetRich Bank - organisatiestructuur afdelingen Marketing, Financiën en IT voor ISO 27001 audit oefening",
+  "_source": "IMG_3272.jpg",
+  "_input_tokens": 1929,
+  "_output_tokens": 422
+}

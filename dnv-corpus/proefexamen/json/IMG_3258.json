@@ -1,0 +1,12 @@
+{
+  "type": "formulier",
+  "vraag_nummer": "",
+  "vraag_tekst": "Auditsituatie 2 - IRCA ISMS AUDIT - AFWIJKINGSRAPPORT\n\nVoor het correct identificeren van de auditsituatie als afwijking (2 punten)\nOmschrijving van de afwijking (Max. 3 punten):\n\n[meerdere lege lijnen voor invullen]\n\nRelevant bewijs (Max. 3 punten):\n\n[meerdere lege lijnen voor invullen]",
+  "antwoord_opties": [],
+  "correct_antwoord": "",
+  "handgeschreven_notities": "[geen handgeschreven notities zichtbaar op deze pagina]",
+  "context": "Afwijkingsrapport formulier - ISMS audit documentatie volgens IRCA standaard. Kandidaat moet een auditsituatie identificeren als afwijking, de afwijking omschrijven en relevant bewijs documenteren. Maximaal 2 punten voor identificatie, 3 punten voor omschrijving, en 3 punten voor bewijs.",
+  "_source": "IMG_3258.jpg",
+  "_input_tokens": 1929,
+  "_output_tokens": 302
+}
