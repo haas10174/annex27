@@ -890,7 +890,6 @@
       <button class="view-btn" data-view="orders">Orders <span class="badge" id="ordersBadge">0</span></button>
       <button class="view-btn" data-view="facturen">Facturen <span class="badge" id="facturenBadge">0</span></button>
       <button class="view-btn" data-view="leads">Aanvragen <span class="badge" id="leadsBadge">0</span></button>
-      <button class="view-btn" data-view="mail">Mail <span class="badge" id="mailBadge">0</span></button>
       <button class="view-btn" data-view="settings">Instellingen</button>
     </div>
     <div class="client-filters">
@@ -1085,7 +1084,8 @@
         <div class="kpi-grid" id="ordersKpis"></div>
         <div style="display:flex;gap:8px;margin-bottom:16px;">
           <button class="filter-btn active" data-order="all" onclick="setOrderFilter('all', this)">Alle</button>
-          <button class="filter-btn" data-order="paid" onclick="setOrderFilter('paid', this)">Betaald</button>
+          <button class="filter-btn" data-order="pending_confirm" onclick="setOrderFilter('pending_confirm', this)">Te bevestigen <span id="pendingConfirmBadge" style="display:none;background:#fbbf24;color:#0F172A;border-radius:99px;padding:1px 7px;font-size:0.7rem;font-weight:700;margin-left:4px;">0</span></button>
+          <button class="filter-btn" data-order="confirmed" onclick="setOrderFilter('confirmed', this)">Bevestigd</button>
           <button class="filter-btn" data-order="failed" onclick="setOrderFilter('failed', this)">Mislukt/afgebroken</button>
           <button class="filter-btn" data-order="archived" onclick="setOrderFilter('archived', this)">Gearchiveerd</button>
           <button class="action-btn" onclick="loadOrders()" style="margin-left:auto;">
@@ -1238,46 +1238,6 @@
     </div>
 
     <!-- View: Mail (inbound info@annex27.nl via Hostnet IMAP) -->
-    <div class="view" id="viewMail">
-      <div class="container-card" style="padding:24px;">
-        <div class="section-title-row" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px;">
-          <div>
-            <h1 style="font-family:'Sora',sans-serif;font-size:1.3rem;font-weight:800;margin:0 0 4px;">Mail <span style="font-size:0.72rem;font-weight:600;color:var(--text-muted);letter-spacing:0.1em;text-transform:uppercase;">&middot; info@annex27.nl</span></h1>
-            <p style="color:var(--text-muted);font-size:0.88rem;margin:0;" id="mailSubtitle">Hostnet inbox &mdash; opgehaald via IMAP, beantwoord via SMTP.</p>
-          </div>
-          <div style="display:flex;gap:8px;">
-            <button class="action-btn" onclick="pollHostnetMail()" id="mailPollBtn">
-              <svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-6.2-8.55"/><polyline points="21 3 21 9 15 9"/></svg>
-              Inbox ophalen
-            </button>
-            <button class="action-btn" onclick="openComposeMail()">
-              <svg viewBox="0 0 24 24"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4z"/></svg>
-              Nieuwe mail
-            </button>
-          </div>
-        </div>
-        <div id="mailList" style="display:flex;flex-direction:column;gap:10px;">
-          <div class="empty-state">Laden...</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Mail compose modal -->
-    <div class="inv-modal" id="mailComposeModal" onclick="if(event.target===this)this.classList.remove('open')" style="display:none;position:fixed;inset:0;z-index:9999;align-items:center;justify-content:center;background:rgba(12,15,26,0.72);backdrop-filter:blur(6px);padding:24px;">
-      <div style="background:#fff;color:#0F172A;border-radius:16px;padding:32px;max-width:640px;width:100%;max-height:90vh;overflow-y:auto;position:relative;">
-        <button onclick="document.getElementById('mailComposeModal').classList.remove('open')" style="position:absolute;top:12px;right:12px;background:transparent;border:none;font-size:1.4rem;color:#64748b;cursor:pointer;">&times;</button>
-        <h3 style="font-family:'Sora',sans-serif;font-size:1.3rem;font-weight:800;margin-bottom:16px;" id="mailComposeTitle">Nieuwe mail</h3>
-        <form onsubmit="sendHostnetMail(event)" style="display:flex;flex-direction:column;gap:10px;">
-          <input type="hidden" id="mailReplyTo" value="" />
-          <div><label style="font-size:0.78rem;font-weight:600;">Aan</label><input type="email" id="mailTo" required style="width:100%;padding:10px 12px;border:1px solid #E5E5E5;border-radius:8px;font-family:inherit;" /></div>
-          <div><label style="font-size:0.78rem;font-weight:600;">Onderwerp</label><input type="text" id="mailSubject" required maxlength="500" style="width:100%;padding:10px 12px;border:1px solid #E5E5E5;border-radius:8px;font-family:inherit;" /></div>
-          <div><label style="font-size:0.78rem;font-weight:600;">Bericht</label><textarea id="mailText" required rows="10" style="width:100%;padding:10px 12px;border:1px solid #E5E5E5;border-radius:8px;font-family:inherit;resize:vertical;"></textarea></div>
-          <div id="mailSendError" style="display:none;padding:10px 12px;background:#FEF2F2;border:1px solid #FECACA;border-radius:8px;color:#DC2626;font-size:0.82rem;"></div>
-          <button type="submit" id="mailSendBtn" style="margin-top:8px;padding:12px;background:#0D9488;color:#fff;border:none;border-radius:10px;font-weight:700;cursor:pointer;">Verstuur</button>
-        </form>
-      </div>
-    </div>
-
     <!-- View: Instellingen -->
     <div class="view" id="viewSettings">
       <div class="view-full">
@@ -1428,7 +1388,6 @@ async function startApp() {
   loadInboxCount();
   loadOrdersCount();
   loadLeadsCount();
-  loadMailCount();
   loadInvoicesCount();
   startGa4Widget();
   // Initial: active tab is Overzicht — verberg klant-filters/list
@@ -1923,7 +1882,6 @@ function activateView(target) {
   if (target === 'inbox') loadInbox();
   if (target === 'orders') loadOrders();
   if (target === 'leads') loadLeads();
-  if (target === 'mail') loadMail();
   if (target === 'facturen') loadInvoicesAdmin();
   if (target === 'settings') loadSettings();
 }
@@ -2030,140 +1988,6 @@ function renderLeads() {
 async function markLeadProcessed(id) {
   const { error } = await sb.from('waitlist').update({ processed_at: new Date().toISOString() }).eq('id', id);
   if (!error) loadLeads();
-}
-
-// ── MAIL (inbound from info@annex27.nl) ──
-let mailData = [];
-
-async function loadMailCount() {
-  try {
-    const { count } = await sb.from('inbound_mail')
-      .select('*', { count: 'exact', head: true })
-      .eq('is_read', false);
-    document.getElementById('mailBadge').textContent = count || 0;
-  } catch(e) {}
-}
-
-async function loadMail() {
-  const listEl = document.getElementById('mailList');
-  listEl.innerHTML = '<div class="empty-state">Laden...</div>';
-  const { data, error } = await sb.from('inbound_mail').select('*').order('received_at', { ascending: false }).limit(100);
-  if (error) {
-    listEl.innerHTML = '<div class="empty-state" style="padding:40px;text-align:center;color:var(--text-muted);">Kon mail niet laden.</div>';
-    return;
-  }
-  mailData = data || [];
-  renderMail();
-  loadMailCount();
-}
-
-function renderMail() {
-  const listEl = document.getElementById('mailList');
-  if (!mailData.length) {
-    listEl.innerHTML = `
-      <div style="padding:40px 24px;text-align:center;background:rgba(16,24,40,0.02);border:1px dashed var(--border);border-radius:10px;">
-        <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:1rem;margin-bottom:8px;">Nog geen mail binnen</div>
-        <div style="color:var(--text-muted);font-size:0.88rem;max-width:520px;margin:0 auto;line-height:1.6;">
-          Om mail van <strong>info@annex27.nl</strong> hier te laten verschijnen, moet de mailkoppeling eenmalig worden geactiveerd. Zie de uitleg in de chat &mdash; vraag Raoul of deze stap al is doorgevoerd.
-        </div>
-      </div>`;
-    return;
-  }
-  listEl.innerHTML = mailData.map(m => {
-    const d = new Date(m.received_at).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
-    const unread = !m.is_read;
-    const snippet = (m.body_text || '').slice(0, 180).replace(/\n+/g, ' ');
-    const atts = Array.isArray(m.attachments) ? m.attachments.length : 0;
-    return `
-      <div onclick="openMail('${m.id}')" style="cursor:pointer;background:${unread ? 'var(--surface)' : 'rgba(16,24,40,0.02)'};border:1px solid ${unread ? 'var(--accent)' : 'var(--border)'};border-radius:10px;padding:14px 18px;">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:4px;">
-          <div style="font-weight:${unread ? '700' : '500'};font-size:0.9rem;">${esc(m.from_name || m.from_email)}</div>
-          <div style="font-size:0.76rem;color:var(--text-muted);white-space:nowrap;">${d}</div>
-        </div>
-        <div style="font-weight:${unread ? '600' : '500'};font-size:0.88rem;margin-bottom:4px;">${esc(m.subject || '(geen onderwerp)')}</div>
-        <div style="font-size:0.82rem;color:var(--text-muted);line-height:1.5;">${esc(snippet)}${snippet.length >= 180 ? '…' : ''}</div>
-        ${atts ? `<div style="margin-top:6px;font-size:0.72rem;color:var(--accent);">&#128206; ${atts} bijlage${atts>1?'n':''}</div>` : ''}
-        <div style="margin-top:10px;display:flex;gap:6px;">
-          <button class="action-btn" onclick="event.stopPropagation(); replyToMail('${m.id}');" style="font-size:0.74rem;padding:5px 10px;">&#8617; Beantwoord</button>
-        </div>
-      </div>
-    `;
-  }).join('');
-}
-
-async function openMail(id) {
-  await sb.from('inbound_mail').update({ is_read: true }).eq('id', id);
-  loadMail();
-}
-
-async function pollHostnetMail() {
-  const btn = document.getElementById('mailPollBtn');
-  const orig = btn.innerHTML;
-  btn.disabled = true;
-  btn.innerHTML = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg> Bezig...';
-  try {
-    const { data, error } = await sb.functions.invoke('mail-poll', { body: {} });
-    if (error) {
-      alert('Mail ophalen mislukt: ' + (error.message || error));
-    } else if (data?.error) {
-      alert('Mail ophalen mislukt: ' + data.error);
-    } else {
-      console.log('Mail-poll result:', data);
-      loadMail();
-    }
-  } finally {
-    btn.disabled = false;
-    btn.innerHTML = orig;
-  }
-}
-
-function openComposeMail(prefill) {
-  const m = document.getElementById('mailComposeModal');
-  document.getElementById('mailReplyTo').value = prefill?.in_reply_to || '';
-  document.getElementById('mailTo').value = prefill?.to || '';
-  document.getElementById('mailSubject').value = prefill?.subject || '';
-  document.getElementById('mailText').value = prefill?.text || '';
-  document.getElementById('mailComposeTitle').textContent = prefill?.in_reply_to ? 'Beantwoord mail' : 'Nieuwe mail';
-  document.getElementById('mailSendError').style.display = 'none';
-  m.classList.add('open');
-  m.style.display = 'flex';
-}
-
-function replyToMail(id) {
-  const m = mailData.find(x => x.id === id);
-  if (!m) return;
-  const subject = m.subject?.startsWith('Re:') ? m.subject : 'Re: ' + (m.subject || '');
-  const quoted = (m.body_text || '').split('\n').map(l => '> ' + l).join('\n');
-  openComposeMail({
-    to: m.from_email,
-    subject,
-    text: '\n\n--- Origineel bericht ---\nVan: ' + (m.from_name || m.from_email) + '\nDatum: ' + new Date(m.received_at).toLocaleString('nl-NL') + '\n\n' + quoted,
-    in_reply_to: m.message_id,
-  });
-}
-
-async function sendHostnetMail(e) {
-  e.preventDefault();
-  const btn = document.getElementById('mailSendBtn');
-  const errEl = document.getElementById('mailSendError');
-  errEl.style.display = 'none';
-  btn.disabled = true; btn.textContent = 'Versturen...';
-  const payload = {
-    to: document.getElementById('mailTo').value.trim(),
-    subject: document.getElementById('mailSubject').value.trim(),
-    text: document.getElementById('mailText').value.trim(),
-    in_reply_to: document.getElementById('mailReplyTo').value || null,
-  };
-  const { data, error } = await sb.functions.invoke('mail-send', { body: payload });
-  btn.disabled = false; btn.textContent = 'Verstuur';
-  if (error || data?.error) {
-    errEl.textContent = data?.error || error?.message || 'Onbekende fout';
-    errEl.style.display = 'block';
-    return;
-  }
-  document.getElementById('mailComposeModal').classList.remove('open');
-  document.getElementById('mailComposeModal').style.display = 'none';
-  e.target.reset();
 }
 
 // ── GA4 REALTIME WIDGET ──
@@ -2510,11 +2334,17 @@ let currentOrderFilter = 'all';
 
 async function loadOrdersCount() {
   try {
+    // Sidebar badge toont aantal "te bevestigen" zodat admin meteen ziet wat aandacht vereist
     const { count } = await sb.from('orders')
       .select('*', { count: 'exact', head: true })
       .eq('status', 'paid')
+      .is('confirmed_at', null)
       .is('archived_at', null);
-    document.getElementById('ordersBadge').textContent = count || 0;
+    const badge = document.getElementById('ordersBadge');
+    if (!badge) return;
+    badge.textContent = count || 0;
+    if (count > 0) { badge.style.background = '#fbbf24'; badge.style.color = '#0F172A'; }
+    else { badge.style.background = ''; badge.style.color = ''; }
   } catch(e) { /* silent */ }
 }
 
@@ -2597,8 +2427,20 @@ function renderOrders() {
   if (currentOrderFilter === 'archived') filtered = ordersData.filter(o => o.archived_at);
   else {
     filtered = ordersData.filter(o => !o.archived_at);
-    if (currentOrderFilter === 'paid') filtered = filtered.filter(o => o.status === 'paid');
+    if (currentOrderFilter === 'pending_confirm') filtered = filtered.filter(o => o.status === 'paid' && !o.confirmed_at);
+    else if (currentOrderFilter === 'confirmed') filtered = filtered.filter(o => o.status === 'paid' && o.confirmed_at);
+    else if (currentOrderFilter === 'paid') filtered = filtered.filter(o => o.status === 'paid');
     else if (currentOrderFilter === 'failed') filtered = filtered.filter(o => ['failed','canceled','expired'].includes(o.status));
+  }
+  // Update sidebar pending badge
+  const pendingCount = ordersData.filter(o => o.status === 'paid' && !o.confirmed_at && !o.archived_at).length;
+  const pcBadge = document.getElementById('pendingConfirmBadge');
+  if (pcBadge) { pcBadge.textContent = pendingCount; pcBadge.style.display = pendingCount > 0 ? 'inline-block' : 'none'; }
+  const obBadge = document.getElementById('ordersBadge');
+  if (obBadge) {
+    obBadge.textContent = pendingCount || '0';
+    obBadge.style.background = pendingCount > 0 ? '#fbbf24' : '';
+    obBadge.style.color = pendingCount > 0 ? '#0F172A' : '';
   }
 
   if (filtered.length === 0) {
@@ -2620,9 +2462,18 @@ function renderOrders() {
       </td>
       <td><span class="client-pakket">${esc(o.plan || '—')}</span></td>
       <td style="font-variant-numeric:tabular-nums;">${fmtEur(o.amount)}</td>
-      <td><span class="status-pill ${esc(o.status||'pending')}">${esc(o.status||'pending')}</span></td>
+      <td>
+        <span class="status-pill ${esc(o.status||'pending')}">${esc(o.status||'pending')}</span>
+        ${o.status === 'paid' && o.confirmed_at ? '<span style="display:inline-block;margin-left:6px;font-size:0.66rem;font-weight:700;color:#059669;background:rgba(16,185,129,0.1);padding:2px 7px;border-radius:99px;">BEVESTIGD</span>' : ''}
+        ${o.status === 'paid' && !o.confirmed_at && !o.archived_at ? '<span style="display:inline-block;margin-left:6px;font-size:0.66rem;font-weight:700;color:#92400e;background:rgba(251,191,36,0.18);padding:2px 7px;border-radius:99px;">TE BEVESTIGEN</span>' : ''}
+      </td>
       <td style="font-family:monospace;font-size:0.75rem;color:var(--text-dim);">${esc(o.payment_id || '')}</td>
-      <td onclick="event.stopPropagation()">
+      <td onclick="event.stopPropagation()" style="white-space:nowrap;">
+        ${o.status === 'paid' && !o.confirmed_at && !o.archived_at
+          ? `<button onclick="confirmOrder('${esc(o.id)}','${esc(label)}')" title="Bevestig order: maak gebruiker aan + verstuur welkomstmail + maak factuur"
+              style="background:#0D9488;color:#fff;border:1px solid #0F766E;border-radius:6px;padding:4px 12px;font-size:0.74rem;font-weight:700;cursor:pointer;margin-right:6px;">&#10003; Bevestig</button>`
+          : ''
+        }
         ${o.archived_at
           ? `<button onclick="restoreOrder('${esc(o.id)}','${esc(label)}')" title="Terugplaatsen in actief overzicht"
               style="background:rgba(20,184,166,0.1);color:#0d9488;border:1px solid rgba(20,184,166,0.3);border-radius:6px;padding:4px 10px;font-size:0.74rem;font-weight:600;cursor:pointer;">Herstel</button>`
@@ -2634,6 +2485,18 @@ function renderOrders() {
       </td>
     </tr>
   `;}).join('');
+}
+
+async function confirmOrder(orderId, label) {
+  if (!confirm(`Order bevestigen: ${label}?\n\nDit maakt de gebruiker aan, verstuurt de welkomstmail en genereert de factuur. Niet ongedaan te maken.`)) return;
+  const { data, error } = await sb.functions.invoke('order-confirm', { body: { order_id: orderId } });
+  if (error || data?.error) {
+    alert('Bevestigen mislukt: ' + (data?.error || error?.message || 'onbekende fout'));
+    return;
+  }
+  alert(`Order bevestigd. ${data.invited_new_user ? 'Gebruiker is uitgenodigd via e-mail.' : 'Bestaande gebruiker geüpgraded.'} Factuur: ${data.invoice_number || '(reeds bestaand)'}.`);
+  loadOrders();
+  loadOverview();
 }
 
 async function loadControls() {
