@@ -1,0 +1,42 @@
+{
+  "note": "Sector-deep vragen + alle hints — verplaatst van quickscan naar gap-analyse in dashboard. Quickscan houdt alleen general-impression.",
+  "source_file": "gap-analyse.html v2026-04-18",
+  "sector_deep": {
+    "saas": [
+      { "cat":"tech", "control":"A.8.12/20/22/24", "q":"Hoe robuust is de isolatie van klantdata in uw multi-tenant platform?", "hint":"Denk aan: architectuurdiagram multi-tenancy, tenant-isolation strategie (shared-db vs per-tenant), encryption-per-tenant beleid." },
+      { "cat":"ops", "control":"A.5.19/20/21/23", "q":"Heeft u een actueel register van alle (sub)verwerkers en cloudproviders met getekende DPA's en jaarlijkse beveiligingsbeoordeling?", "hint":"Denk aan: subprocessor-lijst publiekelijk (Trust-center), DPA's per verwerker, audit-rapportages (SOC 2 / ISO 27001) van cloudproviders." },
+      { "cat":"tech", "control":"A.8.2/5/9/15", "q":"Heeft u geformaliseerde API-security maatregelen (authenticatie, rate-limiting, OWASP API Top 10 check)?", "hint":"Denk aan: API-gateway configuratie, rate-limit-rules per endpoint, OWASP API-security scan rapport, JWT/OAuth flow documentatie." },
+      { "cat":"tech", "control":"A.8.25/28/29/30", "q":"Heeft u een gedocumenteerd secure software development lifecycle (code-review, SAST/DAST, secret-scanning, dependency mgmt)?", "hint":"Denk aan: PR-template met security-checklist, SAST-rapport (SonarQube/Snyk), secret-scanning (TruffleHog), Dependabot-alerts overzicht." }
+    ],
+    "it": [
+      { "cat":"tech", "control":"A.8.20/22 + A.5.23", "q":"Hoe voorkomt u dat data of systemen van klant A bereikbaar zijn vanuit de omgeving van klant B?", "hint":"Denk aan: netwerksegmentatie per klant, separate credentials + secret stores, firewall-rules tussen klantomgevingen." },
+      { "cat":"tech", "control":"A.8.2 + A.5.17 + A.8.15", "q":"Hoe beheert u admin-sessies naar klantomgevingen (jump-host, PAM-tooling, session-recording)?", "hint":"Denk aan: PAM-tool (BeyondTrust, CyberArk, Teleport), bastion-configuratie, session-logs met video-opname." },
+      { "cat":"ops", "control":"A.5.24/29/19", "q":"Zijn contractuele meldingstermijnen naar klanten geformaliseerd en getest (bv. bij datalek binnen 24u)?", "hint":"Denk aan: SLA-bijlage met meldingstermijnen, communicatiesjablonen per incident-type, getrainde incidentmanager." },
+      { "cat":"tech", "control":"A.8.32/31/8", "q":"Heeft u een change-proces dat voorkomt dat een wijziging bij klant A onbedoeld klant B raakt?", "hint":"Denk aan: per-klant deployment-pipelines, staging-testing tussen klanten, blast-radius-assessment bij elke change." }
+    ],
+    "zorg": [
+      { "cat":"org", "control":"A.5.31/34", "q":"Past uw organisatie NEN-7510 toe als aanvulling op ISO 27001 (verplicht voor NL-zorg)?", "hint":"Denk aan: NEN-7510 gap-analyse, specifieke zorg-controls gedocumenteerd, self-assessment of externe audit." },
+      { "cat":"tech", "control":"A.8.15/3/12", "q":"Is alle toegang tot patiëntdossiers gelogd, doel-gebonden en periodiek gereviewd (need-to-know)?", "hint":"Denk aan: access-logs met patiënt-ID + doel, maandelijkse audit van abnormale toegang, Break-the-Glass procedures." },
+      { "cat":"tech", "control":"A.8.5 + A.5.17", "q":"Gebruiken zorgverleners sterke authenticatie (UZI-pas, SSO, MFA) en bestaat er een break-glass procedure?", "hint":"Denk aan: UZI-pas-implementatie, SSO-configuratie, break-glass procedure met post-hoc audit." },
+      { "cat":"phys", "control":"A.5.9/8.20/8.25", "q":"Zijn medische hulpmiddelen (IoMT, monitoring, beeldapparatuur) in het asset-register + gescheiden netwerk?", "hint":"Denk aan: asset-register inclusief medische devices, VLAN-segmentatie, vendor-patch-contracten." }
+    ],
+    "overheid": [
+      { "cat":"org", "control":"A.5.31", "q":"Past u de Baseline Informatiebeveiliging Overheid (BIO) volledig toe?", "hint":"Denk aan: BIO self-assessment (CIP-tool), BIV-classificatie per informatiesysteem, ENSIA-rapportage." },
+      { "cat":"tech", "control":"A.5.34/8.12/8.24", "q":"Zijn BSN en andere burgerdata extra beveiligd (autorisatie, logging, versleuteling) conform Wet BRP?", "hint":"Denk aan: BSN-gebruik alleen bij rechtvaardiging, logging per burger-opvraag, encryption at-rest met aparte key." },
+      { "cat":"ops", "control":"A.5.19/20/21", "q":"Hebt u DPA's/bewerkersovereenkomsten met ketenpartijen (GBA, UWV, Belastingdienst, etc.)?", "hint":"Denk aan: bewerkersovereenkomsten per keten-partner, audit-rechten, meldingsketen bij incidenten." },
+      { "cat":"ops", "control":"A.8.15/5.33", "q":"Kunt u per informatieverzoek (WOO) aantonen welke documenten zijn opgezocht, door wie, wanneer?", "hint":"Denk aan: zoek-logboek per WOO-verzoek, retentiebeleid voor audit-trails, aparte workflow-systeem voor WOO." }
+    ],
+    "bouw": [
+      { "cat":"tech", "control":"A.8.20/5.9/8.31", "q":"Zijn operationele technologie (BMS, bouwmachines, sensoren) gescheiden van kantoor-IT en in het asset-register?", "hint":"Denk aan: OT-netwerk gescheiden, asset-register inclusief bouwmachines + BMS, firewall OT↔IT." },
+      { "cat":"ops", "control":"A.5.19/20", "q":"Zijn onderaannemers en externe partijen met toegang tot projectdata contractueel en technisch geborgd?", "hint":"Denk aan: onderaannemer-contracten met security-clausules, access-controls per project, NDA's." },
+      { "cat":"phys", "control":"A.7.1/2/4", "q":"Zijn tijdelijke kantoren, gereedschap en apparatuur op de bouwplaats adequaat fysiek beveiligd?", "hint":"Denk aan: afsluitbare site-container, cameratoezicht, inventarisatie gereedschap + laptops per week." },
+      { "cat":"tech", "control":"A.5.12/8.12/8.24", "q":"Zijn BIM-modellen, architectuur- en ontwerpfiles geclassificeerd en versleuteld opgeslagen?", "hint":"Denk aan: classificatie per project, versleutelde BIM-server/cloud, toegang per rol + IP-restricties." }
+    ],
+    "overig": [
+      { "cat":"ops", "control":"A.5.23/8.10", "q":"Heeft u een actueel overzicht van alle SaaS-tooling die uw organisatie gebruikt (shadow-IT meegerekend)?", "hint":"Denk aan: SaaS-register (20-50 tools typisch), finance-data als bron (terugkerende betalingen), toegangs-review per tool." },
+      { "cat":"tech", "control":"A.7.9/8.1/8.7", "q":"Is thuiswerk geformaliseerd (VPN, endpoint hardening, BYOD-regels)?", "hint":"Denk aan: thuiswerkbeleid, MDM/Intune voor corporate devices, VPN-configuratie, BYOD-contractclausule." },
+      { "cat":"tech", "control":"A.8.7/6.3/8.20", "q":"Zijn SPF, DKIM en DMARC volledig ingesteld voor uw maildomein + phishing-awareness getest?", "hint":"Denk aan: DMARC-rapport (policy=reject), recente phishing-test met rapportage, email-security gateway." },
+      { "cat":"org", "control":"A.5.12/13/8.12", "q":"Is alle bedrijfsdata geclassificeerd (publiek / intern / vertrouwelijk / geheim) met bijbehorende regels?", "hint":"Denk aan: classificatie-beleid, labels op documenten, DLP-regels per classificatie-niveau." }
+    ]
+  }
+}

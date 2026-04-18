@@ -438,20 +438,24 @@
       width: 100%;
     }
 
-    /* Score ring */
-    .live-ring { width: 150px; height: 150px; position: relative; }
-    .live-ring svg { width: 150px; height: 150px; transform: rotate(-90deg); }
-    .live-ring-bg { fill: none; stroke: rgba(255,255,255,0.06); stroke-width: 10; }
-    .live-ring-fill {
+    /* Segmented score ring (5 arcs — één per categorie) */
+    .live-ring { width: 170px; height: 170px; position: relative; }
+    .live-ring svg { width: 170px; height: 170px; transform: rotate(-90deg); }
+    .live-arc-bg {
       fill: none;
-      stroke: var(--accent);
-      stroke-width: 10;
-      stroke-linecap: round;
-      stroke-dasharray: 376.99;
-      stroke-dashoffset: 376.99;
-      transition: stroke-dashoffset 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-      filter: drop-shadow(0 0 10px rgba(13,148,136,0.4));
+      stroke: rgba(255,255,255,0.06);
+      stroke-width: 11;
+      stroke-linecap: butt;
     }
+    .live-arc-fill {
+      fill: none;
+      stroke-width: 11;
+      stroke-linecap: butt;
+      transition: stroke-dasharray 0.6s cubic-bezier(0.4, 0, 0.2, 1), stroke 0.3s ease;
+    }
+    .live-arc-fill.low  { stroke: #EF4444; filter: drop-shadow(0 0 8px rgba(239,68,68,0.35)); }
+    .live-arc-fill.mid  { stroke: #F59E0B; filter: drop-shadow(0 0 8px rgba(245,158,11,0.35)); }
+    .live-arc-fill.high { stroke: #10B981; filter: drop-shadow(0 0 8px rgba(16,185,129,0.35)); }
     .live-ring-text {
       position: absolute;
       inset: 0;
@@ -461,17 +465,26 @@
       justify-content: center;
     }
     .live-ring-pct {
-      font-size: 2.4rem;
+      font-size: 2.1rem;
       font-weight: 800;
       color: white;
       line-height: 1;
+      letter-spacing: -0.02em;
+    }
+    .live-ring-pct::after {
+      content: '%';
+      font-size: 1rem;
+      font-weight: 600;
+      color: rgba(255,255,255,0.5);
+      margin-left: 2px;
+      vertical-align: super;
     }
     .live-ring-label {
-      font-size: 0.68rem;
+      font-size: 0.62rem;
       color: rgba(255,255,255,0.4);
       text-transform: uppercase;
       letter-spacing: 0.08em;
-      margin-top: 4px;
+      margin-top: 6px;
     }
 
     /* Category bars */
@@ -1252,13 +1265,12 @@
     <div class="live-dash">
       <div class="live-dash-title">Live compliance score</div>
       <div class="live-ring">
-        <svg viewBox="0 0 140 140">
-          <circle class="live-ring-bg" cx="70" cy="70" r="60" />
-          <circle class="live-ring-fill" id="liveRingFill" cx="70" cy="70" r="60" />
+        <svg viewBox="0 0 170 170" id="liveRingSvg">
+          <!-- 5 arcs worden dynamisch gerenderd in renderLiveRing() -->
         </svg>
         <div class="live-ring-text">
           <span class="live-ring-pct" id="livePct">0</span>
-          <span class="live-ring-label">Score</span>
+          <span class="live-ring-label">Overall</span>
         </div>
       </div>
       <div class="cat-bars" id="catBars"></div>
@@ -1607,7 +1619,6 @@ function confirmSector() {
 
 // Fase-indeling voor wizard (6 standaard + 1 conditionele sector-fase per sector)
 const phases = [
-  { id: 'profiel',   label: 'Profiel' },
   { id: 'gov',       label: 'Governance & beleid' },
   { id: 'hr',        label: 'Personeel' },
   { id: 'phys',      label: 'Fysiek & assets' },
@@ -1630,85 +1641,36 @@ function visiblePhases() {
   return phases.filter(p => !p.sector || p.sector === selectedSector);
 }
 
-// Vragen — gewogen, Annex A control mapping, evidence-hints. SaaS-deep vragen krijgen sector:'saas'
+// Quickscan-vragen — GENERAL IMPRESSION (kort + sector-light). Diepgang + hints zitten in betaalde gap-analyse.
+// Alle vragen gebruiken de CMMI-maturity rubric (Niet aanwezig → Gemeten). Kwantitatieve profiel-vragen zijn
+// weggelaten omdat de antwoordopties niet passen.
 const questions = [
-  // Phase 1: Profiel (informatief, niet meegerekend in score)
-  { phase:'profiel', cat:'profiel', catLabel:'Profiel', q:'Hoeveel medewerkers heeft uw organisatie?', subtext:'Inclusief externe medewerkers met systeemtoegang.', weight:1, controls:['Cl.4.1'] },
-  { phase:'profiel', cat:'profiel', catLabel:'Profiel', q:'In hoeveel landen of jurisdicties is uw organisatie operationeel?', subtext:'Beïnvloedt de scope van wettelijke vereisten (AVG, NIS2, etc.).', weight:1, controls:['Cl.4.2'] },
+  // Phase 1: Governance & beleid — 2 kernvragen
+  { phase:'gov', cat:'org', catLabel:'Governance & beleid', q:'Heeft uw organisatie een formeel informatiebeveiligingsbeleid, goedgekeurd door directie?', weight:3, controls:['A.5.1'] },
+  { phase:'gov', cat:'org', catLabel:'Governance & beleid', q:'Voert u periodiek een risicobeoordeling uit voor informatiebeveiliging?', weight:3, controls:['Cl.6.1.2'] },
 
-  // Phase 2: Governance & beleid (A.5 + Cl.5,6) — 6 vragen
-  { phase:'gov', cat:'org', catLabel:'A.5 Organisatorische controls', q:'Heeft uw organisatie een formeel informatiebeveiligingsbeleid dat door directie is goedgekeurd?', weight:3, controls:['A.5.1','Cl.5.2'], hint:'Denk aan: goedgekeurd beleidsdocument met handtekening directie + bewijs van communicatie (intranet, email).' },
-  { phase:'gov', cat:'org', catLabel:'A.5 Organisatorische controls', q:'Zijn rollen en verantwoordelijkheden voor informatiebeveiliging duidelijk vastgelegd en gecommuniceerd?', weight:3, controls:['A.5.2','Cl.5.3'], hint:'Denk aan: RACI-matrix, functiebeschrijvingen, organogram met IS-verantwoordelijkheid.' },
-  { phase:'gov', cat:'org', catLabel:'Clause 6 Risicobeheer',           q:'Heeft u een gedocumenteerd risicobeoordelingsproces voor informatiebeveiliging?', weight:3, controls:['Cl.6.1.2'], hint:'Denk aan: risicomethodologie (1-2 pagina), risicoregister, risicomatrix.' },
-  { phase:'gov', cat:'org', catLabel:'Clause 6 Risicobeheer',           q:'Voert u periodiek een formele risicobeoordeling uit en worden risico\u2019s opgevolgd?', weight:3, controls:['Cl.6.1.2','Cl.8.2'], hint:'Denk aan: notulen jaarlijkse risicobeoordeling, actielog per risico met owner + deadline.' },
-  { phase:'gov', cat:'org', catLabel:'Clause 6 SoA',                    q:'Heeft u een Statement of Applicability (SoA) waarin scope, controls en uitsluitingen zijn vastgelegd?', weight:2, controls:['Cl.6.1.3'], hint:'Denk aan: SoA-document met alle 93 controls (toegepast / uitgesloten met motivatie / status).' },
-  { phase:'gov', cat:'org', catLabel:'Clause 9 Management review',      q:'Worden ISMS-doelstellingen periodiek door directie beoordeeld (management review)?', weight:2, controls:['Cl.9.3'], hint:'Denk aan: notulen management review met bespreking ISMS-prestaties + correctieve acties.' },
+  // Phase 3: Personeel — 1 kernvraag
+  { phase:'hr', cat:'hr', catLabel:'Personeel', q:'Ontvangen medewerkers periodiek bewustzijnstraining over informatiebeveiliging?', weight:3, controls:['A.6.3'] },
 
-  // Phase 3: Personeel (A.6) — 4 vragen
-  { phase:'hr', cat:'hr', catLabel:'A.6 Personeel', q:'Worden medewerkers bij indiensttreding gescreend (arbeidsverleden, referenties, evt. VOG)?', weight:2, controls:['A.6.1'], hint:'Denk aan: screening-checklist per medewerker, kopie VOG of referentie-controle.' },
-  { phase:'hr', cat:'hr', catLabel:'A.6 Personeel', q:'Ontvangen alle medewerkers periodiek bewustzijnstraining over informatiebeveiliging?', weight:3, controls:['A.6.3'], hint:'Denk aan: training-planning, deelnemerslijsten, e-learning-certificaten of phishing-test resultaten.' },
-  { phase:'hr', cat:'hr', catLabel:'A.6 Personeel', q:'Worden geheimhoudingsverklaringen of NDA\u2019s ondertekend door medewerkers met toegang tot vertrouwelijke informatie?', weight:2, controls:['A.6.6'], hint:'Denk aan: getekende geheimhoudingsverklaringen per medewerker (in HR-systeem).' },
-  { phase:'hr', cat:'hr', catLabel:'A.6 Personeel', q:'Zijn er gedocumenteerde procedures voor intrekking van toegangsrechten bij uitdiensttreding of functiewijziging?', weight:3, controls:['A.6.5'], hint:'Denk aan: offboarding-checklists recent vertrokken medewerkers, bewijs van intrekking per systeem.' },
+  // Phase 4: Fysiek & assets — 1 kernvraag
+  { phase:'phys', cat:'phys', catLabel:'Fysiek & assets', q:'Zijn alle informatie-assets (apparatuur, data, software) in kaart gebracht in een asset-register?', weight:2, controls:['A.5.9','A.8.10'] },
 
-  // Phase 4: Fysiek + assets (A.7 + A.8.10-12) — 4 vragen
-  { phase:'phys', cat:'phys', catLabel:'A.7 Fysieke beveiliging', q:'Zijn kantoor- en serverruimtes fysiek beveiligd met toegangscontrole (badges, sleutels, log)?', weight:2, controls:['A.7.1','A.7.2'], hint:'Denk aan: badge-log, sleutelregister, camera-footage retentiebeleid.' },
-  { phase:'phys', cat:'phys', catLabel:'A.7 Fysieke beveiliging', q:'Heeft u een clean desk en clear screen beleid en wordt dit ook gevolgd?', weight:1, controls:['A.7.7'], hint:'Denk aan: beleidsdocument + audit-rapport van spot-checks op kantoor.' },
-  { phase:'phys', cat:'phys', catLabel:'A.5/A.8 Asset management', q:'Zijn alle informatie-assets (apparatuur, data, software) in kaart gebracht in een asset-register?', weight:2, controls:['A.5.9','A.8.10'], hint:'Denk aan: CMDB / asset-lijst (xlsx) met eigenaar, classificatie en locatie per asset.' },
-  { phase:'phys', cat:'phys', catLabel:'A.7/A.8 Veilige verwijdering', q:'Zijn er procedures voor veilige verwijdering van apparatuur en gegevens (data wiping, certified destruction)?', weight:2, controls:['A.7.14','A.8.10'], hint:'Denk aan: certified destruction certificaten van leverancier, data-wipe logs.' },
+  // Phase 5: Technische controls — 3 kernvragen
+  { phase:'tech', cat:'tech', catLabel:'Technische controls', q:'Wordt toegang tot kritieke systemen beschermd met multi-factor authenticatie (MFA)?', weight:3, controls:['A.8.5'] },
+  { phase:'tech', cat:'tech', catLabel:'Technische controls', q:'Worden gegevens versleuteld bij verzending (TLS) en opslag (AES)?', weight:3, controls:['A.8.24'] },
+  { phase:'tech', cat:'tech', catLabel:'Technische controls', q:'Heeft u een vulnerability management proces met patch-deadlines?', weight:2, controls:['A.8.8'] },
 
-  // Phase 5: Technische controls (A.8) — 8 vragen
-  { phase:'tech', cat:'tech', catLabel:'A.8 Toegangsbeheer',     q:'Wordt toegang tot kritieke systemen beschermd met multi-factor authenticatie (MFA)?', weight:3, controls:['A.8.5'], hint:'Denk aan: screenshot MFA-configuratie, overzicht gebruikers met MFA-status, enforcement-beleid.' },
-  { phase:'tech', cat:'tech', catLabel:'A.8 Toegangsbeheer',     q:'Wordt toegang verleend op basis van het principe van minste privilege (least privilege)?', weight:3, controls:['A.8.2','A.8.3'], hint:'Denk aan: role-based access matrix, periodieke access-review rapporten (per kwartaal/half-jaar).' },
-  { phase:'tech', cat:'tech', catLabel:'A.8 Encryptie',          q:'Worden gegevens versleuteld bij verzending (TLS) en bij opslag (AES)?', weight:3, controls:['A.8.24'], hint:'Denk aan: TLS-certificaten, AES-encryptie-beleid, key-rotation-logboek.' },
-  { phase:'tech', cat:'tech', catLabel:'A.8 Vulnerability mgmt', q:'Heeft u een gedocumenteerd vulnerability management proces met patch-deadlines?', weight:3, controls:['A.8.8'], hint:'Denk aan: patch-beleid (SLA per severity), scan-resultaten, CVE-tracking in ticket-systeem.' },
-  { phase:'tech', cat:'tech', catLabel:'A.8 Logging & monitoring', q:'Worden security-events centraal gelogd, gemonitord en gealerteerd op anomalieën?', weight:2, controls:['A.8.15','A.8.16'], hint:'Denk aan: log-retentiebeleid, voorbeeld-alerts (failed login burst), SIEM-dashboard screenshot.' },
-  { phase:'tech', cat:'tech', catLabel:'A.8 Change management',    q:'Zijn er gedocumenteerde change management procedures met goedkeuringsstappen?', weight:2, controls:['A.8.32'], hint:'Denk aan: change advisory board notulen, PR-template met approver, screenshots goedkeurings-workflow.' },
-  { phase:'tech', cat:'tech', catLabel:'A.8 Netwerksegmentatie',   q:'Wordt netwerkverkeer gesegmenteerd (dev/staging/prod gescheiden, klantomgevingen geïsoleerd)?', weight:2, controls:['A.8.20','A.8.22'], hint:'Denk aan: netwerkdiagram, firewall-rules, VPC/subnet-configuratie.' },
-  { phase:'tech', cat:'tech', catLabel:'A.8 Anti-malware',         q:'Zijn er anti-malware controles geïmplementeerd op endpoints en servers?', weight:2, controls:['A.8.7'], hint:'Denk aan: EDR-dashboard, malware-detection rapporten, policy-uitrol (MDM).' },
+  // Phase 6: Operationeel — 2 kernvragen
+  { phase:'ops', cat:'ops', catLabel:'Operationeel', q:'Heeft u een incident response plan met rollen en escalatiepaden?', weight:3, controls:['A.5.24'] },
+  { phase:'ops', cat:'ops', catLabel:'Operationeel', q:'Wordt de restore-functie van uw backups periodiek getest?', weight:2, controls:['A.8.13'] },
 
-  // Phase 6: Operationeel (A.5.24-30 + Cl.7-9) — 6 vragen
-  { phase:'ops', cat:'ops', catLabel:'A.5 Incident response', q:'Heeft u een gedocumenteerd incident response plan met rollen en escalatiepaden?', weight:3, controls:['A.5.24','A.5.25'], hint:'Denk aan: IRP-document met rollen, escalatieschema, 24/7 contactenlijst.' },
-  { phase:'ops', cat:'ops', catLabel:'A.5 Incident response', q:'Wordt het incident response plan periodiek getest (tabletop oefening, drill)?', weight:2, controls:['A.5.26'], hint:'Denk aan: tabletop-verslag, oefeningsresultaten, lessons-learned document.' },
-  { phase:'ops', cat:'ops', catLabel:'A.5/A.8 Continuity',    q:'Heeft u een business continuity plan (BCP) en disaster recovery plan (DRP) met gedefinieerde RTO/RPO?', weight:3, controls:['A.5.30','A.8.14'], hint:'Denk aan: BCP-document met RTO/RPO per dienst, DR-testresultaten laatste cyclus.' },
-  { phase:'ops', cat:'ops', catLabel:'A.8 Backup',            q:'Wordt de restore-functie van uw backups periodiek getest?', weight:2, controls:['A.8.13'], hint:'Denk aan: testrapport recente restore (duration + integriteit-check), backup-retentiebeleid.' },
-  { phase:'ops', cat:'ops', catLabel:'A.5 Supplier mgmt',     q:'Hebt u een leveranciersregister met DPA\u2019s/leveranciersbeoordelingen voor kritieke verwerkers?', weight:3, controls:['A.5.19','A.5.20','A.5.21'], hint:'Denk aan: supplier-register (CSV), DPA\u2019s per verwerker, jaarlijkse leveranciersbeoordeling-formulier.' },
-  { phase:'ops', cat:'ops', catLabel:'Cl.9 Interne audit',    q:'Voert u jaarlijks een interne audit uit van uw ISMS?', weight:2, controls:['Cl.9.2'], hint:'Denk aan: auditplan, auditrapporten, actielog van bevindingen.' },
-
-  // Phase 7: SaaS-diepvragen (alleen voor sector='saas') — 4 vragen
-  { phase:'saas', cat:'tech', sector:'saas', catLabel:'SaaS — Multi-tenancy', q:'Hoe robuust is de isolatie van klantdata in uw multi-tenant platform?', weight:3, controls:['A.8.12','A.8.20','A.8.22','A.8.24'], hint:'Denk aan: architectuurdiagram multi-tenancy, tenant-isolation strategie (shared-db vs per-tenant), encryption-per-tenant beleid.' },
-  { phase:'saas', cat:'ops', sector:'saas', catLabel:'SaaS — Subprocessors', q:'Heeft u een actueel register van alle (sub)verwerkers en cloudproviders met getekende DPA\u2019s en jaarlijkse beveiligingsbeoordeling?', weight:3, controls:['A.5.19','A.5.20','A.5.21','A.5.23'], hint:'Denk aan: subprocessor-lijst publiekelijk (Trust-center), DPA\u2019s per verwerker, audit-rapportages (SOC 2 / ISO 27001) van cloudproviders.' },
-  { phase:'saas', cat:'tech', sector:'saas', catLabel:'SaaS — API security', q:'Heeft u geformaliseerde API-security maatregelen (authenticatie, rate-limiting, OWASP API Top 10 check)?', weight:3, controls:['A.8.2','A.8.5','A.8.9','A.8.15'], hint:'Denk aan: API-gateway configuratie, rate-limit-rules per endpoint, OWASP API-security scan rapport, JWT/OAuth flow documentatie.' },
-  { phase:'saas', cat:'tech', sector:'saas', catLabel:'SaaS — Secure SDLC', q:'Heeft u een gedocumenteerd secure software development lifecycle (code-review, SAST/DAST, secret-scanning, dependency mgmt)?', weight:3, controls:['A.8.25','A.8.28','A.8.29','A.8.30'], hint:'Denk aan: PR-template met security-checklist, SAST-rapport (SonarQube/Snyk), secret-scanning (TruffleHog), Dependabot-alerts overzicht.' },
-
-  // Phase 7b: IT-dienstverlener / MSP — 4 vragen
-  { phase:'it', cat:'tech', sector:'it', catLabel:'MSP — Klantomgeving-isolatie', q:'Hoe voorkomt u dat data of systemen van klant A bereikbaar zijn vanuit de omgeving van klant B?', weight:3, controls:['A.8.20','A.8.22','A.5.23'], hint:'Denk aan: netwerksegmentatie per klant, separate credentials + secret stores, firewall-rules tussen klantomgevingen.' },
-  { phase:'it', cat:'tech', sector:'it', catLabel:'MSP — Privileged access management', q:'Hoe beheert u admin-sessies naar klantomgevingen (jump-host, PAM-tooling, session-recording)?', weight:3, controls:['A.8.2','A.5.17','A.8.15'], hint:'Denk aan: PAM-tool (BeyondTrust, CyberArk, Teleport), bastion-configuratie, session-logs met video-opname.' },
-  { phase:'it', cat:'ops', sector:'it', catLabel:'MSP — SLA & incident-communicatie', q:'Zijn contractuele meldingstermijnen naar klanten geformaliseerd en getest (bv. bij datalek binnen 24u)?', weight:3, controls:['A.5.24','A.5.29','A.5.19'], hint:'Denk aan: SLA-bijlage met meldingstermijnen, communicatiesjablonen per incident-type, getrainde incidentmanager.' },
-  { phase:'it', cat:'tech', sector:'it', catLabel:'MSP — Cross-client change management', q:'Heeft u een change-proces dat voorkomt dat een wijziging bij klant A onbedoeld klant B raakt?', weight:3, controls:['A.8.32','A.8.31','A.8.8'], hint:'Denk aan: per-klant deployment-pipelines, staging-testing tussen klanten, blast-radius-assessment bij elke change.' },
-
-  // Phase 7c: Zorg — 4 vragen
-  { phase:'zorg', cat:'org', sector:'zorg', catLabel:'Zorg — NEN-7510 compliance', q:'Past uw organisatie NEN-7510 toe als aanvulling op ISO 27001 (verplicht voor NL-zorg)?', weight:3, controls:['A.5.31','A.5.34'], hint:'Denk aan: NEN-7510 gap-analyse, specifieke zorg-controls gedocumenteerd, self-assessment of externe audit.' },
-  { phase:'zorg', cat:'tech', sector:'zorg', catLabel:'Zorg — Patiëntdossier-toegang', q:'Is alle toegang tot patiëntdossiers gelogd, doel-gebonden en periodiek gereviewd (need-to-know)?', weight:3, controls:['A.8.15','A.8.3','A.8.12'], hint:'Denk aan: access-logs met patiënt-ID + doel, maandelijkse audit van abnormale toegang, Break-the-Glass procedures.' },
-  { phase:'zorg', cat:'tech', sector:'zorg', catLabel:'Zorg — Zorgverlener-authenticatie', q:'Gebruiken zorgverleners sterke authenticatie (UZI-pas, SSO, MFA) en bestaat er een break-glass procedure?', weight:3, controls:['A.8.5','A.5.17'], hint:'Denk aan: UZI-pas-implementatie, SSO-configuratie, break-glass procedure met post-hoc audit.' },
-  { phase:'zorg', cat:'phys', sector:'zorg', catLabel:'Zorg — Medische hulpmiddelen (IoMT)', q:'Zijn medische hulpmiddelen (IoMT, monitoring, beeldapparatuur) in het asset-register + gescheiden netwerk?', weight:3, controls:['A.5.9','A.8.20','A.8.25'], hint:'Denk aan: asset-register inclusief medische devices, VLAN-segmentatie, vendor-patch-contracten.' },
-
-  // Phase 7d: Overheid — 4 vragen (BIO-framework)
-  { phase:'overheid', cat:'org', sector:'overheid', catLabel:'Overheid — BIO-compliance', q:'Past u de Baseline Informatiebeveiliging Overheid (BIO) volledig toe?', weight:3, controls:['A.5.31'], hint:'Denk aan: BIO self-assessment (CIP-tool), BIV-classificatie per informatiesysteem, ENSIA-rapportage.' },
-  { phase:'overheid', cat:'tech', sector:'overheid', catLabel:'Overheid — Burgerdata-beveiliging', q:'Zijn BSN en andere burgerdata extra beveiligd (autorisatie, logging, versleuteling) conform Wet BRP?', weight:3, controls:['A.5.34','A.8.12','A.8.24'], hint:'Denk aan: BSN-gebruik alleen bij rechtvaardiging, logging per burger-opvraag, encryption at-rest met aparte key.' },
-  { phase:'overheid', cat:'ops', sector:'overheid', catLabel:'Overheid — Ketenverantwoordelijkheid', q:'Hebt u DPA\u2019s/bewerkersovereenkomsten met ketenpartijen (GBA, UWV, Belastingdienst, etc.)?', weight:3, controls:['A.5.19','A.5.20','A.5.21'], hint:'Denk aan: bewerkersovereenkomsten per keten-partner, audit-rechten, meldingsketen bij incidenten.' },
-  { phase:'overheid', cat:'ops', sector:'overheid', catLabel:'Overheid — WOO-audit trail', q:'Kunt u per informatieverzoek (WOO) aantonen welke documenten zijn opgezocht, door wie, wanneer?', weight:3, controls:['A.8.15','A.5.33'], hint:'Denk aan: zoek-logboek per WOO-verzoek, retentiebeleid voor audit-trails, aparte workflow-systeem voor WOO.' },
-
-  // Phase 7e: Bouw — 4 vragen
-  { phase:'bouw', cat:'tech', sector:'bouw', catLabel:'Bouw — OT/IT-integratie', q:'Zijn operationele technologie (BMS, bouwmachines, sensoren) gescheiden van kantoor-IT en in het asset-register?', weight:3, controls:['A.8.20','A.5.9','A.8.31'], hint:'Denk aan: OT-netwerk gescheiden, asset-register inclusief bouwmachines + BMS, firewall OT↔IT.' },
-  { phase:'bouw', cat:'ops', sector:'bouw', catLabel:'Bouw — Subcontractor-security', q:'Zijn onderaannemers en externe partijen met toegang tot projectdata contractueel en technisch geborgd?', weight:3, controls:['A.5.19','A.5.20'], hint:'Denk aan: onderaannemer-contracten met security-clausules, access-controls per project, NDA\u2019s.' },
-  { phase:'bouw', cat:'phys', sector:'bouw', catLabel:'Bouw — Fysieke beveiliging bouwplaats', q:'Zijn tijdelijke kantoren, gereedschap en apparatuur op de bouwplaats adequaat fysiek beveiligd?', weight:3, controls:['A.7.1','A.7.2','A.7.4'], hint:'Denk aan: afsluitbare site-container, cameratoezicht, inventarisatie gereedschap + laptops per week.' },
-  { phase:'bouw', cat:'tech', sector:'bouw', catLabel:'Bouw — BIM-data bescherming', q:'Zijn BIM-modellen, architectuur- en ontwerpfiles geclassificeerd en versleuteld opgeslagen?', weight:3, controls:['A.5.12','A.8.12','A.8.24'], hint:'Denk aan: classificatie per project, versleutelde BIM-server/cloud, toegang per rol + IP-restricties.' },
-
-  // Phase 7f: Overig / MKB-algemeen — 4 universele MKB-diepvragen
-  { phase:'overig', cat:'ops', sector:'overig', catLabel:'MKB — Cloud-stack inventaris', q:'Heeft u een actueel overzicht van alle SaaS-tooling die uw organisatie gebruikt (shadow-IT meegerekend)?', weight:3, controls:['A.5.23','A.8.10'], hint:'Denk aan: SaaS-register (20-50 tools typisch), finance-data als bron (terugkerende betalingen), toegangs-review per tool.' },
-  { phase:'overig', cat:'tech', sector:'overig', catLabel:'MKB — Thuiswerk / BYOD', q:'Is thuiswerk geformaliseerd (VPN, endpoint hardening, BYOD-regels)?', weight:3, controls:['A.7.9','A.8.1','A.8.7'], hint:'Denk aan: thuiswerkbeleid, MDM/Intune voor corporate devices, VPN-configuratie, BYOD-contractclausule.' },
-  { phase:'overig', cat:'tech', sector:'overig', catLabel:'MKB — E-mail security', q:'Zijn SPF, DKIM en DMARC volledig ingesteld voor uw maildomein + phishing-awareness getest?', weight:3, controls:['A.8.7','A.6.3','A.8.20'], hint:'Denk aan: DMARC-rapport (policy=reject), recente phishing-test met rapportage, email-security gateway.' },
-  { phase:'overig', cat:'org', sector:'overig', catLabel:'MKB — Data-classificatie', q:'Is alle bedrijfsdata geclassificeerd (publiek / intern / vertrouwelijk / geheim) met bijbehorende regels?', weight:3, controls:['A.5.12','A.5.13','A.8.12'], hint:'Denk aan: classificatie-beleid, labels op documenten, DLP-regels per classificatie-niveau.' },
+  // Phase 7: Sector-light (1 vraag per sector — high-level, geen diepgang)
+  { phase:'saas',     cat:'tech', sector:'saas',     catLabel:'SaaS',         q:'Is de data van uw klanten in uw multi-tenant platform logisch van elkaar geïsoleerd?', weight:2, controls:['A.8.22'] },
+  { phase:'it',       cat:'tech', sector:'it',       catLabel:'IT-dienstverlener', q:'Zijn omgevingen van verschillende klanten logisch van elkaar gescheiden?', weight:2, controls:['A.8.20'] },
+  { phase:'zorg',     cat:'org',  sector:'zorg',     catLabel:'Zorg',         q:'Past u NEN-7510 toe als aanvulling op ISO 27001?', weight:2, controls:['A.5.31'] },
+  { phase:'overheid', cat:'org',  sector:'overheid', catLabel:'Overheid',     q:'Past u de Baseline Informatiebeveiliging Overheid (BIO) toe?', weight:2, controls:['A.5.31'] },
+  { phase:'bouw',     cat:'ops',  sector:'bouw',     catLabel:'Bouw',         q:'Zijn onderaannemers met toegang tot projectdata contractueel geborgd (NDA, security-clausules)?', weight:2, controls:['A.5.19','A.5.20'] },
+  { phase:'overig',   cat:'ops',  sector:'overig',   catLabel:'MKB algemeen', q:'Heeft u een actueel overzicht van alle SaaS-tooling die uw organisatie gebruikt?', weight:2, controls:['A.5.23'] },
 ];
 
 // 4-punts maturity-rubric (zonder ad-hoc)
@@ -1747,8 +1709,36 @@ function recomputeCategoryTotals() {
 recomputeCategoryTotals();
 
 // Circumferences
-const liveCirc = 2 * Math.PI * 60;  // 376.99
-const bigCirc = 2 * Math.PI * 88;   // 553.0
+const bigCirc = 2 * Math.PI * 88;   // 553.0 (results page big ring)
+
+// Segmented ring math: 5 arcs, 4° gap ertussen
+const RING_R = 70;
+const RING_CX = 85;
+const RING_CY = 85;
+const RING_C = 2 * Math.PI * RING_R;                    // omtrek
+const RING_GAP_DEG = 4;                                 // gap tussen segmenten
+const RING_SEG_DEG = (360 - 5 * RING_GAP_DEG) / 5;      // 360/5 minus gaps = 68°
+const RING_SEG_LEN = (RING_SEG_DEG / 360) * RING_C;     // arc-lengte segment
+const CAT_ORDER = ['org', 'hr', 'phys', 'tech', 'ops'];
+
+function renderLiveRing() {
+  const svg = document.getElementById('liveRingSvg');
+  if (!svg) return;
+  // Build 5 background + 5 foreground arcs
+  let html = '';
+  CAT_ORDER.forEach((key, i) => {
+    // Rotation offset per segment (-90° = start bovenaan)
+    const rot = -90 + i * (RING_SEG_DEG + RING_GAP_DEG);
+    html += `<circle class="live-arc-bg" cx="${RING_CX}" cy="${RING_CY}" r="${RING_R}"
+      stroke-dasharray="${RING_SEG_LEN} ${RING_C - RING_SEG_LEN}"
+      transform="rotate(${rot} ${RING_CX} ${RING_CY})" />`;
+    html += `<circle class="live-arc-fill" id="arc_${key}" cx="${RING_CX}" cy="${RING_CY}" r="${RING_R}"
+      stroke-dasharray="0 ${RING_C}"
+      transform="rotate(${rot} ${RING_CX} ${RING_CY})" />`;
+  });
+  svg.innerHTML = html;
+}
+renderLiveRing();
 
 function startQuiz() {
   show('screenSector');
@@ -1868,15 +1858,26 @@ function updateLiveDash() {
   const answeredWeights = activeQuestions.reduce((sum, q, i) => q.cat !== 'profiel' && answers[i] !== null ? sum + q.weight * 4 : sum, 0);
   const pct = answeredWeights > 0 ? Math.round((weightedScore / answeredWeights) * 100) : 0;
 
-  // Update ring
-  const offset = liveCirc - (pct / 100) * liveCirc;
-  document.getElementById('liveRingFill').style.strokeDashoffset = offset;
+  // Update overall percentage (center text)
   document.getElementById('livePct').textContent = pct;
 
-  // Update category bars (% van max mogelijk per categorie)
+  // Update elk segment (arc + optionele category-bar) op basis van score per categorie
   for (const [key, cat] of Object.entries(categories)) {
     const maxPossible = cat.weightTotal * 4;
     const catPct = maxPossible > 0 ? Math.round((cat.score / maxPossible) * 100) : 0;
+
+    // Segmented ring arc
+    const arc = document.getElementById('arc_' + key);
+    if (arc) {
+      const fillLen = (catPct / 100) * RING_SEG_LEN;
+      arc.setAttribute('stroke-dasharray', `${fillLen} ${RING_C - fillLen}`);
+      arc.classList.remove('low', 'mid', 'high');
+      if (catPct <= 33) arc.classList.add('low');
+      else if (catPct <= 66) arc.classList.add('mid');
+      else arc.classList.add('high');
+    }
+
+    // Category bar labels (onder de ring)
     const fillEl = document.getElementById('catFill_' + key);
     const pctEl = document.getElementById('catPct_' + key);
     if (fillEl) fillEl.style.width = catPct + '%';
