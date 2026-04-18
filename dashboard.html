@@ -3158,7 +3158,7 @@ async function uploadEvidence(controlId, input) {
   if (!input.files.length) return;
   const file = input.files[0];
 
-  // Max 10MB
+  // Max 10MB (client check; server enforces via bucket file_size_limit)
   if (file.size > 10 * 1024 * 1024) {
     alert('Bestand is te groot (max 10MB).');
     return;
@@ -3166,23 +3166,32 @@ async function uploadEvidence(controlId, input) {
 
   if (!evidenceData[controlId]) evidenceData[controlId] = { files: [], note: '' };
 
-  // Try Supabase Storage
-  let url = null;
+  // Sanitize filename (prevent path traversal)
+  const safeName = file.name.replace(/[^a-zA-Z0-9.\-_]/g, '_').slice(0, 160);
+  const safeCtrl = String(controlId).replace(/[^a-zA-Z0-9.\-_]/g, '_');
+  const path = `${user.id}/${safeCtrl}/${Date.now()}_${safeName}`;
+
+  let storedPath = null;
   try {
-    const path = `${user.id}/${controlId}/${file.name}`;
-    const { data, error } = await sb.storage.from('evidence').upload(path, file, { upsert: true });
-    if (!error && data) {
-      const { data: urlData } = sb.storage.from('evidence').getPublicUrl(path);
-      url = urlData?.publicUrl || null;
+    const { data, error } = await sb.storage.from('evidence').upload(path, file, { upsert: false, contentType: file.type });
+    if (error) {
+      console.error('Evidence upload failed:', error);
+      alert('Upload mislukt: ' + (error.message || 'onbekende fout'));
+      return;
     }
-  } catch(e) { /* storage might not be set up yet */ }
+    storedPath = data.path;
+  } catch(e) {
+    console.error('Upload exception:', e);
+    alert('Upload mislukt: ' + (e.message || 'onbekende fout'));
+    return;
+  }
 
   evidenceData[controlId].files.push({
     name: file.name,
     size: file.size,
     type: file.type,
     date: new Date().toISOString(),
-    url: url
+    path: storedPath,  // stored path — downloaded via signed URL on demand
   });
 
   saveEvidenceData();
