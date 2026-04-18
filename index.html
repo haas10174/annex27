@@ -1028,6 +1028,8 @@
       padding: 36px 28px;
       position: relative;
       transition: all 0.3s;
+      display: flex;
+      flex-direction: column;
     }
     .package:hover { background: #FCFCFC; transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,0.06); z-index: 2; }
     .package.featured {
@@ -1124,6 +1126,7 @@
       cursor: pointer;
       border: none;
       font-family: inherit;
+      margin-top: auto;
     }
     .pkg-btn.dark {
       background: var(--text-primary);
@@ -1804,7 +1807,7 @@
           <li><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Resterende gaps identificeren &amp; oplossen</li>
           <li><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Coaching voor het auditgesprek</li>
         </ul>
-        <a href="bestellen.html?plan=preaudit" class="pkg-btn outline">Plan een gesprek</a>
+        <button type="button" class="pkg-btn outline" onclick="openWaitlist('preaudit')">Plan een gesprek</button>
       </div>
     </div>
   </div>
@@ -2297,6 +2300,11 @@
       eyebrow: 'Beleidspakket — offerte op maat',
       title: 'Offerte aanvragen',
       desc: 'Vertel ons kort over uw organisatie. Wij sturen binnen 1 werkdag een offerte op maat voor uw sector en omvang.'
+    },
+    preaudit: {
+      eyebrow: 'Pre-audit Review — intake',
+      title: 'Plan een gesprek',
+      desc: 'Een pre-audit is scope-afhankelijk (€1.495 – €3.500). Laat uw gegevens achter met een korte toelichting — aantal medewerkers, sector, welke certificering u nastreeft — en wij nemen binnen 1 werkdag contact op voor een scope-gesprek.'
     }
   };
 

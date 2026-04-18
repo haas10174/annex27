@@ -1962,8 +1962,16 @@ function renderLeads() {
   const esc = (s) => String(s ?? '').replace(/[<>&"]/g, c => ({'<':'&lt;','>':'&gt;','&':'amp;','"':'&quot;'}[c]));
   listEl.innerHTML = filtered.map(l => {
     const d = new Date(l.created_at).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
-    const productLabel = l.product === 'nis2' ? 'NIS2 Readiness (waitlist)' : 'Beleidspakket (offerte)';
-    const productColor = l.product === 'nis2' ? '#B45309' : '#0D9488';
+    const productLabel = l.product === 'nis2' ? 'NIS2 Readiness (waitlist)'
+      : l.product === 'beleid' ? 'Beleidspakket (offerte)'
+      : l.product === 'preaudit' ? 'Pre-audit (intake)'
+      : l.product === 'quickscan' ? 'Quickscan lead'
+      : l.product;
+    const productColor = l.product === 'nis2' ? '#B45309'
+      : l.product === 'beleid' ? '#0D9488'
+      : l.product === 'preaudit' ? '#7C3AED'
+      : l.product === 'quickscan' ? '#64748B'
+      : '#0D9488';
     const processed = !!l.processed_at;
     return `
       <div style="background:${processed ? 'rgba(16,24,40,0.02)' : 'var(--surface)'};border:1px solid ${processed ? 'transparent' : 'var(--border)'};border-left:3px solid ${processed ? 'var(--border)' : productColor};border-radius:10px;padding:16px 20px;${processed ? 'opacity:0.65;' : ''}">
