@@ -4511,9 +4511,9 @@ function escapeHtml(s) { return String(s ?? '').replace(/[<>&"]/g, c => ({'<':'&
 function escapeAttr(s) { return String(s ?? '').replace(/'/g, "\\'"); }
 
 async function downloadDoc(pakketKey, file) {
-  const path = pakketKey + '/' + file;
+  const filePath = pakketKey + '/' + file;
   try {
-    const { data, error } = await sb.functions.invoke('get-document-url', { body: { path } });
+    const { data, error } = await sb.functions.invoke('get-document-url', { body: { file: filePath } });
     if (error || data?.error) { alert('Download mislukt: ' + (data?.error || error?.message || 'onbekend')); return; }
     if (data?.url) window.open(data.url, '_blank');
     else alert('Geen signed URL terug.');

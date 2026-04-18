@@ -111,7 +111,7 @@ serve(async (req) => {
 
     // Generate signed URL (60 seconds)
     const { data, error } = await supabaseAdmin.storage
-      .from('policies')
+      .from('documents')
       .createSignedUrl(file, 60);
 
     if (error || !data?.signedUrl) {
