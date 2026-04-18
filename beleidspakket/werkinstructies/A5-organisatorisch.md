@@ -326,17 +326,73 @@ Korte, praktische instructies per Annex A control. Per control: wat het is, wat 
 
 ---
 
-## A.5.24 t/m A.5.28 — Incidentmanagement
+## A.5.24 — Incidentmanagement: planning en voorbereiding
 
 
 **Wat:**
- Plannen, beoordelen, reageren, leren en bewijzen bij incidenten.
+ Een vooraf vastgesteld en geoefend Incident Response Plan (IRP) met rollen, verantwoordelijkheden, escalatiepaden en communicatielijnen. Het plan regelt hoe de organisatie zich voorbereidt op cybersecurity-incidenten — nog voor er iets gebeurt.
 
 **Doen:**
- Incident Response Plan opstellen en testen (ISMS-019). Incidenten registreren en evalueren.
+ Incident Response Plan opstellen (ISMS-019) met: scope (welke assets/systemen gedekt), rollen (IRP-manager, communicatie-owner, tech-lead, juridisch), escalatie-matrix (wie wordt wanneer gewekt), 24/7 contactenlijst (intern + extern: CSIRT-NL, CCB, verzekeraar, juridisch). Minimaal jaarlijkse tabletop-oefening. Integreer met NIS2-meldingstermijnen (24u/72u/1mnd) waar van toepassing.
 
 **Bewijs:**
- IRP, incidentregister, evaluatierapporten, testverslagen.
+ IRP-document met versiebeheer, RACI-matrix, 24/7 contactenlijst (getoetst), notulen laatste tabletop, post-oefening lessons-learned, bewijs van goedkeuring door directie.
+
+---
+
+## A.5.25 — Beoordeling en besluit over informatiebeveiligingsgebeurtenissen
+
+
+**Wat:**
+ Niet elke security-gebeurtenis is een incident. Er moet een gestructureerd proces zijn om events te trageren, beoordelen op impact/urgentie, en te beslissen of het een incident is (met bijbehorende response-procedure) of een event (logs, geen actie).
+
+**Doen:**
+ Event-triage proces vastleggen: bron (SIEM, endpoint-alert, gebruikersmelding, leverancier), initiële beoordeling binnen 1 uur, classificatie volgens severity-matrix (laag/gemiddeld/hoog/kritiek), beslissing door IRP-manager. Bij twijfel: escaleren naar incident. Beslissing + rationale vastleggen in incident-register.
+
+**Bewijs:**
+ Event-triage matrix, severity-classificatie, incidentregister met per entry: brontijd, triage-uitkomst, classificatie, beslissing (incident ja/nee), naam beoordelaar, motivatie. Minimaal 3-6 maanden historie beschikbaar voor audit.
+
+---
+
+## A.5.26 — Respons op informatiebeveiligingsincidenten
+
+
+**Wat:**
+ De daadwerkelijke uitvoering van het IRP tijdens een incident: insluiten, mitigeren, communiceren, herstellen en documenteren. Dit is de operationele tegenhanger van de planning in A.5.24.
+
+**Doen:**
+ Per incident een IRP-case openen met: tijdlijn (detection-time, response-time, containment-time, recovery-time), genomen maatregelen (logs veiliggesteld, systemen geïsoleerd, accounts gereset), interne communicatie (directie, betrokken teams), externe communicatie (klanten, toezichthouder, media indien nodig), meldingen (CSIRT-NL/CCB 24u/72u, AP bij persoonsgegevens). Na closure: root-cause-analyse binnen 30 dagen.
+
+**Bewijs:**
+ Incidentdossiers met complete tijdlijnen, communicatie-logs, getroffen maatregelen, eindrapport per incident, bewijs van meldingen aan toezichthouders (ontvangstbevestiging), Root Cause Analysis-rapport.
+
+---
+
+## A.5.27 — Leren van informatiebeveiligingsincidenten
+
+
+**Wat:**
+ Systematische evaluatie van elk incident om herhaling te voorkomen en het ISMS te versterken. Lessons learned moeten leiden tot aanpassingen in beleid, procedures, trainingen of technische maatregelen.
+
+**Doen:**
+ Binnen 30 dagen na closure: Post-Incident Review (PIR) met IRP-team + betrokken afdelingen. Vragen: wat werkte goed, wat niet, welke controls hadden dit kunnen voorkomen, welke procedures moeten worden aangepast. Actielijst met owner + deadline, integreren in correctieve-maatregelen-register (A.10). Bij herhalende incidenten: trend-analyse per kwartaal in management review.
+
+**Bewijs:**
+ PIR-verslagen per incident, actielijst met voortgangsstatus, bewijs dat beleids-/proceswijzigingen zijn doorgevoerd (versieverhoging documenten), kwartaal-trendrapport, management review-notulen met incident-agenda.
+
+---
+
+## A.5.28 — Verzameling van bewijsmateriaal
+
+
+**Wat:**
+ Bij incidenten — zeker bij juridische of regulatoire implicaties — moet bewijs forensisch verantwoord verzameld, bewaard en overgedragen worden. Chain of custody is essentieel om bewijs later rechtsgeldig te laten zijn.
+
+**Doen:**
+ Forensische procedure vastleggen: welke logs worden hoe lang bewaard (minimaal 12 maanden voor kritieke systemen), welke tool voor imaging (FTK, EnCase, dd), wie geautoriseerd is, hoe chain-of-custody wordt bijgehouden (wie had wanneer toegang). Bij serieus incident: externe forensisch onderzoeker inschakelen voordat u zelf rommel maakt in de bewijsstroom. Logs direct na detectie kopieëren naar write-once-storage.
+
+**Bewijs:**
+ Forensische procedure (ISMS-019-bijlage), log-retentiebeleid, chain-of-custody-logboek met handtekeningen/timestamps, voorbeelden uit recente incidenten, contract forensisch leverancier (indien van toepassing), bewijs van immutable log-opslag.
 
 ---
 
