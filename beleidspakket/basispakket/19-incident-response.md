@@ -117,24 +117,94 @@ Binnen 2 weken na afsluiting van het incident:
 
 ## 5. Meldplicht
 
-### 5.1 Autoriteit Persoonsgegevens (datalek)
+### 5.0 Flowchart — wanneer, aan wie, binnen welke termijn
+
+```
+              ┌──────────────────────────────────┐
+              │   INCIDENT GEDETECTEERD (T+0)    │
+              └─────────────────┬────────────────┘
+                                │
+              ┌─────────────────▼────────────────┐
+              │ Classificatie door CISO           │
+              │ (zie §3 Incidentclassificatie)    │
+              └─────────────────┬────────────────┘
+                                │
+        ┌───────────────────────┼──────────────────────┐
+        │                       │                      │
+        ▼                       ▼                      ▼
+  ┌──────────────┐      ┌─────────────────┐    ┌─────────────────┐
+  │ PERSOONSDATA │      │ NIS2-INCIDENT   │    │ STRAFBAAR FEIT  │
+  │   betrokken? │      │   (significant)  │    │ (hack/afpers.) │
+  └──────┬───────┘      └────────┬────────┘    └────────┬────────┘
+         │ Ja                    │ Ja                    │ Ja
+         ▼                       ▼                       ▼
+  ╔════════════╗      ╔═════════════════════╗   ╔═════════════════╗
+  ║ AP (NL) of ║      ║ VROEGMELDING T+24u  ║   ║ Politie —       ║
+  ║ GBA (BE)   ║      ║ → CSIRT             ║   ║ aangifte in     ║
+  ║ binnen 72u ║      ║   BE: CCB           ║   ║ overleg met     ║
+  ║ (AVG art.33)║     ║   NL: RDI/NCSC      ║   ║ directie +      ║
+  ╚═════╦══════╝      ╚══════════╦══════════╝   ║ juridisch       ║
+        │                        │                ╚═════════════════╝
+        │                        ▼
+        │             ╔═════════════════════╗
+        │             ║ NOTIFICATIE T+72u   ║
+        │             ║ → CSIRT (uitgebreid)║
+        │             ║ aard + impact       ║
+        │             ║ + cross-border      ║
+        │             ╚══════════╦══════════╝
+        │                        │
+        ▼                        ▼
+  ┌──────────────┐      ╔═════════════════════╗
+  │ Betrokkenen  │      ║ EINDVERSLAG T+1 mnd ║
+  │ informeren   │      ║ → CSIRT definitief  ║
+  │ bij HOOG     │      ║ oorzaak +           ║
+  │ risico       │      ║ maatregelen         ║
+  └──────────────┘      ╚═════════════════════╝
+```
+
+### 5.1 Autoriteit Persoonsgegevens (AVG-datalek)
 
 Bij een datalek met persoonsgegevens dat een risico vormt voor betrokkenen:
-- Melding aan AP **binnen 72 uur** na ontdekking
-- Melding aan betrokkenen als er een **hoog risico** is
-- CISO is verantwoordelijk voor de melding
 
-### 5.2 NCSC / sectoraal CSIRT
+| Actie | Termijn | Rechtsgrond |
+|---|---|---|
+| Melding aan toezichthouder | **Binnen 72 uur** na ontdekking | AVG art. 33 |
+| Melding aan betrokkenen | Onverwijld bij **hoog risico** | AVG art. 34 |
+| Registratie in datalek-register | Direct | AVG art. 33(5) |
 
-Bij ernstige cyberincidenten die onder NIS2 vallen:
-- Vroegtijdige waarschuwing **binnen 24 uur**
-- Incidentmelding **binnen 72 uur**
-- Eindverslag **binnen 1 maand**
+- **Nederland:** Autoriteit Persoonsgegevens (AP) — https://autoriteitpersoonsgegevens.nl
+- **België:** Gegevensbeschermingsautoriteit (GBA) — https://www.gegevensbeschermingsautoriteit.be
+- CISO is verantwoordelijk voor de melding (coördinatie + indiening).
+
+### 5.2 NIS2-meldplicht — CSIRT / toezichthouder
+
+Bij een **significant incident** zoals gedefinieerd in NIS2 (art. 23):
+
+| Fase | Termijn | Inhoud |
+|---|---|---|
+| **Vroegmelding** | Binnen **24 uur** na kennisname | Vermoeden van kwaadwilligheid? Cross-border? Eerste impact-beoordeling. |
+| **Incident-notificatie** | Binnen **72 uur** | Uitgebreide beschrijving: aard, omvang, impact, afgenomen maatregelen, cross-border gevolgen. |
+| **Tussenrapport** | Op verzoek | Status-update bij aanhoudend incident. |
+| **Eindrapport** | Binnen **1 maand** na incident | Definitieve analyse: oorzaak, verloop, maatregelen, impact grensoverschrijdend. |
+
+**Aan wie melden per land:**
+
+| Land | Toezichthouder / CSIRT | Contact |
+|---|---|---|
+| **België** | Centrum voor Cybersecurity België (CCB) | https://atwork.ccb.belgium.be (portaal) |
+| **Nederland** | Rijksinspectie Digitale Infrastructuur (RDI) + sector-toezichthouder + NCSC-NL | cert@ncsc.nl · 070-751 55 55 |
+
+**Wat is een "significant incident" onder NIS2?** Incident dat:
+- Een ernstige operationele verstoring kan veroorzaken of financiële verliezen;
+- Gevolgen heeft/kan hebben voor andere natuurlijke of rechtspersonen door aanzienlijke materiële of immateriële schade.
 
 ### 5.3 Politie
 
-Bij vermoeden van strafbare feiten (hacken, afpersing, fraude):
+Bij vermoeden van strafbare feiten (hacken, afpersing/ransomware, fraude, sabotage):
 - Aangifte in overleg met directie en juridisch adviseur
+- Bewijsmateriaal bewaren volgens forensische procedure (A.5.28) — geen systemen wipen zonder eerst forensische image
+- NL: Landelijke Meldpunt Internetoplichting (LMIO) / Politie-cybercrime unit
+- BE: Federal Computer Crime Unit (FCCU) — https://www.police.be
 
 ## 6. Incidentregister
 
@@ -144,16 +214,20 @@ Bij vermoeden van strafbare feiten (hacken, afpersing, fraude):
 
 ## 7. Contactlijst
 
-| Rol | Naam | Telefoon | E-mail |
+| Rol | Naam | Telefoon | E-mail / URL |
 |---|---|---|---|
 | CISO | [Naam] | [Nummer] | [E-mail] |
 | IT-beheer (primair) | [Naam] | [Nummer] | [E-mail] |
 | IT-beheer (backup) | [Naam] | [Nummer] | [E-mail] |
 | Directie | [Naam] | [Nummer] | [E-mail] |
-| Autoriteit Persoonsgegevens | — | 070-8888 500 | — |
-| NCSC | — | 070-751 55 55 | cert@ncsc.nl |
-| Politie | — | 0900-8844 | — |
 | Externe forensisch partner | [Naam bedrijf] | [Nummer] | [E-mail] |
+| **Nederland — AP** (AVG-datalek) | — | 070-8888 500 | autoriteitpersoonsgegevens.nl |
+| **Nederland — NCSC** (NIS2-CSIRT) | — | 070-751 55 55 | cert@ncsc.nl |
+| **Nederland — RDI** (NIS2-toezichthouder) | — | 070-314 90 00 | rdi.nl |
+| **Nederland — Politie** (cybercrime) | — | 0900-8844 | — |
+| **België — GBA** (AVG-datalek) | — | +32 2 274 48 00 | gegevensbeschermingsautoriteit.be |
+| **België — CCB** (NIS2-CSIRT + toezicht) | — | — | atwork.ccb.belgium.be |
+| **België — FCCU** (cybercrime) | — | 101 | police.be |
 
 ## 8. Testen
 
