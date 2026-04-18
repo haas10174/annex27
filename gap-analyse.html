@@ -1711,10 +1711,9 @@ const questions = [
   { phase:'overig', cat:'org', sector:'overig', catLabel:'MKB — Data-classificatie', q:'Is alle bedrijfsdata geclassificeerd (publiek / intern / vertrouwelijk / geheim) met bijbehorende regels?', weight:3, controls:['A.5.12','A.5.13','A.8.12'], hint:'Denk aan: classificatie-beleid, labels op documenten, DLP-regels per classificatie-niveau.' },
 ];
 
-// CMMI-5-punts maturity-rubric
+// 4-punts maturity-rubric (zonder ad-hoc)
 const options = [
   { score: 0, label: 'Niet aanwezig',    desc: 'Geen actie of documentatie aanwezig.' },
-  { score: 1, label: 'Ad-hoc',           desc: 'Informeel aanwezig, niet vastgelegd in een document of proces.' },
   { score: 2, label: 'Gedocumenteerd',   desc: 'Vastgelegd in beleid of procedure, maar nog niet consistent uitgevoerd.' },
   { score: 3, label: 'Geïmplementeerd',  desc: 'Gedocumenteerd én consistent gevolgd in de praktijk.' },
   { score: 4, label: 'Gemeten',          desc: 'Geïmplementeerd, gemeten met KPI\u2019s, en continu verbeterd.' },
@@ -1775,24 +1774,14 @@ function renderQuestion() {
   c.offsetHeight;
   c.style.animation = 'fadeIn 0.3s ease';
 
-  const controlsBadge = (q.controls || []).map(ctl => `<span class="q-ctl-badge">${ctl}</span>`).join('');
-  const weightBadge = q.weight >= 3
-    ? '<span class="q-weight q-weight-high" title="Kritiek voor certificering">Kritiek</span>'
-    : q.weight === 2
-      ? '<span class="q-weight q-weight-mid" title="Standaard belang">Standaard</span>'
-      : '<span class="q-weight q-weight-low" title="Informatief">Info</span>';
   const subtext = q.subtext ? `<div class="q-subtext">${q.subtext}</div>` : '';
-  const hint = q.hint ? `<div class="q-hint"><span class="q-hint-icon">\uD83D\uDCA1</span><span>${q.hint}</span></div>` : '';
 
   let html = `
     <div class="q-meta-row">
       <div class="q-category">${q.catLabel}</div>
-      ${weightBadge}
     </div>
     <div class="q-text">${q.q}</div>
     ${subtext}
-    <div class="q-controls-row">${controlsBadge}</div>
-    ${hint}
     <div class="q-options">
   `;
   options.forEach((opt, i) => {
