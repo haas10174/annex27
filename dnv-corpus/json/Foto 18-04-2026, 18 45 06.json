@@ -1,0 +1,19 @@
+{
+  "pagina": "3",
+  "type": "content",
+  "hoofdstuk": "Onderwerpen die we samen zullen behandelen",
+  "transcriptie": "Onderwerpen die we samen zullen behandelen\n\n• Wat is de basis voor het definiëren van het toepassingsgebied en de grenzen van het ISMS voor een organisatie?\n• Hoe bepaal we het ISMS-beleid?\n• Wat moet de aanpak zijn voor de risicobeoordering van informatiebeveiliging en hoe moet het risico worden behandeld?\n• Wat is de informatie-uitwisseling en hoe meer het risico worden behandeld?\n\nTraining Auditor / Lead Auditor\nInformatiebeveiligingsmanagementsystemen\nGestoeld op de ISO/IEC 27001:2022 norm\nModule 5: Risicomanagement\n\n[DIAGRAM: Een netwerkdiagram met onderling verbonden knooppunten in verschillende kleuren (oranje/rood, blauw, geel, groen). De knooppunten zijn weergegeven als 3D-objecten (blokjes, bollen, hexagonen) verbonden door lijnen die een complex netwerk vormen, representatief voor een informatiebeveiligingsmanagementsysteem of risicostructuur.]",
+  "kernconcepten": [
+    "ISMS toepassingsgebied",
+    "ISMS grenzen",
+    "ISMS-beleid",
+    "risicobeoordering",
+    "informatiebeveiliging",
+    "risicobehandeling",
+    "ISO/IEC 27001:2022",
+    "risicomanagement"
+  ],
+  "_source": "Foto 18-04-2026, 18 45 06.jpg",
+  "_input_tokens": 1897,
+  "_output_tokens": 430
+}

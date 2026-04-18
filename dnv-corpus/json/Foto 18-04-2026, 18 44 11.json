@@ -1,0 +1,16 @@
+{
+  "pagina": "20 en 21",
+  "type": "content",
+  "hoofdstuk": "Informatiebeveiliging en Cyber Security",
+  "transcriptie": "Informatiebeveiliging (2/2)\n\nInformatiebeveiliging\nBehoud van vertrouwelijkheid, integriteit en beschikbaarheid van informatie\nISO 27000:2018, paragraaf 3.28\n\nAanvullende aspecten die vaak in overwegingen worden genomen voor informatiebeveiliging:\n- Authenticiteit\n- Niet-vervalslng\n- Verantwoording\n- Betrouwbaarheid\n- Berouwbaarheid\n\nCyber Security\n\nCyber Security\nBehoud van vertrouwelijkheid, integriteit en beschikbaarheid van informatie in cyberspace.\nISO 27032:2012, paragraaf 4.20\n\nCyberspace is De virtuele wereld van computernnetwerken en het Internet",
+  "kernconcepten": [
+    "Informatiebeveiliging driehoek: vertrouwelijkheid, integriteit, beschikbaarheid",
+    "ISO 27000:2018 definitie",
+    "Aanvullende aspecten: authenticiteit, niet-vervalslng, verantwoording, betrouwbaarheid, berouwbaarheid",
+    "Cyber Security definitie ISO 27032:2012",
+    "Cyberspace als virtuele wereld"
+  ],
+  "_source": "Foto 18-04-2026, 18 44 11.jpg",
+  "_input_tokens": 1897,
+  "_output_tokens": 406
+}

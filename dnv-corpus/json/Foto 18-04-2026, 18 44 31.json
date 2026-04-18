@@ -1,0 +1,25 @@
+{
+  "pagina": "35 en 36",
+  "type": "diagram",
+  "hoofdstuk": "Harmonized Structure: Raamwerk",
+  "transcriptie": "Deze pagina's tonen twee diagrammen die de structuur van ISO 27001:2022 visualiseren.\n\nLinker pagina (35) - Harmonized Structure: Raamwerk\nDit diagram toont de hoofdstructuur met vijf kolommen van beneden naar boven:\n\n1. Planning - met onderdelen: 6.1 Maatregelen om risico's te beperken en mogelijkheden te benutten, 6.2 Doelstellingen van de planning om ze te bereiken, 6.3 Planning veranderingen\n\n2. Ondersteuning - met onderdelen: 7.1 Middelen, 7.2 Competentie, 7.3 Bewustzijn, 7.4 Communicatie, 7.5 Gedocumenteerde informatie\n\n3. Uitvoering - met onderdelen: 8 Uitvoering\n\n4. Evaluatie van de prestaties - met onderdelen: 9.1 Monitoren, meten analyseren en evalueren, 9.2 Interne audit, 9.3 Directiebeoordeling\n\n5. Verbetering - met onderdelen: 10.1 Continue verbetering, 10.2 Afwijkingen en corrigerende maatregelen\n\nAlle kolommen zijn verbonden met horizontale lijnen.\n\nRechter pagina (36) - Context van de organisatie 4.1\nDit is een cyclisch diagram dat de PDCA-cyclus (Plan-Do-Check-Act) toont binnen het managementsysteem:\n\nBovenaan: Resultaten van het managementsysteem (4.1)\n\nLinks: Behoeften en verwachtingen van belanghebbenden (4.2)\n\nHet centrale diagram toont vier hoofdfasen in een cirkel:\n- Planning (H-8) met Plan\n- Ondersteuning en uitvoering (H+8) met Do\n- Leiderschap (H-5) met Act\n- Evaluatie van de prestaties (H-9) met Check\n- Verbetering (H-10)\n\nAlle fasen zijn met pijlen verbonden die de cyclische flow aangeven. De pijlen wijzen op de continue verbetering en interactie tussen de fasen.\n\nOnderaan: Behoeften en verwachtingen van belanghebbenden (4.2)",
+  "kernconcepten": [
+    "Harmonized Structure",
+    "PDCA-cyclus",
+    "Plan-Do-Check-Act",
+    "Planning",
+    "Ondersteuning",
+    "Uitvoering",
+    "Evaluatie van prestaties",
+    "Verbetering",
+    "Context van de organisatie",
+    "Belanghebbenden",
+    "Managementsysteem",
+    "Continue verbetering",
+    "Leiderschap",
+    "ISO 27001:2022 structuur"
+  ],
+  "_source": "Foto 18-04-2026, 18 44 31.jpg",
+  "_input_tokens": 1897,
+  "_output_tokens": 777
+}

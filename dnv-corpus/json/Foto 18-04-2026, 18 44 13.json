@@ -1,0 +1,21 @@
+{
+  "pagina": "22 en 24",
+  "type": "content",
+  "hoofdstuk": "Data Privacy en Informatiebeveiliging, Cybersecurity & Privacy",
+  "transcriptie": "Data Privacy\n\nPersoonslink Identificeerbare Informatie (PII)\nPersoonslink identificeerbare informatie (PII) zijn gegevens die, al dan niet in combinatie met andere informatie, de identificatie mogelijk maken van een persoon op wie de informatie betrekking heeft, of bij directe of indirecte aaneen een PII-hulpbijel is of kan worden gekoppeld. ISO 29100\n\nPrivacy van gegevens\nPrivacy van gegevens is het geheel van technologische en organisatorische maatregelen die de opslag van persoonsgegevens en organisatorische methoden om georganiseerde codetoegang openbaarmaking, wijziging en vernietiging.\n\nEisen inzake privacybescherming\nReeks versterken waaraan een organisatie, Rekening moet houden bij de verwerking van persoonlijk identificeerbare informatie (PII) met betrekking tot de privacybescherming van PII.\n\nISO 29100\n\n\nInformatiebeveiliging, Cybersecurity & Privacy\n\n[DIAGRAM: Een concentrisch cirkeldiagram met drie lagen:\n- Binnenste cirkel (rood): Privacy Protection\n- Middelste ring (wit): Cybersecurity\n- Buitenste ring (blauw): Informatiebeveiliging]\n\n02 Module 1\n© DNV Business Assurance B.V.",
+  "kernconcepten": [
+    "PII (Persoonlijk Identificeerbare Informatie)",
+    "Data Privacy",
+    "Privacy van gegevens",
+    "Privacybescherming",
+    "ISO 29100",
+    "ISO 29100",
+    "Informatiebeveiliging",
+    "Cybersecurity",
+    "Privacy Protection",
+    "Concentrische beveiligingslagen"
+  ],
+  "_source": "Foto 18-04-2026, 18 44 13.jpg",
+  "_input_tokens": 1897,
+  "_output_tokens": 517
+}
