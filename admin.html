@@ -1908,27 +1908,56 @@ async function exportJournalCsv() {
 })();
 
 // ── VIEW SWITCHER ──
+function activateView(target) {
+  document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+  const btn = document.querySelector('.view-btn[data-view="' + target + '"]');
+  if (btn) btn.classList.add('active');
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  const view = document.getElementById('view' + target.charAt(0).toUpperCase() + target.slice(1));
+  if (view) view.classList.add('active');
+  // Toon klant-filters + klantenlijst alleen bij Klanten view
+  const clientOnly = (target === 'clients');
+  const cf = document.querySelector('.client-filters'); if (cf) cf.style.display = clientOnly ? 'flex' : 'none';
+  const cl = document.getElementById('clientList'); if (cl) cl.style.display = clientOnly ? '' : 'none';
+  if (target === 'overview') loadOverview();
+  if (target === 'inbox') loadInbox();
+  if (target === 'orders') loadOrders();
+  if (target === 'leads') loadLeads();
+  if (target === 'mail') loadMail();
+  if (target === 'facturen') loadInvoicesAdmin();
+  if (target === 'settings') loadSettings();
+}
+
+function navigateView(target, push) {
+  activateView(target);
+  if (push !== false) {
+    const url = location.pathname + '#' + target;
+    history.pushState({ tab: target }, '', url);
+  }
+}
+
 function bindViewSwitch() {
   document.querySelectorAll('.view-btn').forEach(btn => {
     btn.addEventListener('click', () => {
-      document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
       const target = btn.dataset.view;
-      document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-      document.getElementById('view' + target.charAt(0).toUpperCase() + target.slice(1)).classList.add('active');
-      // Toon klant-filters + klantenlijst alleen bij Klanten view
-      const clientOnly = (target === 'clients');
-      const cf = document.querySelector('.client-filters'); if (cf) cf.style.display = clientOnly ? 'flex' : 'none';
-      const cl = document.getElementById('clientList'); if (cl) cl.style.display = clientOnly ? '' : 'none';
-      if (target === 'overview') loadOverview();
-      if (target === 'inbox') loadInbox();
-      if (target === 'orders') loadOrders();
-      if (target === 'leads') loadLeads();
-      if (target === 'mail') loadMail();
-      if (target === 'facturen') loadInvoicesAdmin();
-      if (target === 'settings') loadSettings();
+      navigateView(target, true);
     });
   });
+  // Browser back/forward → switch tab (en optioneel klant) zonder opnieuw te pushen
+  window.addEventListener('popstate', (e) => {
+    const st = e.state || {};
+    const hash = location.hash.replace('#','');
+    const tab = st.tab || hash.split('/')[0] || 'overview';
+    activateView(tab);
+    if (tab === 'clients' && (st.client || hash.split('/')[1])) {
+      const cid = st.client || hash.split('/')[1];
+      if (typeof selectClient === 'function') selectClient(cid).catch(() => {});
+    }
+  });
+  // Seed history with current tab so first "back" doesn't leave the app
+  const initial = (location.hash.replace('#','')) || 'overview';
+  history.replaceState({ tab: initial }, '', location.pathname + '#' + initial);
+  if (initial !== 'overview') activateView(initial);
 }
 
 // ── LEADS (waitlist + offerte-aanvragen) ──
@@ -2456,11 +2485,10 @@ function renderInbox() {
 }
 
 async function openClientFromInbox(userId) {
-  // Switch to clients view and select
-  document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
-  document.querySelector('.view-btn[data-view="clients"]').classList.add('active');
-  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-  document.getElementById('viewClients').classList.add('active');
+  // Switch to clients view and select (push history so back-button returns)
+  navigateView('clients', true);
+  // Mark current state as client-specific so popstate kan herstellen
+  history.replaceState({ tab: 'clients', client: userId }, '', location.pathname + '#clients/' + userId);
 
   // Also mark client messages as read (best-effort)
   sb.from('messages').update({ is_read: true })
