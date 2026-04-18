@@ -95,9 +95,10 @@ serve(async (req) => {
       });
     } else {
       const siteUrl = Deno.env.get('SITE_URL') || 'https://annex27.nl';
+      // Redirect naar /portal zodat de password-recovery/set-flow start (portal detecteert PASSWORD_RECOVERY event)
       const { data: invited, error: inviteErr } = await supabase.auth.admin.inviteUserByEmail(email, {
         data: { naam, bedrijf },
-        redirectTo: `${siteUrl}/dashboard.html`,
+        redirectTo: `${siteUrl}/portal`,
       });
       if (inviteErr || !invited.user) {
         return new Response(JSON.stringify({ error: 'User-invite mislukt: ' + (inviteErr?.message || 'unknown') }), { status: 500, headers });
