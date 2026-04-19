@@ -4473,8 +4473,8 @@ let pendingAttachments = [];
 // Documenten-catalog (klant-zichtbaar, access-gated op pakket)
 const DOC_CATALOG = {
   basispakket: {
-    label: 'Basispakket — 29 kern-beleidsdocumenten',
-    desc: 'De fundamenten: ISMS-scope, beleid, risicobeoordeling, rollen, toegang, wachtwoorden, incident-response, AVG.',
+    label: 'Basispakket — 31 kern-beleidsdocumenten',
+    desc: 'De fundamenten: ISMS-scope, beleid, risicobeoordeling, rollen, toegang, wachtwoorden, incident-response, AVG (incl. RoPA + DSR-procedure).',
     price_hint: 'Basispakket €699 of hoger',
     required_pakket: ['beleid', 'readiness', 'admin'],
     docs: [
@@ -4506,12 +4506,14 @@ const DOC_CATALOG = {
       { file: '26-non-conformiteit.docx', title: 'Non-conformiteit & corrigerende actie', cat: 'Audit' },
       { file: '27-continue-verbetering.docx', title: 'Continue verbetering', cat: 'Governance' },
       { file: '28-implementatie-roadmap.docx', title: 'Implementatie-roadmap', cat: 'Governance' },
-      { file: '29-dpia-template.docx', title: 'DPIA-template (AVG)', cat: 'Compliance' }
+      { file: '29-dpia-template.docx', title: 'DPIA-template (AVG)', cat: 'Compliance' },
+      { file: '30-ropa-verwerkingsregister.pdf', title: 'Register Verwerkingsactiviteiten (RoPA — AVG Art. 30)', cat: 'Compliance', pdf_only: true },
+      { file: '31-data-subject-rights-procedure.pdf', title: 'Procedure rechten van betrokkenen (AVG Art. 12-22)', cat: 'Compliance', pdf_only: true }
     ]
   },
   premium: {
-    label: 'Premium — 12 aanvullende beleidsdocumenten',
-    desc: 'Diepte: leveranciers, threat intel, cloud, DLP, change mgmt, mobile/remote, backup, netwerk, privacy.',
+    label: 'Premium — 13 aanvullende beleidsdocumenten',
+    desc: 'Diepte: leveranciers (incl. onboarding checklist), threat intel, cloud, DLP, change mgmt, mobile/remote, backup, netwerk, privacy.',
     price_hint: 'Beleidspakket Premium (€1299)',
     required_pakket: ['beleid', 'admin'],
     docs: [
@@ -4526,7 +4528,8 @@ const DOC_CATALOG = {
       { file: '38-backup-recovery.docx', title: 'Backup & recovery', cat: 'Operations' },
       { file: '39-netwerksegmentatie.docx', title: 'Netwerksegmentatie', cat: 'Tech' },
       { file: '40-avg-privacy.docx', title: 'AVG & Privacy', cat: 'Compliance' },
-      { file: '41-crisiscommunicatie.docx', title: 'Crisis-communicatie', cat: 'Operations' }
+      { file: '41-crisiscommunicatie.docx', title: 'Crisis-communicatie', cat: 'Operations' },
+      { file: '35-vendor-onboarding-checklist.pdf', title: 'Leverancier onboarding checklist (A.5.19-22)', cat: 'Supplier', pdf_only: true }
     ]
   },
   werkinstructies: {
@@ -4597,10 +4600,12 @@ async function renderDocumenten() {
                 <div style="font-size:0.72rem;color:var(--text-muted);">${escapeHtml(d.cat)} &middot; ${escapeHtml(d.file)}</div>
               </div>
               ${access
-                ? `<div style="display:flex;gap:6px;">
-                    <button onclick="downloadDoc('${escapeAttr(key)}','${escapeAttr(d.file.replace(/\.docx$/, '.pdf'))}')" title="Lezen / archiveren" style="background:var(--accent);color:#fff;border:none;border-radius:8px;padding:6px 12px;font-size:0.75rem;font-weight:600;cursor:pointer;">PDF</button>
-                    <button onclick="downloadDoc('${escapeAttr(key)}','${escapeAttr(d.file)}')" title="Bewerkbare versie (Word)" style="background:transparent;color:var(--accent);border:1px solid var(--accent);border-radius:8px;padding:5px 11px;font-size:0.75rem;font-weight:600;cursor:pointer;">Word</button>
-                   </div>`
+                ? (d.pdf_only
+                    ? `<button onclick="downloadDoc('${escapeAttr(key)}','${escapeAttr(d.file)}')" title="PDF (alleen lezen)" style="background:var(--accent);color:#fff;border:none;border-radius:8px;padding:6px 14px;font-size:0.75rem;font-weight:600;cursor:pointer;">PDF</button>`
+                    : `<div style="display:flex;gap:6px;">
+                        <button onclick="downloadDoc('${escapeAttr(key)}','${escapeAttr(d.file.replace(/\.docx$/, '.pdf'))}')" title="Lezen / archiveren" style="background:var(--accent);color:#fff;border:none;border-radius:8px;padding:6px 12px;font-size:0.75rem;font-weight:600;cursor:pointer;">PDF</button>
+                        <button onclick="downloadDoc('${escapeAttr(key)}','${escapeAttr(d.file)}')" title="Bewerkbare versie (Word)" style="background:transparent;color:var(--accent);border:1px solid var(--accent);border-radius:8px;padding:5px 11px;font-size:0.75rem;font-weight:600;cursor:pointer;">Word</button>
+                       </div>`)
                 : `<span style="color:#94a3b8;font-size:1.1rem;">\uD83D\uDD12</span>`}
             </div>`).join('')}
         </div>

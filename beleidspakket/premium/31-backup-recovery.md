@@ -59,6 +59,38 @@ Dit beleid waarborgt dat bedrijfskritieke informatie en systemen tijdig kunnen w
 - **2** verschillende opslagmedia of -locaties
 - **1** kopie off-site of in de cloud
 
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 320" width="100%" style="max-width:720px;display:block;margin:16pt auto;">
+  <defs>
+    <marker id="arrBkp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#0D9488"/>
+    </marker>
+  </defs>
+  <rect x="40" y="60" width="160" height="120" rx="12" fill="#0D9488"/>
+  <text x="120" y="88" text-anchor="middle" fill="#FFFFFF" font-family="Inter, Helvetica, Arial" font-size="13" font-weight="700">PRODUCTIE</text>
+  <text x="120" y="110" text-anchor="middle" fill="#CCFBF1" font-family="Inter, Helvetica, Arial" font-size="11">Live data</text>
+  <text x="120" y="148" text-anchor="middle" fill="#FFFFFF" font-family="Inter, Helvetica, Arial" font-size="28" font-weight="800">1</text>
+  <text x="120" y="170" text-anchor="middle" fill="#CCFBF1" font-family="Inter, Helvetica, Arial" font-size="9">Origineel</text>
+  <line x1="200" y1="120" x2="260" y2="120" stroke="#0D9488" stroke-width="2" marker-end="url(#arrBkp)"/>
+  <rect x="260" y="30" width="180" height="100" rx="12" fill="#FFFFFF" stroke="#0D9488" stroke-width="2"/>
+  <text x="350" y="58" text-anchor="middle" fill="#0F172A" font-family="Inter, Helvetica, Arial" font-size="13" font-weight="700">BACKUP 1</text>
+  <text x="350" y="78" text-anchor="middle" fill="#64748B" font-family="Inter, Helvetica, Arial" font-size="10">Lokaal/on-site</text>
+  <text x="350" y="108" text-anchor="middle" fill="#0D9488" font-family="Inter, Helvetica, Arial" font-size="24" font-weight="800">2</text>
+  <text x="350" y="124" text-anchor="middle" fill="#64748B" font-family="Inter, Helvetica, Arial" font-size="9">Snel herstel</text>
+  <rect x="260" y="140" width="180" height="100" rx="12" fill="#FFFFFF" stroke="#0D9488" stroke-width="2"/>
+  <text x="350" y="168" text-anchor="middle" fill="#0F172A" font-family="Inter, Helvetica, Arial" font-size="13" font-weight="700">BACKUP 2</text>
+  <text x="350" y="188" text-anchor="middle" fill="#64748B" font-family="Inter, Helvetica, Arial" font-size="10">Immutable / air-gap</text>
+  <text x="350" y="218" text-anchor="middle" fill="#0D9488" font-family="Inter, Helvetica, Arial" font-size="24" font-weight="800">3</text>
+  <text x="350" y="234" text-anchor="middle" fill="#64748B" font-family="Inter, Helvetica, Arial" font-size="9">Ransomware-proof</text>
+  <line x1="440" y1="180" x2="500" y2="180" stroke="#0D9488" stroke-width="2" marker-end="url(#arrBkp)"/>
+  <rect x="500" y="120" width="180" height="120" rx="12" fill="#0F172A"/>
+  <text x="590" y="150" text-anchor="middle" fill="#FFFFFF" font-family="Inter, Helvetica, Arial" font-size="13" font-weight="700">OFF-SITE</text>
+  <text x="590" y="170" text-anchor="middle" fill="#CBD5E1" font-family="Inter, Helvetica, Arial" font-size="10">Cloud / andere locatie</text>
+  <text x="590" y="205" text-anchor="middle" fill="#14B8A6" font-family="Inter, Helvetica, Arial" font-size="24" font-weight="800">1</text>
+  <text x="590" y="222" text-anchor="middle" fill="#CBD5E1" font-family="Inter, Helvetica, Arial" font-size="9">Disaster recovery</text>
+  <text x="360" y="288" text-anchor="middle" fill="#0F172A" font-family="Inter, Helvetica, Arial" font-size="15" font-weight="800">3 kopieën · 2 media · 1 off-site</text>
+  <text x="360" y="308" text-anchor="middle" fill="#64748B" font-family="Inter, Helvetica, Arial" font-size="10">Herstel-test minimaal jaarlijks · RTO en RPO gedocumenteerd per systeem</text>
+</svg>
+
 ## 5. Herstelproces
 
 ### 5.1 Herstelprocedure

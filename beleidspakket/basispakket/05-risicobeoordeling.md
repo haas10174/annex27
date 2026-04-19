@@ -54,15 +54,56 @@ Identificatie → Analyse → Evaluatie → Behandeling → Monitoring
 
 ### 2.4 Risicomatrix
 
-| | Impact 1 | Impact 2 | Impact 3 | Impact 4 | Impact 5 |
-|---|---|---|---|---|---|
-| **Waarschijnlijkheid 5** | 5 (M) | 10 (M) | 15 (H) | 20 (H) | 25 (K) |
-| **Waarschijnlijkheid 4** | 4 (L) | 8 (M) | 12 (H) | 16 (H) | 20 (H) |
-| **Waarschijnlijkheid 3** | 3 (L) | 6 (M) | 9 (M) | 12 (H) | 15 (H) |
-| **Waarschijnlijkheid 2** | 2 (L) | 4 (L) | 6 (M) | 8 (M) | 10 (M) |
-| **Waarschijnlijkheid 1** | 1 (L) | 2 (L) | 3 (L) | 4 (L) | 5 (M) |
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480" width="100%" style="max-width:640px;display:block;margin:16pt auto;">
+  <text x="320" y="22" text-anchor="middle" fill="#0F172A" font-family="Inter, Helvetica, Arial" font-size="13" font-weight="700">Risicomatrix: Waarschijnlijkheid × Impact</text>
+  <text x="320" y="470" text-anchor="middle" fill="#64748B" font-family="Inter, Helvetica, Arial" font-size="10">IMPACT →</text>
+  <text x="18" y="240" text-anchor="middle" fill="#64748B" font-family="Inter, Helvetica, Arial" font-size="10" transform="rotate(-90 18 240)">← WAARSCHIJNLIJKHEID</text>
+  <g transform="translate(60, 50)">
+    <text x="0" y="30" fill="#64748B" font-family="Inter, Helvetica, Arial" font-size="10" font-weight="600">5</text>
+    <text x="0" y="110" fill="#64748B" font-family="Inter, Helvetica, Arial" font-size="10" font-weight="600">4</text>
+    <text x="0" y="190" fill="#64748B" font-family="Inter, Helvetica, Arial" font-size="10" font-weight="600">3</text>
+    <text x="0" y="270" fill="#64748B" font-family="Inter, Helvetica, Arial" font-size="10" font-weight="600">2</text>
+    <text x="0" y="350" fill="#64748B" font-family="Inter, Helvetica, Arial" font-size="10" font-weight="600">1</text>
+    <text x="40" y="400" text-anchor="middle" fill="#64748B" font-family="Inter, Helvetica, Arial" font-size="10" font-weight="600">1</text>
+    <text x="124" y="400" text-anchor="middle" fill="#64748B" font-family="Inter, Helvetica, Arial" font-size="10" font-weight="600">2</text>
+    <text x="208" y="400" text-anchor="middle" fill="#64748B" font-family="Inter, Helvetica, Arial" font-size="10" font-weight="600">3</text>
+    <text x="292" y="400" text-anchor="middle" fill="#64748B" font-family="Inter, Helvetica, Arial" font-size="10" font-weight="600">4</text>
+    <text x="376" y="400" text-anchor="middle" fill="#64748B" font-family="Inter, Helvetica, Arial" font-size="10" font-weight="600">5</text>
+    <rect x="16" y="8" width="48" height="48" rx="4" fill="#FEF3C7"/><text x="40" y="38" text-anchor="middle" fill="#78350F" font-family="Inter, Helvetica, Arial" font-size="12" font-weight="700">5 (M)</text>
+    <rect x="100" y="8" width="48" height="48" rx="4" fill="#FEF3C7"/><text x="124" y="38" text-anchor="middle" fill="#78350F" font-family="Inter, Helvetica, Arial" font-size="12" font-weight="700">10 (M)</text>
+    <rect x="184" y="8" width="48" height="48" rx="4" fill="#FED7AA"/><text x="208" y="38" text-anchor="middle" fill="#9A3412" font-family="Inter, Helvetica, Arial" font-size="12" font-weight="700">15 (H)</text>
+    <rect x="268" y="8" width="48" height="48" rx="4" fill="#FED7AA"/><text x="292" y="38" text-anchor="middle" fill="#9A3412" font-family="Inter, Helvetica, Arial" font-size="12" font-weight="700">20 (H)</text>
+    <rect x="352" y="8" width="48" height="48" rx="4" fill="#FECACA"/><text x="376" y="38" text-anchor="middle" fill="#7F1D1D" font-family="Inter, Helvetica, Arial" font-size="12" font-weight="700">25 (K)</text>
+    <rect x="16" y="88" width="48" height="48" rx="4" fill="#D1FAE5"/><text x="40" y="118" text-anchor="middle" fill="#065F46" font-family="Inter, Helvetica, Arial" font-size="12" font-weight="700">4 (L)</text>
+    <rect x="100" y="88" width="48" height="48" rx="4" fill="#FEF3C7"/><text x="124" y="118" text-anchor="middle" fill="#78350F" font-family="Inter, Helvetica, Arial" font-size="12" font-weight="700">8 (M)</text>
+    <rect x="184" y="88" width="48" height="48" rx="4" fill="#FED7AA"/><text x="208" y="118" text-anchor="middle" fill="#9A3412" font-family="Inter, Helvetica, Arial" font-size="12" font-weight="700">12 (H)</text>
+    <rect x="268" y="88" width="48" height="48" rx="4" fill="#FED7AA"/><text x="292" y="118" text-anchor="middle" fill="#9A3412" font-family="Inter, Helvetica, Arial" font-size="12" font-weight="700">16 (H)</text>
+    <rect x="352" y="88" width="48" height="48" rx="4" fill="#FED7AA"/><text x="376" y="118" text-anchor="middle" fill="#9A3412" font-family="Inter, Helvetica, Arial" font-size="12" font-weight="700">20 (H)</text>
+    <rect x="16" y="168" width="48" height="48" rx="4" fill="#D1FAE5"/><text x="40" y="198" text-anchor="middle" fill="#065F46" font-family="Inter, Helvetica, Arial" font-size="12" font-weight="700">3 (L)</text>
+    <rect x="100" y="168" width="48" height="48" rx="4" fill="#FEF3C7"/><text x="124" y="198" text-anchor="middle" fill="#78350F" font-family="Inter, Helvetica, Arial" font-size="12" font-weight="700">6 (M)</text>
+    <rect x="184" y="168" width="48" height="48" rx="4" fill="#FEF3C7"/><text x="208" y="198" text-anchor="middle" fill="#78350F" font-family="Inter, Helvetica, Arial" font-size="12" font-weight="700">9 (M)</text>
+    <rect x="268" y="168" width="48" height="48" rx="4" fill="#FED7AA"/><text x="292" y="198" text-anchor="middle" fill="#9A3412" font-family="Inter, Helvetica, Arial" font-size="12" font-weight="700">12 (H)</text>
+    <rect x="352" y="168" width="48" height="48" rx="4" fill="#FED7AA"/><text x="376" y="198" text-anchor="middle" fill="#9A3412" font-family="Inter, Helvetica, Arial" font-size="12" font-weight="700">15 (H)</text>
+    <rect x="16" y="248" width="48" height="48" rx="4" fill="#D1FAE5"/><text x="40" y="278" text-anchor="middle" fill="#065F46" font-family="Inter, Helvetica, Arial" font-size="12" font-weight="700">2 (L)</text>
+    <rect x="100" y="248" width="48" height="48" rx="4" fill="#D1FAE5"/><text x="124" y="278" text-anchor="middle" fill="#065F46" font-family="Inter, Helvetica, Arial" font-size="12" font-weight="700">4 (L)</text>
+    <rect x="184" y="248" width="48" height="48" rx="4" fill="#FEF3C7"/><text x="208" y="278" text-anchor="middle" fill="#78350F" font-family="Inter, Helvetica, Arial" font-size="12" font-weight="700">6 (M)</text>
+    <rect x="268" y="248" width="48" height="48" rx="4" fill="#FEF3C7"/><text x="292" y="278" text-anchor="middle" fill="#78350F" font-family="Inter, Helvetica, Arial" font-size="12" font-weight="700">8 (M)</text>
+    <rect x="352" y="248" width="48" height="48" rx="4" fill="#FEF3C7"/><text x="376" y="278" text-anchor="middle" fill="#78350F" font-family="Inter, Helvetica, Arial" font-size="12" font-weight="700">10 (M)</text>
+    <rect x="16" y="328" width="48" height="48" rx="4" fill="#D1FAE5"/><text x="40" y="358" text-anchor="middle" fill="#065F46" font-family="Inter, Helvetica, Arial" font-size="12" font-weight="700">1 (L)</text>
+    <rect x="100" y="328" width="48" height="48" rx="4" fill="#D1FAE5"/><text x="124" y="358" text-anchor="middle" fill="#065F46" font-family="Inter, Helvetica, Arial" font-size="12" font-weight="700">2 (L)</text>
+    <rect x="184" y="328" width="48" height="48" rx="4" fill="#D1FAE5"/><text x="208" y="358" text-anchor="middle" fill="#065F46" font-family="Inter, Helvetica, Arial" font-size="12" font-weight="700">3 (L)</text>
+    <rect x="268" y="328" width="48" height="48" rx="4" fill="#D1FAE5"/><text x="292" y="358" text-anchor="middle" fill="#065F46" font-family="Inter, Helvetica, Arial" font-size="12" font-weight="700">4 (L)</text>
+    <rect x="352" y="328" width="48" height="48" rx="4" fill="#FEF3C7"/><text x="376" y="358" text-anchor="middle" fill="#78350F" font-family="Inter, Helvetica, Arial" font-size="12" font-weight="700">5 (M)</text>
+  </g>
+  <g transform="translate(470, 60)">
+    <rect x="0" y="0" width="16" height="16" rx="3" fill="#D1FAE5"/><text x="24" y="12" fill="#065F46" font-family="Inter, Helvetica, Arial" font-size="10" font-weight="600">L — Laag (acceptabel)</text>
+    <rect x="0" y="28" width="16" height="16" rx="3" fill="#FEF3C7"/><text x="24" y="40" fill="#78350F" font-family="Inter, Helvetica, Arial" font-size="10" font-weight="600">M — Midden (overwegen)</text>
+    <rect x="0" y="56" width="16" height="16" rx="3" fill="#FED7AA"/><text x="24" y="68" fill="#9A3412" font-family="Inter, Helvetica, Arial" font-size="10" font-weight="600">H — Hoog (behandeling)</text>
+    <rect x="0" y="84" width="16" height="16" rx="3" fill="#FECACA"/><text x="24" y="96" fill="#7F1D1D" font-family="Inter, Helvetica, Arial" font-size="10" font-weight="600">K — Kritiek (onmiddellijk)</text>
+  </g>
+</svg>
 
-*L = Laag (acceptabel) · M = Midden (behandeling overwegen) · H = Hoog (behandeling vereist) · K = Kritiek (onmiddellijke actie)*
+*Score = Waarschijnlijkheid × Impact · L = 1-4 · M = 5-10 · H = 11-19 · K = 20-25*
 
 ### 2.5 Risicobereidheid (Risk Appetite)
 

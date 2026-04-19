@@ -32,6 +32,68 @@ Het interne auditprogramma:
 
 Alle clausules en relevante Annex A controls worden binnen een cyclus van 12 maanden geauditeerd:
 
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 380" width="100%" style="max-width:760px;display:block;margin:16pt auto;">
+  <text x="380" y="22" text-anchor="middle" fill="#0F172A" font-family="Inter, Helvetica, Arial" font-size="13" font-weight="700">Interne audit-kalender (jaarlijkse cyclus)</text>
+  <line x1="60" y1="50" x2="700" y2="50" stroke="#CBD5E1" stroke-width="1"/>
+  <text x="140" y="42" text-anchor="middle" fill="#0D9488" font-family="Inter, Helvetica, Arial" font-size="12" font-weight="800">Q1</text>
+  <text x="300" y="42" text-anchor="middle" fill="#0D9488" font-family="Inter, Helvetica, Arial" font-size="12" font-weight="800">Q2</text>
+  <text x="460" y="42" text-anchor="middle" fill="#0D9488" font-family="Inter, Helvetica, Arial" font-size="12" font-weight="800">Q3</text>
+  <text x="620" y="42" text-anchor="middle" fill="#0D9488" font-family="Inter, Helvetica, Arial" font-size="12" font-weight="800">Q4</text>
+  <line x1="60" y1="45" x2="60" y2="55" stroke="#CBD5E1" stroke-width="1"/>
+  <line x1="220" y1="45" x2="220" y2="55" stroke="#CBD5E1" stroke-width="1"/>
+  <line x1="380" y1="45" x2="380" y2="55" stroke="#CBD5E1" stroke-width="1"/>
+  <line x1="540" y1="45" x2="540" y2="55" stroke="#CBD5E1" stroke-width="1"/>
+  <line x1="700" y1="45" x2="700" y2="55" stroke="#CBD5E1" stroke-width="1"/>
+  <rect x="70" y="70" width="140" height="54" rx="8" fill="#0F172A"/>
+  <text x="140" y="90" text-anchor="middle" fill="#FFFFFF" font-family="Inter, Helvetica, Arial" font-size="11" font-weight="700">ISMS Governance</text>
+  <text x="140" y="106" text-anchor="middle" fill="#CBD5E1" font-family="Inter, Helvetica, Arial" font-size="9">Cl. 4 · 5 · 7.5</text>
+  <text x="140" y="118" text-anchor="middle" fill="#14B8A6" font-family="Inter, Helvetica, Arial" font-size="8" font-weight="600">Scope · beleid · docs</text>
+  <rect x="70" y="134" width="140" height="54" rx="8" fill="#0F172A"/>
+  <text x="140" y="154" text-anchor="middle" fill="#FFFFFF" font-family="Inter, Helvetica, Arial" font-size="11" font-weight="700">Risicomanagement</text>
+  <text x="140" y="170" text-anchor="middle" fill="#CBD5E1" font-family="Inter, Helvetica, Arial" font-size="9">Cl. 6.1 · 8.2 · 8.3</text>
+  <text x="140" y="182" text-anchor="middle" fill="#14B8A6" font-family="Inter, Helvetica, Arial" font-size="8" font-weight="600">Risicobeoordeling</text>
+  <rect x="230" y="70" width="140" height="54" rx="8" fill="#0D9488"/>
+  <text x="300" y="90" text-anchor="middle" fill="#FFFFFF" font-family="Inter, Helvetica, Arial" font-size="11" font-weight="700">Personeel</text>
+  <text x="300" y="106" text-anchor="middle" fill="#CCFBF1" font-family="Inter, Helvetica, Arial" font-size="9">A.6.1–8</text>
+  <text x="300" y="118" text-anchor="middle" fill="#E6FFFB" font-family="Inter, Helvetica, Arial" font-size="8" font-weight="600">Training · NDA's</text>
+  <rect x="230" y="134" width="140" height="54" rx="8" fill="#0D9488"/>
+  <text x="300" y="154" text-anchor="middle" fill="#FFFFFF" font-family="Inter, Helvetica, Arial" font-size="11" font-weight="700">Toegang &amp; Auth</text>
+  <text x="300" y="170" text-anchor="middle" fill="#CCFBF1" font-family="Inter, Helvetica, Arial" font-size="9">A.5.15–18 · 8.2–5</text>
+  <text x="300" y="182" text-anchor="middle" fill="#E6FFFB" font-family="Inter, Helvetica, Arial" font-size="8" font-weight="600">MFA · least priv.</text>
+  <rect x="390" y="70" width="140" height="54" rx="8" fill="#D97706"/>
+  <text x="460" y="90" text-anchor="middle" fill="#FFFFFF" font-family="Inter, Helvetica, Arial" font-size="11" font-weight="700">Technische maatr.</text>
+  <text x="460" y="106" text-anchor="middle" fill="#FEF3C7" font-family="Inter, Helvetica, Arial" font-size="9">A.8.8 · 15 · 16 · 24</text>
+  <text x="460" y="118" text-anchor="middle" fill="#FEF3C7" font-family="Inter, Helvetica, Arial" font-size="8" font-weight="600">Patch · logs · crypto</text>
+  <rect x="390" y="134" width="140" height="54" rx="8" fill="#D97706"/>
+  <text x="460" y="154" text-anchor="middle" fill="#FFFFFF" font-family="Inter, Helvetica, Arial" font-size="11" font-weight="700">Incident &amp; BCM</text>
+  <text x="460" y="170" text-anchor="middle" fill="#FEF3C7" font-family="Inter, Helvetica, Arial" font-size="9">A.5.24–30</text>
+  <text x="460" y="182" text-anchor="middle" fill="#FEF3C7" font-family="Inter, Helvetica, Arial" font-size="8" font-weight="600">IRP · BCP · DR-test</text>
+  <rect x="550" y="70" width="140" height="54" rx="8" fill="#0F172A"/>
+  <text x="620" y="90" text-anchor="middle" fill="#FFFFFF" font-family="Inter, Helvetica, Arial" font-size="11" font-weight="700">Fysiek &amp; class.</text>
+  <text x="620" y="106" text-anchor="middle" fill="#CBD5E1" font-family="Inter, Helvetica, Arial" font-size="9">A.7.1–7 · 5.12–13</text>
+  <text x="620" y="118" text-anchor="middle" fill="#14B8A6" font-family="Inter, Helvetica, Arial" font-size="8" font-weight="600">Kantoor · labels</text>
+  <rect x="550" y="134" width="140" height="54" rx="8" fill="#0F172A"/>
+  <text x="620" y="154" text-anchor="middle" fill="#FFFFFF" font-family="Inter, Helvetica, Arial" font-size="11" font-weight="700">Review &amp; verbet.</text>
+  <text x="620" y="170" text-anchor="middle" fill="#CBD5E1" font-family="Inter, Helvetica, Arial" font-size="9">Cl. 9.1 · 9.3 · 10</text>
+  <text x="620" y="182" text-anchor="middle" fill="#14B8A6" font-family="Inter, Helvetica, Arial" font-size="8" font-weight="600">KPI · CAPA</text>
+  <g transform="translate(60, 230)">
+    <rect x="0" y="0" width="20" height="16" rx="3" fill="#0F172A"/>
+    <text x="28" y="12" fill="#0F172A" font-family="Inter, Helvetica, Arial" font-size="10" font-weight="600">Governance-vlak (Q1+Q4)</text>
+    <rect x="220" y="0" width="20" height="16" rx="3" fill="#0D9488"/>
+    <text x="248" y="12" fill="#0F172A" font-family="Inter, Helvetica, Arial" font-size="10" font-weight="600">People &amp; Access (Q2)</text>
+    <rect x="420" y="0" width="20" height="16" rx="3" fill="#D97706"/>
+    <text x="448" y="12" fill="#0F172A" font-family="Inter, Helvetica, Arial" font-size="10" font-weight="600">Operationeel (Q3)</text>
+  </g>
+  <g transform="translate(60, 275)">
+    <text x="0" y="0" fill="#0F172A" font-family="Inter, Helvetica, Arial" font-size="11" font-weight="700">Aanvullende audits (ongepland)</text>
+    <text x="0" y="22" fill="#64748B" font-family="Inter, Helvetica, Arial" font-size="10">→ Na ernstige incidenten · significant wijzigingen · klachten · vóór externe certificeringsaudit</text>
+  </g>
+  <g transform="translate(60, 320)">
+    <circle cx="8" cy="8" r="6" fill="#10B981"/>
+    <text x="24" y="12" fill="#0F172A" font-family="Inter, Helvetica, Arial" font-size="10" font-weight="600">Doorlooptijd audit: 3–5 werkdagen · Rapportage binnen 2 weken · Voortgang in management review</text>
+  </g>
+</svg>
+
 | Periode | Auditonderwerp | Clausules / Controls | Auditor |
 |---|---|---|---|
 | Q1 | ISMS Governance & Documentatie | Clause 4, 5, 7.5 | [Naam] |

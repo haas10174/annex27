@@ -20,6 +20,83 @@ Dit document biedt een concrete, gefaseerde aanpak om [Organisatienaam] binnen 6
 
 ## 2. Overzicht fasering
 
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 320" width="100%" style="max-width:820px;display:block;margin:16pt auto;">
+  <text x="410" y="22" text-anchor="middle" fill="#0F172A" font-family="Inter, Helvetica, Arial" font-size="13" font-weight="700">6-maanden implementatie-roadmap naar ISO 27001-certificering</text>
+  <line x1="60" y1="80" x2="780" y2="80" stroke="#CBD5E1" stroke-width="2"/>
+  <circle cx="110" cy="80" r="10" fill="#0F172A"/>
+  <text x="110" y="85" text-anchor="middle" fill="#FFFFFF" font-family="Inter, Helvetica, Arial" font-size="10" font-weight="700">1</text>
+  <circle cx="230" cy="80" r="10" fill="#0D9488"/>
+  <text x="230" y="85" text-anchor="middle" fill="#FFFFFF" font-family="Inter, Helvetica, Arial" font-size="10" font-weight="700">2</text>
+  <circle cx="350" cy="80" r="10" fill="#0D9488"/>
+  <text x="350" y="85" text-anchor="middle" fill="#FFFFFF" font-family="Inter, Helvetica, Arial" font-size="10" font-weight="700">3</text>
+  <circle cx="470" cy="80" r="10" fill="#D97706"/>
+  <text x="470" y="85" text-anchor="middle" fill="#FFFFFF" font-family="Inter, Helvetica, Arial" font-size="10" font-weight="700">4</text>
+  <circle cx="590" cy="80" r="10" fill="#D97706"/>
+  <text x="590" y="85" text-anchor="middle" fill="#FFFFFF" font-family="Inter, Helvetica, Arial" font-size="10" font-weight="700">5</text>
+  <circle cx="710" cy="80" r="10" fill="#10B981"/>
+  <text x="710" y="85" text-anchor="middle" fill="#FFFFFF" font-family="Inter, Helvetica, Arial" font-size="10" font-weight="700">6</text>
+  <text x="110" y="55" text-anchor="middle" fill="#64748B" font-family="Inter, Helvetica, Arial" font-size="10" font-weight="600">Maand 1</text>
+  <text x="230" y="55" text-anchor="middle" fill="#64748B" font-family="Inter, Helvetica, Arial" font-size="10" font-weight="600">Maand 2</text>
+  <text x="350" y="55" text-anchor="middle" fill="#64748B" font-family="Inter, Helvetica, Arial" font-size="10" font-weight="600">Maand 3</text>
+  <text x="470" y="55" text-anchor="middle" fill="#64748B" font-family="Inter, Helvetica, Arial" font-size="10" font-weight="600">Maand 4</text>
+  <text x="590" y="55" text-anchor="middle" fill="#64748B" font-family="Inter, Helvetica, Arial" font-size="10" font-weight="600">Maand 5</text>
+  <text x="710" y="55" text-anchor="middle" fill="#64748B" font-family="Inter, Helvetica, Arial" font-size="10" font-weight="600">Maand 6</text>
+  <g transform="translate(40, 110)">
+    <rect x="0" y="0" width="140" height="80" rx="10" fill="#F1F5F9" stroke="#0F172A" stroke-width="1.5"/>
+    <text x="70" y="22" text-anchor="middle" fill="#0F172A" font-family="Inter, Helvetica, Arial" font-size="11" font-weight="700">Fundament &amp; Governance</text>
+    <text x="70" y="42" text-anchor="middle" fill="#64748B" font-family="Inter, Helvetica, Arial" font-size="9">ISMS-scope · beleid</text>
+    <text x="70" y="58" text-anchor="middle" fill="#64748B" font-family="Inter, Helvetica, Arial" font-size="9">rollen · context</text>
+    <text x="70" y="74" text-anchor="middle" fill="#0F172A" font-family="Inter, Helvetica, Arial" font-size="8" font-weight="700">↓ Beleidsdoc. goedgekeurd</text>
+  </g>
+  <g transform="translate(160, 110)">
+    <rect x="0" y="0" width="140" height="80" rx="10" fill="#F1F5F9" stroke="#0D9488" stroke-width="1.5"/>
+    <text x="70" y="22" text-anchor="middle" fill="#0F172A" font-family="Inter, Helvetica, Arial" font-size="11" font-weight="700">Risicomanagement</text>
+    <text x="70" y="42" text-anchor="middle" fill="#64748B" font-family="Inter, Helvetica, Arial" font-size="9">Risicobeoordeling</text>
+    <text x="70" y="58" text-anchor="middle" fill="#64748B" font-family="Inter, Helvetica, Arial" font-size="9">SoA · behandelplan</text>
+    <text x="70" y="74" text-anchor="middle" fill="#0D9488" font-family="Inter, Helvetica, Arial" font-size="8" font-weight="700">↓ SoA vastgesteld</text>
+  </g>
+  <g transform="translate(280, 110)">
+    <rect x="0" y="0" width="140" height="80" rx="10" fill="#F1F5F9" stroke="#0D9488" stroke-width="1.5"/>
+    <text x="70" y="22" text-anchor="middle" fill="#0F172A" font-family="Inter, Helvetica, Arial" font-size="11" font-weight="700">Beleid &amp; Procedures</text>
+    <text x="70" y="42" text-anchor="middle" fill="#64748B" font-family="Inter, Helvetica, Arial" font-size="9">45 documenten</text>
+    <text x="70" y="58" text-anchor="middle" fill="#64748B" font-family="Inter, Helvetica, Arial" font-size="9">procedures · werkinstructies</text>
+    <text x="70" y="74" text-anchor="middle" fill="#0D9488" font-family="Inter, Helvetica, Arial" font-size="8" font-weight="700">↓ Documenten live</text>
+  </g>
+  <g transform="translate(400, 110)">
+    <rect x="0" y="0" width="140" height="80" rx="10" fill="#FEF3C7" stroke="#D97706" stroke-width="1.5"/>
+    <text x="70" y="22" text-anchor="middle" fill="#0F172A" font-family="Inter, Helvetica, Arial" font-size="11" font-weight="700">Implementatie</text>
+    <text x="70" y="42" text-anchor="middle" fill="#78350F" font-family="Inter, Helvetica, Arial" font-size="9">MFA · logging · access</text>
+    <text x="70" y="58" text-anchor="middle" fill="#78350F" font-family="Inter, Helvetica, Arial" font-size="9">patch · backup · encryptie</text>
+    <text x="70" y="74" text-anchor="middle" fill="#D97706" font-family="Inter, Helvetica, Arial" font-size="8" font-weight="700">↓ Technisch operationeel</text>
+  </g>
+  <g transform="translate(520, 110)">
+    <rect x="0" y="0" width="140" height="80" rx="10" fill="#FEF3C7" stroke="#D97706" stroke-width="1.5"/>
+    <text x="70" y="22" text-anchor="middle" fill="#0F172A" font-family="Inter, Helvetica, Arial" font-size="11" font-weight="700">Bewustwording &amp; Testen</text>
+    <text x="70" y="42" text-anchor="middle" fill="#78350F" font-family="Inter, Helvetica, Arial" font-size="9">awareness-training</text>
+    <text x="70" y="58" text-anchor="middle" fill="#78350F" font-family="Inter, Helvetica, Arial" font-size="9">BCP-test · interne audit</text>
+    <text x="70" y="74" text-anchor="middle" fill="#D97706" font-family="Inter, Helvetica, Arial" font-size="8" font-weight="700">↓ Audit-rapport</text>
+  </g>
+  <g transform="translate(640, 110)">
+    <rect x="0" y="0" width="140" height="80" rx="10" fill="#ECFDF5" stroke="#10B981" stroke-width="1.5"/>
+    <text x="70" y="22" text-anchor="middle" fill="#0F172A" font-family="Inter, Helvetica, Arial" font-size="11" font-weight="700">Audit-readiness</text>
+    <text x="70" y="42" text-anchor="middle" fill="#065F46" font-family="Inter, Helvetica, Arial" font-size="9">management review</text>
+    <text x="70" y="58" text-anchor="middle" fill="#065F46" font-family="Inter, Helvetica, Arial" font-size="9">CAPA · pre-audit</text>
+    <text x="70" y="74" text-anchor="middle" fill="#10B981" font-family="Inter, Helvetica, Arial" font-size="8" font-weight="700">✓ Certificeringsklaar</text>
+  </g>
+  <g transform="translate(40, 230)">
+    <rect x="0" y="0" width="12" height="12" rx="2" fill="#0F172A"/>
+    <text x="20" y="10" fill="#0F172A" font-family="Inter, Helvetica, Arial" font-size="10">Governance</text>
+    <rect x="110" y="0" width="12" height="12" rx="2" fill="#0D9488"/>
+    <text x="130" y="10" fill="#0F172A" font-family="Inter, Helvetica, Arial" font-size="10">Content-werk (docs)</text>
+    <rect x="250" y="0" width="12" height="12" rx="2" fill="#D97706"/>
+    <text x="270" y="10" fill="#0F172A" font-family="Inter, Helvetica, Arial" font-size="10">Uitvoering / test</text>
+    <rect x="380" y="0" width="12" height="12" rx="2" fill="#10B981"/>
+    <text x="400" y="10" fill="#0F172A" font-family="Inter, Helvetica, Arial" font-size="10">Audit-ready</text>
+  </g>
+  <text x="410" y="280" text-anchor="middle" fill="#64748B" font-family="Inter, Helvetica, Arial" font-size="10">Gemiddelde doorlooptijd: 4–6 maanden voor MKB (25–50 fte) · Sneller bij bestaande volwassenheid</text>
+  <text x="410" y="300" text-anchor="middle" fill="#64748B" font-family="Inter, Helvetica, Arial" font-size="10">Mijlpalen worden gedocumenteerd in CAPA-register + management review (ISMS-022)</text>
+</svg>
+
 | Fase | Maand | Focus | Resultaat |
 |---|---|---|---|
 | 1 | Maand 1 | Fundament & Governance | ISMS-scope, beleid, rollen, context vastgelegd |

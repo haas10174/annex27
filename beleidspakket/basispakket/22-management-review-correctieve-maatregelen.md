@@ -109,6 +109,66 @@ Deze procedure beschrijft hoe [Organisatienaam] non-conformiteiten identificeert
 
 ## 8. Correctief actieproces
 
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 360" width="100%" style="max-width:800px;display:block;margin:16pt auto;">
+  <defs>
+    <marker id="arrCapa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#94A3B8"/>
+    </marker>
+  </defs>
+  <g transform="translate(30, 80)">
+    <circle cx="50" cy="50" r="46" fill="#0F172A"/>
+    <text x="50" y="44" text-anchor="middle" fill="#FFFFFF" font-family="Inter, Helvetica, Arial" font-size="11" font-weight="700">1</text>
+    <text x="50" y="62" text-anchor="middle" fill="#FFFFFF" font-family="Inter, Helvetica, Arial" font-size="10" font-weight="700">Identificatie</text>
+    <text x="50" y="120" text-anchor="middle" fill="#64748B" font-family="Inter, Helvetica, Arial" font-size="9">Melder · CAPA-register</text>
+    <line x1="96" y1="50" x2="130" y2="50" stroke="#94A3B8" stroke-width="1.5" marker-end="url(#arrCapa)"/>
+  </g>
+  <g transform="translate(130, 80)">
+    <circle cx="50" cy="50" r="46" fill="#DC2626"/>
+    <text x="50" y="44" text-anchor="middle" fill="#FFFFFF" font-family="Inter, Helvetica, Arial" font-size="11" font-weight="700">2</text>
+    <text x="50" y="62" text-anchor="middle" fill="#FFFFFF" font-family="Inter, Helvetica, Arial" font-size="10" font-weight="700">Directe correctie</text>
+    <text x="50" y="120" text-anchor="middle" fill="#64748B" font-family="Inter, Helvetica, Arial" font-size="9">Proceseigenaar · NU</text>
+    <line x1="96" y1="50" x2="130" y2="50" stroke="#94A3B8" stroke-width="1.5" marker-end="url(#arrCapa)"/>
+  </g>
+  <g transform="translate(230, 80)">
+    <circle cx="50" cy="50" r="46" fill="#D97706"/>
+    <text x="50" y="44" text-anchor="middle" fill="#FFFFFF" font-family="Inter, Helvetica, Arial" font-size="11" font-weight="700">3</text>
+    <text x="50" y="62" text-anchor="middle" fill="#FFFFFF" font-family="Inter, Helvetica, Arial" font-size="10" font-weight="700">Oorzaakanalyse</text>
+    <text x="50" y="120" text-anchor="middle" fill="#64748B" font-family="Inter, Helvetica, Arial" font-size="9">CISO · 5x Waarom</text>
+    <line x1="96" y1="50" x2="130" y2="50" stroke="#94A3B8" stroke-width="1.5" marker-end="url(#arrCapa)"/>
+  </g>
+  <g transform="translate(330, 80)">
+    <circle cx="50" cy="50" r="46" fill="#0D9488"/>
+    <text x="50" y="44" text-anchor="middle" fill="#FFFFFF" font-family="Inter, Helvetica, Arial" font-size="11" font-weight="700">4</text>
+    <text x="50" y="62" text-anchor="middle" fill="#FFFFFF" font-family="Inter, Helvetica, Arial" font-size="10" font-weight="700">Maatregel</text>
+    <text x="50" y="120" text-anchor="middle" fill="#64748B" font-family="Inter, Helvetica, Arial" font-size="9">CISO + eigenaar</text>
+    <line x1="96" y1="50" x2="130" y2="50" stroke="#94A3B8" stroke-width="1.5" marker-end="url(#arrCapa)"/>
+  </g>
+  <g transform="translate(430, 80)">
+    <circle cx="50" cy="50" r="46" fill="#0D9488"/>
+    <text x="50" y="44" text-anchor="middle" fill="#FFFFFF" font-family="Inter, Helvetica, Arial" font-size="11" font-weight="700">5</text>
+    <text x="50" y="62" text-anchor="middle" fill="#FFFFFF" font-family="Inter, Helvetica, Arial" font-size="10" font-weight="700">Implementatie</text>
+    <text x="50" y="120" text-anchor="middle" fill="#64748B" font-family="Inter, Helvetica, Arial" font-size="9">Eigenaar · deadline</text>
+    <line x1="96" y1="50" x2="130" y2="50" stroke="#94A3B8" stroke-width="1.5" marker-end="url(#arrCapa)"/>
+  </g>
+  <g transform="translate(530, 80)">
+    <circle cx="50" cy="50" r="46" fill="#0D9488"/>
+    <text x="50" y="44" text-anchor="middle" fill="#FFFFFF" font-family="Inter, Helvetica, Arial" font-size="11" font-weight="700">6</text>
+    <text x="50" y="62" text-anchor="middle" fill="#FFFFFF" font-family="Inter, Helvetica, Arial" font-size="10" font-weight="700">Verificatie</text>
+    <text x="50" y="120" text-anchor="middle" fill="#64748B" font-family="Inter, Helvetica, Arial" font-size="9">CISO · effectief?</text>
+    <line x1="96" y1="50" x2="130" y2="50" stroke="#94A3B8" stroke-width="1.5" marker-end="url(#arrCapa)"/>
+  </g>
+  <g transform="translate(630, 80)">
+    <circle cx="50" cy="50" r="46" fill="#10B981"/>
+    <text x="50" y="44" text-anchor="middle" fill="#FFFFFF" font-family="Inter, Helvetica, Arial" font-size="11" font-weight="700">7</text>
+    <text x="50" y="62" text-anchor="middle" fill="#FFFFFF" font-family="Inter, Helvetica, Arial" font-size="10" font-weight="700">Afsluiting</text>
+    <text x="50" y="120" text-anchor="middle" fill="#64748B" font-family="Inter, Helvetica, Arial" font-size="9">CISO · log</text>
+  </g>
+  <path d="M 680 60 Q 720 40 720 20 Q 720 0 600 0 L 180 0 Q 100 0 100 20 Q 100 40 80 60" stroke="#D97706" stroke-width="1.5" stroke-dasharray="4 4" fill="none" marker-end="url(#arrCapa)" opacity="0.6"/>
+  <text x="400" y="18" text-anchor="middle" fill="#D97706" font-family="Inter, Helvetica, Arial" font-size="9" font-style="italic">Bij recidive: terug naar oorzaakanalyse</text>
+  <text x="400" y="260" text-anchor="middle" fill="#0F172A" font-family="Inter, Helvetica, Arial" font-size="13" font-weight="700">CAPA-cyclus (Corrective and Preventive Action)</text>
+  <text x="400" y="282" text-anchor="middle" fill="#64748B" font-family="Inter, Helvetica, Arial" font-size="10">Van identificatie tot structurele borging · sluit aan op Plan-Do-Check-Act</text>
+</svg>
+
 | Stap | Actie | Verantwoordelijke |
 |---|---|---|
 | 1 | **Identificatie:** Non-conformiteit registreren in het CAPA-register | Melder / Auditor / CISO |
