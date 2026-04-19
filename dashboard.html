@@ -2042,135 +2042,6 @@
       .sector-picker-grid { grid-template-columns: 1fr; }
       .sector-insights-grid { grid-template-columns: 1fr; }
     }
-
-    /* ── BELEIDSDOCUMENTEN ─────────────── */
-    .docs-pakket {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      padding: 28px 28px 22px;
-      margin-bottom: 20px;
-    }
-    .docs-pakket.locked { opacity: 0.55; }
-    .docs-pakket-head {
-      display: flex; align-items: center; gap: 14px;
-      padding-bottom: 20px; margin-bottom: 22px;
-      border-bottom: 1px solid var(--border-light);
-    }
-    .docs-pakket-head h3 {
-      font-family: 'Sora', sans-serif;
-      font-size: 1.05rem; font-weight: 700;
-      color: var(--text-primary); margin: 0;
-      letter-spacing: -0.01em;
-    }
-    .docs-pakket-head .count { color: var(--text-muted); font-weight: 400; }
-    .docs-pakket-head .badge {
-      font-size: 0.68rem; font-weight: 700;
-      padding: 4px 10px; border-radius: 99px;
-      text-transform: uppercase; letter-spacing: 0.08em;
-      margin-left: auto;
-    }
-    .docs-pakket-head .badge.access {
-      background: rgba(5,150,105,0.1); color: #047857;
-    }
-    .docs-pakket-head .badge.locked {
-      background: rgba(148,163,184,0.14); color: var(--text-muted);
-    }
-    .docs-pakket-desc {
-      font-size: 0.84rem; color: var(--text-muted);
-      margin: -16px 0 22px; line-height: 1.55;
-    }
-
-    .doc-group { margin-bottom: 26px; }
-    .doc-group:last-child { margin-bottom: 6px; }
-    .doc-group-title {
-      font-size: 0.68rem; font-weight: 700;
-      text-transform: uppercase; letter-spacing: 0.1em;
-      color: var(--text-muted);
-      margin: 0 0 10px; padding: 0 4px;
-    }
-    .doc-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-      gap: 8px;
-    }
-    .doc-card {
-      display: flex; align-items: center; gap: 14px;
-      padding: 12px 14px;
-      background: var(--bg);
-      border: 1px solid transparent;
-      border-radius: var(--radius);
-      transition: border-color 0.15s, background 0.15s, transform 0.12s;
-    }
-    .doc-card:hover {
-      border-color: var(--border);
-      background: var(--surface);
-    }
-    .doc-card .icon {
-      width: 34px; height: 34px;
-      flex-shrink: 0;
-      border-radius: 8px;
-      background: var(--accent-bg);
-      color: var(--accent);
-      display: flex; align-items: center; justify-content: center;
-    }
-    .doc-card .icon svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2; }
-    .doc-card.locked .icon { background: rgba(148,163,184,0.12); color: var(--text-muted); }
-    .doc-card .info { flex: 1; min-width: 0; }
-    .doc-card .info .title {
-      font-weight: 600; font-size: 0.88rem;
-      color: var(--text-primary);
-      line-height: 1.4;
-      overflow: hidden; text-overflow: ellipsis;
-      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
-    }
-    .doc-card.locked .info .title { color: var(--text-muted); }
-
-    /* Segmented PDF | Word button */
-    .doc-actions {
-      display: inline-flex;
-      border: 1px solid var(--accent);
-      border-radius: 8px;
-      overflow: hidden;
-      flex-shrink: 0;
-    }
-    .doc-actions button {
-      background: transparent;
-      border: none; padding: 6px 12px;
-      font-family: inherit; font-size: 0.74rem; font-weight: 600;
-      color: var(--accent);
-      cursor: pointer;
-      transition: background 0.12s, color 0.12s;
-      line-height: 1;
-      letter-spacing: 0.02em;
-    }
-    .doc-actions button:hover { background: var(--accent-bg); }
-    .doc-actions button.primary {
-      background: var(--accent);
-      color: #fff;
-    }
-    .doc-actions button.primary:hover { background: var(--accent-hover); }
-    .doc-actions button + button { border-left: 1px solid var(--accent); }
-
-    .doc-actions.single { border: none; }
-    .doc-actions.single button {
-      background: var(--accent); color: #fff;
-      border-radius: 8px;
-      padding: 6px 14px;
-    }
-    .doc-actions.single button:hover { background: var(--accent-hover); }
-
-    .doc-card .locked-icon {
-      color: var(--text-muted);
-      font-size: 1.05rem;
-      flex-shrink: 0;
-    }
-
-    @media (max-width: 640px) {
-      .docs-pakket { padding: 22px 18px 16px; }
-      .doc-grid { grid-template-columns: 1fr; }
-      .doc-actions button { padding: 6px 10px; font-size: 0.72rem; }
-    }
   </style>
 </head>
 <body>
@@ -4705,70 +4576,37 @@ async function renderDocumenten() {
   let html = '';
   for (const [key, cat] of Object.entries(DOC_CATALOG)) {
     const access = hasDocAccess(key);
-    // Group by sub-category — preserve first-seen order
-    const groups = [];
-    const groupIdx = {};
-    for (const d of cat.docs) {
-      if (groupIdx[d.cat] === undefined) {
-        groupIdx[d.cat] = groups.length;
-        groups.push({ name: d.cat, docs: [] });
-      }
-      groups[groupIdx[d.cat]].docs.push(d);
-    }
-
-    const renderCard = (d) => {
-      const titleHtml = escapeHtml(d.title);
-      const iconSvg = '<svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/></svg>';
-
-      if (!access) {
-        return `
-          <div class="doc-card locked">
-            <div class="icon">${iconSvg}</div>
-            <div class="info"><div class="title">${titleHtml}</div></div>
-            <span class="locked-icon" aria-label="Vergrendeld">\uD83D\uDD12</span>
-          </div>`;
-      }
-
-      if (d.pdf_only) {
-        return `
-          <div class="doc-card">
-            <div class="icon">${iconSvg}</div>
-            <div class="info"><div class="title">${titleHtml}</div></div>
-            <div class="doc-actions single">
-              <button onclick="downloadDoc('${escapeAttr(key)}','${escapeAttr(d.file)}')" title="Download PDF">PDF</button>
-            </div>
-          </div>`;
-      }
-
-      const pdfFile = d.file.replace(/\.docx$/, '.pdf');
-      return `
-        <div class="doc-card">
-          <div class="icon">${iconSvg}</div>
-          <div class="info"><div class="title">${titleHtml}</div></div>
-          <div class="doc-actions">
-            <button class="primary" onclick="downloadDoc('${escapeAttr(key)}','${escapeAttr(pdfFile)}')" title="Download PDF (alleen lezen)">PDF</button>
-            <button onclick="downloadDoc('${escapeAttr(key)}','${escapeAttr(d.file)}')" title="Download Word (bewerkbaar)">Word</button>
-          </div>
-        </div>`;
-    };
 
     html += `
-      <section class="docs-pakket${access ? '' : ' locked'}">
-        <div class="docs-pakket-head">
-          <h3>${escapeHtml(cat.label)} <span class="count">&middot; ${cat.docs.length} documenten</span></h3>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:24px;margin-bottom:20px;${access ? '' : 'opacity:0.55;'}">
+        <div style="display:flex;align-items:flex-start;gap:14px;margin-bottom:16px;flex-wrap:wrap;">
+          <div style="flex:1;min-width:240px;">
+            <h3 style="font-family:'Sora',sans-serif;font-size:1.1rem;margin:0 0 4px;">${escapeHtml(cat.label)}</h3>
+            <p style="font-size:0.88rem;color:var(--text-muted);margin:0;line-height:1.55;">${escapeHtml(cat.desc)}</p>
+          </div>
           ${access
-            ? '<span class="badge access">Toegang</span>'
-            : `<span class="badge locked">\uD83D\uDD12 ${escapeHtml(cat.price_hint || 'Vergrendeld')}</span>`}
+            ? `<span style="font-size:0.72rem;font-weight:700;padding:4px 10px;background:rgba(16,185,129,0.12);color:#059669;border-radius:99px;text-transform:uppercase;letter-spacing:0.06em;">Toegang</span>`
+            : `<span style="font-size:0.72rem;font-weight:700;padding:4px 10px;background:rgba(15,23,42,0.06);color:var(--text-muted);border-radius:99px;letter-spacing:0.06em;">\uD83D\uDD12 ${escapeHtml(cat.price_hint)}</span>`}
         </div>
-        ${cat.desc ? `<p class="docs-pakket-desc">${escapeHtml(cat.desc)}</p>` : ''}
-        ${groups.map(g => `
-          <div class="doc-group">
-            <h4 class="doc-group-title">${escapeHtml(g.name)}</h4>
-            <div class="doc-grid">
-              ${g.docs.map(renderCard).join('')}
-            </div>
-          </div>`).join('')}
-      </section>`;
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          ${cat.docs.map(d => `
+            <div style="display:flex;align-items:center;gap:12px;padding:12px 14px;background:var(--bg-warm);border-radius:10px;${access ? '' : ''}">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="${access?'#0D9488':'#94a3b8'}" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/></svg>
+              <div style="flex:1;min-width:0;">
+                <div style="font-weight:600;font-size:0.86rem;color:${access?'var(--text-primary)':'var(--text-muted)'};overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${escapeHtml(d.title)}</div>
+                <div style="font-size:0.72rem;color:var(--text-muted);">${escapeHtml(d.cat)} &middot; ${escapeHtml(d.file)}</div>
+              </div>
+              ${access
+                ? (d.pdf_only
+                    ? `<button onclick="downloadDoc('${escapeAttr(key)}','${escapeAttr(d.file)}')" title="PDF (alleen lezen)" style="background:var(--accent);color:#fff;border:none;border-radius:8px;padding:6px 14px;font-size:0.75rem;font-weight:600;cursor:pointer;">PDF</button>`
+                    : `<div style="display:flex;gap:6px;">
+                        <button onclick="downloadDoc('${escapeAttr(key)}','${escapeAttr(d.file.replace(/\.docx$/, '.pdf'))}')" title="Lezen / archiveren" style="background:var(--accent);color:#fff;border:none;border-radius:8px;padding:6px 12px;font-size:0.75rem;font-weight:600;cursor:pointer;">PDF</button>
+                        <button onclick="downloadDoc('${escapeAttr(key)}','${escapeAttr(d.file)}')" title="Bewerkbare versie (Word)" style="background:transparent;color:var(--accent);border:1px solid var(--accent);border-radius:8px;padding:5px 11px;font-size:0.75rem;font-weight:600;cursor:pointer;">Word</button>
+                       </div>`)
+                : `<span style="color:#94a3b8;font-size:1.1rem;">\uD83D\uDD12</span>`}
+            </div>`).join('')}
+        </div>
+      </div>`;
   }
   container.innerHTML = html;
 }
