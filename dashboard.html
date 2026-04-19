@@ -1299,6 +1299,20 @@
       margin-bottom: 14px;
       line-height: 1.4;
     }
+    .ga-sector-tag {
+      display: inline-block;
+      margin-left: 10px;
+      padding: 2px 10px;
+      background: rgba(13, 148, 136, 0.12);
+      color: var(--accent);
+      border-radius: 99px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      vertical-align: middle;
+    }
 
     .ga-answer-grid {
       display: grid;
@@ -2479,6 +2493,8 @@ function loadSector() {
       try { userSector = JSON.parse(leadData).sector; } catch(e) {}
     }
   }
+  // Re-merge gap-questions now that we know the sector — triggers sector-deep vragen
+  if (typeof mergeGapQuestions === 'function') mergeGapQuestions();
 }
 
 async function saveSector(sector) {
@@ -2489,6 +2505,8 @@ async function saveSector(sector) {
     await sb.auth.updateUser({ data: { ...(user.user_metadata || {}), sector } });
     if (user && user.user_metadata) user.user_metadata.sector = sector;
   } catch (e) { /* localStorage fallback is already set */ }
+  // Rebuild gap-questions including sector-deep
+  if (typeof mergeGapQuestions === 'function') mergeGapQuestions();
 }
 
 // ── SUPABASE CONFIG ──
@@ -3852,9 +3870,10 @@ function renderControlCard(ctrl, idx, total) {
     const key = ctrl.id + '_' + qi;
     const current = gapAnswers[key];
     const complianceClaimed = current === '4' || current === '3' || current === '2';
+    const sectorTag = q.sector ? `<span class="ga-sector-tag" title="Sector-specifieke vraag voor uw ${esc(q.sector)}-profiel">Sector-diepte</span>` : '';
 
     html += `
-      <div class="ga-control-question">${esc(q.q)}</div>
+      <div class="ga-control-question">${esc(q.q)}${sectorTag}</div>
       <div class="ga-answer-grid">
     `;
     gapOptions.forEach(opt => {
