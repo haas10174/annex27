@@ -109,10 +109,11 @@ serve(async (req) => {
       }), { status: 403, headers });
     }
 
-    // Generate signed URL (60 seconds)
+    // Generate signed URL (60 seconds) — force attachment download with original filename
+    const downloadName = file.split('/').pop() || 'document';
     const { data, error } = await supabaseAdmin.storage
       .from('documents')
-      .createSignedUrl(file, 60);
+      .createSignedUrl(file, 60, { download: downloadName });
 
     if (error || !data?.signedUrl) {
       console.error('Signed URL error:', error);

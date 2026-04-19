@@ -4626,11 +4626,13 @@ async function downloadDoc(pakketKey, file) {
       return;
     }
     if (!data?.url) { alert('Geen signed URL terug.'); return; }
-    // <a download> werkt wel na await (window.open wordt geblokkeerd)
+    // De signed URL bevat ?download=<filename> zodat Supabase
+    // Content-Disposition: attachment; filename="..." zet. De browser
+    // herkent dat als download en zet de juiste extensie (.docx of .pdf).
+    // Geen target=_blank: voorkomt popup-blocker en opent geen extra tab.
     const a = document.createElement('a');
     a.href = data.url;
     a.download = file.split('/').pop() || file;
-    a.target = '_blank';
     a.rel = 'noopener noreferrer';
     document.body.appendChild(a);
     a.click();
