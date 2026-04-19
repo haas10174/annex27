@@ -20,6 +20,28 @@ Dit beleid definieert de classificatieniveaus voor informatie binnen [Organisati
 
 ## 2. Classificatieniveaus
 
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 340" width="100%" style="max-width:640px;display:block;margin:16pt auto;">
+  <text x="320" y="22" text-anchor="middle" fill="#0F172A" font-family="Inter, Helvetica, Arial" font-size="13" font-weight="700">Informatieclassificatie — 4 niveaus (pyramide van gevoeligheid)</text>
+  <polygon points="80,280 560,280 470,240 170,240" fill="#10B981"/>
+  <text x="320" y="266" text-anchor="middle" fill="#FFFFFF" font-family="Inter, Helvetica, Arial" font-size="13" font-weight="700">OPENBAAR</text>
+  <polygon points="170,240 470,240 400,200 240,200" fill="#F59E0B"/>
+  <text x="320" y="226" text-anchor="middle" fill="#FFFFFF" font-family="Inter, Helvetica, Arial" font-size="13" font-weight="700">INTERN</text>
+  <polygon points="240,200 400,200 360,160 280,160" fill="#EA580C"/>
+  <text x="320" y="186" text-anchor="middle" fill="#FFFFFF" font-family="Inter, Helvetica, Arial" font-size="12" font-weight="700">VERTROUWELIJK</text>
+  <polygon points="280,160 360,160 340,120 300,120" fill="#DC2626"/>
+  <text x="320" y="146" text-anchor="middle" fill="#FFFFFF" font-family="Inter, Helvetica, Arial" font-size="10" font-weight="700">GEHEIM</text>
+  <text x="580" y="146" fill="#7F1D1D" font-family="Inter, Helvetica, Arial" font-size="9" font-weight="700">← ernstige schade</text>
+  <text x="580" y="186" fill="#7C2D12" font-family="Inter, Helvetica, Arial" font-size="9" font-weight="700">← schade aan business</text>
+  <text x="580" y="226" fill="#78350F" font-family="Inter, Helvetica, Arial" font-size="9" font-weight="700">← ongewenst openbaar</text>
+  <text x="580" y="266" fill="#065F46" font-family="Inter, Helvetica, Arial" font-size="9" font-weight="700">← publiek toegankelijk</text>
+  <line x1="560" y1="150" x2="560" y2="270" stroke="#CBD5E1" stroke-width="1"/>
+  <g transform="translate(30, 300)">
+    <text x="0" y="0" fill="#0F172A" font-family="Inter, Helvetica, Arial" font-size="10" font-weight="700">Indicatieve maatregelen per niveau</text>
+    <text x="0" y="16" fill="#64748B" font-family="Inter, Helvetica, Arial" font-size="9">• Geheim: E2E-encryptie · 2-persoonsregel · dedicated systeem · audit per toegang</text>
+    <text x="0" y="30" fill="#64748B" font-family="Inter, Helvetica, Arial" font-size="9">• Vertrouwelijk: encryptie at-rest + transit · MFA · access-review per 3 mnd</text>
+  </g>
+</svg>
+
 | Niveau | Kleurcode | Beschrijving | Voorbeelden |
 |---|---|---|---|
 | **Openbaar** | Groen | Informatie die vrij beschikbaar is of mag zijn voor het publiek | Website-inhoud, marketingmateriaal, persberichten |

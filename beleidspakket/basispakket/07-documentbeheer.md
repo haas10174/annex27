@@ -31,6 +31,30 @@ Alle gedocumenteerde informatie die onderdeel uitmaakt van het ISMS, waaronder:
 
 ### 3.1 Hiërarchie
 
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 340" width="100%" style="max-width:640px;display:block;margin:16pt auto;">
+  <defs>
+    <marker id="arrDoc" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#94A3B8"/>
+    </marker>
+  </defs>
+  <text x="320" y="22" text-anchor="middle" fill="#0F172A" font-family="Inter, Helvetica, Arial" font-size="13" font-weight="700">Documentstructuur — 4 niveaus van abstract naar concreet</text>
+  <rect x="180" y="40" width="280" height="50" rx="10" fill="#0F172A"/>
+  <text x="320" y="62" text-anchor="middle" fill="#FFFFFF" font-family="Inter, Helvetica, Arial" font-size="12" font-weight="700">Niveau 1 — BELEID</text>
+  <text x="320" y="80" text-anchor="middle" fill="#CBD5E1" font-family="Inter, Helvetica, Arial" font-size="10">wat wordt er geregeld · directie-goedgekeurd</text>
+  <line x1="320" y1="90" x2="320" y2="118" stroke="#94A3B8" stroke-width="1.5" marker-end="url(#arrDoc)"/>
+  <rect x="150" y="122" width="340" height="50" rx="10" fill="#0D9488"/>
+  <text x="320" y="144" text-anchor="middle" fill="#FFFFFF" font-family="Inter, Helvetica, Arial" font-size="12" font-weight="700">Niveau 2 — PROCEDURE</text>
+  <text x="320" y="162" text-anchor="middle" fill="#CCFBF1" font-family="Inter, Helvetica, Arial" font-size="10">hoe wordt het gedaan · wie · wanneer</text>
+  <line x1="320" y1="172" x2="320" y2="200" stroke="#94A3B8" stroke-width="1.5" marker-end="url(#arrDoc)"/>
+  <rect x="120" y="204" width="400" height="50" rx="10" fill="#F59E0B"/>
+  <text x="320" y="226" text-anchor="middle" fill="#FFFFFF" font-family="Inter, Helvetica, Arial" font-size="12" font-weight="700">Niveau 3 — WERKINSTRUCTIE</text>
+  <text x="320" y="244" text-anchor="middle" fill="#FEF3C7" font-family="Inter, Helvetica, Arial" font-size="10">stap-voor-stap · screenshots · tooling-specifiek</text>
+  <line x1="320" y1="254" x2="320" y2="282" stroke="#94A3B8" stroke-width="1.5" marker-end="url(#arrDoc)"/>
+  <rect x="90" y="286" width="460" height="50" rx="10" fill="#E0F2FE" stroke="#0EA5E9" stroke-width="1.5"/>
+  <text x="320" y="308" text-anchor="middle" fill="#075985" font-family="Inter, Helvetica, Arial" font-size="12" font-weight="700">Niveau 4 — REGISTRATIE</text>
+  <text x="320" y="326" text-anchor="middle" fill="#075985" font-family="Inter, Helvetica, Arial" font-size="10">bewijs van uitvoering · auditrapporten · logs · notulen</text>
+</svg>
+
 | Niveau | Type | Beschrijving | Voorbeeld |
 |---|---|---|---|
 | 1 | Beleid | Overkoepelende principes en uitgangspunten, goedgekeurd door directie | Informatiebeveiligingsbeleid |
