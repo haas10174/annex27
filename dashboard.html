@@ -2744,8 +2744,9 @@ let user = null;
     renderDocuments();
     renderChecklists();
     updateUnreadBadge();
-    // Poll for new messages every 60 seconds
-    setInterval(updateUnreadBadge, 60000);
+    updateRapportBadge();
+    // Poll for new messages + rapport every 60 seconds
+    setInterval(() => { updateUnreadBadge(); updateRapportBadge(); }, 60000);
   }
 })();
 
@@ -2938,6 +2939,7 @@ function showView(name) {
   if (name === 'gapanalyse') renderGapAnalyse();
   if (name === 'berichten') renderBerichten();
   if (name === 'documenten') renderDocumenten();
+  if (name === 'rapport') renderRapport();
   // Close mobile sidebar
   document.getElementById('sidebar').classList.remove('open');
   document.getElementById('overlay').classList.remove('open');
@@ -3341,10 +3343,67 @@ const specificQuestions = {
   ]
 };
 
-// Merge specific questions
-Object.keys(specificQuestions).forEach(id => {
-  gapQuestions[id] = specificQuestions[id];
-});
+// Sector-deep vragen — alleen getoond als user.sector matcht. Primary control = eerste in control-string.
+const sectorDeepQuestions = {
+  saas: {
+    'A.8.22': [{ q: 'Hoe robuust is de isolatie van klantdata in uw multi-tenant platform?', type: 'impl', hint: 'Upload: architectuurdiagram multi-tenancy, tenant-isolation strategie (shared-db vs per-tenant), encryption-per-tenant beleid.' }],
+    'A.5.19': [{ q: 'Heeft u een actueel register van alle (sub)verwerkers en cloudproviders met getekende DPA\'s en jaarlijkse beveiligingsbeoordeling?', type: 'doc', hint: 'Upload: subprocessor-lijst (trust-center), DPA\'s per verwerker, audit-rapportages SOC 2 / ISO 27001 van providers.' }],
+    'A.8.2':  [{ q: 'Heeft u geformaliseerde API-security maatregelen (authenticatie, rate-limiting, OWASP API Top 10 check)?', type: 'impl', hint: 'Upload: API-gateway config, rate-limit-rules, OWASP API-security scan-rapport, JWT/OAuth flow documentatie.' }],
+    'A.8.25': [{ q: 'Heeft u een gedocumenteerd secure software development lifecycle (code-review, SAST/DAST, secret-scanning, dependency mgmt)?', type: 'doc', hint: 'Upload: PR-template met security-checklist, SAST-rapport (SonarQube/Snyk), secret-scanning (TruffleHog), Dependabot-overzicht.' }]
+  },
+  it: {
+    'A.8.20': [{ q: 'Hoe voorkomt u dat data of systemen van klant A bereikbaar zijn vanuit de omgeving van klant B?', type: 'impl', hint: 'Upload: netwerksegmentatie per klant, separate credentials + secret stores, firewall-rules tussen klantomgevingen.' }],
+    'A.8.2':  [{ q: 'Hoe beheert u admin-sessies naar klantomgevingen (jump-host, PAM-tooling, session-recording)?', type: 'proc', hint: 'Upload: PAM-tool config (BeyondTrust/CyberArk/Teleport), bastion-configuratie, session-logs met opname.' }],
+    'A.5.24': [{ q: 'Zijn contractuele meldingstermijnen naar klanten geformaliseerd en getest (bv. bij datalek binnen 24u)?', type: 'doc', hint: 'Upload: SLA-bijlage met meldingstermijnen, communicatiesjablonen per incident-type, trainings-bewijs incidentmanager.' }],
+    'A.8.32': [{ q: 'Heeft u een change-proces dat voorkomt dat een wijziging bij klant A onbedoeld klant B raakt?', type: 'proc', hint: 'Upload: per-klant deployment-pipelines, staging-procedure, blast-radius-assessment bij change.' }]
+  },
+  zorg: {
+    'A.5.31': [{ q: 'Past uw organisatie NEN-7510 toe als aanvulling op ISO 27001 (verplicht voor NL-zorg)?', type: 'doc', hint: 'Upload: NEN-7510 gap-analyse, specifieke zorg-controls gedocumenteerd, self-assessment of externe audit.' }],
+    'A.8.15': [{ q: 'Is alle toegang tot patiëntdossiers gelogd, doel-gebonden en periodiek gereviewd (need-to-know)?', type: 'impl', hint: 'Upload: access-logs met patiënt-ID + doel, maandelijkse audit van abnormale toegang, Break-the-Glass procedures.' }],
+    'A.8.5':  [{ q: 'Gebruiken zorgverleners sterke authenticatie (UZI-pas, SSO, MFA) en bestaat er een break-glass procedure?', type: 'impl', hint: 'Upload: UZI-pas-implementatie, SSO-configuratie, break-glass procedure met post-hoc audit.' }],
+    'A.5.9':  [{ q: 'Zijn medische hulpmiddelen (IoMT, monitoring, beeldapparatuur) in het asset-register + gescheiden netwerk?', type: 'doc', hint: 'Upload: asset-register inclusief medische devices, VLAN-segmentatie, vendor-patch-contracten.' }]
+  },
+  overheid: {
+    'A.5.31': [{ q: 'Past u de Baseline Informatiebeveiliging Overheid (BIO) volledig toe?', type: 'doc', hint: 'Upload: BIO self-assessment (CIP-tool), BIV-classificatie per informatiesysteem, ENSIA-rapportage.' }],
+    'A.5.34': [{ q: 'Zijn BSN en andere burgerdata extra beveiligd (autorisatie, logging, versleuteling) conform Wet BRP?', type: 'impl', hint: 'Upload: BSN-gebruik alleen bij rechtvaardiging, logging per burger-opvraag, encryption at-rest met aparte key.' }],
+    'A.5.19': [{ q: 'Hebt u DPA\'s/bewerkersovereenkomsten met ketenpartijen (GBA, UWV, Belastingdienst, etc.)?', type: 'doc', hint: 'Upload: bewerkersovereenkomsten per keten-partner, audit-rechten, meldingsketen bij incidenten.' }],
+    'A.5.33': [{ q: 'Kunt u per informatieverzoek (WOO) aantonen welke documenten zijn opgezocht, door wie, wanneer?', type: 'proc', hint: 'Upload: zoek-logboek per WOO-verzoek, retentiebeleid voor audit-trails, workflow-systeem voor WOO.' }]
+  },
+  bouw: {
+    'A.8.20': [{ q: 'Zijn operationele technologie (BMS, bouwmachines, sensoren) gescheiden van kantoor-IT en in het asset-register?', type: 'impl', hint: 'Upload: OT-netwerk gescheiden, asset-register inclusief bouwmachines + BMS, firewall OT↔IT.' }],
+    'A.5.19': [{ q: 'Zijn onderaannemers en externe partijen met toegang tot projectdata contractueel en technisch geborgd?', type: 'doc', hint: 'Upload: onderaannemer-contracten met security-clausules, access-controls per project, NDA\'s.' }],
+    'A.7.1':  [{ q: 'Zijn tijdelijke kantoren, gereedschap en apparatuur op de bouwplaats adequaat fysiek beveiligd?', type: 'impl', hint: 'Upload: afsluitbare site-container, cameratoezicht, inventarisatie gereedschap + laptops per week.' }],
+    'A.5.12': [{ q: 'Zijn BIM-modellen, architectuur- en ontwerpfiles geclassificeerd en versleuteld opgeslagen?', type: 'impl', hint: 'Upload: classificatie per project, versleutelde BIM-server/cloud, toegang per rol + IP-restricties.' }]
+  },
+  overig: {
+    'A.5.23': [{ q: 'Heeft u een actueel overzicht van alle SaaS-tooling die uw organisatie gebruikt (shadow-IT meegerekend)?', type: 'doc', hint: 'Upload: SaaS-register (20-50 tools typisch), finance-data als bron (terugkerende betalingen), toegangs-review per tool.' }],
+    'A.7.9':  [{ q: 'Is thuiswerk geformaliseerd (VPN, endpoint hardening, BYOD-regels)?', type: 'doc', hint: 'Upload: thuiswerkbeleid, MDM/Intune voor corporate devices, VPN-configuratie, BYOD-contractclausule.' }],
+    'A.8.7':  [{ q: 'Zijn SPF, DKIM en DMARC volledig ingesteld voor uw maildomein + phishing-awareness getest?', type: 'impl', hint: 'Upload: DMARC-rapport (policy=reject), recente phishing-test met rapportage, email-security gateway.' }],
+    'A.5.12': [{ q: 'Is alle bedrijfsdata geclassificeerd (publiek / intern / vertrouwelijk / geheim) met bijbehorende regels?', type: 'doc', hint: 'Upload: classificatie-beleid, labels op documenten, DLP-regels per classificatie-niveau.' }]
+  }
+};
+
+// Merge specific questions — base + sector-deep (gefilterd op user.sector)
+function mergeGapQuestions() {
+  // Reset + merge base
+  Object.keys(specificQuestions).forEach(id => {
+    gapQuestions[id] = [...specificQuestions[id]];
+  });
+  // Append sector-deep vragen als user een sector heeft
+  const sec = (typeof userSector !== 'undefined' && userSector) || null;
+  if (sec && sectorDeepQuestions[sec]) {
+    for (const [ctrlId, qs] of Object.entries(sectorDeepQuestions[sec])) {
+      if (!gapQuestions[ctrlId]) gapQuestions[ctrlId] = [];
+      qs.forEach(q => gapQuestions[ctrlId].push({ ...q, sector: sec }));
+      // Inject evidence hint for this control (as extra line) if not already present
+      if (qs[0]?.hint && !(evidenceHints[ctrlId] || '').includes('[sector]')) {
+        const base = evidenceHints[ctrlId] || '';
+        evidenceHints[ctrlId] = base + (base ? ' · ' : '') + '[sector] ' + qs[0].hint;
+      }
+    }
+  }
+}
+mergeGapQuestions();
 
 let gapAnswers = {};
 const gapOptions = [
@@ -4555,6 +4614,162 @@ async function downloadDoc(pakketKey, file) {
   } catch (e) {
     alert('Download fout: ' + e.message);
   }
+}
+
+// ── RAPPORT (released AI-gap-analyse rapport, read-only) ──
+async function renderRapport() {
+  const container = document.getElementById('rapportContainer');
+  const subtitle = document.getElementById('rapportSubtitle');
+  container.innerHTML = '<div style="padding:40px;text-align:center;color:var(--text-muted);">Rapport laden\u2026</div>';
+
+  try {
+    // RLS zorgt dat user alleen eigen released drafts ziet
+    const { data, error } = await sb.from('report_drafts')
+      .select('id, sections, released_at, generated_at, model')
+      .not('released_at', 'is', null)
+      .order('released_at', { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    if (error) {
+      container.innerHTML = `<div style="padding:40px;background:var(--surface);border:1px solid var(--border);border-radius:12px;text-align:center;color:var(--text-muted);">Kon rapport niet laden: ${escapeHtml(error.message)}</div>`;
+      return;
+    }
+
+    if (!data) {
+      container.innerHTML = `
+        <div style="padding:48px 32px;background:var(--surface);border:1px solid var(--border);border-radius:14px;text-align:center;">
+          <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="var(--text-muted)" stroke-width="1.5" style="margin:0 auto 18px;display:block;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="15" x2="15" y2="15"/><line x1="9" y1="18" x2="15" y2="18"/></svg>
+          <h3 style="font-family:'Sora',sans-serif;margin:0 0 8px;color:var(--text-primary);">Nog geen rapport vrijgegeven</h3>
+          <p style="margin:0;color:var(--text-muted);font-size:0.92rem;line-height:1.6;">Uw Lead Auditor werkt aan uw rapport. Zodra het klaar is verschijnt het hier, inclusief compliance-score, bevindingen per categorie en concrete actiepunten.</p>
+          <p style="margin-top:18px;font-size:0.86rem;color:var(--text-muted);">Zorg dat uw gap-analyse volledig is ingevuld en evidence is geüpload — dat versnelt het proces.</p>
+        </div>`;
+      return;
+    }
+
+    const s = data.sections || {};
+    const releasedOn = new Date(data.released_at).toLocaleDateString('nl-NL', { dateStyle: 'long' });
+    subtitle.textContent = `Vrijgegeven op ${releasedOn} · door Lead Auditor Raoul Haas`;
+
+    const categoryIcons = {
+      'Governance & beleid': 'M12 2v20M2 12h20',
+      'Personeel': 'M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2 M9 7a4 4 0 1 0 0 8 4 4 0 0 0 0-8',
+      'Fysiek & assets': 'M3 21h18 M5 21V7l8-4v18 M13 11h6v10',
+      'Technische controls': 'M20 16.5l-8 4-8-4 M20 12l-8 4-8-4 M20 7.5l-8 4-8-4 8-4 8 4z',
+      'Operationeel': 'M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4'
+    };
+
+    const statusColor = { gap: '#D97706', critical: '#DC2626', ok: '#10B981' };
+    const statusLabel = { gap: 'Gap', critical: 'Kritiek', ok: 'Op orde' };
+
+    let html = `
+      <div style="background:linear-gradient(135deg,#0c0f1a,#1e293b);color:white;border-radius:16px;padding:32px 36px;margin-bottom:24px;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+          <span style="background:rgba(20,184,166,0.2);color:#5eead4;font-size:0.72rem;font-weight:700;padding:4px 10px;border-radius:999px;text-transform:uppercase;letter-spacing:0.08em;">Gap-analyse rapport</span>
+          <span style="font-size:0.82rem;color:rgba(255,255,255,0.5);">${releasedOn}</span>
+        </div>
+        <h2 style="font-family:'Sora',sans-serif;font-size:1.4rem;font-weight:800;margin:0 0 14px;line-height:1.3;">Samenvatting</h2>
+        <p style="font-size:0.98rem;line-height:1.7;color:rgba(255,255,255,0.85);margin:0;">${escapeHtml(s.executive_summary || '')}</p>
+      </div>`;
+
+    if (s.score_summary) {
+      html += `
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:24px 28px;margin-bottom:20px;">
+          <h3 style="font-family:'Sora',sans-serif;font-size:1.05rem;font-weight:700;margin:0 0 10px;color:var(--text-primary);">Compliance-score</h3>
+          <p style="margin:0;line-height:1.7;color:var(--text-secondary);font-size:0.95rem;">${escapeHtml(s.score_summary)}</p>
+        </div>`;
+    }
+
+    if (s.findings_by_category && typeof s.findings_by_category === 'object') {
+      html += `<h3 style="font-family:'Sora',sans-serif;font-size:1.05rem;font-weight:700;margin:24px 0 12px;color:var(--text-primary);">Bevindingen per categorie</h3>`;
+      html += `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;margin-bottom:24px;">`;
+      for (const [cat, txt] of Object.entries(s.findings_by_category)) {
+        if (!txt) continue;
+        const iconPath = categoryIcons[cat] || 'M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z';
+        html += `
+          <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="${iconPath}"/></svg>
+              <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:0.92rem;color:var(--text-primary);">${escapeHtml(cat)}</div>
+            </div>
+            <p style="margin:0;font-size:0.88rem;line-height:1.65;color:var(--text-secondary);">${escapeHtml(txt)}</p>
+          </div>`;
+      }
+      html += `</div>`;
+    }
+
+    if (Array.isArray(s.top_priorities) && s.top_priorities.length) {
+      html += `
+        <div style="background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--accent);border-radius:12px;padding:22px 26px;margin-bottom:24px;">
+          <h3 style="font-family:'Sora',sans-serif;font-size:1.05rem;font-weight:700;margin:0 0 14px;color:var(--text-primary);">Top prioriteiten</h3>
+          <ol style="margin:0;padding-left:22px;">`;
+      s.top_priorities.forEach(p => {
+        html += `<li style="margin-bottom:8px;line-height:1.6;color:var(--text-secondary);font-size:0.92rem;">${escapeHtml(p)}</li>`;
+      });
+      html += `</ol></div>`;
+    }
+
+    if (Array.isArray(s.detailed_findings) && s.detailed_findings.length) {
+      html += `<h3 style="font-family:'Sora',sans-serif;font-size:1.05rem;font-weight:700;margin:24px 0 12px;color:var(--text-primary);">Gedetailleerde bevindingen</h3>`;
+      html += `<div style="display:flex;flex-direction:column;gap:12px;margin-bottom:24px;">`;
+      s.detailed_findings.forEach(f => {
+        const color = statusColor[f.status] || 'var(--text-muted)';
+        const label = statusLabel[f.status] || f.status || '';
+        html += `
+          <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px 22px;">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap;">
+              <span style="font-family:'Sora',sans-serif;font-weight:700;font-size:0.9rem;color:var(--text-primary);">${escapeHtml(f.control_id || '')}</span>
+              ${label ? `<span style="font-size:0.7rem;font-weight:700;padding:3px 9px;border-radius:999px;background:${color}15;color:${color};text-transform:uppercase;letter-spacing:0.06em;">${escapeHtml(label)}</span>` : ''}
+            </div>
+            ${f.finding ? `<div style="font-size:0.88rem;line-height:1.6;color:var(--text-secondary);margin-bottom:8px;"><strong style="color:var(--text-primary);font-weight:600;">Bevinding:</strong> ${escapeHtml(f.finding)}</div>` : ''}
+            ${f.recommendation ? `<div style="font-size:0.88rem;line-height:1.6;color:var(--text-secondary);"><strong style="color:var(--accent);font-weight:600;">Aanbeveling:</strong> ${escapeHtml(f.recommendation)}</div>` : ''}
+          </div>`;
+      });
+      html += `</div>`;
+    }
+
+    if (s.disclosure) {
+      html += `
+        <div style="background:var(--bg-warm);border-radius:10px;padding:16px 20px;font-size:0.82rem;color:var(--text-muted);line-height:1.6;font-style:italic;">
+          ${escapeHtml(s.disclosure)}
+        </div>`;
+    }
+
+    container.innerHTML = html;
+
+    // Mark this rapport as seen → verberg NIEUW-badge
+    try {
+      localStorage.setItem('rapportSeen_' + data.id, Date.now().toString());
+      const badge = document.getElementById('rapportBadge');
+      if (badge) badge.style.display = 'none';
+    } catch (_) {}
+  } catch (err) {
+    console.error('renderRapport error:', err);
+    container.innerHTML = `<div style="padding:40px;background:var(--surface);border:1px solid var(--border);border-radius:12px;text-align:center;color:var(--text-muted);">Rapport kon niet worden geladen: ${escapeHtml(err.message || String(err))}</div>`;
+  }
+}
+
+// Badge: toon dot op sidebar als er een released rapport is dat nog niet is geopend
+async function updateRapportBadge() {
+  try {
+    const { data } = await sb.from('report_drafts')
+      .select('id, released_at')
+      .not('released_at', 'is', null)
+      .order('released_at', { ascending: false })
+      .limit(1)
+      .maybeSingle();
+    const badge = document.getElementById('rapportBadge');
+    if (!badge) return;
+    if (data && data.released_at) {
+      const seenKey = 'rapportSeen_' + data.id;
+      if (!localStorage.getItem(seenKey)) {
+        badge.style.display = 'inline-flex';
+        badge.textContent = 'NIEUW';
+      } else {
+        badge.style.display = 'none';
+      }
+    }
+  } catch (e) { /* ignore */ }
 }
 
 async function renderBerichten() {
