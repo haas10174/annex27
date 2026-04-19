@@ -5,6 +5,7 @@
 
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.49.4';
+import { computeVat, isEuCountry } from '../_shared/vat-rules.ts';
 
 const ALLOWED_ORIGINS = [
   'https://annex27.nl',
@@ -40,6 +41,70 @@ function sanitize(s: unknown, max: number): string {
   return String(s ?? '').trim().slice(0, max);
 }
 
+function normalizeCountry(c: string): string {
+  const up = c.toUpperCase().trim();
+  if (!up) return 'NL';
+  // Sentinel "XX" = non-EU
+  if (up === 'XX' || up === 'NON_EU') return 'XX';
+  return up;
+}
+
+async function viesCheck(
+  countryCode: string,
+  vatNumberRaw: string,
+  supabase: ReturnType<typeof createClient>,
+): Promise<{ valid: boolean | null; company_name: string | null }> {
+  try {
+    const cleaned = vatNumberRaw.replace(/[\s.\-]/g, '').toUpperCase();
+    let country = countryCode;
+    let number = cleaned;
+    if (/^[A-Z]{2}/.test(cleaned)) {
+      country = cleaned.slice(0, 2);
+      number = cleaned.slice(2);
+    } else if (cleaned.startsWith(countryCode)) {
+      number = cleaned.slice(countryCode.length);
+    }
+    const fullVat = `${country}${number}`;
+
+    // Cache-lookup
+    const { data: cached } = await supabase
+      .from('vat_validation_cache')
+      .select('valid, company_name')
+      .eq('vat_number', fullVat)
+      .gt('expires_at', new Date().toISOString())
+      .maybeSingle();
+    if (cached) return { valid: !!cached.valid, company_name: cached.company_name };
+
+    // Live VIES
+    const viesResp = await fetch('https://ec.europa.eu/taxation_customs/vies/rest-api/check-vat-number', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({ countryCode: country, vatNumber: number }),
+      signal: AbortSignal.timeout(8000),
+    });
+    if (!viesResp.ok) return { valid: null, company_name: null };
+    const data = await viesResp.json();
+    const valid = !!data.valid;
+    const companyName = (data.name && data.name !== '---') ? String(data.name).slice(0, 255) : null;
+    const companyAddress = (data.address && data.address !== '---') ? String(data.address).slice(0, 500) : null;
+
+    await supabase.from('vat_validation_cache').upsert({
+      vat_number: fullVat,
+      valid,
+      country_code: country,
+      company_name: companyName,
+      company_address: companyAddress,
+      checked_at: new Date().toISOString(),
+      expires_at: new Date(Date.now() + (valid ? 7 : 1) * 24 * 3600 * 1000).toISOString(),
+      source: 'vies',
+    }, { onConflict: 'vat_number' });
+
+    return { valid, company_name: companyName };
+  } catch {
+    return { valid: null, company_name: null };
+  }
+}
+
 serve(async (req) => {
   const origin = req.headers.get('origin');
   const headers = { ...corsHeaders(origin), 'Content-Type': 'application/json' };
@@ -62,7 +127,7 @@ serve(async (req) => {
     const ip = req.headers.get('x-forwarded-for')?.split(',')[0].trim() || 'unknown';
     const supabaseAdmin = createClient(
       Deno.env.get('SUPABASE_URL')!,
-      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
     );
 
     const { data: allowed } = await supabaseAdmin.rpc('check_rate_limit', {
@@ -73,7 +138,7 @@ serve(async (req) => {
 
     if (allowed === false) {
       return new Response(JSON.stringify({ error: 'Te veel aanvragen. Probeer over een minuut opnieuw.' }), {
-        status: 429, headers: { ...headers, 'Retry-After': '60' }
+        status: 429, headers: { ...headers, 'Retry-After': '60' },
       });
     }
 
@@ -81,7 +146,6 @@ serve(async (req) => {
 
     // Honeypot check (extra server-side line of defense)
     if (body.website_url) {
-      // Bot detected — return fake success without actually creating payment
       return new Response(JSON.stringify({ checkoutUrl: 'https://annex27.nl/success', paymentId: 'blocked' }), { status: 200, headers });
     }
 
@@ -90,6 +154,9 @@ serve(async (req) => {
     const bedrijf = sanitize(body.bedrijf, MAX_BEDRIJF_LENGTH);
     const email = sanitize(body.email, MAX_EMAIL_LENGTH).toLowerCase();
     const btwNummer = sanitize(body.btw_nummer, MAX_BTW_LENGTH);
+    const countryInput = normalizeCountry(sanitize(body.country, 4));
+    const customerTypeInput = sanitize(body.customer_type, 10).toLowerCase();
+    const customerType: 'b2c' | 'b2b' = customerTypeInput === 'b2c' ? 'b2c' : 'b2b';
 
     // Validation
     if (!plan || !PRODUCTS[plan]) {
@@ -111,19 +178,31 @@ serve(async (req) => {
       return new Response(JSON.stringify({ error: 'Mollie niet geconfigureerd' }), { status: 500, headers });
     }
 
-    // Calculate total incl. BTW
-    const btwRate = 0.21;
-    const btwAmount = Math.round(product.price * btwRate * 100) / 100;
-    const total = Math.round((product.price + btwAmount) * 100) / 100;
+    // VIES-check alleen bij B2B + VAT-nummer + EU-land
+    let vatValid: boolean | null = null;
+    let vatValidatedAt: string | null = null;
+    if (customerType === 'b2b' && btwNummer && isEuCountry(countryInput)) {
+      const res = await viesCheck(countryInput, btwNummer, supabaseAdmin);
+      vatValid = res.valid;
+      if (vatValid !== null) vatValidatedAt = new Date().toISOString();
+    }
+
+    // Bereken BTW-regel en bedragen server-side (autoritatief)
+    const vat = computeVat({
+      country: countryInput,
+      customerType,
+      vatValid,
+      subtotal: product.price,
+    });
 
     const siteUrl = origin && ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
     const molliePayment: Record<string, unknown> = {
       amount: {
         currency: 'EUR',
-        value: total.toFixed(2),
+        value: vat.total.toFixed(2),
       },
       description: `Annex27 - ${product.name}`,
-      redirectUrl: `${siteUrl}/success?plan=${encodeURIComponent(plan)}&value=${total}`,
+      redirectUrl: `${siteUrl}/success?plan=${encodeURIComponent(plan)}&value=${vat.total}`,
       webhookUrl: `${Deno.env.get('SUPABASE_URL')}/functions/v1/mollie-webhook`,
       metadata: {
         plan,
@@ -131,6 +210,13 @@ serve(async (req) => {
         bedrijf,
         email,
         btw_nummer: btwNummer,
+        country: countryInput,
+        customer_type: customerType,
+        vat_valid: vatValid,
+        vat_rule_applied: vat.rule,
+        vat_rate: vat.rate,
+        subtotal: vat.subtotal,
+        vat_amount: vat.vatAmount,
       },
     };
 
@@ -156,11 +242,19 @@ serve(async (req) => {
       return new Response(JSON.stringify({ error: 'Geen checkout URL ontvangen' }), { status: 500, headers });
     }
 
-    // Log pending order
+    // Log pending order met alle BTW-velden
     await supabaseAdmin.from('orders').upsert({
       payment_id: payment.id,
       plan,
-      amount: total,
+      amount: vat.total,
+      subtotal: vat.subtotal,
+      vat_amount: vat.vatAmount,
+      vat_rate: vat.rate,
+      vat_rule_applied: vat.rule,
+      vat_valid: vatValid,
+      vat_validated_at: vatValidatedAt,
+      country: countryInput,
+      customer_type: customerType,
       naam,
       bedrijf,
       email,
@@ -171,6 +265,8 @@ serve(async (req) => {
     return new Response(JSON.stringify({
       checkoutUrl,
       paymentId: payment.id,
+      total: vat.total,
+      vatRule: vat.rule,
     }), { status: 200, headers });
   } catch (err) {
     console.error('Error:', err);

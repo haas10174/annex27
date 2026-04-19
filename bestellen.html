@@ -28,6 +28,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.min.js" integrity="sha384-2zrRDgDHSYB/GN3nFW3fsZXoxEhKIr3N2h63Tc6DEOB9JJdFIu8xMJT2Cph/gBil" crossorigin="anonymous"></script>
+  <script src="/vat-rules.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -135,7 +136,7 @@
     .order-line .value { color: #0F172A; font-weight: 600; }
 
     .order-form { display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px; }
-    .order-input {
+    .order-input, .order-select {
       padding: 12px 16px;
       border: 1px solid #E5E5E5;
       border-radius: 10px;
@@ -143,8 +144,58 @@
       font-size: 0.9rem;
       color: #0F172A;
       outline: none;
+      background: white;
+      width: 100%;
     }
-    .order-input:focus { border-color: #0D9488; box-shadow: 0 0 0 3px rgba(13,148,136,0.1); }
+    .order-input:focus, .order-select:focus { border-color: #0D9488; box-shadow: 0 0 0 3px rgba(13,148,136,0.1); }
+
+    .field-label {
+      font-size: 0.72rem; font-weight: 600; color: #64748B;
+      text-transform: uppercase; letter-spacing: 0.08em;
+      margin-bottom: 6px; display: block;
+    }
+    .radio-group { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .radio-card {
+      border: 1px solid #E5E5E5; border-radius: 10px;
+      padding: 12px 14px; cursor: pointer;
+      display: flex; align-items: center; gap: 10px;
+      transition: all 0.15s; font-size: 0.9rem; color: #0F172A;
+    }
+    .radio-card:hover { border-color: #0D9488; }
+    .radio-card.selected { border-color: #0D9488; background: #F0FDFA; }
+    .radio-card input { position: absolute; opacity: 0; pointer-events: none; }
+    .radio-dot {
+      width: 16px; height: 16px; border: 2px solid #CBD5E1; border-radius: 50%;
+      flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+    }
+    .radio-card.selected .radio-dot { border-color: #0D9488; background: #0D9488; }
+    .radio-card.selected .radio-dot::after {
+      content: ''; width: 6px; height: 6px; border-radius: 50%; background: white;
+    }
+
+    .vat-status {
+      display: none; align-items: center; gap: 8px;
+      padding: 8px 12px; border-radius: 8px;
+      font-size: 0.8rem; margin-top: -4px;
+    }
+    .vat-status.show { display: flex; }
+    .vat-status.checking { background: #F1F5F9; color: #475569; }
+    .vat-status.valid { background: #ECFDF5; color: #065F46; }
+    .vat-status.invalid { background: #FEF2F2; color: #991B1B; }
+    .vat-status.error { background: #FFFBEB; color: #92400E; }
+    .vat-status .spin {
+      width: 14px; height: 14px; border: 2px solid #CBD5E1; border-top-color: #475569;
+      border-radius: 50%; animation: vatspin 0.8s linear infinite;
+    }
+    @keyframes vatspin { to { transform: rotate(360deg); } }
+
+    .vat-hint {
+      font-size: 0.76rem; color: #64748B;
+      margin-top: 6px; line-height: 1.45;
+      padding: 10px 12px; background: #F8FAFC; border-left: 3px solid #0D9488;
+      border-radius: 0 8px 8px 0;
+    }
+    .field-group { display: flex; flex-direction: column; gap: 6px; }
 
     .order-pay {
       width: 100%;
@@ -288,23 +339,68 @@
       <h3>Bestelling</h3>
       <div class="order-line">
         <span class="label" id="orderProduct">Gap-analyse</span>
-        <span class="value" id="orderPrice">&euro;795</span>
+        <span class="value" id="orderPrice">&euro;795,00</span>
       </div>
-      <div class="order-line">
-        <span class="label">BTW (21%)</span>
-        <span class="value" id="orderBtw">&euro;166,95</span>
+      <div class="order-line" id="vatLine" style="display:none;">
+        <span class="label" id="vatLabel">BTW</span>
+        <span class="value" id="orderBtw">&euro;0,00</span>
       </div>
       <div class="order-line total">
         <span>Totaal</span>
-        <span id="orderTotal">&euro;961,95</span>
+        <span id="orderTotal">&euro;795,00</span>
+      </div>
+      <div id="vatNote" style="margin-top:10px;padding:10px 12px;font-size:0.72rem;color:#64748B;background:#F8FAFC;border-radius:8px;line-height:1.5;">
+        Vrijstelling Art. 56bis W.BTW &mdash; geen BTW van toepassing.
       </div>
     </div>
 
     <form class="order-form" onsubmit="handleOrder(event)" novalidate>
+      <div class="field-group">
+        <label class="field-label" for="countrySelect">Land</label>
+        <select class="order-select" id="countrySelect" name="country" required>
+          <option value="NL" selected>Nederland</option>
+          <option value="BE">Belgi&euml;</option>
+          <option value="DE">Duitsland</option>
+          <option value="FR">Frankrijk</option>
+          <option value="LU">Luxemburg</option>
+          <option value="ES">Spanje</option>
+          <option value="IT">Itali&euml;</option>
+          <option value="AT">Oostenrijk</option>
+          <option value="IE">Ierland</option>
+          <option value="__EU">Ander EU-land</option>
+          <option value="__NON_EU">Buiten EU</option>
+        </select>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Type klant</label>
+        <div class="radio-group">
+          <label class="radio-card selected" id="typeB2B">
+            <input type="radio" name="customer_type" value="b2b" checked />
+            <span class="radio-dot"></span>
+            <span>Bedrijf</span>
+          </label>
+          <label class="radio-card" id="typeB2C">
+            <input type="radio" name="customer_type" value="b2c" />
+            <span class="radio-dot"></span>
+            <span>Particulier</span>
+          </label>
+        </div>
+      </div>
+
       <input class="order-input" type="text" name="naam" placeholder="Volledige naam" required maxlength="200" autocomplete="name" />
-      <input class="order-input" type="text" name="bedrijf" placeholder="Bedrijfsnaam" required maxlength="200" autocomplete="organization" />
+      <input class="order-input" type="text" name="bedrijf" id="bedrijfInput" placeholder="Bedrijfsnaam" required maxlength="200" autocomplete="organization" />
       <input class="order-input" type="email" name="email" placeholder="E-mailadres" required maxlength="320" autocomplete="email" />
-      <input class="order-input" type="text" name="btw_nummer" placeholder="BTW-nummer (optioneel)" maxlength="50" pattern="[A-Za-z0-9.\-\s]{0,50}" />
+
+      <div class="field-group" id="vatNumberWrap">
+        <input class="order-input" type="text" name="btw_nummer" id="vatInput" placeholder="BTW-nummer (bv. NL123456789B01)" maxlength="50" autocomplete="off" />
+        <div class="vat-status" id="vatStatus" role="status" aria-live="polite"></div>
+        <div class="vat-hint" id="vatHint">
+          <strong>Tip:</strong> met een geldig BTW-nummer wordt de BTW verlegd (0% op uw factuur, u geeft zelf aan).
+          Zonder BTW-nummer factureren wij onder de kleine-ondernemersvrijstelling (Art. 56bis).
+        </div>
+      </div>
+
       <!-- Honeypot: hidden field that real users won't fill in; bots often fill all fields -->
       <input type="text" name="website_url" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;opacity:0;pointer-events:none;" aria-hidden="true" />
       <button type="submit" class="order-pay" id="payBtn">Betalen via iDEAL, Bancontact of creditcard</button>
@@ -407,6 +503,48 @@
     });
   })();
 
+  // ===== VAT-state =====
+  let vatState = {
+    country: 'NL',
+    customerType: 'b2b',
+    vatNumberRaw: '',
+    vatValid: null,      // true | false | null (onbekend/nog niet gevalideerd)
+    vatChecking: false,
+    companyName: null,
+  };
+
+  function fmtEur(n) {
+    return '\u20AC' + Number(n).toLocaleString('nl-NL', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+
+  function recomputeSummary() {
+    const vat = window.Annex27VAT.computeVat({
+      country: vatState.country,
+      customerType: vatState.customerType,
+      vatValid: vatState.vatValid,
+      subtotal: selectedPrice,
+    });
+
+    document.getElementById('orderPrice').textContent = fmtEur(vat.subtotal);
+    document.getElementById('orderTotal').textContent = fmtEur(vat.total);
+
+    const vatLine = document.getElementById('vatLine');
+    const vatNote = document.getElementById('vatNote');
+
+    if (vat.rate > 0) {
+      vatLine.style.display = 'flex';
+      document.getElementById('vatLabel').textContent = 'BTW (' + Math.round(vat.rate * 100) + '%)';
+      document.getElementById('orderBtw').textContent = fmtEur(vat.vatAmount);
+    } else {
+      vatLine.style.display = 'none';
+    }
+
+    vatNote.textContent = vat.invoiceNote;
+
+    const payBtn = document.getElementById('payBtn');
+    payBtn.textContent = 'Betalen \u2014 ' + fmtEur(vat.total);
+  }
+
   function selectPlan(el, plan, price, period) {
     document.querySelectorAll('.plan-option').forEach(p => p.classList.remove('selected'));
     el.classList.add('selected');
@@ -417,17 +555,131 @@
       window.annex27Track('bestelling_clicked', { plan: plan, price: price, currency: 'EUR' });
     }
 
-    const btw = Math.round(price * 0.21 * 100) / 100;
-    const total = Math.round((price + btw) * 100) / 100;
-
     document.getElementById('orderProduct').textContent = el.querySelector('.plan-name').textContent;
-    document.getElementById('orderPrice').textContent = '\u20AC' + price.toLocaleString('nl-NL');
-    document.getElementById('orderBtw').textContent = '\u20AC' + btw.toLocaleString('nl-NL', {minimumFractionDigits:2});
-    document.getElementById('orderTotal').textContent = '\u20AC' + total.toLocaleString('nl-NL', {minimumFractionDigits:2});
+    recomputeSummary();
+  }
 
-    document.getElementById('payBtn').textContent = period === '/maand'
-      ? 'Betalen — \u20AC' + total.toLocaleString('nl-NL', {minimumFractionDigits:2}) + '/maand'
-      : 'Betalen via iDEAL, Bancontact of creditcard';
+  // ===== Country / type handlers =====
+  document.addEventListener('DOMContentLoaded', () => {
+    const countrySel = document.getElementById('countrySelect');
+    const b2bCard = document.getElementById('typeB2B');
+    const b2cCard = document.getElementById('typeB2C');
+    const bedrijf = document.getElementById('bedrijfInput');
+    const vatWrap = document.getElementById('vatNumberWrap');
+    const vatInput = document.getElementById('vatInput');
+
+    // Country → map "__EU" / "__NON_EU" naar concrete behandeling
+    countrySel.addEventListener('change', () => {
+      const v = countrySel.value;
+      if (v === '__NON_EU') {
+        vatState.country = 'XX';   // non-EU sentinel
+      } else if (v === '__EU') {
+        vatState.country = 'DE';   // willekeurig EU-land als placeholder; gebruiker kan specifieker kiezen
+      } else {
+        vatState.country = v;
+      }
+      vatState.vatValid = null;
+      recheckVatDebounced();
+      recomputeSummary();
+    });
+
+    function setType(t) {
+      vatState.customerType = t;
+      if (t === 'b2b') {
+        b2bCard.classList.add('selected'); b2cCard.classList.remove('selected');
+        b2bCard.querySelector('input').checked = true;
+        bedrijf.required = true;
+        vatWrap.style.display = 'flex';
+      } else {
+        b2cCard.classList.add('selected'); b2bCard.classList.remove('selected');
+        b2cCard.querySelector('input').checked = true;
+        bedrijf.required = false;
+        vatWrap.style.display = 'none';
+        vatInput.value = '';
+        vatState.vatNumberRaw = '';
+        vatState.vatValid = null;
+        showVatStatus('');
+      }
+      recomputeSummary();
+    }
+    b2bCard.addEventListener('click', () => setType('b2b'));
+    b2cCard.addEventListener('click', () => setType('b2c'));
+
+    vatInput.addEventListener('input', () => {
+      vatState.vatNumberRaw = vatInput.value;
+      vatState.vatValid = null;
+      recomputeSummary();
+      recheckVatDebounced();
+    });
+    vatInput.addEventListener('blur', () => recheckVatNow());
+
+    recomputeSummary();
+  });
+
+  function showVatStatus(kind, msg) {
+    const el = document.getElementById('vatStatus');
+    el.className = 'vat-status';
+    el.innerHTML = '';
+    if (!kind) { el.classList.remove('show'); return; }
+    el.classList.add('show', kind);
+    if (kind === 'checking') {
+      el.innerHTML = '<span class="spin"></span> <span>' + msg + '</span>';
+    } else {
+      const icon = kind === 'valid' ? '\u2713' : kind === 'invalid' ? '\u2717' : '!';
+      el.innerHTML = '<strong>' + icon + '</strong> <span>' + msg + '</span>';
+    }
+  }
+
+  let vatCheckTimer = null;
+  function recheckVatDebounced() {
+    clearTimeout(vatCheckTimer);
+    vatCheckTimer = setTimeout(recheckVatNow, 600);
+  }
+
+  async function recheckVatNow() {
+    const raw = (vatState.vatNumberRaw || '').trim();
+    if (!raw || vatState.customerType !== 'b2b') {
+      showVatStatus('');
+      vatState.vatValid = null;
+      recomputeSummary();
+      return;
+    }
+    // Alleen VIES-check bij EU-land
+    if (!window.Annex27VAT.isEuCountry(vatState.country)) {
+      showVatStatus('error', 'VIES controleert alleen EU-BTW-nummers.');
+      vatState.vatValid = false;
+      recomputeSummary();
+      return;
+    }
+
+    showVatStatus('checking', 'BTW-nummer controleren bij VIES \u2026');
+    vatState.vatChecking = true;
+
+    try {
+      const { data, error } = await sb.functions.invoke('vies-check', {
+        body: { country_code: vatState.country, vat_number: raw },
+      });
+      vatState.vatChecking = false;
+      if (error) {
+        showVatStatus('error', 'Validatie tijdelijk niet mogelijk. Klopt het formaat? We laten uw bestelling gewoon doorgaan.');
+        vatState.vatValid = null;
+      } else if (data && data.valid === true) {
+        vatState.vatValid = true;
+        vatState.companyName = data.company_name || null;
+        showVatStatus('valid', 'Geldig BTW-nummer' + (data.company_name ? ' \u2014 ' + data.company_name : ''));
+      } else if (data && data.valid === false) {
+        vatState.vatValid = false;
+        showVatStatus('invalid', data.error || 'BTW-nummer niet gevonden in VIES. Wij factureren onder Art. 56bis.');
+      } else {
+        vatState.vatValid = null;
+        showVatStatus('error', 'VIES-dienst antwoordt niet. We proberen het later opnieuw.');
+      }
+    } catch (e) {
+      vatState.vatChecking = false;
+      vatState.vatValid = null;
+      showVatStatus('error', 'Validatie tijdelijk niet mogelijk.');
+    }
+    recomputeSummary();
   }
 
   const SUPABASE_URL = 'https://tvqhxhoohzdzekcfzjuv.supabase.co';
@@ -473,6 +725,14 @@
     btn.textContent = 'Bezig met doorsturen naar Mollie...';
 
     try {
+      // Compute local VAT preview so we can log the correct value for analytics / pending-order
+      const vatPreview = window.Annex27VAT.computeVat({
+        country: vatState.country,
+        customerType: vatState.customerType,
+        vatValid: vatState.vatValid,
+        subtotal: selectedPrice,
+      });
+
       const { data: result, error } = await sb.functions.invoke('create-payment', {
         body: {
           plan: selectedPlan,
@@ -480,6 +740,8 @@
           bedrijf,
           email,
           btw_nummer: btw,
+          country: vatState.country,
+          customer_type: vatState.customerType,
         },
       });
 
@@ -490,19 +752,18 @@
       if (window.annex27Track) {
         window.annex27Track('begin_checkout', {
           currency: 'EUR',
-          value: selectedPrice,
+          value: vatPreview.total,
           items: [{ item_id: selectedPlan, item_name: selectedPlan, price: selectedPrice, quantity: 1 }]
         });
       }
 
       // Save pending order zodat /success een stabiel transaction_id heeft
       try {
-        var btwAmt = Math.round(selectedPrice * 0.21 * 100) / 100;
-        var totalAmt = Math.round((selectedPrice + btwAmt) * 100) / 100;
         localStorage.setItem('annex27_pending_order', JSON.stringify({
           ref: result.paymentId || ('anx_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8)),
           plan: selectedPlan,
-          value: totalAmt,
+          value: vatPreview.total,
+          vat_rule: vatPreview.rule,
           ts: Date.now()
         }));
       } catch (_) {}

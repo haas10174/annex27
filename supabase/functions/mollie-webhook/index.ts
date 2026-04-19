@@ -66,10 +66,26 @@ serve(async (req) => {
       }
 
       // Idempotent upsert — markeer betaald, laat confirmed_at op null voor admin-bevestiging
+      // BTW-velden uit metadata (gezet door create-payment) meenemen
+      const vatRuleApplied = String(meta.vat_rule_applied || '').slice(0, 40) || null;
+      const vatRateRaw = meta.vat_rate;
+      const vatRate = (typeof vatRateRaw === 'number') ? vatRateRaw : (typeof vatRateRaw === 'string' ? parseFloat(vatRateRaw) : 0) || 0;
+      const subtotalRaw = meta.subtotal;
+      const subtotal = (typeof subtotalRaw === 'number') ? subtotalRaw : (typeof subtotalRaw === 'string' ? parseFloat(subtotalRaw) : null);
+      const vatAmountRaw = meta.vat_amount;
+      const vatAmount = (typeof vatAmountRaw === 'number') ? vatAmountRaw : (typeof vatAmountRaw === 'string' ? parseFloat(vatAmountRaw) : 0) || 0;
+
       await supabase.from('orders').upsert({
         payment_id: payment.id,
         plan: String(meta.plan || '').slice(0, 50),
         amount: parseFloat(payment.amount.value),
+        subtotal: subtotal,
+        vat_amount: vatAmount,
+        vat_rate: vatRate,
+        vat_rule_applied: vatRuleApplied,
+        vat_valid: (meta.vat_valid === true || meta.vat_valid === false) ? meta.vat_valid : null,
+        country: String(meta.country || '').slice(0, 4) || null,
+        customer_type: (meta.customer_type === 'b2b' || meta.customer_type === 'b2c') ? meta.customer_type : null,
         naam,
         bedrijf,
         email,

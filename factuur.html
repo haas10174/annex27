@@ -299,6 +299,56 @@ function fmt(n) { return '\u20AC ' + Number(n).toLocaleString('nl-NL', { minimum
 
   const deliverables = PRODUCT_DELIVERABLES[data.product] || [];
 
+  // === BTW-regel bepalen op basis van vat_rule_applied (nieuw) of btw_regime (legacy) ===
+  // Returns: { kind: 'exempt_56bis' | 'reverse_charge' | 'outside_eu' | 'standard', note: string, hasVatLine: boolean }
+  function resolveVatDisplay(inv) {
+    const rule = inv.vat_rule_applied;
+    const rate = Number(inv.vat_rate || 0);
+    if (rule === 'reverse_charge') {
+      return {
+        kind: 'reverse_charge',
+        note: 'BTW verlegd &mdash; Art. 196 Richtlijn 2006/112/EG. BTW-aangifte door afnemer.',
+        hasVatLine: false,
+      };
+    }
+    if (rule === 'outside_eu') {
+      return {
+        kind: 'outside_eu',
+        note: 'Outside scope of EU VAT.',
+        hasVatLine: false,
+      };
+    }
+    if (rule === 'exempt_56bis' || rule === 'exempt_56bis_eu') {
+      return {
+        kind: 'exempt_56bis',
+        note: 'Bijzondere vrijstellingsregeling kleine ondernemingen &mdash; Art. 56bis W.BTW (Belgi&euml;). Geen BTW van toepassing.',
+        hasVatLine: false,
+      };
+    }
+    if (rate > 0 || inv.btw_regime === 'standard') {
+      return {
+        kind: 'standard',
+        note: '',
+        hasVatLine: true,
+      };
+    }
+    if (inv.btw_regime === 'reverse_charge') {
+      return {
+        kind: 'reverse_charge',
+        note: 'BTW verlegd &mdash; Art. 196 Richtlijn 2006/112/EG. BTW-aangifte door afnemer.',
+        hasVatLine: false,
+      };
+    }
+    // Legacy / default (btw_regime = 'none')
+    return {
+      kind: 'exempt_56bis',
+      note: 'Bijzondere vrijstellingsregeling kleine ondernemingen &mdash; Art. 56bis W.BTW (Belgi&euml;). Geen BTW van toepassing.',
+      hasVatLine: false,
+    };
+  }
+
+  const vatDisplay = resolveVatDisplay(data);
+
   sheet.innerHTML = `
     <div class="head">
       <div>
@@ -356,22 +406,27 @@ function fmt(n) { return '\u20AC ' + Number(n).toLocaleString('nl-NL', { minimum
         </table>
 
         <div class="totals">
-          ${data.btw_regime === 'none' ? `
+          ${vatDisplay.kind === 'standard' ? `
+            <div class="totals-row"><span>Subtotaal</span><span>${fmt(data.subtotal)}</span></div>
+            <div class="totals-row"><span>BTW (${Math.round((data.vat_rate || 0.21) * 100)}%)</span><span>${fmt(data.btw_amount)}</span></div>
             <div class="totals-row grand"><span>Totaal</span><span>${fmt(data.total)}</span></div>
-            <div style="margin-top:10px;font-size:0.76rem;color:var(--muted);text-align:right;max-width:100%;line-height:1.5;">
-              Geen BTW van toepassing &mdash; Annex27 is kleine onderneming (BTW-vrijgesteld, Art. 56bis WBTW) zolang BTW-nummer in aanvraag is.
-            </div>
-          ` : data.btw_regime === 'reverse_charge' ? `
+          ` : vatDisplay.kind === 'reverse_charge' ? `
             <div class="totals-row"><span>Subtotaal</span><span>${fmt(data.subtotal)}</span></div>
             <div class="totals-row"><span>BTW verlegd naar afnemer</span><span>&mdash;</span></div>
             <div class="totals-row grand"><span>Totaal</span><span>${fmt(data.total)}</span></div>
             <div style="margin-top:10px;font-size:0.76rem;color:var(--muted);text-align:right;line-height:1.5;">
-              BTW verlegd &mdash; art. 196 BTW-richtlijn. BTW-aangifte door afnemer.
+              ${vatDisplay.note}
+            </div>
+          ` : vatDisplay.kind === 'outside_eu' ? `
+            <div class="totals-row grand"><span>Totaal</span><span>${fmt(data.total)}</span></div>
+            <div style="margin-top:10px;font-size:0.76rem;color:var(--muted);text-align:right;line-height:1.5;">
+              ${vatDisplay.note}
             </div>
           ` : `
-            <div class="totals-row"><span>Subtotaal</span><span>${fmt(data.subtotal)}</span></div>
-            <div class="totals-row"><span>BTW (21%)</span><span>${fmt(data.btw_amount)}</span></div>
             <div class="totals-row grand"><span>Totaal</span><span>${fmt(data.total)}</span></div>
+            <div style="margin-top:10px;font-size:0.76rem;color:var(--muted);text-align:right;max-width:100%;line-height:1.5;">
+              ${vatDisplay.note}
+            </div>
           `}
         </div>
 

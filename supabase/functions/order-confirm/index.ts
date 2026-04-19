@@ -134,10 +134,30 @@ serve(async (req) => {
       }
       invoiceNumber = `${prefix}${String(seq).padStart(4, '0')}`;
 
-      const btwRegime = 'none'; // Art. 56bis WBTW vrijstelling — flip to 'standard' as soon as BTW-nummer komt
+      // Bepaal BTW-velden — gebruik order-velden als die gezet zijn, anders fallback (oude orders)
       const totalIncl = parseFloat(order.amount);
-      const subtotal = btwRegime === 'none' ? totalIncl : Math.round((totalIncl / 1.21) * 100) / 100;
-      const btwAmount = btwRegime === 'none' ? 0 : Math.round((totalIncl - subtotal) * 100) / 100;
+      const vatRuleApplied: string | null = order.vat_rule_applied || null;
+      const vatRate: number = typeof order.vat_rate === 'number' ? order.vat_rate
+        : (typeof order.vat_rate === 'string' ? parseFloat(order.vat_rate) : 0) || 0;
+
+      let subtotal: number;
+      let btwAmount: number;
+      if (order.subtotal != null && order.vat_amount != null) {
+        subtotal = parseFloat(order.subtotal);
+        btwAmount = parseFloat(order.vat_amount);
+      } else if (vatRate > 0) {
+        subtotal = Math.round((totalIncl / (1 + vatRate)) * 100) / 100;
+        btwAmount = Math.round((totalIncl - subtotal) * 100) / 100;
+      } else {
+        subtotal = totalIncl;
+        btwAmount = 0;
+      }
+
+      // Map vat_rule_applied naar bestaande btw_regime-kolom (backwards compat)
+      let btwRegime: string;
+      if (vatRuleApplied === 'reverse_charge') btwRegime = 'reverse_charge';
+      else if (vatRate > 0) btwRegime = 'standard';
+      else btwRegime = 'none';
 
       await supabase.from('invoices').insert({
         invoice_number: invoiceNumber,
@@ -151,6 +171,10 @@ serve(async (req) => {
         subtotal, btw_amount: btwAmount, total: totalIncl,
         status: 'paid',
         btw_regime: btwRegime,
+        vat_rule_applied: vatRuleApplied,
+        vat_rate: vatRate,
+        country: order.country || null,
+        customer_type: order.customer_type || null,
         payment_method: 'mollie',
         payment_id: order.payment_id,
       });
