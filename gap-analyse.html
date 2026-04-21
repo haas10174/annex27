@@ -1016,7 +1016,16 @@
       border-color: var(--accent);
       background: var(--accent-light);
     }
-    .sector-option-icon { font-size: 1.3rem; margin-bottom: 8px; display: block; }
+    .sector-option-icon {
+      display: flex; align-items: center; justify-content: center;
+      width: 36px; height: 36px;
+      margin-bottom: 12px;
+      border-radius: 8px;
+      background: var(--accent-bg, rgba(13,148,136,0.08));
+      color: var(--accent, #0D9488);
+    }
+    .sector-option-icon svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    .sector-option.selected .sector-option-icon { background: var(--accent, #0D9488); color: #fff; }
     .sector-option-name {
       font-size: 0.9rem;
       font-weight: 700;
@@ -1214,32 +1223,44 @@
     <p>Wij stemmen de quickscan af op uw sector zodat de resultaten en aanbevelingen direct relevant zijn.</p>
     <div class="sector-grid">
       <div class="sector-option" onclick="pickSector('saas', this)">
-        <span class="sector-option-icon">&#9729;&#65039;</span>
+        <span class="sector-option-icon">
+          <svg viewBox="0 0 24 24"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>
+        </span>
         <div class="sector-option-name">SaaS &amp; Cloud</div>
         <div class="sector-option-desc">Software, platforms, cloud-diensten</div>
       </div>
       <div class="sector-option" onclick="pickSector('it', this)">
-        <span class="sector-option-icon">&#128421;&#65039;</span>
+        <span class="sector-option-icon">
+          <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+        </span>
         <div class="sector-option-name">IT-dienstverlener / MSP</div>
         <div class="sector-option-desc">Managed services, consultancy, hosting</div>
       </div>
       <div class="sector-option" onclick="pickSector('zorg', this)">
-        <span class="sector-option-icon">&#127973;</span>
+        <span class="sector-option-icon">
+          <svg viewBox="0 0 24 24"><path d="M8 2v4M16 2v4M4 6h16v15a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6z"/><path d="M12 11v6M9 14h6"/></svg>
+        </span>
         <div class="sector-option-name">Zorg &amp; Medisch</div>
         <div class="sector-option-desc">Zorginstellingen, medische technologie</div>
       </div>
       <div class="sector-option" onclick="pickSector('overheid', this)">
-        <span class="sector-option-icon">&#127963;&#65039;</span>
+        <span class="sector-option-icon">
+          <svg viewBox="0 0 24 24"><path d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M8 14v3M12 14v3M16 14v3"/></svg>
+        </span>
         <div class="sector-option-name">Overheid &amp; Semi-overheid</div>
         <div class="sector-option-desc">Gemeenten, uitvoeringsorganisaties, ZBO's</div>
       </div>
       <div class="sector-option" onclick="pickSector('bouw', this)">
-        <span class="sector-option-icon">&#127959;&#65039;</span>
+        <span class="sector-option-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 2l9 4v6c0 5-4 9-9 10-5-1-9-5-9-10V6l9-4z"/><path d="M8 11l3 3 5-6"/></svg>
+        </span>
         <div class="sector-option-name">Bouw &amp; Techniek</div>
         <div class="sector-option-desc">Aannemers, ingenieursbureaus, infra</div>
       </div>
       <div class="sector-option" onclick="pickSector('overig', this)">
-        <span class="sector-option-icon">&#128640;</span>
+        <span class="sector-option-icon">
+          <svg viewBox="0 0 24 24"><polyline points="3 17 9 11 13 15 21 7"/><polyline points="14 7 21 7 21 14"/></svg>
+        </span>
         <div class="sector-option-name">Scale-up / Overig</div>
         <div class="sector-option-desc">Fintech, retail, logistiek, overige</div>
       </div>
