@@ -137,7 +137,7 @@
       '@media (max-width:520px){#a27-cookie-banner{left:8px;right:8px;bottom:8px;padding:14px 16px;}}' +
       '</style>' +
       '<h3>Cookies &amp; privacy</h3>' +
-      '<p>Wij gebruiken alleen analytische cookies (Google Analytics, geanonimiseerd) om de site te verbeteren. Geen tracking voor advertenties zonder uw toestemming. <a href="/trust">Meer lezen</a>.</p>' +
+      '<p>Wij gebruiken alleen geanonimiseerde analytische cookies (Google Analytics 4) om de site te verbeteren. Geen advertentie- of tracking-cookies. <a href="/privacy#cookies">Cookie-beleid</a>.</p>' +
       '<div class="a27-btns">' +
       '<button class="a27-accept" type="button">Accepteren</button>' +
       '<button class="a27-reject" type="button">Alleen noodzakelijke</button>' +
@@ -184,4 +184,19 @@
   } else {
     mount();
   }
+
+  // Publieke helper: bezoeker kan cookie-keuze wijzigen via /privacy of footer-link.
+  window.annex27ResetConsent = function () {
+    try { localStorage.removeItem(CONSENT_KEY); } catch (e) {}
+    gtag('consent', 'update', {
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      analytics_storage: 'denied'
+    });
+    // Forceer opnieuw tonen van banner
+    var existing = document.getElementById('a27-cookie-banner');
+    if (existing) existing.parentNode.removeChild(existing);
+    mount();
+  };
 })();
