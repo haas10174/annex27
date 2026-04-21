@@ -1525,6 +1525,45 @@
     .ga-evidence-note:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(20,184,166,0.1); }
     .ga-evidence-note::placeholder { color: var(--text-muted); }
 
+    /* Evidence-form (structured toelichting) */
+    .ga-ef {
+      display: flex; flex-direction: column; gap: 12px;
+      padding: 14px 16px;
+      background: #fff;
+      border: 1px solid rgba(20,184,166,0.2);
+      border-radius: 10px;
+    }
+    .ga-ef-row { display: flex; flex-direction: column; gap: 4px; }
+    .ga-ef-row-2 { display: grid; grid-template-columns: 1fr 180px; gap: 12px; }
+    .ga-ef-label {
+      font-size: 0.72rem; font-weight: 600;
+      color: var(--text-secondary);
+      letter-spacing: 0.02em;
+    }
+    .ga-ef-input, .ga-ef-textarea {
+      width: 100%;
+      padding: 8px 12px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.84rem;
+      color: var(--text-primary);
+      outline: none;
+      transition: border-color .15s, box-shadow .15s;
+    }
+    .ga-ef-input-date { max-width: 180px; }
+    .ga-ef-textarea { min-height: 54px; resize: vertical; line-height: 1.5; }
+    .ga-ef-input:focus, .ga-ef-textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(20,184,166,0.12);
+      background: #fff;
+    }
+    .ga-ef-input::placeholder, .ga-ef-textarea::placeholder { color: var(--text-muted); }
+    @media (max-width: 560px) {
+      .ga-ef-row-2 { grid-template-columns: 1fr; }
+    }
+
     /* Legacy warning — hidden, replaced by header status chip */
     .ga-evidence-warning { display: none !important; }
 
@@ -3237,6 +3276,53 @@ async function uploadEvidence(controlId, input) {
   }, 100);
 }
 
+// Delegated drag/drop + click op .ga-evidence-upload — werkt ook voor dynamisch gerenderde dropzones.
+// Wordt 1x aangehangen.
+(function setupEvidenceDropzones() {
+  if (window.__annex27DropsReady) return;
+  window.__annex27DropsReady = true;
+
+  document.addEventListener('dragover', (e) => {
+    const zone = e.target.closest && e.target.closest('.ga-evidence-upload');
+    if (!zone) return;
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'copy';
+    zone.classList.add('dragging');
+  });
+
+  document.addEventListener('dragleave', (e) => {
+    const zone = e.target.closest && e.target.closest('.ga-evidence-upload');
+    if (!zone) return;
+    // Alleen removen wanneer écht buiten de zone, niet bij naar een child bewegen
+    if (e.relatedTarget && zone.contains(e.relatedTarget)) return;
+    zone.classList.remove('dragging');
+  });
+
+  document.addEventListener('drop', (e) => {
+    const zone = e.target.closest && e.target.closest('.ga-evidence-upload');
+    if (!zone) return;
+    e.preventDefault();
+    zone.classList.remove('dragging');
+    const ctrlId = zone.dataset.ctrl;
+    if (!ctrlId) return;
+    const files = e.dataTransfer && e.dataTransfer.files;
+    if (!files || !files.length) return;
+    // Upload sequentieel (eenvoudig; meeste gebruikers droppen 1 bestand)
+    for (let i = 0; i < files.length; i++) {
+      uploadEvidence(ctrlId, { files: [files[i]] });
+    }
+  });
+
+  // Klik op zone opent file-picker (niet via label — div opent geen input bij display:none)
+  document.addEventListener('click', (e) => {
+    const zone = e.target.closest && e.target.closest('.ga-evidence-upload');
+    if (!zone) return;
+    if (e.target.tagName === 'INPUT') return; // laat input-clicks origineel
+    const input = zone.querySelector('input[type="file"]');
+    if (input) input.click();
+  });
+})();
+
 function removeEvidence(controlId, fileIndex) {
   if (!evidenceData[controlId]) return;
   evidenceData[controlId].files.splice(fileIndex, 1);
@@ -4417,9 +4503,11 @@ function renderControlCard(ctrl, idx, total) {
     return v === '4' || v === '3' || v === '2';
   });
 
-  const hasEvidence = (evidence.files.length > 0) || (evidence.note && evidence.note.trim().length > 0);
+  const nf = evidence.note_fields || {};
+  const hasStructuredNote = !!(nf.procedure || nf.location || nf.owner || nf.last_verified || nf.remark);
+  const hasEvidence = (evidence.files.length > 0) || hasStructuredNote || (evidence.note && evidence.note.trim().length > 0);
 
-  const noteOpen = !!(evidence.note && evidence.note.trim().length > 0);
+  const noteOpen = hasStructuredNote || !!(evidence.note && evidence.note.trim().length > 0);
   const hintFormatted = esc(evHint).replace(/^Upload:\s*/i, '<strong>Wat een auditor verifieert: </strong>');
 
   html += `
@@ -4447,21 +4535,54 @@ function renderControlCard(ctrl, idx, total) {
   const noteId = 'note_' + ctrl.id.replace(/\./g, '_');
   html += `
       </div>
-      <label class="ga-evidence-upload"
-             ondragover="event.preventDefault(); this.classList.add('dragging');"
-             ondragleave="this.classList.remove('dragging');"
-             ondrop="event.preventDefault(); this.classList.remove('dragging'); if(event.dataTransfer.files[0]) uploadEvidence('${esc(ctrl.id)}', {files: event.dataTransfer.files});">
+      <div class="ga-evidence-upload" data-ctrl="${esc(ctrl.id)}">
         <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
         <span class="ga-evidence-upload-main">Sleep bestanden hierheen of klik om te uploaden</span>
         <span class="ga-evidence-upload-sub">PDF &middot; DOCX &middot; PNG &middot; XLSX &middot; max 10MB</span>
         <input type="file" onchange="uploadEvidence('${esc(ctrl.id)}', this)" accept=".pdf,.png,.jpg,.jpeg,.docx,.xlsx,.txt" />
-      </label>
-      <button type="button" class="ga-evidence-note-toggle ${noteOpen ? 'open' : ''}" onclick="const w=document.getElementById('${noteId}'); w.classList.toggle('open'); this.classList.toggle('open'); if(w.classList.contains('open')) w.querySelector('textarea').focus();">
+      </div>
+      <button type="button" class="ga-evidence-note-toggle ${noteOpen ? 'open' : ''}" onclick="const w=document.getElementById('${noteId}'); w.classList.toggle('open'); this.classList.toggle('open'); if(w.classList.contains('open')) { const firstInput = w.querySelector('input,textarea'); if(firstInput) firstInput.focus(); }">
         <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
         ${noteOpen ? 'Toelichting' : 'Toelichting toevoegen'}
       </button>
       <div class="ga-evidence-note-wrap ${noteOpen ? 'open' : ''}" id="${noteId}">
-        <textarea class="ga-evidence-note" placeholder="Beschrijf uw onderbouwing: welke procedure, waar te vinden, wanneer getest..." onblur="saveEvidenceNote('${esc(ctrl.id)}', this.value)">${esc(evidence.note || '')}</textarea>
+        <div class="ga-ef">
+          <div class="ga-ef-row">
+            <label class="ga-ef-label">Welke procedure, beleidsdocument of bewijs is dit?</label>
+            <input type="text" class="ga-ef-input" data-field="procedure"
+                   value="${esc(nf.procedure || '')}"
+                   onblur="saveEvidenceField('${esc(ctrl.id)}','procedure',this.value)"
+                   placeholder="bv. Informatiebeveiligingsbeleid v2.1 (PDF)" />
+          </div>
+          <div class="ga-ef-row">
+            <label class="ga-ef-label">Waar is dit te vinden?</label>
+            <input type="text" class="ga-ef-input" data-field="location"
+                   value="${esc(nf.location || '')}"
+                   onblur="saveEvidenceField('${esc(ctrl.id)}','location',this.value)"
+                   placeholder="bv. SharePoint / Teams / Google Drive &mdash; &lsaquo;pad&rsaquo;" />
+          </div>
+          <div class="ga-ef-row ga-ef-row-2">
+            <div>
+              <label class="ga-ef-label">Wie is eigenaar?</label>
+              <input type="text" class="ga-ef-input" data-field="owner"
+                     value="${esc(nf.owner || '')}"
+                     onblur="saveEvidenceField('${esc(ctrl.id)}','owner',this.value)"
+                     placeholder="bv. CISO, IT-manager, HR" />
+            </div>
+            <div>
+              <label class="ga-ef-label">Laatst gereviewd</label>
+              <input type="date" class="ga-ef-input ga-ef-input-date" data-field="last_verified"
+                     value="${esc(nf.last_verified || '')}"
+                     onblur="saveEvidenceField('${esc(ctrl.id)}','last_verified',this.value)" />
+            </div>
+          </div>
+          <div class="ga-ef-row">
+            <label class="ga-ef-label">Opmerking (optioneel)</label>
+            <textarea class="ga-ef-textarea" data-field="remark"
+                      onblur="saveEvidenceField('${esc(ctrl.id)}','remark',this.value)"
+                      placeholder="Context, afwijkingen, scope-afbakeningen, lopende verbetering\u2026">${esc(nf.remark || '')}</textarea>
+          </div>
+        </div>
       </div>
     </div>
   </div>`;
@@ -4504,6 +4625,25 @@ function setGaAnswer(key, value, btn) {
     const warn = document.getElementById('warn_' + ctrl.id.replace(/\./g, '_'));
     if (warn) warn.classList.toggle('active', anyClaimed && !hasEvidence);
   }
+}
+
+// Save één gestructureerd veld + sync serialized note
+function saveEvidenceField(ctrlId, field, value) {
+  if (!evidenceData[ctrlId]) evidenceData[ctrlId] = { files: [], note: '', note_fields: {} };
+  if (!evidenceData[ctrlId].note_fields) evidenceData[ctrlId].note_fields = {};
+  evidenceData[ctrlId].note_fields[field] = (value || '').slice(0, 800);
+
+  // Sync serialized note voor export/legacy consumers
+  const nf = evidenceData[ctrlId].note_fields;
+  const parts = [];
+  if (nf.procedure) parts.push('Procedure/document: ' + nf.procedure);
+  if (nf.location) parts.push('Locatie: ' + nf.location);
+  if (nf.owner) parts.push('Eigenaar: ' + nf.owner);
+  if (nf.last_verified) parts.push('Laatst gereviewd: ' + nf.last_verified);
+  if (nf.remark) parts.push('Opmerking: ' + nf.remark);
+  evidenceData[ctrlId].note = parts.join('\n');
+
+  saveEvidenceData();
 }
 
 function saveEvidenceNote(ctrlId, noteVal) {
