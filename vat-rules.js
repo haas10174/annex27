@@ -1,5 +1,5 @@
-// Client-side VAT-rules voor bestellen.html (mirror van supabase/functions/_shared/vat-rules.ts).
-// Zie die file voor het autoritatieve model — server-side valideert opnieuw.
+// Client-side VAT-rules (mirror van supabase/functions/_shared/vat-rules.ts).
+// 2026-04-22: Annex27 heeft standaard BTW-regime (BE 21%), geen 56bis-vrijstelling meer.
 (function (root) {
   'use strict';
 
@@ -7,6 +7,8 @@
     AT:1,BE:1,BG:1,CY:1,CZ:1,DE:1,DK:1,EE:1,EL:1,ES:1,FI:1,FR:1,HR:1,HU:1,
     IE:1,IT:1,LT:1,LU:1,LV:1,MT:1,NL:1,PL:1,PT:1,RO:1,SE:1,SI:1,SK:1,XI:1,
   };
+
+  var STANDARD_RATE_BE = 0.21;
 
   function isEuCountry(c) { return !!EU_COUNTRIES[String(c || '').toUpperCase()]; }
 
@@ -16,6 +18,7 @@
     var customerType = args.customerType || 'b2c';
     var vatValid = args.vatValid;
 
+    // Buiten EU → outside scope
     if (!EU_COUNTRIES[country]) {
       return {
         rule: 'outside_eu', rate: 0,
@@ -24,15 +27,8 @@
         requiresVatNumber: false,
       };
     }
-    if (country === sellerCountry) {
-      return {
-        rule: 'exempt_56bis', rate: 0,
-        invoiceNote: 'Bijzondere vrijstellingsregeling kleine ondernemingen \u2014 Art. 56bis W.BTW (Belgi\u00eb)',
-        shortLabel: 'Vrijstelling Art. 56bis',
-        requiresVatNumber: false,
-      };
-    }
-    if (customerType === 'b2b' && vatValid === true) {
+    // EU B2B met geldig VIES-nummer + niet BE (eigen land) → BTW verlegd
+    if (country !== sellerCountry && customerType === 'b2b' && vatValid === true) {
       return {
         rule: 'reverse_charge', rate: 0,
         invoiceNote: 'BTW verlegd \u2014 Art. 196 Richtlijn 2006/112/EG. BTW-aangifte door afnemer.',
@@ -40,10 +36,11 @@
         requiresVatNumber: true,
       };
     }
+    // Alle andere gevallen (BE binnenland, EU B2C, EU B2B zonder valid VAT) → BE 21%
     return {
-      rule: 'exempt_56bis_eu', rate: 0,
-      invoiceNote: 'Bijzondere vrijstellingsregeling kleine ondernemingen \u2014 Art. 56bis W.BTW (Belgi\u00eb). Onder EU-B2C-drempel van \u20AC10.000.',
-      shortLabel: 'Vrijstelling Art. 56bis',
+      rule: 'standard_be', rate: STANDARD_RATE_BE,
+      invoiceNote: 'BTW 21% (BE).',
+      shortLabel: 'BTW 21%',
       requiresVatNumber: false,
     };
   }

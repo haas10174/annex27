@@ -304,7 +304,7 @@ function fmt(n) { return '\u20AC ' + Number(n).toLocaleString('nl-NL', { minimum
   function resolveVatDisplay(inv) {
     const rule = inv.vat_rule_applied;
     const rate = Number(inv.vat_rate || 0);
-    if (rule === 'reverse_charge') {
+    if (rule === 'reverse_charge' || inv.btw_regime === 'reverse_charge') {
       return {
         kind: 'reverse_charge',
         note: 'BTW verlegd &mdash; Art. 196 Richtlijn 2006/112/EG. BTW-aangifte door afnemer.',
@@ -318,32 +318,19 @@ function fmt(n) { return '\u20AC ' + Number(n).toLocaleString('nl-NL', { minimum
         hasVatLine: false,
       };
     }
-    if (rule === 'exempt_56bis' || rule === 'exempt_56bis_eu') {
+    // Legacy orders (v&oacute;&oacute;r 2026-04-22) met 56bis-vrijstelling: laten zoals opgeslagen voor historische consistentie
+    if (rule === 'exempt_56bis' || rule === 'exempt_56bis_eu' || (inv.btw_regime === 'none' && rate === 0)) {
       return {
         kind: 'exempt_56bis',
-        note: 'Bijzondere vrijstellingsregeling kleine ondernemingen &mdash; Art. 56bis W.BTW (Belgi&euml;). Geen BTW van toepassing.',
+        note: 'Historische vrijstelling kleine onderneming (Art. 56bis W.BTW) &mdash; regime per 22-04-2026 omgezet naar standaard BTW-regime.',
         hasVatLine: false,
       };
     }
-    if (rate > 0 || inv.btw_regime === 'standard') {
-      return {
-        kind: 'standard',
-        note: '',
-        hasVatLine: true,
-      };
-    }
-    if (inv.btw_regime === 'reverse_charge') {
-      return {
-        kind: 'reverse_charge',
-        note: 'BTW verlegd &mdash; Art. 196 Richtlijn 2006/112/EG. BTW-aangifte door afnemer.',
-        hasVatLine: false,
-      };
-    }
-    // Legacy / default (btw_regime = 'none')
+    // Default (standaard BE 21%)
     return {
-      kind: 'exempt_56bis',
-      note: 'Bijzondere vrijstellingsregeling kleine ondernemingen &mdash; Art. 56bis W.BTW (Belgi&euml;). Geen BTW van toepassing.',
-      hasVatLine: false,
+      kind: 'standard',
+      note: '',
+      hasVatLine: true,
     };
   }
 
@@ -370,8 +357,8 @@ function fmt(n) { return '\u20AC ' + Number(n).toLocaleString('nl-NL', { minimum
           <div class="line">
             info@annex27.nl<br/>
             KBO 1006.203.170<br/>
-            IBAN: BE28 7310 7616 8920<br/>
-            ${data.btw_regime === 'none' ? 'Kleine onderneming &mdash; vrijgesteld van BTW (Art. 56bis WBTW)' : 'BTW: BE ' + (data.seller_btw || 'in aanvraag')}
+            BTW: BE1006.203.170<br/>
+            IBAN: BE28 7310 7616 8920
           </div>
         </div>
         <div class="meta-block">
