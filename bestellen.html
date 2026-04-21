@@ -376,7 +376,7 @@
         <span id="orderTotal">&euro;795,00</span>
       </div>
       <div id="vatNote" style="margin-top:10px;padding:10px 12px;font-size:0.72rem;color:#64748B;background:#F8FAFC;border-radius:8px;line-height:1.5;">
-        Vrijstelling Art. 56bis W.BTW &mdash; geen BTW van toepassing.
+        Prijzen excl. BTW. Het uiteindelijke BTW-bedrag wordt berekend op basis van uw land en BTW-nummer volgens de EU-regels.
       </div>
     </div>
 
@@ -428,8 +428,8 @@
         <input class="order-input" type="text" name="btw_nummer" id="vatInput" placeholder="BTW-nummer (bv. NL123456789B01)" maxlength="50" autocomplete="off" />
         <div class="vat-status" id="vatStatus" role="status" aria-live="polite"></div>
         <div class="vat-hint" id="vatHint">
-          <strong>Tip:</strong> met een geldig BTW-nummer wordt de BTW verlegd (0% op uw factuur, u geeft zelf aan).
-          Zonder BTW-nummer factureren wij onder de kleine-ondernemersvrijstelling (Art. 56bis).
+          <strong>Tip:</strong> met een geldig EU BTW-nummer buiten België wordt de BTW verlegd (0% op uw factuur, u geeft zelf aan).
+          Zonder BTW-nummer factureren wij het tarief van uw land (standaard Belgisch BTW-regime).
         </div>
       </div>
 
@@ -777,7 +777,7 @@
         showVatStatus('valid', 'Geldig BTW-nummer' + (data.company_name ? ' \u2014 ' + data.company_name : ''));
       } else if (data && data.valid === false) {
         vatState.vatValid = false;
-        showVatStatus('invalid', data.error || 'BTW-nummer niet gevonden in VIES. Wij factureren onder Art. 56bis.');
+        showVatStatus('invalid', data.error || 'BTW-nummer niet gevonden in VIES. Wij factureren met BTW conform uw land.');
       } else {
         vatState.vatValid = null;
         showVatStatus('error', 'VIES-dienst antwoordt niet. We proberen het later opnieuw.');
