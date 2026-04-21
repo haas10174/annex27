@@ -197,6 +197,32 @@
     }
     .field-group { display: flex; flex-direction: column; gap: 6px; }
 
+    .terms-accept {
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 12px 14px;
+      background: #F8FAFC;
+      border: 1px solid #E2E8F0;
+      border-radius: 10px;
+      font-size: 0.82rem;
+      color: #475569;
+      line-height: 1.5;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .terms-accept:hover { border-color: #0D9488; }
+    .terms-accept input[type="checkbox"] {
+      margin-top: 3px; flex-shrink: 0;
+      width: 16px; height: 16px;
+      accent-color: #0D9488;
+      cursor: pointer;
+    }
+    .terms-accept a {
+      color: #0D9488;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+    .terms-accept.invalid { border-color: #DC2626; background: #FEF2F2; }
+
     .order-pay {
       width: 100%;
       padding: 16px;
@@ -409,6 +435,12 @@
 
       <!-- Honeypot: hidden field that real users won't fill in; bots often fill all fields -->
       <input type="text" name="website_url" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;opacity:0;pointer-events:none;" aria-hidden="true" />
+
+      <label class="terms-accept" for="termsCheck">
+        <input type="checkbox" id="termsCheck" name="accept_terms" required />
+        <span>Ik ga akkoord met de <a href="/algemene-voorwaarden" target="_blank" rel="noopener">algemene voorwaarden</a>, het <a href="/privacy" target="_blank" rel="noopener">privacybeleid</a> en de <a href="/verwerkersovereenkomst" target="_blank" rel="noopener">verwerkersovereenkomst (DPA)</a>.</span>
+      </label>
+
       <button type="submit" class="order-pay" id="payBtn">Betalen via iDEAL, Bancontact of creditcard</button>
     </form>
 
@@ -795,6 +827,18 @@
       return showOrderError('Het BTW-nummer lijkt niet geldig. Laat leeg als u geen BTW-nummer heeft.');
     }
 
+    // Verplicht akkoord met AV / privacy / DPA
+    const termsCheck = document.getElementById('termsCheck');
+    const termsLabel = termsCheck?.closest('.terms-accept');
+    if (!termsCheck || !termsCheck.checked) {
+      if (termsLabel) {
+        termsLabel.classList.add('invalid');
+        termsLabel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+      return showOrderError('Vink het vakje aan om akkoord te gaan met de voorwaarden.');
+    }
+    if (termsLabel) termsLabel.classList.remove('invalid');
+
     // Disable button during request
     btn.disabled = true;
     const originalText = btn.textContent;
@@ -818,6 +862,8 @@
           btw_nummer: btw,
           country: vatState.country,
           customer_type: vatState.customerType,
+          accept_terms: true,
+          terms_version: '2026-04-22',
         },
       });
 
