@@ -4616,6 +4616,7 @@ function escapeAttr(s) { return String(s ?? '').replace(/'/g, "\\'"); }
 
 async function downloadDoc(pakketKey, file) {
   const filePath = pakketKey + '/' + file;
+  const filename = file.split('/').pop() || file;
   try {
     const { data, error } = await sb.functions.invoke('get-document-url', { body: { file: filePath } });
     if (error || data?.error) {
@@ -4623,19 +4624,26 @@ async function downloadDoc(pakketKey, file) {
       return;
     }
     if (!data?.url) { alert('Geen signed URL terug.'); return; }
-    // De signed URL bevat ?download=<filename> zodat Supabase
-    // Content-Disposition: attachment; filename="..." zet. De browser
-    // herkent dat als download en zet de juiste extensie (.docx of .pdf).
-    // Geen target=_blank: voorkomt popup-blocker en opent geen extra tab.
+
+    // Fetch -> Blob -> trigger download. Dit omzeilt eventuele
+    // Content-Disposition problemen waardoor .docx soms als ander
+    // bestandstype geserveerd werd. Browser gebruikt de a.download
+    // attribute altijd (same-origin blob), dus extensie is gegarandeerd.
+    const resp = await fetch(data.url);
+    if (!resp.ok) throw new Error('HTTP ' + resp.status + ' bij ophalen document');
+    const blob = await resp.blob();
+    const blobUrl = URL.createObjectURL(blob);
     const a = document.createElement('a');
-    a.href = data.url;
-    a.download = file.split('/').pop() || file;
-    a.rel = 'noopener noreferrer';
+    a.href = blobUrl;
+    a.download = filename;
     document.body.appendChild(a);
     a.click();
-    document.body.removeChild(a);
+    setTimeout(() => {
+      URL.revokeObjectURL(blobUrl);
+      document.body.removeChild(a);
+    }, 100);
   } catch (e) {
-    alert('Download fout: ' + e.message);
+    alert('Download fout: ' + (e.message || e));
   }
 }
 
