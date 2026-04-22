@@ -1405,6 +1405,25 @@
       color: #B45309;
       border: 1px solid rgba(217,119,6,0.28);
     }
+    .ga-evidence-status.required {
+      background: rgba(220,38,38,0.08);
+      color: #B91C1C;
+      border: 1px solid rgba(220,38,38,0.28);
+      animation: a27-pulse 2s ease-in-out infinite;
+    }
+    @keyframes a27-pulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(220,38,38,0); }
+      50% { box-shadow: 0 0 0 4px rgba(220,38,38,0.08); }
+    }
+    .ga-ctrl-flash {
+      animation: a27-flash 1.2s ease-in-out 2;
+      box-shadow: 0 0 0 2px rgba(220,38,38,0.35);
+      border-radius: 12px;
+    }
+    @keyframes a27-flash {
+      0%, 100% { background: transparent; }
+      50% { background: rgba(220,38,38,0.06); }
+    }
     .ga-evidence-hint {
       font-size: 0.85rem;
       line-height: 1.6;
@@ -1603,6 +1622,10 @@
     .ga-nav-btn.primary { background: var(--accent); color: white; border-color: var(--accent); }
     .ga-nav-btn.primary:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
     .ga-nav-btn.primary:disabled { opacity: 0.5; cursor: not-allowed; }
+    .ga-nav-btn.advice { border-color: rgba(13,148,136,0.4); color: var(--accent); background: rgba(13,148,136,0.04); }
+    .ga-nav-btn.advice:hover { background: rgba(13,148,136,0.08); }
+    .ga-nav-btn.advice.flagged { background: var(--accent-light); color: var(--accent-hover); border-color: var(--accent); font-weight: 700; }
+    .ga-nav-btn.advice svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; vertical-align: middle; margin-right: 4px; }
 
     /* Module completed screen */
     .ga-module-done {
@@ -4409,10 +4432,16 @@ function renderModuleAssessment(cat) {
     html += renderControlCard(ctrl, idx, catControls.length);
   });
 
+  const adviceFlagged = isAdviceFlagged(cat);
+
   html += `
       <div class="ga-nav-bar">
         <div class="ga-nav-info">Module <strong>${esc(moduleLabel(cat))}</strong> — ${answered}/${total} beoordeeld</div>
         <div class="ga-nav-buttons">
+          <button class="ga-nav-btn advice ${adviceFlagged ? 'flagged' : ''}" onclick="toggleAdviceFlag('${esc(cat)}', this)" title="Twijfelt u over uw antwoorden? Vraag een Lead Auditor om mee te kijken voor uw rapport.">
+            <svg viewBox="0 0 24 24"><path d="M9 11h6M9 15h4M21 12c0 4.97-4.03 9-9 9-1.42 0-2.76-.33-3.95-.92L3 22l1.92-5.05A8.96 8.96 0 0 1 3 12c0-4.97 4.03-9 9-9s9 4.03 9 9z"/></svg>
+            ${adviceFlagged ? 'Advies aangevraagd' : 'Vraag Lead Auditor advies'}
+          </button>
           <button class="ga-nav-btn" onclick="backToOverview()">Later verdergaan</button>
           <button class="ga-nav-btn primary" onclick="nextModule()">${answered === total ? 'Volgende module' : 'Sla op & sluit'}</button>
         </div>
@@ -4421,6 +4450,41 @@ function renderModuleAssessment(cat) {
   `;
 
   container.innerHTML = html;
+}
+
+function adviceStoreKey() {
+  return 'annex27_advice_flags_' + (user && user.id ? user.id : 'anon');
+}
+function getAdviceFlags() {
+  try { return JSON.parse(localStorage.getItem(adviceStoreKey()) || '{}'); } catch(e) { return {}; }
+}
+function isAdviceFlagged(cat) {
+  return !!getAdviceFlags()[cat];
+}
+function toggleAdviceFlag(cat, btn) {
+  const flags = getAdviceFlags();
+  if (flags[cat]) {
+    delete flags[cat];
+    if (btn) {
+      btn.classList.remove('flagged');
+      btn.innerHTML = `<svg viewBox="0 0 24 24"><path d="M9 11h6M9 15h4M21 12c0 4.97-4.03 9-9 9-1.42 0-2.76-.33-3.95-.92L3 22l1.92-5.05A8.96 8.96 0 0 1 3 12c0-4.97 4.03-9 9-9s9 4.03 9 9z"/></svg> Vraag Lead Auditor advies`;
+    }
+  } else {
+    flags[cat] = { requested_at: new Date().toISOString() };
+    if (btn) {
+      btn.classList.add('flagged');
+      btn.innerHTML = `<svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg> Advies aangevraagd`;
+    }
+  }
+  localStorage.setItem(adviceStoreKey(), JSON.stringify(flags));
+  // Sync to DB best-effort — column kan ontbreken, geen blokkade
+  if (typeof sb !== 'undefined' && user && user.id) {
+    sb.from('gap_analyse').upsert({
+      user_id: user.id,
+      advice_flags: flags,
+      updated_at: new Date().toISOString()
+    }, { onConflict: 'user_id' }).then(() => {}).catch(() => {});
+  }
 }
 
 function renderControlCard(ctrl, idx, total) {
@@ -4507,15 +4571,27 @@ function renderControlCard(ctrl, idx, total) {
   const hasStructuredNote = !!(nf.procedure || nf.location || nf.owner || nf.last_verified || nf.remark);
   const hasEvidence = (evidence.files.length > 0) || hasStructuredNote || (evidence.note && evidence.note.trim().length > 0);
 
+  // "Hoge" claim = 3 (Grotendeels) of 4 (Volledig): vereist onderbouwing
+  const highClaim = qs.some((_, qi) => {
+    const v = gapAnswers[ctrl.id + '_' + qi];
+    return v === '4' || v === '3';
+  });
+  const evidenceMissing = highClaim && !hasEvidence;
+
   const noteOpen = hasStructuredNote || !!(evidence.note && evidence.note.trim().length > 0);
   const hintFormatted = esc(evHint).replace(/^Upload:\s*/i, '<strong>Wat een auditor verifieert: </strong>');
+
+  const statusClass = hasEvidence ? 'ok' : (evidenceMissing ? 'required' : 'missing');
+  const statusText = hasEvidence
+    ? '&#10003; Onderbouwd'
+    : (evidenceMissing ? '&#9888; Onderbouwing vereist' : '! Nog geen bewijs');
 
   html += `
     <div class="ga-evidence ${anyClaimed ? 'active' : ''}" data-ctrl="${esc(ctrl.id)}">
       <div class="ga-evidence-header">
         <div class="ga-evidence-label">Auditor-bewijs</div>
-        <div class="ga-evidence-status ${hasEvidence ? 'ok' : 'missing'}">
-          ${hasEvidence ? '&#10003; Onderbouwd' : '! Nog geen bewijs'}
+        <div class="ga-evidence-status ${statusClass}">
+          ${statusText}
         </div>
       </div>
       <div class="ga-evidence-hint">${hintFormatted}</div>
@@ -4708,6 +4784,47 @@ async function saveGapAnalyse() {
 
 // ── PDF RAPPORT GENERATOR ──
 function generateReport() {
+  // Pre-flight: bij "Grotendeels" of "Volledig" compliant (3 of 4) is onderbouwing vereist
+  const missingEvidence = [];
+  controls.forEach(ctrl => {
+    const qs = gapQuestions[ctrl.id];
+    if (!qs) return;
+    const highClaim = qs.some((_, qi) => {
+      const v = gapAnswers[ctrl.id + '_' + qi];
+      return v === '4' || v === '3';
+    });
+    if (!highClaim) return;
+    const ev = getEvidence(ctrl.id);
+    const hasFiles = ev.files && ev.files.length > 0;
+    const nf = ev.note_fields || {};
+    const hasStructured = !!(nf.procedure || nf.location || nf.owner || nf.last_verified || nf.remark);
+    const hasNote = hasStructured || !!(ev.note && ev.note.trim().length >= 20);
+    if (!hasFiles && !hasNote) missingEvidence.push(ctrl);
+  });
+
+  if (missingEvidence.length > 0) {
+    const preview = missingEvidence.slice(0, 8).map(c => '• ' + c.id + ' — ' + (c.name || '')).join('\n');
+    const more = missingEvidence.length > 8 ? `\n\n…en nog ${missingEvidence.length - 8} controls` : '';
+    alert(
+      `Onderbouwing ontbreekt bij ${missingEvidence.length} control(s) waar u "Grotendeels" of "Volledig" compliant claimt:\n\n` +
+      preview + more +
+      `\n\nVoor een auditor-ready rapport is per zulke claim minimaal één van deze vereist:\n` +
+      `  1) Een bewijsbestand (upload), of\n` +
+      `  2) Een toelichting (procedure, locatie, eigenaar ingevuld).\n\n` +
+      `U wordt nu naar de eerste ontbrekende control gescrolled.`
+    );
+    missingEvidence.forEach(c => {
+      const el = document.getElementById('ctrl_' + c.id.replace(/\./g, '_'));
+      if (el) {
+        el.classList.add('ga-ctrl-flash');
+        setTimeout(() => el.classList.remove('ga-ctrl-flash'), 3000);
+      }
+    });
+    const first = document.getElementById('ctrl_' + missingEvidence[0].id.replace(/\./g, '_'));
+    if (first) first.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+
   // Collect data
   const naam = user.user_metadata?.naam || user.email;
   const bedrijf = user.user_metadata?.bedrijf || '';
