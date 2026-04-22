@@ -221,7 +221,7 @@
     @page{
       size:A4;
       margin:18mm 16mm 20mm 16mm;
-      @bottom-left{content:"Annex27 · ISO 27001:2022 Gap-Analyse · A27-V-2026-0001";font-family:'Sora',sans-serif;font-size:8pt;color:#94A3B8;}
+      @bottom-left{content:"Annex27 · NEN-EN-ISO/IEC 27001:2023 Gap-Analyse · A27-V-2026-0001";font-family:'Sora',sans-serif;font-size:8pt;color:#94A3B8;}
       @bottom-right{content:"Pagina " counter(page) " van " counter(pages);font-family:'Sora',sans-serif;font-size:8pt;color:#94A3B8;}
     }
     @media print{
@@ -308,14 +308,14 @@
     <div class="doc">
       <div class="doc-header">
         <div class="doc-meta">
-          <span><strong>Annex27</strong> &middot; ISO/IEC 27001:2022 Rev.7 Gap-Analyse</span>
+          <span><strong>Annex27</strong> &middot; NEN-EN-ISO/IEC 27001:2023 Gap-Analyse</span>
           <span>Rapport-ID: A27-V-2026-0001 &middot; Uitgifte: 22-04-2026</span>
         </div>
         <div class="doc-title">Voorbeeld B.V. &mdash; Gap-analyse Rapport</div>
         <div class="doc-subtitle">Sector: SaaS &amp; Cloud &middot; 23 fte &middot; Hoofdvestiging: Nederland &middot; Opdrachtgever: J. de Vries (CTO)</div>
         <div class="doc-chips">
           <span class="doc-chip accent"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg> Lead Auditor reviewed</span>
-          <span class="doc-chip">ISO/IEC 27001:2022 Rev.7</span>
+          <span class="doc-chip">NEN-EN-ISO/IEC 27001:2023</span>
           <span class="doc-chip">DNV auditmethodiek</span>
           <span class="doc-chip">AI-assisted · Anthropic Claude</span>
         </div>
@@ -345,7 +345,7 @@
       <h3>Kernbevindingen (top-5)</h3>
       <ol>
         <li><strong>Geen gedocumenteerd ISMS</strong> &mdash; Clausules 4-7 niet aantoonbaar. Major NC.</li>
-        <li><strong>Geen risicobeoordelingsproces</strong> &mdash; Clause 6.1.2 afwezig. Major NC &mdash; gate-criterium voor Stage 1.</li>
+        <li><strong>Geen risicobeoordelingsprocedure</strong> &mdash; Clausule 6.1.2 ("Risicobeoordeling van informatiebeveiliging") afwezig. Majeure afwijking &mdash; gate-criterium voor Stage 1.</li>
         <li><strong>Leveranciersmanagement fragmentair</strong> &mdash; 14 SaaS-tools, register dekt 6. A.5.19 Minor NC.</li>
         <li><strong>Logging zonder retentie of alerting</strong> &mdash; A.8.15 Minor NC, verzekeringseis.</li>
         <li><strong>Restore-test nooit uitgevoerd</strong> &mdash; A.5.30 Minor NC.</li>
@@ -362,7 +362,7 @@
         <p>Specifieke aandachtspunten:</p>
         <ul>
           <li>De quickscan-antwoorden suggereren <strong>meer</strong> volwassenheid dan de aangeleverde documenten laten zien. Dat is typisch voor sterk-technische teams: ze doen het goed, maar schrijven het niet op. Combineer tijdens de implementatie-fase altijd de interview-kennis (CTO) met een schriftelijk artefact &mdash; anders valt de bewijsvoering weg zodra de persoon weg is.</li>
-          <li>Het ontbreken van een <strong>CAPA-register</strong> (Clause 10) is mijn grootste zorg voor Stage 2. Zelfs als je een perfect ISMS opstelt, zonder bewijs dat je kunt leren-van-incidents wordt dat een NC. Kwartaal-tafelscenario's met tabletop-exercises plus vastgelegde lessen zijn hiervoor de snelste weg.</li>
+          <li>Het ontbreken van een <strong>CAPA-register</strong> (Clausule 10.2 "Afwijkingen en corrigerende maatregelen") is mijn grootste zorg voor Stage 2. Zelfs als je een perfect ISMS opstelt, zonder bewijs dat je kunt leren-van-incidents wordt dat een afwijking. Kwartaal-tafelscenario's met tabletop-exercises plus vastgelegde lessen zijn hiervoor de snelste weg.</li>
           <li>De <strong>leveranciersketen</strong> is de zwakste schakel gecombineerd met de hoogste zakelijke impact. Een datalek bij één van de 14 SaaS-tools valt onder uw verantwoordelijkheid. Prioriteit 1 vanaf week 7.</li>
         </ul>
         <p><strong>Geschat certificeringsrisico Stage 2 bij huidige snelheid:</strong> laag-tot-middel, mits de 3 Major NC&apos;s in clausules 6 en 10 eerst zijn opgelost. Verwachting: 95% kans op certificering bij eerste Stage 2-poging als de roadmap (§8) wordt gevolgd.</p>
@@ -377,7 +377,7 @@
       <h2>2. Scope en methodologie</h2>
 
       <h3>Scope van de beoordeling</h3>
-      <p>Deze gap-analyse dekt het volledige toepassingsgebied van ISO/IEC 27001:2022 (Rev. 7) zoals geldend voor een SaaS-organisatie met eigen productontwikkeling. Beoordeeld zijn de ISMS-clausules 4 t/m 10 (verplicht) en alle 93 controls uit Annex A (A.5 Organisatorisch, A.6 Personeel, A.7 Fysiek, A.8 Technologisch).</p>
+      <p>Deze gap-analyse dekt het volledige toepassingsgebied van <strong>NEN-EN-ISO/IEC 27001:2023</strong> (NL-vertaling van ISO/IEC 27001:2022) zoals geldend voor een SaaS-organisatie met eigen productontwikkeling. Beoordeeld zijn de ISMS-clausules 4 t/m 10 (verplicht) en alle 93 beheersmaatregelen uit Bijlage A (A.5 Organisatorisch, A.6 Mensgericht, A.7 Fysiek, A.8 Technologisch).</p>
 
       <div class="scope-grid">
         <div class="scope-card">
@@ -404,7 +404,7 @@
 
       <h3>Methodologie</h3>
       <div class="method-box">
-        De beoordeling volgt de auditmethodiek uit de <strong>DNV Business Assurance Lead Auditor training voor ISO/IEC 27001:2022 (Rev. 7)</strong>, in lijn met de principes van <strong>ISO 19011 (auditing)</strong> en <strong>ISO/IEC 17021-1 (eisen aan certificerende instellingen)</strong>. Elke bevinding is onderbouwd met drie elementen conform DNV-criteria: een <em>eis</em>, een <em>tekortkoming</em>, en <em>objectief bewijs</em>.
+        De beoordeling volgt de auditmethodiek uit de <strong>DNV Business Assurance Lead Auditor training ISMS ISO/IEC 27001:2022</strong>, in lijn met de principes van <strong>ISO 19011 (auditing)</strong> en <strong>ISO/IEC 17021-1 (eisen aan certificerende instellingen)</strong>. Elke bevinding is onderbouwd met drie elementen conform DNV-criteria: een <em>eis</em>, een <em>tekortkoming</em>, en <em>objectief bewijs</em>.
       </div>
 
       <h4>Findings-taxonomie (4 categorieën volgens DNV)</h4>
@@ -633,7 +633,7 @@
           <tr><td>R2</td><td>Compliance-falen bij supplier-breach (n-tier)</td><td>A.5.19, A.5.21</td><td style="color:var(--danger);">Kritiek</td></tr>
           <tr><td>R3</td><td>Datacorruptie zonder herstel-pad</td><td>A.8.13, A.5.30</td><td style="color:var(--warning);">Hoog</td></tr>
           <tr><td>R4</td><td>Onopgemerkte privilege-escalatie</td><td>A.8.15, A.8.16</td><td style="color:var(--warning);">Hoog</td></tr>
-          <tr><td>R5</td><td>Non-conformiteit Stage 1 blokkeert cert.</td><td>Clause 6.1.2</td><td style="color:var(--danger);">Kritiek</td></tr>
+          <tr><td>R5</td><td>Afwijking Stage 1 blokkeert cert.</td><td>Clausule 6.1.2</td><td style="color:var(--danger);">Kritiek</td></tr>
           <tr><td>R6</td><td>Insecure dependencies in productie</td><td>A.8.8</td><td style="color:var(--warning);">Hoog</td></tr>
           <tr><td>R7</td><td>Phishing-succes door ontbrekende training</td><td>A.6.3</td><td style="color:var(--warning);">Hoog</td></tr>
           <tr><td>R8</td><td>Avg-boete bij datalek > 72u zonder meldpad</td><td>A.5.5, A.5.25</td><td style="color:var(--danger);">Kritiek</td></tr>
@@ -641,7 +641,7 @@
           <tr><td>R10</td><td>Productie-data in staging (privacy-risico)</td><td>A.8.11, A.8.33</td><td style="color:var(--danger);">Kritiek</td></tr>
           <tr><td>R11</td><td>Verlies intellectueel eigendom bij exit</td><td>A.6.5, A.5.32</td><td style="color:var(--warning);">Hoog</td></tr>
           <tr><td>R12</td><td>Niet-compliance DPA bij verwerkers</td><td>A.5.20</td><td style="color:var(--warning);">Hoog</td></tr>
-          <tr><td>R13</td><td>CAPA-falen &mdash; herhaalde non-conformiteit</td><td>Clause 10</td><td style="color:var(--danger);">Kritiek</td></tr>
+          <tr><td>R13</td><td>CAPA-falen &mdash; herhaalde non-conformiteit</td><td>Clausule 10</td><td style="color:var(--danger);">Kritiek</td></tr>
           <tr><td>R14</td><td>Kantoorinbraak met ongeautoriseerde toegang</td><td>A.7.1-A.7.4</td><td style="color:var(--warning);">Hoog</td></tr>
           <tr><td>R15</td><td>Verstoring business door DRP-afwezigheid</td><td>A.5.29, A.5.30</td><td style="color:var(--danger);">Kritiek</td></tr>
         </tbody>
@@ -720,7 +720,7 @@
       <ul style="list-style:none;padding:0;margin:14px 0;">
         <li style="padding:10px 14px;background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:4px 8px 8px 4px;margin-bottom:6px;"><strong>Bijlage A &mdash; Bewijsregister</strong> &mdash; alle geüploade documenten met SHA-256 hash, gekoppeld aan controls (CSV-export in dashboard).</li>
         <li style="padding:10px 14px;background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:4px 8px 8px 4px;margin-bottom:6px;"><strong>Bijlage B &mdash; Geïnterviewden</strong> &mdash; datum, rol, besproken onderwerp en duur per gesprek.</li>
-        <li style="padding:10px 14px;background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:4px 8px 8px 4px;margin-bottom:6px;"><strong>Bijlage C &mdash; Toegepaste normen en bronnen</strong> &mdash; ISO 27001:2022 Rev.7, ISO 27002, ISO 27005, ISO 19011, ISO 17021-1, DNV Lead Auditor methodiek, NCSC/CCB richtlijnen, AVG.</li>
+        <li style="padding:10px 14px;background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:4px 8px 8px 4px;margin-bottom:6px;"><strong>Bijlage C &mdash; Toegepaste normen en bronnen</strong> &mdash; NEN-EN-ISO/IEC 27001:2023, ISO/IEC 27002:2022, ISO/IEC 27005, ISO 19011:2018, ISO/IEC 17021-1:2015, ISO 31000:2018, DNV Lead Auditor methodiek, NCSC/CCB richtlijnen, AVG.</li>
         <li style="padding:10px 14px;background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:4px 8px 8px 4px;margin-bottom:6px;"><strong>Bijlage D &mdash; Beschikbare templates</strong> &mdash; 12 kant-en-klare templates uit het Annex27 Beleidspakket (policy, SoA, risicomethodologie, BCP/DRP, JML, CAPA, &hellip;).</li>
       </ul>
 
@@ -743,7 +743,7 @@
       <p>Vragen over dit rapport? Mail <a href="mailto:info@annex27.nl">info@annex27.nl</a> met rapport-ID <strong>A27-V-2026-0001</strong> in het onderwerp.</p>
 
       <div class="doc-footer">
-        <p>Dit rapport is opgesteld door een ISO/IEC 27001:2022 Lead Auditor volgens de auditmethodiek van DNV Business Assurance Lead Auditor training (Rev. 7), in lijn met ISO 19011 en ISO/IEC 17021-1. Het rapport is geen vervanging voor een formele certificeringsaudit, die uitgevoerd wordt door een geaccrediteerde certificerende instantie (CB).</p>
+        <p>Dit rapport is opgesteld door een ISO/IEC 27001:2022 Lead Auditor volgens de auditmethodiek van de DNV Business Assurance Lead Auditor training ISMS, in lijn met ISO 19011 en ISO/IEC 17021-1. Het rapport is geen vervanging voor een formele certificeringsaudit, die uitgevoerd wordt door een geaccrediteerde certificerende instantie (CB).</p>
         <p style="margin-top:8px;">Voorbeeldrapport opgesteld op basis van een gefingeerd profiel &mdash; niet representatief voor uw individuele situatie.</p>
         <p style="margin-top:8px;">AI-disclosure: bevindingen zijn gegenereerd met AI-ondersteuning (Claude, Anthropic PBC) en gereviewd en ondertekend door Lead Auditor Raoul Haas. Zie <a href="/privacy#ai">privacy &sect;6</a>.</p>
         <p style="margin-top:8px;">&copy; 2026 Annex27 &middot; Raoul Haas &middot; KBO 1006.203.170 &middot; BTW BE1006.203.170</p>
