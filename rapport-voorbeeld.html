@@ -194,6 +194,17 @@
     .appendix{background:var(--surface);border-radius:10px;padding:20px 24px;margin:14px 0;border:1px solid var(--border);border-left:3px solid var(--accent);}
     .appendix h3{margin-top:0;font-family:'Sora',sans-serif;}
 
+    .teaser-lock{position:relative;margin:18px 0;padding:28px 24px;border-radius:12px;background:linear-gradient(180deg,var(--surface) 0%,var(--bg-warm) 100%);border:1px dashed var(--border);text-align:center;}
+    .teaser-lock::before{content:'';display:block;width:44px;height:44px;border-radius:50%;background:var(--accent-light);margin:0 auto 10px;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230D9488' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='3' y='11' width='18' height='11' rx='2'/><path d='M7 11V7a5 5 0 0 1 10 0v4'/></svg>");background-repeat:no-repeat;background-position:center;background-size:22px 22px;}
+    .teaser-lock-label{font-family:'Sora',sans-serif;font-size:0.72rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:6px;}
+    .teaser-lock-title{font-family:'Sora',sans-serif;font-size:1.02rem;font-weight:700;color:var(--text-primary);margin-bottom:6px;}
+    .teaser-lock-sub{font-size:0.88rem;color:var(--text-secondary);margin-bottom:14px;max-width:520px;margin-left:auto;margin-right:auto;}
+    .teaser-cta{display:inline-flex;align-items:center;gap:6px;background:var(--accent);color:#fff;padding:10px 20px;border-radius:8px;font-weight:700;font-size:0.88rem;text-decoration:none;font-family:'Sora',sans-serif;}
+    .teaser-cta:hover{background:var(--accent-hover);}
+    .teaser-cta svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2.5;}
+    .teaser-preview{position:relative;max-height:260px;overflow:hidden;border-radius:10px;margin-bottom:-30px;}
+    .teaser-preview::after{content:'';position:absolute;left:0;right:0;bottom:0;height:160px;background:linear-gradient(180deg,rgba(250,250,250,0) 0%,var(--bg) 90%);pointer-events:none;}
+
     .doc-footer{margin-top:48px;padding-top:24px;border-top:1px solid var(--border-light);font-size:0.78rem;color:var(--text-muted);text-align:center;}
 
     footer{background:var(--surface);border-top:1px solid var(--border-light);padding:40px 0;font-size:0.84rem;color:var(--text-muted);}
@@ -496,126 +507,12 @@
         </div>
       </div>
 
-      <div class="evidence-group">
-        <div class="evidence-group-head">
-          <span>A.6 &mdash; Personeel</span>
-          <span class="evidence-group-count">1 document &middot; gem. score 60%</span>
-        </div>
-        <div class="evidence-rows">
-          <div class="evidence-row">
-            <div class="evidence-row-head">
-              <span class="evidence-ctrl">A.6.3 &mdash; Awareness en training</span>
-              <span class="control-status status-partial">Gedeeltelijk &middot; 55%</span>
-            </div>
-            <span class="evidence-file">📄 security-training-log-2025.xlsx</span>
-            <div class="evidence-review">
-              <span class="good">✓</span> 19/23 medewerkers hebben phishing-training gevolgd in 2025.<br>
-              <span class="bad">✗</span> Geen curriculum of leerdoelen gedocumenteerd.
-              <span class="bad">✗</span> Nieuwe medewerkers na 2025-Q3 nog geen onboarding-training.
-            </div>
-          </div>
-        </div>
+      <div class="teaser-lock">
+        <div class="teaser-lock-label">Voorbeeld-limiet</div>
+        <div class="teaser-lock-title">Bewijs voor nog 4 hoofdstukken ingeklapt</div>
+        <div class="teaser-lock-sub">In uw eigen rapport tonen we de beoordeling per control voor <strong>A.6 Personeel</strong>, <strong>A.7 Fysiek</strong>, <strong>A.8 Technologisch</strong> en <strong>Clausules 4-10 (ISMS)</strong> &mdash; gebaseerd op uw eigen geüploade bewijsvoering.</div>
+        <a href="/bestellen" class="teaser-cta">Bestel gap-analyse <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
       </div>
-
-      <div class="evidence-group">
-        <div class="evidence-group-head">
-          <span>A.7 &mdash; Fysieke beveiliging</span>
-          <span class="evidence-group-count">1 document &middot; gem. score 78%</span>
-        </div>
-        <div class="evidence-rows">
-          <div class="evidence-row">
-            <div class="evidence-row-head">
-              <span class="evidence-ctrl">A.7.1 / A.7.2 &mdash; Fysieke beveiliging kantoor</span>
-              <span class="control-status status-ok">Compleet &middot; 80%</span>
-            </div>
-            <span class="evidence-file">🖼️ kantoor-plattegrond-badged-zones.pdf</span>
-            <div class="evidence-review">
-              <span class="good">✓</span> Kantoor heeft badge-toegang, bezoekersregister, camera's bij ingang.
-              <span class="good">✓</span> Server-ruimte separate sloten, beperkte toegang.<br>
-              <span class="bad">✗</span> Geen formeel fysiek-beveiligingsbeleid als document.
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="evidence-group">
-        <div class="evidence-group-head">
-          <span>A.8 &mdash; Technologische controls</span>
-          <span class="evidence-group-count">5 documenten &middot; gem. score 58%</span>
-        </div>
-        <div class="evidence-rows">
-          <div class="evidence-row">
-            <div class="evidence-row-head">
-              <span class="evidence-ctrl">A.8.2 &mdash; Privileged access rights</span>
-              <span class="control-status status-ok">Compleet &middot; 80%</span>
-            </div>
-            <span class="evidence-file">🖼️ aws-iam-console.png &middot; 📄 iam-policy-export.json</span>
-            <div class="evidence-review">
-              <span class="good">✓</span> MFA afgedwongen op alle admin-rollen.
-              <span class="good">✓</span> Least-privilege zichtbaar in IAM-policy export (11 rollen).<br>
-              <span class="bad">✗</span> Geen PAM-tool/session-recording &mdash; acceptabel bij deze schaal.
-            </div>
-          </div>
-          <div class="evidence-row">
-            <div class="evidence-row-head">
-              <span class="evidence-ctrl">A.8.13 &mdash; Backup</span>
-              <span class="control-status status-partial">Gedeeltelijk &middot; 55%</span>
-            </div>
-            <span class="evidence-file">📄 backup-runbook-v1.pdf &middot; 🖼️ s3-lifecycle.png</span>
-            <div class="evidence-review">
-              <span class="good">✓</span> Dagelijkse backup naar S3 cross-region, 30d retentie.<br>
-              <span class="bad">✗</span> Restore-test nog nooit uitgevoerd &mdash; kritiek (A.5.30 + cyber-verzekering).
-              <span class="bad">✗</span> Geen RTO/RPO gedefinieerd.
-            </div>
-          </div>
-          <div class="evidence-row">
-            <div class="evidence-row-head">
-              <span class="evidence-ctrl">A.8.15 &mdash; Logging</span>
-              <span class="control-status status-gap">Gap &middot; 50%</span>
-            </div>
-            <span class="evidence-file">🖼️ cloudwatch-dashboard.png</span>
-            <div class="evidence-review">
-              <span class="good">✓</span> Logs centraal in CloudWatch.<br>
-              <span class="bad">✗</span> Geen retentiebeleid (A.8.15 + 5.33).
-              <span class="bad">✗</span> Geen alerting-regels; geen periodieke log-review.
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="evidence-group">
-        <div class="evidence-group-head">
-          <span>Clausules 4-10 &mdash; ISMS</span>
-          <span class="evidence-group-count">2 documenten &middot; gem. score 30%</span>
-        </div>
-        <div class="evidence-rows">
-          <div class="evidence-row">
-            <div class="evidence-row-head">
-              <span class="evidence-ctrl">Clause 6.1.2 &mdash; Risicobeoordelingsproces</span>
-              <span class="control-status status-miss">Ontbreekt &middot; 10%</span>
-            </div>
-            <span class="evidence-file missing">geen document geüpload</span>
-            <div class="evidence-review">
-              Quickscan: &ldquo;ad hoc&rdquo;. Zonder gedocumenteerde methode (criteria, scope, verantwoordelijke, frequentie) is dit een gate-criterium voor Stage 1.
-            </div>
-          </div>
-          <div class="evidence-row">
-            <div class="evidence-row-head">
-              <span class="evidence-ctrl">Clause 9.2 &mdash; Interne audit</span>
-              <span class="control-status status-gap">Gap &middot; 40%</span>
-            </div>
-            <span class="evidence-file">📄 intern-audit-plan-2026.pdf</span>
-            <div class="evidence-review">
-              <span class="good">✓</span> Jaarplan opgesteld met scope-rotatie over 2 jaar.<br>
-              <span class="bad">✗</span> Nog geen uitgevoerde audit; Stage 2 vereist &ge;1 afgeronde cyclus.
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <p style="font-size:0.84rem;color:var(--text-muted);margin-top:10px;">
-        Volledig bewijsregister voor alle 93 controls: zie bijlage A (digitaal via uw dashboard).
-      </p>
 
       <h2>5. Volledige controls-matrix</h2>
       <p>Hieronder alle 93 Annex A-controls plus 7 ISMS-clausules, met score, status en referentie naar het aangeleverde bewijs. Voor detail-bevindingen zie §6.</p>
@@ -631,111 +528,16 @@
           <tr><td class="cid">A.5.3</td><td class="cname">Functiescheiding</td><td class="cscore">65%</td><td><div class="cbar-track"><div class="cbar-fill bar-green" style="width:65%;"></div></div></td><td><span class="control-status status-ok">OK</span></td><td>interview CTO</td></tr>
           <tr><td class="cid">A.5.4</td><td class="cname">Verantwoordelijkheid management</td><td class="cscore">35%</td><td><div class="cbar-track"><div class="cbar-fill bar-orange" style="width:35%;"></div></div></td><td><span class="control-status status-gap">Gap</span></td><td>&mdash;</td></tr>
           <tr><td class="cid">A.5.5</td><td class="cname">Contact met autoriteiten</td><td class="cscore">20%</td><td><div class="cbar-track"><div class="cbar-fill bar-red" style="width:20%;"></div></div></td><td><span class="control-status status-miss">Ontbreekt</span></td><td>&mdash;</td></tr>
-          <tr><td class="cid">A.5.6</td><td class="cname">Contact met interest-groepen</td><td class="cscore">30%</td><td><div class="cbar-track"><div class="cbar-fill bar-red" style="width:30%;"></div></div></td><td><span class="control-status status-gap">Gap</span></td><td>&mdash;</td></tr>
-          <tr><td class="cid">A.5.7</td><td class="cname">Threat intelligence</td><td class="cscore">25%</td><td><div class="cbar-track"><div class="cbar-fill bar-red" style="width:25%;"></div></div></td><td><span class="control-status status-gap">Gap</span></td><td>&mdash;</td></tr>
-          <tr><td class="cid">A.5.8</td><td class="cname">Informatiebeveiliging in projectmgmt</td><td class="cscore">45%</td><td><div class="cbar-track"><div class="cbar-fill bar-orange" style="width:45%;"></div></div></td><td><span class="control-status status-partial">Gedeeltelijk</span></td><td>jira-issue-templates</td></tr>
-          <tr><td class="cid">A.5.9</td><td class="cname">Informatie-inventaris</td><td class="cscore">85%</td><td><div class="cbar-track"><div class="cbar-fill bar-green" style="width:85%;"></div></div></td><td><span class="control-status status-ok">OK</span></td><td>asset-register.xlsx</td></tr>
-          <tr><td class="cid">A.5.10</td><td class="cname">Acceptable use van assets</td><td class="cscore">30%</td><td><div class="cbar-track"><div class="cbar-fill bar-red" style="width:30%;"></div></div></td><td><span class="control-status status-gap">Gap</span></td><td>&mdash;</td></tr>
-          <tr><td class="cid">A.5.11</td><td class="cname">Return of assets</td><td class="cscore">50%</td><td><div class="cbar-track"><div class="cbar-fill bar-yellow" style="width:50%;"></div></div></td><td><span class="control-status status-partial">Gedeeltelijk</span></td><td>offboarding-checklist</td></tr>
-          <tr><td class="cid">A.5.12</td><td class="cname">Classificatie van informatie</td><td class="cscore">60%</td><td><div class="cbar-track"><div class="cbar-fill bar-green" style="width:60%;"></div></div></td><td><span class="control-status status-ok">OK</span></td><td>asset-register (classificatie-kolom)</td></tr>
-          <tr><td class="cid">A.5.13</td><td class="cname">Labeling van informatie</td><td class="cscore">35%</td><td><div class="cbar-track"><div class="cbar-fill bar-orange" style="width:35%;"></div></div></td><td><span class="control-status status-gap">Gap</span></td><td>&mdash;</td></tr>
-          <tr><td class="cid">A.5.14</td><td class="cname">Informatie-overdracht</td><td class="cscore">55%</td><td><div class="cbar-track"><div class="cbar-fill bar-yellow" style="width:55%;"></div></div></td><td><span class="control-status status-partial">Gedeeltelijk</span></td><td>transfer-policy draft</td></tr>
-          <tr><td class="cid">A.5.15</td><td class="cname">Toegangscontrole</td><td class="cscore">15%</td><td><div class="cbar-track"><div class="cbar-fill bar-red" style="width:15%;"></div></div></td><td><span class="control-status status-miss">Ontbreekt</span></td><td>&mdash;</td></tr>
-          <tr><td class="cid">A.5.16</td><td class="cname">Identity management</td><td class="cscore">70%</td><td><div class="cbar-track"><div class="cbar-fill bar-green" style="width:70%;"></div></div></td><td><span class="control-status status-ok">OK</span></td><td>okta-export.json</td></tr>
-          <tr><td class="cid">A.5.17</td><td class="cname">Authenticatie-informatie</td><td class="cscore">75%</td><td><div class="cbar-track"><div class="cbar-fill bar-green" style="width:75%;"></div></div></td><td><span class="control-status status-ok">OK</span></td><td>okta + MFA-config</td></tr>
-          <tr><td class="cid">A.5.18</td><td class="cname">Toegangsrechten</td><td class="cscore">60%</td><td><div class="cbar-track"><div class="cbar-fill bar-green" style="width:60%;"></div></div></td><td><span class="control-status status-ok">OK</span></td><td>okta-groups</td></tr>
-          <tr><td class="cid">A.5.19</td><td class="cname">Infosec leveranciersrelaties</td><td class="cscore">25%</td><td><div class="cbar-track"><div class="cbar-fill bar-red" style="width:25%;"></div></div></td><td><span class="control-status status-gap">Gap</span></td><td>leveranciers.docx</td></tr>
-          <tr><td class="cid">A.5.20</td><td class="cname">Infosec in leveranciersovereenkomsten</td><td class="cscore">30%</td><td><div class="cbar-track"><div class="cbar-fill bar-red" style="width:30%;"></div></div></td><td><span class="control-status status-gap">Gap</span></td><td>3 DPA's aanwezig</td></tr>
-          <tr><td class="cid">A.5.21</td><td class="cname">Infosec in ICT supply chain</td><td class="cscore">20%</td><td><div class="cbar-track"><div class="cbar-fill bar-red" style="width:20%;"></div></div></td><td><span class="control-status status-miss">Ontbreekt</span></td><td>&mdash;</td></tr>
-          <tr><td class="cid">A.5.22</td><td class="cname">Monitoren leveranciersdiensten</td><td class="cscore">25%</td><td><div class="cbar-track"><div class="cbar-fill bar-red" style="width:25%;"></div></div></td><td><span class="control-status status-gap">Gap</span></td><td>&mdash;</td></tr>
-          <tr><td class="cid">A.5.23</td><td class="cname">Cloud security</td><td class="cscore">60%</td><td><div class="cbar-track"><div class="cbar-fill bar-green" style="width:60%;"></div></div></td><td><span class="control-status status-ok">OK</span></td><td>aws-config-screenshot</td></tr>
-          <tr><td class="cid">A.5.24</td><td class="cname">Incident management planning</td><td class="cscore">45%</td><td><div class="cbar-track"><div class="cbar-fill bar-orange" style="width:45%;"></div></div></td><td><span class="control-status status-partial">Gedeeltelijk</span></td><td>ir-runbook-v0.2.md</td></tr>
-          <tr><td class="cid">A.5.25</td><td class="cname">Assessment infosec events</td><td class="cscore">40%</td><td><div class="cbar-track"><div class="cbar-fill bar-orange" style="width:40%;"></div></div></td><td><span class="control-status status-partial">Gedeeltelijk</span></td><td>pagerduty-log</td></tr>
-          <tr><td class="cid">A.5.26</td><td class="cname">Response op incidents</td><td class="cscore">40%</td><td><div class="cbar-track"><div class="cbar-fill bar-orange" style="width:40%;"></div></div></td><td><span class="control-status status-partial">Gedeeltelijk</span></td><td>ir-runbook</td></tr>
-          <tr><td class="cid">A.5.27</td><td class="cname">Leren van incidents</td><td class="cscore">35%</td><td><div class="cbar-track"><div class="cbar-fill bar-orange" style="width:35%;"></div></div></td><td><span class="control-status status-gap">Gap</span></td><td>&mdash;</td></tr>
-          <tr><td class="cid">A.5.28</td><td class="cname">Verzamelen van bewijs</td><td class="cscore">20%</td><td><div class="cbar-track"><div class="cbar-fill bar-red" style="width:20%;"></div></div></td><td><span class="control-status status-miss">Ontbreekt</span></td><td>&mdash;</td></tr>
-          <tr><td class="cid">A.5.29</td><td class="cname">Infosec tijdens disruption</td><td class="cscore">30%</td><td><div class="cbar-track"><div class="cbar-fill bar-red" style="width:30%;"></div></div></td><td><span class="control-status status-gap">Gap</span></td><td>&mdash;</td></tr>
-          <tr><td class="cid">A.5.30</td><td class="cname">ICT-gereedheid BCM</td><td class="cscore">40%</td><td><div class="cbar-track"><div class="cbar-fill bar-orange" style="width:40%;"></div></div></td><td><span class="control-status status-gap">Gap</span></td><td>backup-runbook</td></tr>
-          <tr><td class="cid">A.5.31</td><td class="cname">Wettelijke en contractuele eisen</td><td class="cscore">55%</td><td><div class="cbar-track"><div class="cbar-fill bar-yellow" style="width:55%;"></div></div></td><td><span class="control-status status-partial">Gedeeltelijk</span></td><td>legal-register</td></tr>
-          <tr><td class="cid">A.5.32</td><td class="cname">Intellectueel eigendom</td><td class="cscore">70%</td><td><div class="cbar-track"><div class="cbar-fill bar-green" style="width:70%;"></div></div></td><td><span class="control-status status-ok">OK</span></td><td>contracten</td></tr>
-          <tr><td class="cid">A.5.33</td><td class="cname">Bescherming van records</td><td class="cscore">45%</td><td><div class="cbar-track"><div class="cbar-fill bar-orange" style="width:45%;"></div></div></td><td><span class="control-status status-partial">Gedeeltelijk</span></td><td>s3-retention-policy</td></tr>
-          <tr><td class="cid">A.5.34</td><td class="cname">Privacy en PII</td><td class="cscore">60%</td><td><div class="cbar-track"><div class="cbar-fill bar-green" style="width:60%;"></div></div></td><td><span class="control-status status-ok">OK</span></td><td>privacy-policy, RoPA</td></tr>
-          <tr><td class="cid">A.5.35</td><td class="cname">Onafhankelijke review infosec</td><td class="cscore">30%</td><td><div class="cbar-track"><div class="cbar-fill bar-red" style="width:30%;"></div></div></td><td><span class="control-status status-gap">Gap</span></td><td>&mdash;</td></tr>
-          <tr><td class="cid">A.5.36</td><td class="cname">Compliance met infosec-policies</td><td class="cscore">35%</td><td><div class="cbar-track"><div class="cbar-fill bar-orange" style="width:35%;"></div></div></td><td><span class="control-status status-gap">Gap</span></td><td>&mdash;</td></tr>
-          <tr><td class="cid">A.5.37</td><td class="cname">Gedocumenteerde operating procedures</td><td class="cscore">50%</td><td><div class="cbar-track"><div class="cbar-fill bar-yellow" style="width:50%;"></div></div></td><td><span class="control-status status-partial">Gedeeltelijk</span></td><td>notion-playbooks</td></tr>
-
-          <tr class="group-head"><td colspan="6">A.6 &mdash; Personeel (8 controls &middot; 60%)</td></tr>
-          <tr><td class="cid">A.6.1</td><td class="cname">Screening</td><td class="cscore">65%</td><td><div class="cbar-track"><div class="cbar-fill bar-green" style="width:65%;"></div></div></td><td><span class="control-status status-ok">OK</span></td><td>hr-onboarding-flow</td></tr>
-          <tr><td class="cid">A.6.2</td><td class="cname">Arbeidsvoorwaarden</td><td class="cscore">75%</td><td><div class="cbar-track"><div class="cbar-fill bar-green" style="width:75%;"></div></div></td><td><span class="control-status status-ok">OK</span></td><td>nda-template</td></tr>
-          <tr><td class="cid">A.6.3</td><td class="cname">Awareness, onderwijs en training</td><td class="cscore">55%</td><td><div class="cbar-track"><div class="cbar-fill bar-yellow" style="width:55%;"></div></div></td><td><span class="control-status status-partial">Gedeeltelijk</span></td><td>training-log.xlsx</td></tr>
-          <tr><td class="cid">A.6.4</td><td class="cname">Disciplinair proces</td><td class="cscore">50%</td><td><div class="cbar-track"><div class="cbar-fill bar-yellow" style="width:50%;"></div></div></td><td><span class="control-status status-partial">Gedeeltelijk</span></td><td>hr-handbook</td></tr>
-          <tr><td class="cid">A.6.5</td><td class="cname">Verantwoordelijkheden na beëindiging</td><td class="cscore">60%</td><td><div class="cbar-track"><div class="cbar-fill bar-green" style="width:60%;"></div></div></td><td><span class="control-status status-ok">OK</span></td><td>offboarding</td></tr>
-          <tr><td class="cid">A.6.6</td><td class="cname">Vertrouwelijkheid / NDA</td><td class="cscore">80%</td><td><div class="cbar-track"><div class="cbar-fill bar-green" style="width:80%;"></div></div></td><td><span class="control-status status-ok">OK</span></td><td>signed NDAs</td></tr>
-          <tr><td class="cid">A.6.7</td><td class="cname">Remote working</td><td class="cscore">55%</td><td><div class="cbar-track"><div class="cbar-fill bar-yellow" style="width:55%;"></div></div></td><td><span class="control-status status-partial">Gedeeltelijk</span></td><td>wfh-policy draft</td></tr>
-          <tr><td class="cid">A.6.8</td><td class="cname">Incident reporting door personeel</td><td class="cscore">40%</td><td><div class="cbar-track"><div class="cbar-fill bar-orange" style="width:40%;"></div></div></td><td><span class="control-status status-gap">Gap</span></td><td>&mdash;</td></tr>
-
-          <tr class="group-head"><td colspan="6">A.7 &mdash; Fysieke beveiliging (14 controls &middot; 78%)</td></tr>
-          <tr><td class="cid">A.7.1</td><td class="cname">Fysieke beveiligingsperimeters</td><td class="cscore">80%</td><td><div class="cbar-track"><div class="cbar-fill bar-green" style="width:80%;"></div></div></td><td><span class="control-status status-ok">OK</span></td><td>plattegrond.pdf</td></tr>
-          <tr><td class="cid">A.7.2</td><td class="cname">Fysieke toegang</td><td class="cscore">85%</td><td><div class="cbar-track"><div class="cbar-fill bar-green" style="width:85%;"></div></div></td><td><span class="control-status status-ok">OK</span></td><td>badge-logs</td></tr>
-          <tr><td class="cid">A.7.3</td><td class="cname">Beveiligen kantoren en faciliteiten</td><td class="cscore">80%</td><td><div class="cbar-track"><div class="cbar-fill bar-green" style="width:80%;"></div></div></td><td><span class="control-status status-ok">OK</span></td><td>observatie</td></tr>
-          <tr><td class="cid">A.7.4</td><td class="cname">Fysieke security monitoring</td><td class="cscore">75%</td><td><div class="cbar-track"><div class="cbar-fill bar-green" style="width:75%;"></div></div></td><td><span class="control-status status-ok">OK</span></td><td>camera-plan</td></tr>
-          <tr><td class="cid">A.7.5</td><td class="cname">Bescherming fysieke bedreigingen</td><td class="cscore">70%</td><td><div class="cbar-track"><div class="cbar-fill bar-green" style="width:70%;"></div></div></td><td><span class="control-status status-ok">OK</span></td><td>brandmelders</td></tr>
-          <tr><td class="cid">A.7.6</td><td class="cname">Werken in secure areas</td><td class="cscore">75%</td><td><div class="cbar-track"><div class="cbar-fill bar-green" style="width:75%;"></div></div></td><td><span class="control-status status-ok">OK</span></td><td>interview CTO</td></tr>
-          <tr><td class="cid">A.7.7</td><td class="cname">Clear desk / clear screen</td><td class="cscore">85%</td><td><div class="cbar-track"><div class="cbar-fill bar-green" style="width:85%;"></div></div></td><td><span class="control-status status-ok">OK</span></td><td>observatie</td></tr>
-          <tr><td class="cid">A.7.8</td><td class="cname">Equipment siting</td><td class="cscore">80%</td><td><div class="cbar-track"><div class="cbar-fill bar-green" style="width:80%;"></div></div></td><td><span class="control-status status-ok">OK</span></td><td>&mdash;</td></tr>
-          <tr><td class="cid">A.7.9</td><td class="cname">Beveiliging off-premises assets</td><td class="cscore">70%</td><td><div class="cbar-track"><div class="cbar-fill bar-green" style="width:70%;"></div></div></td><td><span class="control-status status-ok">OK</span></td><td>mdm-config</td></tr>
-          <tr><td class="cid">A.7.10</td><td class="cname">Storage media</td><td class="cscore">75%</td><td><div class="cbar-track"><div class="cbar-fill bar-green" style="width:75%;"></div></div></td><td><span class="control-status status-ok">OK</span></td><td>disposal-log</td></tr>
-          <tr><td class="cid">A.7.11</td><td class="cname">Supporting utilities</td><td class="cscore">80%</td><td><div class="cbar-track"><div class="cbar-fill bar-green" style="width:80%;"></div></div></td><td><span class="control-status status-ok">OK</span></td><td>facility-agreement</td></tr>
-          <tr><td class="cid">A.7.12</td><td class="cname">Cabling security</td><td class="cscore">80%</td><td><div class="cbar-track"><div class="cbar-fill bar-green" style="width:80%;"></div></div></td><td><span class="control-status status-ok">OK</span></td><td>&mdash;</td></tr>
-          <tr><td class="cid">A.7.13</td><td class="cname">Onderhoud equipment</td><td class="cscore">75%</td><td><div class="cbar-track"><div class="cbar-fill bar-green" style="width:75%;"></div></div></td><td><span class="control-status status-ok">OK</span></td><td>maintenance-contract</td></tr>
-          <tr><td class="cid">A.7.14</td><td class="cname">Veilige verwijdering / hergebruik</td><td class="cscore">75%</td><td><div class="cbar-track"><div class="cbar-fill bar-green" style="width:75%;"></div></div></td><td><span class="control-status status-ok">OK</span></td><td>disposal-log</td></tr>
-
-          <tr class="group-head"><td colspan="6">A.8 &mdash; Technologische controls (34 controls &middot; 56%)</td></tr>
-          <tr><td class="cid">A.8.1</td><td class="cname">User endpoint devices</td><td class="cscore">70%</td><td><div class="cbar-track"><div class="cbar-fill bar-green" style="width:70%;"></div></div></td><td><span class="control-status status-ok">OK</span></td><td>mdm-jamf</td></tr>
-          <tr><td class="cid">A.8.2</td><td class="cname">Privileged access rights</td><td class="cscore">80%</td><td><div class="cbar-track"><div class="cbar-fill bar-green" style="width:80%;"></div></div></td><td><span class="control-status status-ok">OK</span></td><td>aws-iam</td></tr>
-          <tr><td class="cid">A.8.3</td><td class="cname">Information access restriction</td><td class="cscore">70%</td><td><div class="cbar-track"><div class="cbar-fill bar-green" style="width:70%;"></div></div></td><td><span class="control-status status-ok">OK</span></td><td>okta-groups</td></tr>
-          <tr><td class="cid">A.8.4</td><td class="cname">Access to source code</td><td class="cscore">75%</td><td><div class="cbar-track"><div class="cbar-fill bar-green" style="width:75%;"></div></div></td><td><span class="control-status status-ok">OK</span></td><td>github-perms</td></tr>
-          <tr><td class="cid">A.8.5</td><td class="cname">Secure authentication</td><td class="cscore">85%</td><td><div class="cbar-track"><div class="cbar-fill bar-green" style="width:85%;"></div></div></td><td><span class="control-status status-ok">OK</span></td><td>MFA config</td></tr>
-          <tr><td class="cid">A.8.6</td><td class="cname">Capacity management</td><td class="cscore">60%</td><td><div class="cbar-track"><div class="cbar-fill bar-green" style="width:60%;"></div></div></td><td><span class="control-status status-ok">OK</span></td><td>grafana-dashboards</td></tr>
-          <tr><td class="cid">A.8.7</td><td class="cname">Protection against malware</td><td class="cscore">65%</td><td><div class="cbar-track"><div class="cbar-fill bar-green" style="width:65%;"></div></div></td><td><span class="control-status status-ok">OK</span></td><td>edr-export</td></tr>
-          <tr><td class="cid">A.8.8</td><td class="cname">Management technical vulnerabilities</td><td class="cscore">55%</td><td><div class="cbar-track"><div class="cbar-fill bar-yellow" style="width:55%;"></div></div></td><td><span class="control-status status-partial">Gedeeltelijk</span></td><td>dependabot, geen SLA</td></tr>
-          <tr><td class="cid">A.8.9</td><td class="cname">Configuration management</td><td class="cscore">60%</td><td><div class="cbar-track"><div class="cbar-fill bar-green" style="width:60%;"></div></div></td><td><span class="control-status status-ok">OK</span></td><td>terraform-state</td></tr>
-          <tr><td class="cid">A.8.10</td><td class="cname">Information deletion</td><td class="cscore">50%</td><td><div class="cbar-track"><div class="cbar-fill bar-yellow" style="width:50%;"></div></div></td><td><span class="control-status status-partial">Gedeeltelijk</span></td><td>gdpr-delete-job</td></tr>
-          <tr><td class="cid">A.8.11</td><td class="cname">Data masking</td><td class="cscore">40%</td><td><div class="cbar-track"><div class="cbar-fill bar-orange" style="width:40%;"></div></div></td><td><span class="control-status status-gap">Gap</span></td><td>&mdash;</td></tr>
-          <tr><td class="cid">A.8.12</td><td class="cname">Data leakage prevention</td><td class="cscore">45%</td><td><div class="cbar-track"><div class="cbar-fill bar-orange" style="width:45%;"></div></div></td><td><span class="control-status status-partial">Gedeeltelijk</span></td><td>gsuite-dlp</td></tr>
-          <tr><td class="cid">A.8.13</td><td class="cname">Backup</td><td class="cscore">55%</td><td><div class="cbar-track"><div class="cbar-fill bar-yellow" style="width:55%;"></div></div></td><td><span class="control-status status-partial">Gedeeltelijk</span></td><td>backup-runbook</td></tr>
-          <tr><td class="cid">A.8.14</td><td class="cname">Redundancy informatiesystemen</td><td class="cscore">65%</td><td><div class="cbar-track"><div class="cbar-fill bar-green" style="width:65%;"></div></div></td><td><span class="control-status status-ok">OK</span></td><td>multi-az-setup</td></tr>
-          <tr><td class="cid">A.8.15</td><td class="cname">Logging</td><td class="cscore">50%</td><td><div class="cbar-track"><div class="cbar-fill bar-yellow" style="width:50%;"></div></div></td><td><span class="control-status status-gap">Gap</span></td><td>cloudwatch</td></tr>
-          <tr><td class="cid">A.8.16</td><td class="cname">Monitoring activiteiten</td><td class="cscore">50%</td><td><div class="cbar-track"><div class="cbar-fill bar-yellow" style="width:50%;"></div></div></td><td><span class="control-status status-partial">Gedeeltelijk</span></td><td>datadog</td></tr>
-          <tr><td class="cid">A.8.17</td><td class="cname">Klokkensynchronisatie</td><td class="cscore">80%</td><td><div class="cbar-track"><div class="cbar-fill bar-green" style="width:80%;"></div></div></td><td><span class="control-status status-ok">OK</span></td><td>ntp-config</td></tr>
-          <tr><td class="cid">A.8.18</td><td class="cname">Utility programs</td><td class="cscore">65%</td><td><div class="cbar-track"><div class="cbar-fill bar-green" style="width:65%;"></div></div></td><td><span class="control-status status-ok">OK</span></td><td>&mdash;</td></tr>
-          <tr><td class="cid">A.8.19</td><td class="cname">Installation software on operational systems</td><td class="cscore">60%</td><td><div class="cbar-track"><div class="cbar-fill bar-green" style="width:60%;"></div></div></td><td><span class="control-status status-ok">OK</span></td><td>change-mgmt</td></tr>
-          <tr><td class="cid">A.8.20</td><td class="cname">Networks security</td><td class="cscore">65%</td><td><div class="cbar-track"><div class="cbar-fill bar-green" style="width:65%;"></div></div></td><td><span class="control-status status-ok">OK</span></td><td>vpc-setup</td></tr>
-          <tr><td class="cid">A.8.21</td><td class="cname">Security of network services</td><td class="cscore">60%</td><td><div class="cbar-track"><div class="cbar-fill bar-green" style="width:60%;"></div></div></td><td><span class="control-status status-ok">OK</span></td><td>cloudfront-waf</td></tr>
-          <tr><td class="cid">A.8.22</td><td class="cname">Segregation in networks</td><td class="cscore">55%</td><td><div class="cbar-track"><div class="cbar-fill bar-yellow" style="width:55%;"></div></div></td><td><span class="control-status status-partial">Gedeeltelijk</span></td><td>subnet-config</td></tr>
-          <tr><td class="cid">A.8.23</td><td class="cname">Web filtering</td><td class="cscore">50%</td><td><div class="cbar-track"><div class="cbar-fill bar-yellow" style="width:50%;"></div></div></td><td><span class="control-status status-partial">Gedeeltelijk</span></td><td>dns-filter</td></tr>
-          <tr><td class="cid">A.8.24</td><td class="cname">Gebruik cryptografie</td><td class="cscore">70%</td><td><div class="cbar-track"><div class="cbar-fill bar-green" style="width:70%;"></div></div></td><td><span class="control-status status-ok">OK</span></td><td>kms-keys</td></tr>
-          <tr><td class="cid">A.8.25</td><td class="cname">Secure development lifecycle</td><td class="cscore">60%</td><td><div class="cbar-track"><div class="cbar-fill bar-green" style="width:60%;"></div></div></td><td><span class="control-status status-ok">OK</span></td><td>pr-review-policy</td></tr>
-          <tr><td class="cid">A.8.26</td><td class="cname">Application security requirements</td><td class="cscore">50%</td><td><div class="cbar-track"><div class="cbar-fill bar-yellow" style="width:50%;"></div></div></td><td><span class="control-status status-partial">Gedeeltelijk</span></td><td>security-stories</td></tr>
-          <tr><td class="cid">A.8.27</td><td class="cname">Secure system architecture</td><td class="cscore">55%</td><td><div class="cbar-track"><div class="cbar-fill bar-yellow" style="width:55%;"></div></div></td><td><span class="control-status status-partial">Gedeeltelijk</span></td><td>arch-diagrams</td></tr>
-          <tr><td class="cid">A.8.28</td><td class="cname">Secure coding</td><td class="cscore">55%</td><td><div class="cbar-track"><div class="cbar-fill bar-yellow" style="width:55%;"></div></div></td><td><span class="control-status status-partial">Gedeeltelijk</span></td><td>sonarqube</td></tr>
-          <tr><td class="cid">A.8.29</td><td class="cname">Security testing in ontwikkeling</td><td class="cscore">45%</td><td><div class="cbar-track"><div class="cbar-fill bar-orange" style="width:45%;"></div></div></td><td><span class="control-status status-partial">Gedeeltelijk</span></td><td>unit-tests only</td></tr>
-          <tr><td class="cid">A.8.30</td><td class="cname">Outsourced development</td><td class="cscore">40%</td><td><div class="cbar-track"><div class="cbar-fill bar-orange" style="width:40%;"></div></div></td><td><span class="control-status status-gap">Gap</span></td><td>geen contractors</td></tr>
-          <tr><td class="cid">A.8.31</td><td class="cname">Scheiding dev/test/prod</td><td class="cscore">70%</td><td><div class="cbar-track"><div class="cbar-fill bar-green" style="width:70%;"></div></div></td><td><span class="control-status status-ok">OK</span></td><td>aws-accounts</td></tr>
-          <tr><td class="cid">A.8.32</td><td class="cname">Change management</td><td class="cscore">60%</td><td><div class="cbar-track"><div class="cbar-fill bar-green" style="width:60%;"></div></div></td><td><span class="control-status status-ok">OK</span></td><td>pr-process</td></tr>
-          <tr><td class="cid">A.8.33</td><td class="cname">Test informatie</td><td class="cscore">45%</td><td><div class="cbar-track"><div class="cbar-fill bar-orange" style="width:45%;"></div></div></td><td><span class="control-status status-partial">Gedeeltelijk</span></td><td>synthetic-data</td></tr>
-          <tr><td class="cid">A.8.34</td><td class="cname">Bescherming infosystemen tijdens audit</td><td class="cscore">50%</td><td><div class="cbar-track"><div class="cbar-fill bar-yellow" style="width:50%;"></div></div></td><td><span class="control-status status-partial">Gedeeltelijk</span></td><td>&mdash;</td></tr>
-
-          <tr class="group-head"><td colspan="6">Clausules 4-10 &mdash; ISMS (7 clausules &middot; 30%)</td></tr>
-          <tr><td class="cid">4</td><td class="cname">Context van de organisatie</td><td class="cscore">35%</td><td><div class="cbar-track"><div class="cbar-fill bar-orange" style="width:35%;"></div></div></td><td><span class="control-status status-gap">Gap</span></td><td>geen SWOT</td></tr>
-          <tr><td class="cid">5</td><td class="cname">Leiderschap en commitment</td><td class="cscore">40%</td><td><div class="cbar-track"><div class="cbar-fill bar-orange" style="width:40%;"></div></div></td><td><span class="control-status status-partial">Gedeeltelijk</span></td><td>policy-draft</td></tr>
-          <tr><td class="cid">6</td><td class="cname">Planning &amp; risico's</td><td class="cscore">15%</td><td><div class="cbar-track"><div class="cbar-fill bar-red" style="width:15%;"></div></div></td><td><span class="control-status status-miss">Ontbreekt</span></td><td>&mdash;</td></tr>
-          <tr><td class="cid">7</td><td class="cname">Ondersteuning (resources, competentie, documentatie)</td><td class="cscore">40%</td><td><div class="cbar-track"><div class="cbar-fill bar-orange" style="width:40%;"></div></div></td><td><span class="control-status status-gap">Gap</span></td><td>competentiematrix</td></tr>
-          <tr><td class="cid">8</td><td class="cname">Uitvoering (operations)</td><td class="cscore">35%</td><td><div class="cbar-track"><div class="cbar-fill bar-orange" style="width:35%;"></div></div></td><td><span class="control-status status-gap">Gap</span></td><td>&mdash;</td></tr>
-          <tr><td class="cid">9</td><td class="cname">Evaluatie van prestaties (interne audit, MR)</td><td class="cscore">40%</td><td><div class="cbar-track"><div class="cbar-fill bar-orange" style="width:40%;"></div></div></td><td><span class="control-status status-partial">Gedeeltelijk</span></td><td>audit-plan</td></tr>
-          <tr><td class="cid">10</td><td class="cname">Verbetering (NC-beheer, CAPA)</td><td class="cscore">20%</td><td><div class="cbar-track"><div class="cbar-fill bar-red" style="width:20%;"></div></div></td><td><span class="control-status status-miss">Ontbreekt</span></td><td>&mdash;</td></tr>
+          <tr><td colspan="6" style="text-align:center;font-style:italic;color:var(--text-muted);padding:14px;background:rgba(13,148,136,0.03);">…nog 88 controls zichtbaar in uw volledige rapport (A.5.6 t/m Clausule 10)…</td></tr>
         </tbody>
       </table>
+
+      <div class="teaser-lock">
+        <div class="teaser-lock-label">Voorbeeld-limiet</div>
+        <div class="teaser-lock-title">Volledige 93-controls matrix in uw rapport</div>
+        <div class="teaser-lock-sub">Uw eigen rapport toont alle 93 Annex A-controls plus de 7 ISMS-clausules, met score, bewijs-referentie en DNV-beoordelingsstatus &mdash; gebaseerd op uw antwoorden en geüploade evidence.</div>
+        <a href="/bestellen" class="teaser-cta">Bestel gap-analyse <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      </div>
 
       <h2>6. Detail-analyse per hoofdstuk</h2>
       <p>Per hoofdstuk alle geïdentificeerde bevindingen, ingedeeld volgens DNV-taxonomie (Major NC, Minor NC, Observatie, OFI). Elke bevinding bevat de drie DNV-componenten: <em>Eis</em> (uit de norm), <em>Tekortkoming</em> (wat ontbreekt), <em>Bewijs</em> (wat wij hebben gezien of niet gezien).</p>
@@ -773,91 +575,11 @@
         </ul>
       </div>
 
-      <div class="annex-detail">
-        <div class="annex-detail-head">
-          <div class="annex-detail-title">A.6 &mdash; Personeel</div>
-          <div class="annex-detail-meta">Score 60% &middot; 8 controls &middot; 0 Major &middot; 2 Minor &middot; 2 Observaties &middot; 2 OFI</div>
-        </div>
-        <h4><span class="nc-tag nc-minor">NC Minor</span></h4>
-        <ul class="finding-list">
-          <li class="f-minor"><strong>A.6.3 Awareness training:</strong> 4 nieuwe medewerkers sinds 2025-Q3 zonder onboarding-training. Curriculum en leerdoelen niet gedocumenteerd.</li>
-          <li class="f-minor"><strong>A.6.8 Incident reporting:</strong> Geen vertrouwelijk meldpunt of procedure voor medewerkers om security-issues te rapporteren.</li>
-        </ul>
-        <h4><span class="nc-tag nc-obs">Observaties</span></h4>
-        <ul class="finding-list">
-          <li class="f-obs"><strong>A.6.4 Disciplinair proces:</strong> HR-handbook noemt "passende maatregelen" zonder verwijzing naar infosec-overtredingen specifiek.</li>
-          <li class="f-obs"><strong>A.6.7 Remote working:</strong> Draft-policy niet formeel gecommuniceerd. ~80% medewerkers werkt hybride.</li>
-        </ul>
-        <h4><span class="nc-tag nc-ofi">OFI</span></h4>
-        <ul class="finding-list">
-          <li class="f-ofi">Integreer <strong>phishing-simulaties</strong> (KnowBe4 / Proofpoint) — gemiddeld 18% klikt een phishing-mail bij eerste meting.</li>
-          <li class="f-ofi">Koppel training-compliance aan HR-cyclus (jaarlijkse performance review).</li>
-        </ul>
-      </div>
-
-      <div class="annex-detail">
-        <div class="annex-detail-head">
-          <div class="annex-detail-title">A.7 &mdash; Fysieke beveiliging</div>
-          <div class="annex-detail-meta">Score 78% &middot; 14 controls &middot; 0 Major &middot; 0 Minor &middot; 2 Observaties &middot; 1 OFI</div>
-        </div>
-        <p>Fysieke beveiliging is het sterkste hoofdstuk. Het kantoor heeft passende maatregelen (badge-toegang, camera's, brandveiligheid, clean desk). Geen NC&apos;s geïdentificeerd.</p>
-        <h4><span class="nc-tag nc-obs">Observaties</span></h4>
-        <ul class="finding-list">
-          <li class="f-obs"><strong>A.7.1 Perimeters:</strong> Geen gedocumenteerd fysiek-beveiligingsbeleid als apart document, wel praktische implementatie.</li>
-          <li class="f-obs"><strong>A.7.4 Monitoring:</strong> Camerabeelden worden 14 dagen bewaard; retentiebeleid niet gedocumenteerd.</li>
-        </ul>
-        <h4><span class="nc-tag nc-ofi">OFI</span></h4>
-        <ul class="finding-list">
-          <li class="f-ofi">Overweeg jaarlijkse <strong>fysieke penetratietest</strong> (tailgating-test) &mdash; niet verplicht maar waardevol bewijs.</li>
-        </ul>
-      </div>
-
-      <div class="annex-detail">
-        <div class="annex-detail-head">
-          <div class="annex-detail-title">A.8 &mdash; Technologische controls</div>
-          <div class="annex-detail-meta">Score 56% &middot; 34 controls &middot; 0 Major &middot; 4 Minor &middot; 6 Observaties &middot; 4 OFI</div>
-        </div>
-        <h4><span class="nc-tag nc-minor">NC Minor</span></h4>
-        <ul class="finding-list">
-          <li class="f-minor"><strong>A.8.13 Backup:</strong> Backup aanwezig maar restore-test is nooit uitgevoerd. Dit is een eis voor zowel A.8.13 als A.5.30 als voor de cyber-verzekering.</li>
-          <li class="f-minor"><strong>A.8.15 Logging:</strong> Geen retentiebeleid (180d+/1y cold), geen alerting-regels op security-events, geen periodieke review-procedure.</li>
-          <li class="f-minor"><strong>A.8.8 Vulnerability management:</strong> Dependabot actief maar geen SLA voor patching (high-severity &lt;14d, critical &lt;72u).</li>
-          <li class="f-minor"><strong>A.8.11 Data masking:</strong> Production-data wordt in staging gekopieerd zonder masking.</li>
-        </ul>
-        <h4><span class="nc-tag nc-obs">Observaties</span></h4>
-        <ul class="finding-list">
-          <li class="f-obs"><strong>A.8.22 Network segregation:</strong> VPC-segmentatie op subnet-niveau, geen micro-segmentatie tussen services.</li>
-          <li class="f-obs"><strong>A.8.26 Application security requirements:</strong> Security-stories in Jira, niet alle features hebben een security-review.</li>
-          <li class="f-obs"><strong>A.8.29 Security testing:</strong> Unit-tests aanwezig, geen SAST/DAST-pipeline.</li>
-          <li class="f-obs"><strong>A.8.33 Test data:</strong> Synthetic data gebruikt waar mogelijk, uitzonderingen niet gelogd.</li>
-          <li class="f-obs"><strong>A.8.23 Web filtering:</strong> DNS-filter actief, URL-categorie-policy niet gedocumenteerd.</li>
-          <li class="f-obs"><strong>A.8.34 Bescherming tijdens audit:</strong> Geen procedure voor read-only auditor-accounts.</li>
-        </ul>
-        <h4><span class="nc-tag nc-ofi">OFI</span></h4>
-        <ul class="finding-list">
-          <li class="f-ofi">Implementeer <strong>automated restore-test</strong> (Chaos Engineering-light) — kwartaal, gelogd.</li>
-          <li class="f-ofi">Voeg <strong>SAST (CodeQL / Semgrep)</strong> toe aan CI-pipeline.</li>
-          <li class="f-ofi">Overweeg <strong>immutable infrastructure</strong> voor productie-workloads (Terraform enforce).</li>
-          <li class="f-ofi">Stel <strong>bug bounty</strong> in (HackerOne / Intigriti) voor externe vulnerability-discovery.</li>
-        </ul>
-      </div>
-
-      <div class="annex-detail">
-        <div class="annex-detail-head">
-          <div class="annex-detail-title">Clausules 4-10 &mdash; ISMS</div>
-          <div class="annex-detail-meta">Score 30% &middot; 7 clausules &middot; 3 Major NC &middot; 2 Minor NC &middot; 1 Observatie</div>
-        </div>
-        <h4><span class="nc-tag nc-major">NC Major</span> &mdash; Structurele gap-criteria Stage 1</h4>
-        <ul class="finding-list">
-          <li class="f-major"><strong>Clause 6.1.2 Risicobeoordelingsproces:</strong> <em>Eis</em> &mdash; organisatie moet een gedocumenteerd risicobeoordelingsproces opzetten (criteria, scope, verantwoordelijke). <em>Tekortkoming</em> &mdash; proces ontbreekt volledig. <em>Bewijs</em> &mdash; quickscan-antwoord: "wordt ad hoc gedaan".</li>
-          <li class="f-major"><strong>Clause 6.1.3 Behandelplan:</strong> <em>Eis</em> &mdash; risico's moeten behandeld worden (vermijden, overdragen, accepteren, reduceren). <em>Tekortkoming</em> &mdash; geen risicoregister, geen behandelplan, geen acceptatie-criteria. <em>Bewijs</em> &mdash; geen document.</li>
-          <li class="f-major"><strong>Clause 10 Verbetering (CAPA):</strong> <em>Eis</em> &mdash; non-conformiteiten moeten gecorrigeerd worden met root cause analysis. <em>Tekortkoming</em> &mdash; geen NC-register, geen CAPA-procedure. <em>Bewijs</em> &mdash; ontbreekt.</li>
-        </ul>
-        <h4><span class="nc-tag nc-minor">NC Minor</span></h4>
-        <ul class="finding-list">
-          <li class="f-minor"><strong>Clause 7.5 Gedocumenteerde informatie:</strong> Documenten verspreid over wiki, Google Drive en SharePoint zonder versiebeheer.</li>
-          <li class="f-minor"><strong>Clause 9.3 Management review:</strong> Geen formele MR-cyclus of notulen.</li>
-        </ul>
+      <div class="teaser-lock">
+        <div class="teaser-lock-label">Voorbeeld-limiet</div>
+        <div class="teaser-lock-title">Detail-analyse voor 4 nog hoofdstukken in uw rapport</div>
+        <div class="teaser-lock-sub">Uw rapport bevat deze zelfde diepgaande uitwerking ook voor <strong>A.6 Personeel</strong>, <strong>A.7 Fysieke beveiliging</strong>, <strong>A.8 Technologische controls</strong> en <strong>Clausules 4-10 ISMS</strong> &mdash; inclusief alle Major NC&apos;s, Minor NC&apos;s, Observaties en OFI&apos;s met DNV-triple (Eis, Tekortkoming, Bewijs).</div>
+        <a href="/bestellen" class="teaser-cta">Bestel gap-analyse <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
       </div>
 
       <h2>7. Risico-prioritering (heatmap)</h2>
@@ -934,25 +656,16 @@
           <tr><td class="week">1-2</td><td>Kick-off + scope-definitie ISMS, stakeholder-mapping, kwalificatie Lead Auditor</td><td>ISMS-scope document, RACI</td><td>CTO + Lead Auditor</td></tr>
           <tr><td class="week">3</td><td>Risicomethodologie vaststellen (ISO 27005 gebaseerd)</td><td>Risico-methodiek (2 pag)</td><td>CTO</td></tr>
           <tr><td class="week">4-5</td><td>Eerste risk assessment op 8 kritieke assets</td><td>Risicoregister v1, behandelplan</td><td>CTO + Security Officer</td></tr>
-          <tr><td class="week">6</td><td>Information Security Policy opstellen + directieapproval</td><td>Policy v1.0 ondertekend</td><td>Directie + CTO</td></tr>
-          <tr><td class="week">7</td><td>Leveranciersregister compleet (14 SaaS), DPA's opvragen</td><td>Register + 14 DPA's</td><td>Procurement</td></tr>
-          <tr><td class="week">8</td><td>Access-management procedure + JML + access-matrix</td><td>Access-beleid + matrix</td><td>Security Officer</td></tr>
-          <tr><td class="week">9</td><td>Logging retentie + alerting + periodieke review</td><td>Logging-procedure, 12 alert-rules</td><td>DevOps Lead</td></tr>
-          <tr><td class="week">10</td><td>BCP/DRP opstellen + RTO/RPO vastleggen</td><td>BCP v1.0, DRP v1.0</td><td>CTO</td></tr>
-          <tr><td class="week">11</td><td><strong>Restore-test</strong> op staging, volledig gelogd</td><td>Restore-rapport</td><td>DevOps Lead</td></tr>
-          <tr><td class="week">12</td><td>Awareness-training curriculum + nieuwe kickoff</td><td>Onboarding-module</td><td>HR + Security Officer</td></tr>
-          <tr><td class="week">13</td><td>Vulnerability management SLA + patch-policy</td><td>VM-beleid</td><td>DevOps Lead</td></tr>
-          <tr><td class="week">14</td><td>Incident response runbook uitbreiden + tabletop-test</td><td>IR v2.0 + test-rapport</td><td>Security Officer</td></tr>
-          <tr><td class="week">15</td><td>Statement of Applicability (SoA) invullen voor alle 93 controls</td><td>SoA v1.0</td><td>Lead Auditor</td></tr>
-          <tr><td class="week">16</td><td>Documentenbeheer + versiebeleid (clausule 7.5)</td><td>Document-procedure</td><td>CTO</td></tr>
-          <tr><td class="week">17</td><td>Management review voorbereiden + KPI-set</td><td>MR-template</td><td>Directie</td></tr>
-          <tr><td class="week">18</td><td><strong>Interne audit cyclus 1</strong> uitvoeren</td><td>IA-rapport + bevindingen</td><td>Lead Auditor</td></tr>
-          <tr><td class="week">19</td><td>CAPA-proces + NC-register opzetten</td><td>CAPA-procedure</td><td>Security Officer</td></tr>
-          <tr><td class="week">20</td><td>Corrigeren bevindingen interne audit + hertest</td><td>Hertest-verslag</td><td>Allen</td></tr>
-          <tr><td class="week">21</td><td><strong>Management review cyclus 1</strong> houden</td><td>MR-notulen</td><td>Directie</td></tr>
-          <tr><td class="week">22</td><td>Stage 1 Audit aanvragen bij geaccrediteerde CB (bv. DNV)</td><td>Audit-contract</td><td>CTO</td></tr>
+          <tr><td colspan="4" style="text-align:center;font-style:italic;color:var(--text-muted);padding:14px;background:rgba(13,148,136,0.03);">…week 6 t/m 22 uitgewerkt in uw volledige rapport (policy, leveranciers, access, logging, BCP, restore-test, training, vulnerability mgmt, incident response, SoA, documentenbeheer, MR, interne audit, CAPA, Stage 1 aanvraag)…</td></tr>
         </tbody>
       </table>
+
+      <div class="teaser-lock">
+        <div class="teaser-lock-label">Voorbeeld-limiet</div>
+        <div class="teaser-lock-title">Volledige 22-weken roadmap in uw rapport</div>
+        <div class="teaser-lock-sub">Week 6-22 zijn uitgewerkt met deliverables en eigenaren, op maat afgestemd op uw organisatie-grootte en beschikbare capaciteit.</div>
+        <a href="/bestellen" class="teaser-cta">Bestel gap-analyse <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      </div>
 
       <h2>9. Benchmarkvergelijking</h2>
       <p>Vergelijking van Voorbeeld B.V. met peer-group (47 SaaS MKB-bedrijven, &lt;50 fte, eerste meting in ons corpus).</p>
@@ -1002,71 +715,20 @@
       </p>
 
       <h2>10. Bijlagen</h2>
+      <p>Uw volledige rapport bevat vier bijlagen met het concrete audit-bewijsmateriaal en onderbouwing. In dit voorbeeld alleen de titels; de inhoud is op uw eigen organisatie afgestemd.</p>
 
-      <div class="appendix">
-        <h3>Bijlage A &mdash; Bewijsregister (volledig)</h3>
-        <p>Register van alle 11 aangeleverde documenten met SHA-256 hash en koppeling naar controls. Digitaal beschikbaar als CSV via uw dashboard.</p>
-        <table style="font-size:0.82rem;">
-          <thead><tr><th>ID</th><th>Bestand</th><th>Type</th><th>Grootte</th><th>Gekoppeld aan</th></tr></thead>
-          <tbody>
-            <tr><td>E-001</td><td>informatiebeveiligingsbeleid-draft.pdf</td><td>Beleid</td><td>280 KB</td><td>A.5.1, Clause 5.2</td></tr>
-            <tr><td>E-002</td><td>raci-matrix.xlsx</td><td>Matrix</td><td>48 KB</td><td>A.5.2, A.5.4</td></tr>
-            <tr><td>E-003</td><td>asset-register.xlsx</td><td>Register</td><td>120 KB</td><td>A.5.9, A.5.12</td></tr>
-            <tr><td>E-004</td><td>leveranciers-overzicht.docx</td><td>Register</td><td>62 KB</td><td>A.5.19, A.5.20</td></tr>
-            <tr><td>E-005</td><td>security-training-log-2025.xlsx</td><td>Log</td><td>95 KB</td><td>A.6.3</td></tr>
-            <tr><td>E-006</td><td>kantoor-plattegrond-badged-zones.pdf</td><td>Plattegrond</td><td>1.4 MB</td><td>A.7.1-7.4</td></tr>
-            <tr><td>E-007</td><td>aws-iam-console-screenshot.png</td><td>Screenshot</td><td>320 KB</td><td>A.8.2, A.8.5</td></tr>
-            <tr><td>E-008</td><td>iam-policy-export.json</td><td>Config</td><td>78 KB</td><td>A.8.2, A.8.3</td></tr>
-            <tr><td>E-009</td><td>backup-runbook-v1.pdf</td><td>Runbook</td><td>190 KB</td><td>A.8.13, A.5.30</td></tr>
-            <tr><td>E-010</td><td>cloudwatch-dashboard.png</td><td>Screenshot</td><td>410 KB</td><td>A.8.15, A.8.16</td></tr>
-            <tr><td>E-011</td><td>intern-audit-plan-2026.pdf</td><td>Plan</td><td>65 KB</td><td>Clause 9.2</td></tr>
-          </tbody>
-        </table>
-      </div>
+      <ul style="list-style:none;padding:0;margin:14px 0;">
+        <li style="padding:10px 14px;background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:4px 8px 8px 4px;margin-bottom:6px;"><strong>Bijlage A &mdash; Bewijsregister</strong> &mdash; alle geüploade documenten met SHA-256 hash, gekoppeld aan controls (CSV-export in dashboard).</li>
+        <li style="padding:10px 14px;background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:4px 8px 8px 4px;margin-bottom:6px;"><strong>Bijlage B &mdash; Geïnterviewden</strong> &mdash; datum, rol, besproken onderwerp en duur per gesprek.</li>
+        <li style="padding:10px 14px;background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:4px 8px 8px 4px;margin-bottom:6px;"><strong>Bijlage C &mdash; Toegepaste normen en bronnen</strong> &mdash; ISO 27001:2022 Rev.7, ISO 27002, ISO 27005, ISO 19011, ISO 17021-1, DNV Lead Auditor methodiek, NCSC/CCB richtlijnen, AVG.</li>
+        <li style="padding:10px 14px;background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:4px 8px 8px 4px;margin-bottom:6px;"><strong>Bijlage D &mdash; Beschikbare templates</strong> &mdash; 12 kant-en-klare templates uit het Annex27 Beleidspakket (policy, SoA, risicomethodologie, BCP/DRP, JML, CAPA, &hellip;).</li>
+      </ul>
 
-      <div class="appendix">
-        <h3>Bijlage B &mdash; Geïnterviewden</h3>
-        <table style="font-size:0.82rem;">
-          <thead><tr><th>Datum</th><th>Persoon</th><th>Rol</th><th>Onderwerp</th><th>Duur</th></tr></thead>
-          <tbody>
-            <tr><td>2026-04-08</td><td>J. de Vries</td><td>CTO</td><td>ISMS-scope, technische controls, backups, incident mgmt</td><td>75 min</td></tr>
-            <tr><td>2026-04-10</td><td>S. Bakker</td><td>Security Officer</td><td>Access mgmt, policies, vendor mgmt, training</td><td>60 min</td></tr>
-            <tr><td>2026-04-11</td><td>M. van Dam</td><td>HR Lead</td><td>Onboarding, screening, NDA, offboarding</td><td>40 min</td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div class="appendix">
-        <h3>Bijlage C &mdash; Toegepaste normen en bronnen</h3>
-        <ul>
-          <li><strong>ISO/IEC 27001:2022 Rev. 7</strong> &mdash; Information security management systems &mdash; Requirements</li>
-          <li><strong>ISO/IEC 27002:2022</strong> &mdash; Information security controls &mdash; implementation guidance</li>
-          <li><strong>ISO/IEC 27005:2022</strong> &mdash; Guidance on managing information security risks</li>
-          <li><strong>ISO 19011:2018</strong> &mdash; Guidelines for auditing management systems</li>
-          <li><strong>ISO/IEC 17021-1:2015</strong> &mdash; Requirements for bodies providing audit and certification</li>
-          <li><strong>DNV Business Assurance Lead Auditor training (Rev. 7)</strong> &mdash; Audit-methodiek, 4-categorieën bevindingen, certificatie-proces (Pre-audit → Stage 1 → Stage 2 → Periodieke audits → Hercertificatie)</li>
-          <li><strong>NCSC (NL) + CCB (BE)</strong> &mdash; Nationale threat-intelligence en richtlijnen</li>
-          <li><strong>AVG / GDPR</strong> &mdash; Verordening (EU) 2016/679, aangehaald bij controls A.5.34, A.8.10, A.8.11</li>
-        </ul>
-      </div>
-
-      <div class="appendix">
-        <h3>Bijlage D &mdash; Beschikbare templates (Annex27 Beleidspakket)</h3>
-        <p>Voor implementatie zijn de volgende templates direct beschikbaar in uw Annex27-dashboard (basispakket €795, premium €1495):</p>
-        <ul>
-          <li>Information Security Policy (3-5 pag)</li>
-          <li>Risico-methodiek + register-template</li>
-          <li>Leveranciersregister-template (CSV + DPA-tracking)</li>
-          <li>Access-management procedure + matrix-template</li>
-          <li>JML-procedure (joiners-movers-leavers)</li>
-          <li>Incident response runbook + tabletop-scenario</li>
-          <li>BCP/DRP-template + RTO/RPO-sjabloon</li>
-          <li>Interne audit-plan + checklist ISO 27001:2022</li>
-          <li>Management review-template + KPI-dashboard</li>
-          <li>CAPA-register + root-cause-template</li>
-          <li>Statement of Applicability (SoA) voor alle 93 controls</li>
-          <li>Awareness-training curriculum (onboarding + jaarlijkse refresh)</li>
-        </ul>
+      <div class="teaser-lock">
+        <div class="teaser-lock-label">Voorbeeld-limiet</div>
+        <div class="teaser-lock-title">Volledige bijlagen met alle audit-bewijs in uw rapport</div>
+        <div class="teaser-lock-sub">Het echte rapport bevat complete tabellen met uw eigen bewijsregister, interviewlogboek en het template-pakket dat relevant is voor uw sector en omvang.</div>
+        <a href="/bestellen" class="teaser-cta">Bestel gap-analyse <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
       </div>
 
       <h2>11. Volgende stap</h2>
