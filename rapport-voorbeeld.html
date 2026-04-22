@@ -91,6 +91,21 @@
     .control-body{font-size:0.88rem;color:var(--text-secondary);}
     .control-body strong{color:var(--text-primary);}
     .control-action{margin-top:8px;padding:10px 12px;background:var(--surface);border-left:3px solid var(--accent);border-radius:6px;font-size:0.86rem;}
+    .status-partial{background:rgba(234,179,8,0.12);color:#a16207;}
+
+    .evidence-group{margin:10px 0 22px;}
+    .evidence-group-head{display:flex;justify-content:space-between;align-items:baseline;padding:10px 14px;background:var(--dark);color:#fff;border-radius:10px 10px 0 0;font-family:'Sora',sans-serif;font-size:0.88rem;font-weight:700;}
+    .evidence-group-count{font-size:0.74rem;font-weight:500;color:rgba(255,255,255,0.65);}
+    .evidence-rows{border:1px solid var(--border);border-top:none;border-radius:0 0 10px 10px;overflow:hidden;}
+    .evidence-row{padding:14px 16px;border-bottom:1px solid var(--border-light);background:var(--surface);}
+    .evidence-row:last-child{border-bottom:none;}
+    .evidence-row-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:6px;}
+    .evidence-ctrl{font-family:'Sora',sans-serif;font-size:0.88rem;font-weight:600;color:var(--text-primary);}
+    .evidence-file{display:inline-flex;align-items:center;gap:6px;font-size:0.8rem;color:var(--accent);font-family:monospace;background:var(--accent-light);padding:3px 8px;border-radius:6px;margin:4px 0 6px;}
+    .evidence-file.missing{color:var(--text-muted);background:var(--border-light);font-style:italic;}
+    .evidence-review{font-size:0.84rem;color:var(--text-secondary);line-height:1.6;}
+    .evidence-review .good{color:var(--success);}
+    .evidence-review .bad{color:var(--danger);}
 
     .doc-footer{margin-top:48px;padding-top:24px;border-top:1px solid var(--border-light);font-size:0.78rem;color:var(--text-muted);text-align:center;}
 
@@ -212,7 +227,158 @@
         </tbody>
       </table>
 
-      <h2>3. Top-prioriteit bevindingen (selectie)</h2>
+      <h2>3. Aangeleverd bewijs en beoordeling</h2>
+      <p>Tijdens de gap-analyse zijn <strong>11 documenten</strong> en <strong>94 quickscan-antwoorden</strong> aangeleverd. Per Annex A-hoofdstuk hieronder het aangeleverde bewijs en onze beoordeling.</p>
+
+      <div class="evidence-group">
+        <div class="evidence-group-head">
+          <span>A.5 &mdash; Organisatorische controls</span>
+          <span class="evidence-group-count">4 documenten &middot; gemiddelde score 41%</span>
+        </div>
+        <div class="evidence-rows">
+
+          <div class="evidence-row">
+            <div class="evidence-row-head">
+              <span class="evidence-ctrl">A.5.1 &mdash; Beleidsregels voor informatiebeveiliging</span>
+              <span class="control-status status-partial">Gedeeltelijk &middot; 40%</span>
+            </div>
+            <span class="evidence-file">📄 informatiebeveiligingsbeleid-draft.pdf &middot; 8 pag &middot; v0.3</span>
+            <div class="evidence-review">
+              <span class="good">✓</span> Scope en toepassingsgebied zijn helder beschreven.
+              <span class="good">✓</span> Rollen (CISO, directie, medewerker) benoemd.<br>
+              <span class="bad">✗</span> Geen management-goedkeuring in het document zichtbaar.
+              <span class="bad">✗</span> Geen versiebeheer of review-datum vastgesteld (art. 5.2 vereist jaarlijkse review).
+            </div>
+          </div>
+
+          <div class="evidence-row">
+            <div class="evidence-row-head">
+              <span class="evidence-ctrl">A.5.9 &mdash; Informatie-inventaris</span>
+              <span class="control-status status-ok">Compleet &middot; 85%</span>
+            </div>
+            <span class="evidence-file">📊 asset-register.xlsx &middot; 47 assets &middot; owner: J. Bakker</span>
+            <div class="evidence-review">
+              <span class="good">✓</span> 47 assets geregistreerd, classificatie-kolom ingevuld, eigenaar per asset.
+              <span class="good">✓</span> Laatste update 2 weken geleden (voldoet aan de review-cadans).<br>
+              <span class="bad">✗</span> Cloud-subscriptions (AWS, SaaS-tools) nog niet apart benoemd &mdash; wordt aanbevolen als aparte tab.
+            </div>
+          </div>
+
+          <div class="evidence-row">
+            <div class="evidence-row-head">
+              <span class="evidence-ctrl">A.5.15 &mdash; Toegangscontrole</span>
+              <span class="control-status status-miss">Ontbreekt &middot; 15%</span>
+            </div>
+            <span class="evidence-file missing">geen document geüpload</span>
+            <div class="evidence-review">
+              Antwoord op quickscan: &ldquo;proces in opbouw, geen formeel beleid&rdquo;. Zonder documentatie kan de auditor het bestaan van het proces niet vaststellen.
+              <br><span class="bad">✗</span> Geen access-matrix, geen joiners-movers-leavers-procedure aangeleverd.
+            </div>
+          </div>
+
+          <div class="evidence-row">
+            <div class="evidence-row-head">
+              <span class="evidence-ctrl">A.5.19 &mdash; Informatiebeveiliging in leveranciersrelaties</span>
+              <span class="control-status status-gap">Gap &middot; 25%</span>
+            </div>
+            <span class="evidence-file">📋 leveranciers-overzicht.docx &middot; 6 leveranciers benoemd</span>
+            <div class="evidence-review">
+              <span class="good">✓</span> 6 kritieke leveranciers benoemd met contactpersoon.<br>
+              <span class="bad">✗</span> Geen DPA's bijgevoegd. Quickscan noemt 14 SaaS-tools in gebruik &mdash; register dekt dus ~43%.
+              <span class="bad">✗</span> Geen tiering (kritikaliteit), geen evaluatie-frequentie.
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="evidence-group">
+        <div class="evidence-group-head">
+          <span>A.8 &mdash; Technologische controls</span>
+          <span class="evidence-group-count">5 documenten &middot; gemiddelde score 58%</span>
+        </div>
+        <div class="evidence-rows">
+
+          <div class="evidence-row">
+            <div class="evidence-row-head">
+              <span class="evidence-ctrl">A.8.2 &mdash; Privileged access rights</span>
+              <span class="control-status status-ok">Compleet &middot; 80%</span>
+            </div>
+            <span class="evidence-file">🖼️ aws-iam-console-screenshot.png, 📄 iam-policy-export.json</span>
+            <div class="evidence-review">
+              <span class="good">✓</span> MFA afgedwongen op alle admin-rollen (screenshot toont "MFA required" op root).
+              <span class="good">✓</span> Least-privilege zichtbaar in IAM-policy export (11 rollen, scope-based).<br>
+              <span class="bad">✗</span> Geen PAM-tool of session-recording &mdash; acceptabel voor deze schaal, aan te bevelen bij groei &gt;50 fte.
+            </div>
+          </div>
+
+          <div class="evidence-row">
+            <div class="evidence-row-head">
+              <span class="evidence-ctrl">A.8.15 &mdash; Logging</span>
+              <span class="control-status status-gap">Gap &middot; 50%</span>
+            </div>
+            <span class="evidence-file">🖼️ cloudwatch-dashboard.png</span>
+            <div class="evidence-review">
+              <span class="good">✓</span> Logs worden gecentraliseerd in CloudWatch.<br>
+              <span class="bad">✗</span> Geen retentiebeleid gedocumenteerd (vereist A.8.15 + 5.33).
+              <span class="bad">✗</span> Geen alerting-regels aangeleverd. Geen bewijs van periodieke log-review.
+            </div>
+          </div>
+
+          <div class="evidence-row">
+            <div class="evidence-row-head">
+              <span class="evidence-ctrl">A.8.13 &mdash; Backup</span>
+              <span class="control-status status-partial">Gedeeltelijk &middot; 55%</span>
+            </div>
+            <span class="evidence-file">📄 backup-runbook-v1.pdf, 🖼️ s3-lifecycle-rule.png</span>
+            <div class="evidence-review">
+              <span class="good">✓</span> Dagelijkse backup naar S3 cross-region, 30 dagen retentie (lifecycle-rule zichtbaar).<br>
+              <span class="bad">✗</span> Restore-test nog nooit uitgevoerd &mdash; kritiek punt voor A.5.30 en cyber-verzekering-eisen.
+              <span class="bad">✗</span> Geen RTO/RPO gedefinieerd.
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="evidence-group">
+        <div class="evidence-group-head">
+          <span>Clausules 4-10 &mdash; ISMS</span>
+          <span class="evidence-group-count">2 documenten &middot; gemiddelde score 30%</span>
+        </div>
+        <div class="evidence-rows">
+
+          <div class="evidence-row">
+            <div class="evidence-row-head">
+              <span class="evidence-ctrl">Clause 6.1.2 &mdash; Risicobeoordelingsproces</span>
+              <span class="control-status status-miss">Ontbreekt &middot; 10%</span>
+            </div>
+            <span class="evidence-file missing">geen document geüpload</span>
+            <div class="evidence-review">
+              Antwoord op quickscan: &ldquo;wordt ad hoc gedaan&rdquo;. Zonder gedocumenteerde methode (criteria, scope, verantwoordelijke, frequentie) kan de auditor dit proces niet toetsen &mdash; dit is een gate-criterium voor Stage 1.
+            </div>
+          </div>
+
+          <div class="evidence-row">
+            <div class="evidence-row-head">
+              <span class="evidence-ctrl">Clause 9.2 &mdash; Interne audit</span>
+              <span class="control-status status-gap">Gap &middot; 40%</span>
+            </div>
+            <span class="evidence-file">📄 intern-audit-plan-2026.pdf</span>
+            <div class="evidence-review">
+              <span class="good">✓</span> Jaarplan opgesteld met scope-rotatie over 2 jaar.<br>
+              <span class="bad">✗</span> Geen uitgevoerde audits, geen bevindingen-register. Voor Stage 2 verplicht: minstens 1 interne audit-cyclus afgerond.
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <p style="font-size:0.84rem;color:var(--text-muted);margin-top:10px;">
+        Voor de volledige bewijslijst van alle 93 controls, zie bijlage A (digitaal beschikbaar via uw dashboard).
+      </p>
+
+      <h2>4. Top-prioriteit bevindingen (selectie)</h2>
 
       <div class="control-card">
         <div class="control-head">
@@ -269,7 +435,7 @@
         </div>
       </div>
 
-      <h2>4. Aanbevolen volgorde van implementatie</h2>
+      <h2>5. Aanbevolen volgorde van implementatie</h2>
       <ol>
         <li><strong>Maand 1-2:</strong> Scope, Information Security Policy, leveranciersregister, risicobeoordelingsproces.</li>
         <li><strong>Maand 2-3:</strong> Annex A documentatie afronden (focus op A.5 en A.8 categorieën).</li>
@@ -278,7 +444,7 @@
         <li><strong>Maand 5+:</strong> Plan Stage 1 en Stage 2 audit met geaccrediteerde certificerende instantie.</li>
       </ol>
 
-      <h2>5. Volgende stap</h2>
+      <h2>6. Volgende stap</h2>
       <p>Na ontvangst van dit rapport adviseren wij een korte sessie (45 min) met onze Lead Auditor om de prioriteit-gaps door te nemen en een implementatieplan af te stemmen op uw resources. Deze sessie is inbegrepen in het gap-analyse pakket (€795).</p>
 
       <div class="doc-footer">
