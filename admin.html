@@ -1275,6 +1275,28 @@
             <div id="settingsSystem" style="font-size:0.85rem;color:var(--text-muted);line-height:1.75;"></div>
           </div>
         </div>
+
+        <div class="ov-row" style="grid-template-columns:1fr;">
+          <div class="ov-card">
+            <div class="ov-card-head">
+              <h3>Edge functions diagnostic</h3>
+              <button onclick="diagnoseAllEdgeFns()" style="background:var(--accent);color:#fff;border:0;border-radius:8px;padding:7px 14px;font-size:0.82rem;font-weight:600;cursor:pointer;">Test alle</button>
+            </div>
+            <p style="font-size:0.84rem;color:var(--text-muted);margin:0 0 14px;line-height:1.6;">Controleer of de Supabase edge functions bereikbaar zijn. Gebruikt dummy-payloads die geen echte data wijzigen.</p>
+            <div id="edgeFnDiag" style="display:flex;flex-direction:column;gap:10px;"></div>
+          </div>
+        </div>
+
+        <div class="ov-row" style="grid-template-columns:1fr;">
+          <div class="ov-card">
+            <div class="ov-card-head">
+              <h3>Vastgelopen orders</h3>
+              <button onclick="loadStuckOrders()" style="background:transparent;color:var(--accent);border:1px solid var(--accent);border-radius:8px;padding:6px 12px;font-size:0.82rem;font-weight:600;cursor:pointer;">Verversen</button>
+            </div>
+            <p style="font-size:0.84rem;color:var(--text-muted);margin:0 0 12px;line-height:1.6;">Orders met <code>status=paid</code> die langer dan 24 uur niet bevestigd zijn — kan duiden op een gefaalde edge function.</p>
+            <div id="stuckOrders" style="font-size:0.86rem;"></div>
+          </div>
+        </div>
       </div>
     </div>
   </main>
@@ -1288,6 +1310,141 @@ const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 function esc(s) {
   if (s == null) return '';
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ── Toast helper (admin) ──
+let _adminToastEl = null, _adminToastTimer = null;
+function adminToast(msg, opts = {}) {
+  if (!_adminToastEl) {
+    _adminToastEl = document.createElement('div');
+    _adminToastEl.style.cssText = 'position:fixed;bottom:24px;right:24px;background:#0F172A;color:#fff;padding:14px 20px;border-radius:10px;font-family:Inter,sans-serif;font-size:0.88rem;font-weight:500;box-shadow:0 12px 32px rgba(0,0,0,0.4);display:flex;align-items:center;gap:10px;transform:translateY(8px);opacity:0;pointer-events:none;transition:transform .22s,opacity .22s;z-index:9999;max-width:calc(100vw - 48px);';
+    document.body.appendChild(_adminToastEl);
+  }
+  const time = new Date().toLocaleTimeString('nl-NL', { hour:'2-digit', minute:'2-digit' });
+  const color = opts.error ? '#FCA5A5' : (opts.warn ? '#FBBF24' : '#34D399');
+  const icon = opts.error ? '✕' : (opts.warn ? '⚠' : '✓');
+  _adminToastEl.innerHTML = `<span style="color:${color};font-weight:700;font-size:1rem;">${icon}</span><span>${esc(msg)}</span><span style="color:rgba(255,255,255,0.45);font-size:0.78rem;margin-left:4px;">${time}</span>`;
+  _adminToastEl.style.transform = 'translateY(0)';
+  _adminToastEl.style.opacity = '1';
+  clearTimeout(_adminToastTimer);
+  _adminToastTimer = setTimeout(() => {
+    _adminToastEl.style.transform = 'translateY(8px)';
+    _adminToastEl.style.opacity = '0';
+  }, opts.duration || 3000);
+}
+
+// ── Robuste edge-function invoker met timeout + structured errors ──
+// Wikkelt sb.functions.invoke met: 30s timeout, console.error voor debug, en
+// een uniforme `{ ok, data, error, ms, name }` return — caller kan beslissen wat te doen.
+async function invokeEdgeFn(name, body, opts = {}) {
+  const timeoutMs = opts.timeoutMs || 30000;
+  const start = Date.now();
+  let timeoutHandle;
+  const timeoutPromise = new Promise((_, reject) => {
+    timeoutHandle = setTimeout(() => reject(new Error(`Edge function "${name}" timeout na ${timeoutMs/1000}s`)), timeoutMs);
+  });
+  try {
+    const result = await Promise.race([
+      sb.functions.invoke(name, { body }),
+      timeoutPromise
+    ]);
+    clearTimeout(timeoutHandle);
+    const ms = Date.now() - start;
+    const { data, error } = result;
+    if (error) {
+      console.error(`[edge:${name}]`, error, 'body:', body);
+      return { ok: false, error: error.message || String(error), data, ms, name };
+    }
+    if (data && data.error) {
+      console.error(`[edge:${name}] data.error`, data, 'body:', body);
+      return { ok: false, error: data.error, data, ms, name };
+    }
+    return { ok: true, data, ms, name };
+  } catch (e) {
+    clearTimeout(timeoutHandle);
+    const ms = Date.now() - start;
+    console.error(`[edge:${name}] exception`, e, 'body:', body);
+    return { ok: false, error: e.message || String(e), ms, name };
+  }
+}
+
+// ── Edge function diagnostic ──
+const EDGE_FUNCTIONS_DIAG = [
+  { name: 'order-confirm',    body: { order_id: '__diag_dry_run__' }, timeoutMs: 15000, desc: 'Bevestigt betaalde orders → user-account + factuur' },
+  { name: 'generate-report',  body: { user_id:  '__diag_dry_run__' }, timeoutMs: 15000, desc: 'AI-rapport genereren uit gap-antwoorden' },
+  { name: 'get-document-url', body: { file:     '__diag_dry_run__.txt' }, timeoutMs: 8000, desc: 'Signed URL voor beleidsdocument download' },
+  { name: 'create-payment',   body: { plan: '__diag_dry_run__' }, timeoutMs: 8000, desc: 'Mollie payment-creation flow' }
+];
+
+async function diagnoseEdgeFn(fn) {
+  const r = await invokeEdgeFn(fn.name, fn.body, { timeoutMs: fn.timeoutMs });
+  // Een "ok response" of een specifieke "validation/auth error" betekent dat de functie LEEFT.
+  // Een 5xx, timeout of NetworkError betekent BROKEN.
+  const aliveSignals = ['unauthorized', 'invalid', 'not found', 'missing', 'forbidden', '__diag_dry_run__', 'order_id', 'user_id', 'plan'];
+  const isLikelyAlive = r.ok || (r.error && aliveSignals.some(s => r.error.toLowerCase().includes(s)));
+  return {
+    ...r,
+    alive: isLikelyAlive,
+    verdict: isLikelyAlive ? (r.ok ? 'OK' : 'OK (validation-error response = function is alive)') : 'UNREACHABLE'
+  };
+}
+
+async function diagnoseAllEdgeFns() {
+  const cont = document.getElementById('edgeFnDiag');
+  cont.innerHTML = EDGE_FUNCTIONS_DIAG.map(f => `
+    <div class="diag-row" id="diag_${esc(f.name)}" style="display:flex;align-items:center;gap:12px;padding:12px 14px;background:var(--bg-warm,#f8fafc);border:1px solid var(--border);border-radius:10px;">
+      <span style="flex-shrink:0;width:18px;height:18px;border-radius:50%;background:#94a3b8;animation:diagPulse 1.2s infinite;"></span>
+      <div style="flex:1;min-width:0;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:0.86rem;font-weight:700;color:var(--text);">${esc(f.name)}</div>
+        <div style="font-size:0.78rem;color:var(--text-muted);">${esc(f.desc)}</div>
+      </div>
+      <div style="font-size:0.78rem;color:var(--text-muted);font-family:'JetBrains Mono',monospace;" id="diag_${esc(f.name)}_status">testen…</div>
+    </div>`).join('');
+
+  for (const f of EDGE_FUNCTIONS_DIAG) {
+    const r = await diagnoseEdgeFn(f);
+    const row = document.getElementById('diag_' + f.name);
+    const statusEl = document.getElementById('diag_' + f.name + '_status');
+    const dot = row ? row.querySelector('span:first-child') : null;
+    if (dot) {
+      dot.style.animation = 'none';
+      dot.style.background = r.alive ? '#10b981' : '#ef4444';
+    }
+    if (statusEl) {
+      statusEl.innerHTML = `<span style="color:${r.alive ? '#059669' : '#dc2626'};font-weight:700;">${r.verdict}</span> · ${r.ms}ms${r.error ? `<br><span style="color:var(--text-muted);font-size:0.72rem;">${esc(r.error.slice(0,120))}</span>` : ''}`;
+    }
+  }
+  adminToast('Edge function diagnose gereed');
+}
+
+// Stuck orders — paid maar niet confirmed na 24u
+async function loadStuckOrders() {
+  const cont = document.getElementById('stuckOrders');
+  cont.innerHTML = '<div style="color:var(--text-muted);">Laden…</div>';
+  const since = new Date(Date.now() - 24*60*60*1000).toISOString();
+  const { data, error } = await sb.from('orders')
+    .select('id, naam, bedrijf, plan, amount, paid_at, created_at')
+    .eq('status', 'paid')
+    .is('confirmed_at', null)
+    .lt('created_at', since)
+    .order('created_at', { ascending: false })
+    .limit(20);
+  if (error) {
+    cont.innerHTML = `<div style="color:#dc2626;">Fout bij ophalen: ${esc(error.message)}</div>`;
+    return;
+  }
+  if (!data || data.length === 0) {
+    cont.innerHTML = '<div style="color:#059669;font-weight:600;">✓ Geen vastgelopen orders</div>';
+    return;
+  }
+  cont.innerHTML = data.map(o => `
+    <div style="display:flex;align-items:center;gap:14px;padding:12px 14px;background:rgba(220,38,38,0.04);border:1px solid rgba(220,38,38,0.2);border-radius:10px;margin-bottom:8px;">
+      <div style="flex:1;min-width:0;">
+        <div style="font-weight:700;font-size:0.9rem;">${esc(o.bedrijf || o.naam || '(geen naam)')}</div>
+        <div style="font-size:0.78rem;color:var(--text-muted);">${esc(o.plan)} · €${o.amount} · betaald ${o.paid_at ? new Date(o.paid_at).toLocaleString('nl-NL') : '?'}</div>
+      </div>
+      <button onclick="confirmOrder('${esc(o.id)}','${esc(o.bedrijf || o.naam || 'order')}')" style="background:#dc2626;color:#fff;border:0;border-radius:8px;padding:6px 14px;font-size:0.78rem;font-weight:700;cursor:pointer;">Retry confirm</button>
+    </div>`).join('');
 }
 
 // Annex A controls (mirror from dashboard.html — simplified)
@@ -2497,12 +2654,14 @@ function renderOrders() {
 
 async function confirmOrder(orderId, label) {
   if (!confirm(`Order bevestigen: ${label}?\n\nDit maakt de gebruiker aan, verstuurt de welkomstmail en genereert de factuur. Niet ongedaan te maken.`)) return;
-  const { data, error } = await sb.functions.invoke('order-confirm', { body: { order_id: orderId } });
-  if (error || data?.error) {
-    alert('Bevestigen mislukt: ' + (data?.error || error?.message || 'onbekende fout'));
+  adminToast(`Order "${label}" bevestigen…`, { duration: 6000 });
+  const r = await invokeEdgeFn('order-confirm', { order_id: orderId });
+  if (!r.ok) {
+    adminToast(`Bevestigen mislukt (${r.ms}ms): ${r.error}`, { error: true, duration: 8000 });
+    if (confirm(`Bevestigen mislukt:\n${r.error}\n\nNogmaals proberen?`)) return confirmOrder(orderId, label);
     return;
   }
-  alert(`Order bevestigd. ${data.invited_new_user ? 'Gebruiker is uitgenodigd via e-mail.' : 'Bestaande gebruiker geüpgraded.'} Factuur: ${data.invoice_number || '(reeds bestaand)'}.`);
+  adminToast(`Order bevestigd in ${r.ms}ms · ${r.data.invited_new_user ? 'gebruiker uitgenodigd' : 'bestaande gebruiker geüpgraded'} · ${r.data.invoice_number || 'factuur reeds bestaand'}`, { duration: 5000 });
   loadOrders();
   loadOverview();
 }
@@ -2704,14 +2863,17 @@ async function generateAIDraft(regenerate) {
   const btn = document.getElementById('genDraftBtn');
   const status = document.getElementById('genDraftStatus');
   if (btn) { btn.disabled = true; btn.textContent = 'Genereren...'; }
-  if (status) { status.style.display = 'block'; status.textContent = 'Claude Opus analyseert quickscan + evidence... (10-30 sec)'; }
+  if (status) { status.style.display = 'block'; status.textContent = 'Claude Opus analyseert quickscan + evidence... (10-60 sec)'; }
+  adminToast('AI-draft genereren — kan 30-60s duren', { duration: 7000 });
 
-  const { data, error } = await sb.functions.invoke('generate-report', { body: { user_id: currentClient.user_id } });
-  if (error || data?.error) {
-    alert('Generatie mislukt: ' + (data?.error || error?.message || 'onbekend'));
+  const r = await invokeEdgeFn('generate-report', { user_id: currentClient.user_id }, { timeoutMs: 90000 });
+  if (!r.ok) {
+    adminToast(`Generatie mislukt (${r.ms}ms): ${r.error}`, { error: true, duration: 8000 });
     if (btn) { btn.disabled = false; btn.textContent = 'Genereer AI-draft'; }
+    if (status) status.textContent = 'Mislukt — zie melding rechtsonder. Probeer opnieuw of check edge function status.';
     return;
   }
+  adminToast(`AI-draft gereed in ${(r.ms/1000).toFixed(1)}s`, { duration: 4000 });
   loadRapportPanel();
 }
 
