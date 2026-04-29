@@ -1627,6 +1627,7 @@
     .ga-evidence-remove:hover { color: var(--danger); }
 
     .ga-evidence-upload {
+      position: relative;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -1647,6 +1648,22 @@
     .ga-evidence-upload:hover {
       background: rgba(20,184,166,0.04);
       border-color: var(--accent);
+    }
+    .ga-evidence-upload.uploading {
+      pointer-events: none;
+      background: rgba(13,148,136,0.06);
+      border-color: rgba(13,148,136,0.4);
+      opacity: 0.85;
+    }
+    .ga-evidence-upload.uploading::after {
+      content: 'Uploaden…';
+      position: absolute;
+      top: 50%; right: 16px;
+      transform: translateY(-50%);
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--accent);
+      letter-spacing: 0.04em;
     }
     .ga-evidence-upload.dragging {
       background: rgba(20,184,166,0.08);
@@ -3408,12 +3425,13 @@ function toggleEvidence(safeId) {
 }
 
 async function uploadEvidence(controlId, input) {
-  if (!input.files.length) return;
+  if (!input || !input.files || !input.files.length) return;
   const file = input.files[0];
 
   // Max 10MB (client check; server enforces via bucket file_size_limit)
   if (file.size > 10 * 1024 * 1024) {
-    alert('Bestand is te groot (max 10MB).');
+    if (typeof showToast === 'function') showToast('Bestand is te groot (max 10MB)', { error: true, duration: 3500 });
+    else alert('Bestand is te groot (max 10MB).');
     return;
   }
 
@@ -3424,18 +3442,29 @@ async function uploadEvidence(controlId, input) {
   const safeCtrl = String(controlId).replace(/[^a-zA-Z0-9.\-_]/g, '_');
   const path = `${user.id}/${safeCtrl}/${Date.now()}_${safeName}`;
 
+  // Visual: tijdens upload — voorkom dubbele uploads, toon status
+  const safeId = controlId.replace(/\./g, '_');
+  const card = document.getElementById('ctrl_' + safeId);
+  const dropzone = card ? card.querySelector(`.ga-evidence-upload[data-ctrl="${controlId}"]`) : null;
+  if (dropzone) dropzone.classList.add('uploading');
+  if (typeof showToast === 'function') showToast(`Bestand "${file.name}" uploaden…`, { duration: 6000 });
+
   let storedPath = null;
   try {
     const { data, error } = await sb.storage.from('evidence').upload(path, file, { upsert: false, contentType: file.type });
     if (error) {
       console.error('Evidence upload failed:', error);
-      alert('Upload mislukt: ' + (error.message || 'onbekende fout'));
+      if (typeof showToast === 'function') showToast('Upload mislukt: ' + (error.message || 'onbekende fout'), { error: true, duration: 5000 });
+      else alert('Upload mislukt: ' + (error.message || 'onbekende fout'));
+      if (dropzone) dropzone.classList.remove('uploading');
       return;
     }
     storedPath = data.path;
   } catch(e) {
     console.error('Upload exception:', e);
-    alert('Upload mislukt: ' + (e.message || 'onbekende fout'));
+    if (typeof showToast === 'function') showToast('Upload mislukt: ' + (e.message || 'onbekende fout'), { error: true, duration: 5000 });
+    else alert('Upload mislukt: ' + (e.message || 'onbekende fout'));
+    if (dropzone) dropzone.classList.remove('uploading');
     return;
   }
 
@@ -3444,18 +3473,72 @@ async function uploadEvidence(controlId, input) {
     size: file.size,
     type: file.type,
     date: new Date().toISOString(),
-    path: storedPath,  // stored path — downloaded via signed URL on demand
+    path: storedPath,
   });
 
   saveEvidenceData();
-  renderChecklists();
+  if (dropzone) dropzone.classList.remove('uploading');
 
-  // Re-expand the item
-  setTimeout(() => {
-    const safeId = controlId.replace(/\./g, '_');
-    const el = document.getElementById('chk_' + safeId);
-    if (el) el.classList.add('expanded');
-  }, 100);
+  // Reset het file-input zodat dezelfde file later opnieuw kan
+  if (input.value !== undefined) try { input.value = ''; } catch(e) {}
+
+  // Refresh UI in zowel gap-analyse als checklist views
+  refreshEvidenceUI(controlId);
+
+  if (typeof showToast === 'function') showToast(`"${file.name}" geüpload`);
+}
+
+// Refresh evidence-UI voor één control op de huidige zichtbare view
+function refreshEvidenceUI(controlId) {
+  const safeId = controlId.replace(/\./g, '_');
+  const ev = getEvidence(controlId);
+
+  // 1. Gap-analyse control-card (renderModuleAssessment view)
+  const card = document.getElementById('ctrl_' + safeId);
+  if (card) {
+    const filesEl = card.querySelector('.ga-evidence-files');
+    if (filesEl) {
+      filesEl.innerHTML = ev.files.map((f, fi) => `
+        <span class="ga-evidence-file">
+          <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/></svg>
+          <span class="ga-evidence-file-name">${esc(f.name)}</span>
+          <button class="ga-evidence-remove" onclick="removeEvidence('${esc(controlId)}',${fi})" aria-label="Verwijder">&times;</button>
+        </span>
+      `).join('');
+    }
+    // Update status-badge
+    const qs = (typeof gapQuestions !== 'undefined' && gapQuestions[controlId]) || [];
+    const anyClaimed = qs.some((_, qi) => {
+      const v = gapAnswers[controlId + '_' + qi];
+      return v === '4' || v === '3' || v === '2';
+    });
+    const highClaim = qs.some((_, qi) => {
+      const v = gapAnswers[controlId + '_' + qi];
+      return v === '4' || v === '3';
+    });
+    const nf = ev.note_fields || {};
+    const hasStructuredNote = !!(nf.procedure || nf.location || nf.owner || nf.last_verified || nf.remark);
+    const hasEvidence = (ev.files.length > 0) || hasStructuredNote || (ev.note && ev.note.trim().length > 0);
+    const evidenceMissing = highClaim && !hasEvidence;
+    const statusEl = card.querySelector('.ga-evidence-status');
+    if (statusEl) {
+      statusEl.classList.remove('ok', 'missing', 'required');
+      statusEl.classList.add(hasEvidence ? 'ok' : (evidenceMissing ? 'required' : 'missing'));
+      statusEl.innerHTML = hasEvidence ? '&#10003; Onderbouwd' : (evidenceMissing ? '&#9888; Onderbouwing vereist' : '! Nog geen bewijs');
+    }
+    const evSection = card.querySelector('.ga-evidence');
+    if (evSection) evSection.classList.toggle('active', anyClaimed || hasEvidence);
+  }
+
+  // 2. Checklist view (alleen update als die zichtbaar is)
+  const chkEl = document.getElementById('chk_' + safeId);
+  if (chkEl && document.getElementById('viewChecklists')?.classList.contains('active')) {
+    renderChecklists();
+    setTimeout(() => {
+      const reEl = document.getElementById('chk_' + safeId);
+      if (reEl) reEl.classList.add('expanded');
+    }, 100);
+  }
 }
 
 // Delegated drag/drop + click op .ga-evidence-upload — werkt ook voor dynamisch gerenderde dropzones.
@@ -3505,11 +3588,18 @@ async function uploadEvidence(controlId, input) {
   });
 })();
 
-function removeEvidence(controlId, fileIndex) {
-  if (!evidenceData[controlId]) return;
+async function removeEvidence(controlId, fileIndex) {
+  if (!evidenceData[controlId] || !evidenceData[controlId].files[fileIndex]) return;
+  const removed = evidenceData[controlId].files[fileIndex];
+  // Remove uit Supabase Storage (best-effort — UI updaten ook bij faal)
+  if (removed && removed.path) {
+    try { await sb.storage.from('evidence').remove([removed.path]); }
+    catch (e) { console.warn('Storage delete failed:', e); }
+  }
   evidenceData[controlId].files.splice(fileIndex, 1);
   saveEvidenceData();
-  renderChecklists();
+  refreshEvidenceUI(controlId);
+  if (typeof showToast === 'function') showToast('Bestand verwijderd');
 }
 
 function saveNote(controlId, value) {
