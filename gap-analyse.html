@@ -741,6 +741,148 @@
       line-height: 1.7;
     }
 
+    /* Upsell block — pakkende doorklik naar €795 vóór lead-form */
+    .upsell-block {
+      margin-top: 28px;
+      background: linear-gradient(155deg, rgba(13,148,136,0.10) 0%, rgba(20,184,166,0.04) 50%, rgba(217,119,6,0.06) 100%);
+      border: 1px solid rgba(20,184,166,0.22);
+      border-radius: var(--radius-lg);
+      padding: 32px 36px;
+      position: relative;
+      overflow: hidden;
+    }
+    .upsell-block::before {
+      content: '';
+      position: absolute;
+      top: -100px; right: -80px;
+      width: 320px; height: 320px;
+      background: radial-gradient(circle, var(--sector-glow, rgba(20,184,166,0.18)) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    .upsell-block::after {
+      content: '';
+      position: absolute;
+      bottom: -80px; left: -60px;
+      width: 240px; height: 240px;
+      background: radial-gradient(circle, rgba(217,119,6,0.10) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .upsell-grid {
+      display: grid;
+      grid-template-columns: 1.6fr 1fr;
+      gap: 36px;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+    }
+    .upsell-eyebrow {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--sector-accent, #5EEAD4);
+      margin-bottom: 10px;
+    }
+    .upsell-title {
+      font-family: 'Sora', sans-serif;
+      font-size: 1.45rem;
+      font-weight: 700;
+      color: white;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      margin-bottom: 12px;
+    }
+    .upsell-lead {
+      font-size: 0.94rem;
+      color: rgba(255,255,255,0.72);
+      line-height: 1.65;
+      margin-bottom: 16px;
+    }
+    .upsell-lead strong { color: rgba(255,255,255,0.92); font-weight: 600; }
+    .upsell-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .upsell-list li {
+      font-size: 0.86rem;
+      color: rgba(255,255,255,0.78);
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      line-height: 1.5;
+    }
+    .upsell-tick {
+      color: var(--sector-accent, #5EEAD4);
+      font-weight: 800;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .upsell-right {
+      background: rgba(15,23,42,0.42);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: var(--radius);
+      padding: 22px 22px 18px;
+      text-align: center;
+      backdrop-filter: blur(6px);
+    }
+    .upsell-price {
+      font-family: 'Sora', sans-serif;
+      font-size: 2.4rem;
+      font-weight: 800;
+      color: white;
+      line-height: 1;
+      letter-spacing: -0.03em;
+      margin-bottom: 4px;
+    }
+    .upsell-price small {
+      display: block;
+      font-size: 0.74rem;
+      font-weight: 500;
+      color: rgba(255,255,255,0.45);
+      margin-top: 4px;
+      letter-spacing: 0.02em;
+    }
+    .upsell-vs {
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.4);
+      margin-bottom: 18px;
+    }
+    .upsell-cta {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      background: var(--sector-cta, #14b8a6);
+      color: var(--sector-cta-fg, #0F172A);
+      padding: 13px 18px;
+      border-radius: var(--radius);
+      font-family: 'Sora', sans-serif;
+      font-weight: 700;
+      font-size: 0.92rem;
+      text-decoration: none;
+      box-shadow: 0 6px 22px var(--sector-cta-shadow, rgba(20,184,166,0.32));
+      transition: transform 0.2s, box-shadow 0.2s, filter 0.2s;
+    }
+    .upsell-cta:hover { transform: translateY(-1px); filter: brightness(1.05); }
+    .upsell-secondary {
+      display: block;
+      margin-top: 10px;
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.45);
+      text-decoration: none;
+    }
+    .upsell-secondary:hover { color: rgba(255,255,255,0.7); }
+    @media (max-width: 720px) {
+      .upsell-grid { grid-template-columns: 1fr; gap: 24px; }
+      .upsell-block { padding: 24px; }
+      .upsell-title { font-size: 1.2rem; }
+    }
+
     /* Lead capture */
     .lead-capture {
       background: var(--dark-card);
@@ -1368,6 +1510,33 @@
       <h4>Aanbevolen prioriteiten voor uw sector</h4>
       <ul id="sectorActionList"></ul>
     </div>
+
+    <!-- Upsell-block: vóór de lead-form, om door te willen klikken -->
+    <div class="upsell-block" id="upsellBlock">
+      <div class="upsell-grid">
+        <div class="upsell-left">
+          <div class="upsell-eyebrow" id="upsellEyebrow">De volledige toets</div>
+          <h3 class="upsell-title" id="upsellTitle">Wat blijft buiten beeld in deze quickscan?</h3>
+          <p class="upsell-lead" id="upsellLead">U beantwoordde 15 vragen op hoofdlijnen. De volledige gap-analyse toetst <strong>alle 93 ISO 27002:2022-controls</strong> én clausules 4-10 met evidence-vereisten — een rapport dat een auditor kan gebruiken.</p>
+          <ul class="upsell-list" id="upsellList">
+            <li><span class="upsell-tick">✓</span> Bewijsvoering per claim (geen self-assessment-praatjes)</li>
+            <li><span class="upsell-tick">✓</span> Lead Auditor review (DNV/IRCA-gecertificeerd)</li>
+            <li><span class="upsell-tick">✓</span> Mapping op ISO 27002, NEN 7510, BIO of NIS2 — sector-aware</li>
+            <li><span class="upsell-tick">✓</span> PDF-rapport binnen 48 uur</li>
+          </ul>
+        </div>
+        <div class="upsell-right">
+          <div class="upsell-price"><span>€795</span><small>eenmalig</small></div>
+          <div class="upsell-vs">marktconform: zorgconsultancy €5–15k</div>
+          <a href="bestellen.html?plan=gap" class="upsell-cta" id="upsellCta">
+            Bestel volledige gap-analyse
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+          <a href="#leadCapture" class="upsell-secondary">Of bewaar uw resultaat ↓</a>
+        </div>
+      </div>
+    </div>
+
     <div class="lead-capture" id="leadCapture">
       <h3>Bewaar uw resultaat</h3>
       <p>Vul uw gegevens in om uw score te bewaren en ontdek hoe u uw compliance kunt verbeteren.</p>
@@ -1383,15 +1552,15 @@
         <svg viewBox="0 0 24 24"><polyline points="5 12 10 17 19 7"/></svg>
       </div>
       <h3>Resultaat bewaard</h3>
-      <p class="ls-tagline">
+      <p class="ls-tagline" id="lsTagline">
         U heeft een eerste indicatie. De volgende stap is een <strong style="color:#fff;">auditor-ready rapport</strong> dat u kunt overhandigen aan klanten, partners of een certificerende instelling.
       </p>
 
       <div class="ls-compare">
         <div class="ls-col">
           <div class="ls-col-label">U heeft nu</div>
-          <div class="ls-col-title">Gratis quickscan</div>
-          <ul class="ls-col-list">
+          <div class="ls-col-title" id="lsHaveTitle">Gratis quickscan</div>
+          <ul class="ls-col-list" id="lsHaveList">
             <li>13 indicatieve vragen</li>
             <li>Score per categorie</li>
             <li>Geen onderbouwing</li>
@@ -1401,8 +1570,8 @@
         <div class="ls-arrow">&rarr;</div>
         <div class="ls-col next">
           <div class="ls-col-label">Volgende stap</div>
-          <div class="ls-col-title">Volledige gap-analyse</div>
-          <ul class="ls-col-list">
+          <div class="ls-col-title" id="lsNextTitle">Volledige gap-analyse</div>
+          <ul class="ls-col-list" id="lsNextList">
             <li>Alle 93 Annex A controls</li>
             <li>Bewijsvoering verplicht</li>
             <li>Persoonlijke Lead Auditor review</li>
@@ -1652,6 +1821,7 @@ const phases = [
   { id: 'ops',       label: 'Operationeel' },
   { id: 'saas',      label: 'SaaS-specifiek',       sector: 'saas' },
   { id: 'it',        label: 'IT-dienstverlener',    sector: 'it' },
+  { id: 'zorg',      label: 'Zorg (NEN 7510)',      sector: 'zorg' },
   { id: 'overheid',  label: 'Overheid (BIO)',       sector: 'overheid' },
   { id: 'bouw',      label: 'Bouw-specifiek',       sector: 'bouw' },
   { id: 'overig',    label: 'MKB extra',            sector: 'overig' },
@@ -1693,35 +1863,15 @@ const questions = [
   { phase:'ops', cat:'ops', catLabel:'Operationeel', q:'Wordt de restore-functie van uw backups periodiek getest?', weight:2, controls:['A.8.13'] },
   { phase:'ops', cat:'ops', catLabel:'Operationeel', q:'Heeft u een leveranciersregister met DPA\u2019s/verwerkersovereenkomsten voor kritieke verwerkers?', weight:3, controls:['A.5.19','A.5.20'] },
 
-  // Phase 7: Sector-light (1 vraag per sector — high-level, geen diepgang)
+  // Phase 7: Sector-light (1-2 vragen per sector — high-level, geen diepgang).
+  // De volledige 14 NEN 7510-deltavragen voor zorg zitten in de echte gap-analyse (dashboard.html), niet hier.
   { phase:'saas',     cat:'tech', sector:'saas',     catLabel:'SaaS',         q:'Is de data van uw klanten in uw multi-tenant platform logisch van elkaar geïsoleerd?', weight:2, controls:['A.8.22'] },
   { phase:'it',       cat:'tech', sector:'it',       catLabel:'IT-dienstverlener', q:'Zijn omgevingen van verschillende klanten logisch van elkaar gescheiden?', weight:2, controls:['A.8.20'] },
+  { phase:'zorg',     cat:'tech', sector:'zorg',     catLabel:'Zorg — toegang dossiers', q:'Is toegang tot patiëntdossiers gebaseerd op een actieve behandelrelatie, met logging en break-glass-procedure (NEN 7510-2 §5.15/§8.15)?', weight:3, controls:['A.5.15','A.8.15','NEN 7510-2 §5.15','NEN 7510-2 §8.15'] },
+  { phase:'zorg',     cat:'ops',  sector:'zorg',     catLabel:'Zorg — meldplicht & verwerkers', q:'Heeft u een datalek-meldprocedure naar AP én IGJ, plus zorgspecifieke verwerkersovereenkomsten met EPD-/PACS-leveranciers (NEN 7510-2 §5.19/§6.8)?', weight:3, controls:['A.5.19','A.5.24','A.6.8','NEN 7510-2 §5.19','NEN 7510-2 §6.8'] },
   { phase:'overheid', cat:'org',  sector:'overheid', catLabel:'Overheid',     q:'Past u de Baseline Informatiebeveiliging Overheid (BIO) toe?', weight:2, controls:['A.5.31'] },
   { phase:'bouw',     cat:'ops',  sector:'bouw',     catLabel:'Bouw',         q:'Zijn onderaannemers met toegang tot projectdata contractueel geborgd (NDA, security-clausules)?', weight:2, controls:['A.5.19','A.5.20'] },
   { phase:'overig',   cat:'ops',  sector:'overig',   catLabel:'MKB algemeen', q:'Heeft u een actueel overzicht van alle SaaS-tooling die uw organisatie gebruikt?', weight:2, controls:['A.5.23'] },
-
-  // === ZORG-DELTAS (sector:'zorg') — 14 NEN 7510-2 specifieke diepvragen ===
-  // Mapping: ISO 27001 Annex A + NEN 7510-2:2024+A1:2026 zorgspecifieke richtlijnen.
-  // Concept v1 — zie ZORG-VRAGEN-CONCEPT.md voor onderbouwing per vraag.
-  // Phase 1: Governance & beleid
-  { phase:'gov',  cat:'org',  sector:'zorg', catLabel:'Patiëntprivacy & beleid',   q:'Heeft uw organisatie een vastgelegd informatiebeveiligings- en privacybeleid dat AVG art. 9 (bijzondere persoonsgegevens), WGBO-bewaarplicht en NEN 7510 expliciet adresseert?', weight:3, controls:['A.5.1','A.5.31','NEN 7510-2 §5.36'] },
-  { phase:'gov',  cat:'org',  sector:'zorg', catLabel:'IB-functionaris & advies',  q:'Is een Informatiebeveiligingsfunctionaris (CISO/FG/IB-officer) aangewezen, en bij organisaties met meer dan 500 medewerkers of meer dan 10.000 cliënten een formele adviesgroep informatiebeveiliging die periodiek bijeenkomt?', weight:3, controls:['A.5.2','NEN 7510-2 §5.2'] },
-  // Phase 3: Personeel
-  { phase:'hr',   cat:'hr',   sector:'zorg', catLabel:'Geheimhouding zorgpersoneel', q:'Tekenen zorgmedewerkers een geheimhoudingsverklaring die expliciet verwijst naar tuchtrechtelijke verantwoordelijkheid (BIG/Wkkgz) en de bijzondere positie van patiëntgegevens?', weight:2, controls:['A.6.6','NEN 7510-2 §6.6'] },
-  { phase:'hr',   cat:'hr',   sector:'zorg', catLabel:'Awareness zorgcontext',     q:'Krijgen zowel klinisch personeel als ICT-medewerkers periodieke bewustwordingstraining over zorgspecifieke risico’s (toegang buiten behandelrelatie, medische apparaten, social engineering, datalek-meldplicht)?', weight:3, controls:['A.6.3','NEN 7510-2 §6.3'] },
-  // Phase 4: Fysiek & assets
-  { phase:'phys', cat:'phys', sector:'zorg', catLabel:'Ketenstromen & interfaces', q:'Zijn alle informatiestromen tussen u en ketenpartners (verwijsbrief, labuitslagen, medicatie-overdracht, integratieplatforms zoals Nuts/MedMij/Twiin) inclusief interfaces opgenomen in het asset-register?', weight:3, controls:['A.5.9','NEN 7510-2 §5.9'] },
-  { phase:'phys', cat:'phys', sector:'zorg', catLabel:'Bewaartermijn dossiers',    q:'Worden medische dossiers bewaard en vernietigd conform de WGBO-bewaartermijn (20 jaar of langer indien noodzakelijk), met een gedocumenteerd vernietigingsbeleid voor papier én digitaal?', weight:3, controls:['A.7.10','A.8.10','NEN 7510-2 §7.10','NEN 7510-2 §8.10'] },
-  // Phase 5: Technische controls
-  { phase:'tech', cat:'tech', sector:'zorg', catLabel:'Behandelrelatie & break-glass', q:'Is toegang tot patiëntdossiers gebaseerd op een actieve behandelrelatie, en bestaat er een gedocumenteerde noodtoegang (break-glass) met automatische logging en periodieke review?', weight:3, controls:['A.5.15','A.5.18','NEN 7510-2 §5.15'] },
-  { phase:'tech', cat:'tech', sector:'zorg', catLabel:'Sterke authenticatie zorg', q:'Authenticeren zorgverleners met ten minste twee factoren waarvan één persoonsgebonden (UZI-pas, DigiD substantieel/hoog of vergelijkbaar) bij toegang tot patiëntgegevens?', weight:3, controls:['A.5.16','A.8.5','NEN 7510-2 §5.16','NEN 7510-2 §8.5'] },
-  { phase:'tech', cat:'tech', sector:'zorg', catLabel:'Logging dossiertoegang',    q:'Wordt elke toegang tot een patiëntdossier (lezen, wijzigen, exporteren) gelogd met gebruikers-ID, tijdstip en dossier-/BSN-referentie, en bestaat er een proces voor periodieke dossier-toegang-audits?', weight:3, controls:['A.8.15','NEN 7510-2 §8.15'] },
-  { phase:'tech', cat:'tech', sector:'zorg', catLabel:'Encryptie patiëntdata',     q:'Worden patiëntgegevens (BSN, diagnose, behandelplan) versleuteld in transit én at rest, met sleutelbeheer onder uw eigen organisatie of een verwerker met passende waarborgen?', weight:3, controls:['A.8.24','NEN 7510-2 §8.24'] },
-  { phase:'tech', cat:'tech', sector:'zorg', catLabel:'Pseudoniem-registratie',    q:'Bestaat er een procedure voor pseudoniem- of alias-registratie van VIP’s, slachtoffers van misdrijven, beveiligings-/defensiemedewerkers en kinderen, met beperkte toegang tot hun ware identiteit?', weight:2, controls:['A.5.34','NEN 7510-2 §5.34'] },
-  // Phase 6: Operationeel
-  { phase:'ops',  cat:'ops',  sector:'zorg', catLabel:'Datalek-melding zorg',      q:'Heeft u een datalek-meldprocedure die binnen 72 uur de Autoriteit Persoonsgegevens informeert én een meldlijn naar de IGJ (Inspectie Gezondheidszorg en Jeugd) bij continuïteits- of patiëntveiligheidsimpact?', weight:3, controls:['A.5.24','A.6.8','NEN 7510-2 §6.8'] },
-  { phase:'ops',  cat:'ops',  sector:'zorg', catLabel:'Verwerkers zorgketen',      q:'Bevatten verwerkersovereenkomsten met EPD-leveranciers, laboratoria, fabrikanten van medische apparaten en ICT-ketenpartners zorgspecifieke clausules (continuïteit klinisch proces, sub-verwerker patiëntdata, audit-recht, ISO 27001/NEN 7510-bewijs)?', weight:3, controls:['A.5.19','A.5.20','A.5.21','NEN 7510-2 §5.19','NEN 7510-2 §5.21'] },
-  { phase:'ops',  cat:'ops',  sector:'zorg', catLabel:'Back-up EPD/PACS/RIS',      q:'Worden back-ups van EPD-, PACS- en RIS-systemen periodiek getest op restore-functionaliteit, met respect voor de wettelijke bewaartermijnen voor medische dossiers?', weight:3, controls:['A.8.13','NEN 7510-2 §8.13'] },
 ];
 
 // 4-punts maturity-rubric (zonder ad-hoc)
@@ -1942,8 +2092,75 @@ function updateLiveDash() {
   }
 }
 
+// Sector-aware accent palette voor screenResults — geen blauw, per sector eigen vibe.
+const sectorAccent = {
+  saas:     { cta:'#14b8a6', ctaFg:'#0F172A', accent:'#5EEAD4', glow:'rgba(20,184,166,0.20)',  ringFrom:'#0D9488', ringTo:'#14B8A6' },
+  it:       { cta:'#06B6D4', ctaFg:'#0F172A', accent:'#67E8F9', glow:'rgba(6,182,212,0.22)',   ringFrom:'#0891B2', ringTo:'#06B6D4' },
+  zorg:     { cta:'#F97316', ctaFg:'#0F1F1A', accent:'#6EE7B7', glow:'rgba(4,120,87,0.28)',    ringFrom:'#047857', ringTo:'#F97316' },
+  overheid: { cta:'#F59E0B', ctaFg:'#1A1206', accent:'#FBBF24', glow:'rgba(245,158,11,0.22)',  ringFrom:'#B45309', ringTo:'#F59E0B' },
+  bouw:     { cta:'#CA8A04', ctaFg:'#1A1206', accent:'#FCD34D', glow:'rgba(202,138,4,0.22)',   ringFrom:'#854D0E', ringTo:'#EAB308' },
+  overig:   { cta:'#14b8a6', ctaFg:'#0F172A', accent:'#5EEAD4', glow:'rgba(20,184,166,0.20)',  ringFrom:'#0D9488', ringTo:'#14B8A6' }
+};
+
+function applySectorTheme() {
+  const a = sectorAccent[selectedSector] || sectorAccent.overig;
+  const root = document.getElementById('screenResults');
+  if (!root) return;
+  root.style.setProperty('--sector-cta', a.cta);
+  root.style.setProperty('--sector-cta-fg', a.ctaFg);
+  root.style.setProperty('--sector-cta-shadow', a.glow);
+  root.style.setProperty('--sector-accent', a.accent);
+  root.style.setProperty('--sector-glow', a.glow);
+  // Update ring gradient stops dynamically
+  const grad = document.getElementById('scoreGradient');
+  if (grad) {
+    const stops = grad.querySelectorAll('stop');
+    if (stops[0]) stops[0].setAttribute('stop-color', a.ringFrom);
+    if (stops[1]) stops[1].setAttribute('stop-color', a.ringTo);
+  }
+}
+
+function applyUpsellContent() {
+  const eyebrow = document.getElementById('upsellEyebrow');
+  const title = document.getElementById('upsellTitle');
+  const lead = document.getElementById('upsellLead');
+  const list = document.getElementById('upsellList');
+  const cta = document.getElementById('upsellCta');
+  if (!eyebrow || !title || !lead || !list || !cta) return;
+
+  const totalQ = (typeof activeQuestions !== 'undefined' && activeQuestions.length) || 15;
+  if (selectedSector === 'zorg') {
+    eyebrow.textContent = 'Volledige NEN 7510 + ISO 27001';
+    title.innerHTML = 'Geen indicatie — een toets per beheersmaatregel';
+    lead.innerHTML = `U beantwoordde ${totalQ} vragen op hoofdlijnen. De volledige zorg-gap toetst <strong>alle 93 ISO 27002-controls + 16 NEN 7510-zorgdeltas</strong> (§5.x/§6.x/§7.x/§8.x), met bewijsvoering en Lead Auditor review.`;
+    list.innerHTML = `
+      <li><span class="upsell-tick">✓</span> 93 Annex A-controls + 16 NEN 7510-2 zorgspecifieke richtlijnen</li>
+      <li><span class="upsell-tick">✓</span> Behandelrelatie, EPD-logging, WGBO-bewaartermijnen, BIG/Wkkgz</li>
+      <li><span class="upsell-tick">✓</span> Datalek-meldplicht naar AP én IGJ + zorgketen-DPA's</li>
+      <li><span class="upsell-tick">✓</span> Rapport voor toezichthouder, certificerende instelling of zorgverzekeraar</li>`;
+    cta.firstChild.textContent = 'Bestel zorg-gap-analyse ';
+  } else if (selectedSector === 'overheid') {
+    eyebrow.textContent = 'Volledige BIO + ISO 27001';
+    title.innerHTML = 'Indicatie afronden? Stap door naar audit-ready.';
+    lead.innerHTML = `U beantwoordde ${totalQ} vragen op hoofdlijnen. De volledige gap toetst <strong>alle 93 Annex A-controls</strong> tegen BIO-thema-uitwerkingen, met bewijsvoering en Lead Auditor review.`;
+    cta.firstChild.textContent = 'Bestel BIO-gap-analyse ';
+  } else if (selectedSector === 'bouw') {
+    eyebrow.textContent = 'Volledige ISO 27001';
+    title.innerHTML = 'Quickscan gedaan — klaar voor de echte toets?';
+    lead.innerHTML = `U beantwoordde ${totalQ} vragen op hoofdlijnen. De volledige gap toetst <strong>alle 93 Annex A-controls</strong> met focus op onderaannemer-keten, BIM/CDE en projectdata, plus bewijsvoering.`;
+    cta.firstChild.textContent = 'Bestel volledige gap-analyse ';
+  } else {
+    eyebrow.textContent = 'Volledige ISO 27001-toets';
+    title.innerHTML = 'Wat blijft buiten beeld in deze quickscan?';
+    lead.innerHTML = `U beantwoordde ${totalQ} vragen op hoofdlijnen. De volledige gap-analyse toetst <strong>alle 93 ISO 27002:2022-controls</strong> én clausules 4-10 met evidence-vereisten — een rapport dat een auditor kan gebruiken.`;
+    cta.firstChild.textContent = 'Bestel volledige gap-analyse ';
+  }
+}
+
 function showResults() {
   show('screenResults');
+  applySectorTheme();
+  applyUpsellContent();
 
   // Calculate final weighted scores
   for (const key in categories) categories[key].score = 0;
@@ -1961,11 +2178,30 @@ function showResults() {
 
   const pct = weightedTotal > 0 ? Math.round((weightedScore / weightedTotal) * 100) : 0;
 
-  // Subtitle
+  // Subtitle + Title — sector-aware voor zorg
   const sub = document.getElementById('resultsSubtitle');
-  if (pct >= 70) sub.textContent = 'Uw organisatie heeft een goede basis. Met gerichte verbeteringen bent u certificeringsklaar.';
-  else if (pct >= 40) sub.textContent = 'Er is een basis aanwezig, maar meerdere gebieden vereisen aandacht voor certificering.';
-  else sub.textContent = 'Uw organisatie staat aan het begin van het compliance-traject. Er is werk aan de winkel.';
+  const ttl = document.getElementById('resultsTitle');
+  if (selectedSector === 'zorg') {
+    ttl.innerHTML = 'Uw <span style="color:#F97316;">NEN 7510 + ISO 27001</span> quickscan-score';
+    if (pct >= 70) sub.innerHTML = 'Goede basis. De volledige NEN 7510-gap toetst nog <strong>16 NEN 7510-zorgdeltas</strong> die in deze quickscan niet zijn meegenomen — onmisbaar richting toezichthouder.';
+    else if (pct >= 40) sub.innerHTML = 'Basis aanwezig, maar in de zorg telt elk dossier-toegangsmoment, elke ketenstroom, elke verwerkersovereenkomst. De volledige NEN 7510-gap analyseert <strong>alle 16 NEN 7510-zorgdeltas</strong>.';
+    else sub.innerHTML = 'Significante gaps. In de zorg zijn die niet vrijblijvend: WGBO, AVG art. 9 en NEN 7510 stellen harde eisen. De volledige gap-analyse geeft u een <strong>verdedigbaar oordeel per control</strong>.';
+
+    // Vervang lead-success "Volgende stap" panel met zorg-context
+    const lsTagline = document.getElementById('lsTagline');
+    if (lsTagline) lsTagline.innerHTML = 'U heeft een eerste indicatie. De volgende stap is een <strong style="color:#fff;">NEN 7510-toets per beheersmaatregel</strong> die u kunt overhandigen aan toezichthouder, certificerende instelling of zorgverzekeraar.';
+    const lsHaveList = document.getElementById('lsHaveList');
+    if (lsHaveList) lsHaveList.innerHTML = '<li>15 indicatieve vragen</li><li>Score per categorie</li><li>Geen NEN 7510-controlmapping</li><li>Geen bewijsvoering</li>';
+    const lsNextTitle = document.getElementById('lsNextTitle');
+    if (lsNextTitle) lsNextTitle.innerHTML = 'NEN 7510 + ISO 27001 gap-analyse';
+    const lsNextList = document.getElementById('lsNextList');
+    if (lsNextList) lsNextList.innerHTML = '<li>93 Annex A + 41 NEN 7510-zorgcontrols</li><li>Mapping op §5.x/§6.x/§7.x/§8.x</li><li>Behandelrelatie + EPD-logging + WGBO</li><li>Lead Auditor review (DNV/IRCA)</li>';
+  } else {
+    ttl.textContent = 'Uw compliance score';
+    if (pct >= 70) sub.textContent = 'Uw organisatie heeft een goede basis. Met gerichte verbeteringen bent u certificeringsklaar.';
+    else if (pct >= 40) sub.textContent = 'Er is een basis aanwezig, maar meerdere gebieden vereisen aandacht voor certificering.';
+    else sub.textContent = 'Uw organisatie staat aan het begin van het compliance-traject. Er is werk aan de winkel.';
+  }
 
   // Big ring animation
   setTimeout(() => {

@@ -3,14 +3,16 @@
 Sector: **zorg** | Norm-basis: **ISO/IEC 27001:2022 + NEN 7510-1/-2:2024+A1:2026**
 Status: **CONCEPT — wacht op Lead Auditor (Raoul) review voor publicatie**
 
-## Opzet
+## Plaatsing in het product
 
-- **13 ISO 27001-basisvragen** (al in `gap-analyse.html` aanwezig, blijven actief voor alle sectoren)
-- **+ 14 zorg-deltavragen** (sector:'zorg', alleen actief bij sectorkeuze 'zorg')
-- **CMMI 0/2/3/4 schaal**, weight 2-3 zoals bestaand
-- Mapping op ISO 27001 Annex A + NEN 7510-2 zorg-controls
+Twee niveaus:
 
-Totaal voor zorg-klant: **27 vragen** (in plaats van huidige 14). Verdedigbaar voor €795.
+| Tool | Vragen | Plek |
+|---|---|---|
+| **Quickscan** (`gap-analyse.html`, gratis lead-funnel) | 13 ISO + 2 zorg-light = 15 | Al bijgewerkt, NEN 7510 zichtbaar in resultaat |
+| **Echte gap-analyse** (`dashboard.html`, €795 achter login) | Alle 93 Annex A + clausules 4-10 + onderstaande 14 NEN 7510-deltas voor zorg-klanten | Toe te voegen als `zorgSpecificQuestions` map naast bestaande `specificQuestions` |
+
+De 14 onderstaande vragen behoren bij de **echte gap-analyse**, niet bij de quickscan (FAQ houdt quickscan op 10-15 vragen voor productieve lead-conversion).
 
 ## 14 zorg-deltavragen
 

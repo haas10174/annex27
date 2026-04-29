@@ -2457,23 +2457,25 @@ const sectorProfiles = {
   },
   zorg: { label: 'Zorg & Medisch', benchmark: 35, relevantControls: 91, naControls: 2,
     pitfalls: [
-      'Toegang tot patientdossiers: onvoldoende logging en controle op wie wat inziet',
-      'Verwerkersovereenkomsten: niet op orde met leveranciers van zorgsystemen (EPD, labsystemen)',
-      'Mobile devices: onbeveiligde tablets en smartphones in klinische omgevingen',
-      'Awareness: medisch personeel onvoldoende getraind in informatiebeveiliging en phishing',
-      'Classificatie: geen onderscheid tussen patiëntgegevens en reguliere bedrijfsdata'
+      'Toegang tot patiëntdossiers zonder behandelrelatie-controle of break-glass-procedure (NEN 7510-2 §5.15)',
+      'EPD-toegang gelogd maar logs worden niet periodiek geaudit op afwijkende patronen (§8.15)',
+      'Verwerkersovereenkomsten met EPD-/PACS-leveranciers missen zorgspecifieke continuïteits- en audit-clausules (§5.19/§5.21)',
+      'Geheimhoudingsverklaringen verwijzen niet naar BIG-tucht of Wkkgz (§6.6)',
+      'Bewaartermijn medische dossiers (WGBO 20+ jaar) niet vertaald in back-up- en vernietigingsbeleid (§7.10/§8.10)',
+      'Awareness training generiek zonder zorgspecifieke risico-scenario\'s (§6.3)',
+      'Geen pseudoniem-procedure voor VIP\'s, slachtoffers van misdrijven of kinderen (§5.34)'
     ],
     actions: [
-      'Breng alle verwerkingen van bijzondere persoonsgegevens in kaart (AVG Art. 9)',
-      'Stel ISMS-scope op met nadruk op patientgegevens en zorgsystemen (Clause 4.3)',
-      'Voer risicobeoordeling uit specifiek voor medische informatiesystemen (Clause 6.1.2)',
-      'Implementeer logging op alle toegang tot patientdossiers (A.8.15)',
-      'Controleer en update alle verwerkersovereenkomsten met zorgsysteem-leveranciers (A.5.19-A.5.22)',
-      'Voer structurele awareness training uit gericht op medisch personeel (A.6.3)',
-      'Stel mobile device policy op voor klinische omgevingen (A.8.1)',
-      'Classificeer alle informatie met onderscheid patient/bedrijfsdata (A.5.12-A.5.13)'
+      'Breng alle verwerkingen van bijzondere persoonsgegevens in kaart (AVG art. 9)',
+      'Stel ISMS-scope op met patiëntgegevens en ketenstromen (Clause 4.3)',
+      'Implementeer behandelrelatie-gebaseerde toegang met break-glass-procedure (A.5.15 + NEN 7510-2 §5.15)',
+      'Activeer dossier-toegangslogging met periodieke audit-review (A.8.15 + §8.15)',
+      'Controleer alle verwerkersovereenkomsten op zorgspecifieke clausules (A.5.19-A.5.22 + §5.19/§5.21)',
+      'Pas geheimhoudingsverklaringen aan voor BIG/Wkkgz-tucht (A.6.6 + §6.6)',
+      'Voer awareness training met zorgcontext-scenario\'s uit (A.6.3 + §6.3)',
+      'Borg WGBO-bewaartermijnen in back-up- en vernietigingsbeleid (A.8.13/A.8.10 + §8.10/§8.13)'
     ],
-    frameworks: ['ISO 27001','NEN 7510','AVG/GDPR','NIS2'],
+    frameworks: ['ISO 27001','NEN 7510-1:2024','NEN 7510-2:2024+A1:2026','AVG/GDPR','NIS2'],
     naHints: ['A.7.12','A.8.14']
   },
   overheid: { label: 'Overheid & Semi-overheid', benchmark: 44, relevantControls: 91, naControls: 2,
@@ -4013,10 +4015,24 @@ const sectorDeepQuestions = {
     'A.8.32': [{ q: 'Heeft u een change-proces dat voorkomt dat een wijziging bij klant A onbedoeld klant B raakt?', type: 'proc', hint: 'Upload: per-klant deployment-pipelines, staging-procedure, blast-radius-assessment bij change.' }]
   },
   zorg: {
-    'A.5.31': [{ q: 'Past uw organisatie NEN-7510 toe als aanvulling op ISO 27001 (verplicht voor NL-zorg)?', type: 'doc', hint: 'Upload: NEN-7510 gap-analyse, specifieke zorg-controls gedocumenteerd, self-assessment of externe audit.' }],
-    'A.8.15': [{ q: 'Is alle toegang tot patiëntdossiers gelogd, doel-gebonden en periodiek gereviewd (need-to-know)?', type: 'impl', hint: 'Upload: access-logs met patiënt-ID + doel, maandelijkse audit van abnormale toegang, Break-the-Glass procedures.' }],
-    'A.8.5':  [{ q: 'Gebruiken zorgverleners sterke authenticatie (UZI-pas, SSO, MFA) en bestaat er een break-glass procedure?', type: 'impl', hint: 'Upload: UZI-pas-implementatie, SSO-configuratie, break-glass procedure met post-hoc audit.' }],
-    'A.5.9':  [{ q: 'Zijn medische hulpmiddelen (IoMT, monitoring, beeldapparatuur) in het asset-register + gescheiden netwerk?', type: 'doc', hint: 'Upload: asset-register inclusief medische devices, VLAN-segmentatie, vendor-patch-contracten.' }]
+    // 16 NEN 7510-2:2024+A1:2026 zorgspecifieke deltavragen tov ISO 27002:2022.
+    // Mapping per Annex A-control + verwijzing naar §5.x/§6.x/§7.x/§8.x in NEN 7510-2.
+    'A.5.1':  [{ q: 'Adresseert uw informatiebeveiligings- en privacybeleid expliciet AVG art. 9 (bijzondere persoonsgegevens), WGBO-bewaarplicht en NEN 7510?', type: 'doc', hint: 'Upload: privacybeleid met expliciete verwijzing AVG art. 9, WGBO-bewaartermijnen, NEN 7510-clausules. NEN 7510-2 §5.36.' }],
+    'A.5.2':  [{ q: 'Is een Informatiebeveiligingsfunctionaris (CISO/FG) aangewezen, en bij >500 medewerkers of >10.000 cliënten een formele adviesgroep informatiebeveiliging die periodiek bijeenkomt?', type: 'doc', hint: 'Upload: aanstelling CISO/FG, charter adviesgroep IB, notulen kwartaalbijeenkomsten met clinici + ICT. NEN 7510-2 §5.2.' }],
+    'A.5.9':  [{ q: 'Zijn medische hulpmiddelen (IoMT, monitoring, beeldapparatuur) én alle informatiestromen tussen u en ketenpartners (Nuts/MedMij/Twiin, verwijsbrieven, lab-uitslagen) in het asset-register opgenomen, inclusief integratie-interfaces?', type: 'doc', hint: 'Upload: asset-register inclusief medische devices + ketenstromen, VLAN-segmentatie, vendor-patch-contracten, integratie-overzicht. NEN 7510-2 §5.9.' }],
+    'A.5.15': [{ q: 'Is toegang tot patiëntdossiers gebaseerd op een actieve behandelrelatie (zorgverlener-cliënt-koppeling) en bestaat er een gedocumenteerde break-glass-procedure voor noodtoegang?', type: 'impl', hint: 'Upload: behandelrelatie-controle in EPD-toegangsbeleid, break-glass-procedure met automatische logging, voorbeeld review break-glass-events. NEN 7510-2 §5.15.' }],
+    'A.5.16': [{ q: 'Worden zorgverleners geïdentificeerd via een persoonsgebonden identiteit (UZI-pas, BIG-nummer, of vergelijkbaar) en wordt deze identiteit beheerd via een gedocumenteerd lifecycle-proces?', type: 'doc', hint: 'Upload: UZI-pas-uitgifteproces, koppeling BIG-register, joiner/mover/leaver-procedure voor zorgverlener-accounts. NEN 7510-2 §5.16.' }],
+    'A.5.19': [{ q: 'Bevatten verwerkersovereenkomsten met EPD-/PACS-/RIS-leveranciers, laboratoria, fabrikanten van medische apparaten en ICT-ketenpartners zorgspecifieke clausules (continuïteit klinisch proces, sub-verwerker patiëntdata, audit-recht, ISO 27001/NEN 7510-bewijs)?', type: 'doc', hint: 'Upload: verwerkersovereenkomsten met EPD/PACS/RIS-leveranciers, sub-verwerker-clausule, audit-rechten, certificaten leveranciers. NEN 7510-2 §5.19/§5.21.' }],
+    'A.5.24': [{ q: 'Heeft u een datalek-meldprocedure die de Autoriteit Persoonsgegevens binnen 72u informeert én een meldlijn naar de IGJ (Inspectie Gezondheidszorg en Jeugd) bij continuïteits- of patiëntveiligheidsimpact?', type: 'doc', hint: 'Upload: incident-response plan met dual-track AP + IGJ, meldformulieren, beslissingsboom impact patiëntveiligheid. NEN 7510-2 §6.8.' }],
+    'A.5.31': [{ q: 'Bevat uw register van wet- en regelgeving expliciet AVG art. 9, WGBO, Wkkgz, NEN 7510-1/-2 en (indien essentiële entiteit) NIS2, met review-datum < 12 maanden?', type: 'doc', hint: 'Upload: compliance-register met AVG art. 9, WGBO, Wkkgz, NEN 7510-1/-2:2024+A1:2026, NIS2; laatste review-evidence. NEN 7510-2 §5.36.' }],
+    'A.5.34': [{ q: 'Bestaat er een procedure voor pseudoniem- of alias-registratie van VIPs, slachtoffers van misdrijven, beveiligings-/defensiemedewerkers en kinderen, met beperkte toegang tot hun ware identiteit?', type: 'doc', hint: 'Upload: pseudoniem-procedure, koppelingstabel beheerd door beperkte rolgroep, audit-trail van identiteits-resolves. NEN 7510-2 §5.34.' }],
+    'A.6.3':  [{ q: 'Krijgen klinisch personeel én ICT-medewerkers periodieke awareness-training met zorgspecifieke scenario\'s (toegang buiten behandelrelatie, medische apparaten, social engineering, datalek-meldplicht)?', type: 'doc', hint: 'Upload: awareness-curriculum met zorgcasussen, voltooiingsdashboard per rolgroep, evaluatie effectiviteit. NEN 7510-2 §6.3.' }],
+    'A.6.6':  [{ q: 'Tekenen zorgmedewerkers een geheimhoudingsverklaring die expliciet verwijst naar tuchtrechtelijke verantwoordelijkheid (BIG/Wkkgz) en de bijzondere positie van patiëntgegevens?', type: 'doc', hint: 'Upload: NDA-template met BIG/Wkkgz-verwijzing, getekend exemplaar per zorgmedewerker, koppeling personeelsdossier. NEN 7510-2 §6.6.' }],
+    'A.8.5':  [{ q: 'Authenticeren zorgverleners met ten minste twee factoren, waarvan één persoonsgebonden (UZI-pas, DigiD substantieel/hoog of vergelijkbaar) bij toegang tot patiëntgegevens, met gedocumenteerde break-glass-procedure?', type: 'impl', hint: 'Upload: UZI-/DigiD-implementatie, MFA-conditional-access voor zorgapps, break-glass procedure met post-hoc audit + logging. NEN 7510-2 §5.16/§8.5.' }],
+    'A.8.10': [{ q: 'Is de wettelijke bewaartermijn voor medische dossiers (WGBO: 20 jaar of langer indien noodzakelijk) vertaald in een gedocumenteerd vernietigingsbeleid voor zowel papier als digitaal?', type: 'doc', hint: 'Upload: vernietigingsbeleid met WGBO-bewaartermijnen, vernietigingscertificaten, papier-shredder/wipe-procedure, retentie-dashboard EPD. NEN 7510-2 §7.10/§8.10.' }],
+    'A.8.13': [{ q: 'Worden back-ups van EPD-, PACS- en RIS-systemen periodiek getest op restore-functionaliteit, met respect voor de wettelijke bewaartermijnen voor medische dossiers?', type: 'impl', hint: 'Upload: back-up-schema EPD/PACS/RIS, restore-test-rapport (datum + succes-criteria), retentie-config conform WGBO. NEN 7510-2 §8.13.' }],
+    'A.8.15': [{ q: 'Wordt elke toegang tot een patiëntdossier (lezen, wijzigen, exporteren) gelogd met gebruikers-ID, tijdstip, dossier-/BSN-referentie en bestaat er een proces voor periodieke dossier-toegang-audits?', type: 'impl', hint: 'Upload: SIEM-screenshot met dossier-toegangslogs, maandelijkse audit-rapportage, voorbeeld opvolging afwijkende toegang. NEN 7510-2 §8.15.' }],
+    'A.8.24': [{ q: 'Worden patiëntgegevens (BSN, diagnose, behandelplan) versleuteld in transit én at rest, met sleutelbeheer onder uw eigen organisatie of een verwerker met passende waarborgen?', type: 'impl', hint: 'Upload: TLS-config (SSLLabs A+), at-rest-encryptie EPD/PACS, KMS-architectuur, sleutelrotatie-schema, contract sleutel-beherende verwerker. NEN 7510-2 §8.24.' }]
   },
   overheid: {
     'A.5.31': [{ q: 'Past u de Baseline Informatiebeveiliging Overheid (BIO) volledig toe?', type: 'doc', hint: 'Upload: BIO self-assessment (CIP-tool), BIV-classificatie per informatiesysteem, ENSIA-rapportage.' }],
