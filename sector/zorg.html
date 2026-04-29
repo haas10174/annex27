@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <meta name="theme-color" content="#0D9488" />
+  <script src="/analytics.js"></script>
+  <title>ISO 27001 + NEN 7510 Gap-analyse voor de zorg | Annex27</title>
+  <meta name="description" content="Zorgspecifieke gap-analyse op basis van ISO 27001:2022 en NEN 7510-1/-2:2024+A1:2026. 27 vragen, behandelrelatie, EPD-logging, WGBO-bewaartermijnen. €795 incl. Lead Auditor review." />
+  <meta name="keywords" content="NEN 7510, NEN 7510 gap-analyse, ISO 27001 zorg, informatiebeveiliging zorg, EPD security, patiëntdossier toegang, AVG zorg, WGBO bewaartermijn, zorginstelling compliance" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://annex27.nl/sector/zorg" />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://annex27.nl/sector/zorg" />
+  <meta property="og:title" content="ISO 27001 + NEN 7510 Gap-analyse voor de zorg | Annex27" />
+  <meta property="og:description" content="27 zorgspecifieke vragen op basis van NEN 7510-2:2024+A1:2026. €795 incl. Lead Auditor review." />
+  <meta property="og:image" content="https://annex27.nl/og-image.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"FAQPage",
+    "mainEntity":[
+      {"@type":"Question","name":"Wat is het verschil met een gewone ISO 27001-gap-analyse?","acceptedAnswer":{"@type":"Answer","text":"Onze zorg-gap-analyse stelt 27 vragen (in plaats van 14): 13 ISO 27001-basisvragen plus 14 zorgspecifieke vragen op basis van NEN 7510-2:2024+A1:2026. We toetsen behandelrelatie-toegang, EPD-logging, WGBO-bewaartermijnen, BIG/Wkkgz-geheimhouding, ketenstromen en datalek-meldplicht naar AP én IGJ."}},
+      {"@type":"Question","name":"Voor welke zorgorganisaties is dit geschikt?","acceptedAnswer":{"@type":"Answer","text":"Huisartsenpraktijken, fysiotherapie, tandartsen, GGZ-instellingen, verloskundige praktijken, eHealth/telezorg-aanbieders, laboratoria, en kleine tot middelgrote zorginstellingen. Niet voor academische ziekenhuizen of zorgverzekeraars (die hebben enterprise-trajecten nodig)."}},
+      {"@type":"Question","name":"Welke normen worden gedekt?","acceptedAnswer":{"@type":"Answer","text":"ISO/IEC 27001:2022 (managementsysteem), NEN 7510-1:2024 (zorgspecifiek managementsysteem), NEN 7510-2:2024+A1:2026 (zorgspecifieke beheersmaatregelen), AVG/GDPR (bijzondere persoonsgegevens art. 9), WGBO-bewaartermijnen, en NIS2 voor zorginstellingen die als essentiële entiteit kwalificeren."}},
+      {"@type":"Question","name":"Wat krijg ik voor €795?","acceptedAnswer":{"@type":"Answer","text":"De volledige zorg-gap-analyse (27 vragen), een rapport met scores per ISO 27002:2022-categorie, NEN 7510-2 control-mapping per bevinding, geprioriteerde remediatie-acties, en een persoonlijke review door gecertificeerd Lead Auditor (DNV/IRCA)."}}
+    ]
+  }
+  </script>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    :root{--bg:#FAFAFA;--surface:#FFF;--bg-warm:#F5F3EF;--border:#E5E5E5;--border-light:#F0F0F0;--text-primary:#0F172A;--text-secondary:#475569;--text-muted:#94A3B8;--accent:#0D9488;--accent-hover:#0F766E;--accent-light:#CCFBF1;--dark:#0c0f1a;--warning:#D97706;--danger:#dc2626;--radius:10px;--radius-lg:16px;}
+    html{scroll-behavior:smooth;}
+    body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text-secondary);line-height:1.7;-webkit-font-smoothing:antialiased;}
+    .container{max-width:1080px;margin:0 auto;padding:0 24px;}
+    nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(250,250,250,0.85);backdrop-filter:blur(16px);border-bottom:1px solid var(--border-light);height:64px;display:flex;align-items:center;padding:0 5%;}
+    .nav-inner{display:flex;align-items:center;justify-content:space-between;width:100%;max-width:1120px;margin:0 auto;}
+    .nav-logo{font-family:'Sora',sans-serif;font-size:1.4rem;font-weight:700;color:var(--text-primary);text-decoration:none;letter-spacing:-0.03em;}
+    .nav-logo span{color:var(--accent);}
+    .nav-back{display:inline-flex;align-items:center;gap:6px;font-size:0.85rem;color:var(--text-secondary);text-decoration:none;font-weight:500;}
+    .nav-back:hover{color:var(--text-primary);}
+    .nav-back svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;}
+
+    .hero{padding:120px 0 72px;background:var(--dark);color:white;position:relative;overflow:hidden;}
+    .hero::before{content:'';position:absolute;top:-100px;right:-100px;width:500px;height:500px;background:radial-gradient(circle,rgba(20,184,166,0.15) 0%,transparent 70%);}
+    .hero .container{position:relative;z-index:1;}
+    .hero-grid{display:grid;grid-template-columns:1.4fr 1fr;gap:48px;align-items:center;}
+    .eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:0.78rem;font-weight:600;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.14em;margin-bottom:18px;}
+    .eyebrow::before{content:'';width:24px;height:1px;background:#14b8a6;}
+    .hero h1{font-family:'Sora',sans-serif;font-size:clamp(2rem,4.4vw,3.2rem);font-weight:700;line-height:1.05;letter-spacing:-0.03em;margin-bottom:18px;}
+    .hero h1 .accent{color:#14b8a6;}
+    .hero p.lead{font-size:1.08rem;color:rgba(255,255,255,0.72);max-width:560px;margin-bottom:28px;}
+    .hero-cta{display:flex;gap:14px;flex-wrap:wrap;}
+    .btn-primary{display:inline-flex;align-items:center;gap:10px;background:#14b8a6;color:white;padding:14px 24px;border-radius:10px;font-weight:600;font-size:0.96rem;text-decoration:none;transition:background .2s,transform .2s;}
+    .btn-primary:hover{background:#0d9488;transform:translateY(-1px);}
+    .btn-ghost{display:inline-flex;align-items:center;gap:10px;background:rgba(255,255,255,0.06);color:white;padding:14px 22px;border-radius:10px;font-weight:600;font-size:0.96rem;text-decoration:none;border:1px solid rgba(255,255,255,0.15);transition:background .2s;}
+    .btn-ghost:hover{background:rgba(255,255,255,0.1);}
+
+    .hero-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:24px;backdrop-filter:blur(8px);}
+    .hero-card-eyebrow{font-size:0.72rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#5eead4;margin-bottom:12px;}
+    .hero-card h3{font-family:'Sora',sans-serif;color:white;font-size:1.05rem;font-weight:700;margin-bottom:4px;}
+    .hero-card .price{font-family:'Sora',sans-serif;color:white;font-size:2rem;font-weight:700;margin-bottom:14px;}
+    .hero-card .price small{font-size:0.78rem;font-weight:500;color:rgba(255,255,255,0.55);}
+    .hero-card ul{list-style:none;padding:0;margin:0 0 18px;font-size:0.86rem;color:rgba(255,255,255,0.78);}
+    .hero-card ul li{padding:5px 0;display:flex;gap:8px;align-items:flex-start;}
+    .hero-card ul li::before{content:'✓';color:#5eead4;font-weight:700;flex-shrink:0;}
+    .hero-card a.cta{display:block;text-align:center;background:#14b8a6;color:white;padding:13px 22px;border-radius:10px;font-weight:600;text-decoration:none;font-size:0.94rem;margin-bottom:8px;}
+    .hero-card a.cta:hover{background:#0d9488;}
+    .hero-card-foot{margin-top:14px;font-size:0.74rem;color:rgba(255,255,255,0.42);line-height:1.55;}
+
+    section{padding:80px 0;}
+    section.alt{background:var(--surface);border-top:1px solid var(--border-light);border-bottom:1px solid var(--border-light);}
+    .label{font-size:0.78rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;}
+    h2.section-title{font-family:'Sora',sans-serif;font-size:clamp(1.6rem,3vw,2.2rem);font-weight:700;color:var(--text-primary);letter-spacing:-0.02em;margin-bottom:14px;}
+    .section-lead{font-size:1.02rem;line-height:1.75;max-width:680px;margin-bottom:40px;}
+
+    .compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:24px;}
+    .compare-col{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:24px;}
+    .compare-col.miss{border-left:4px solid var(--danger);}
+    .compare-col.cover{border-left:4px solid var(--accent);}
+    .compare-col h3{font-family:'Sora',sans-serif;font-size:1.05rem;color:var(--text-primary);margin-bottom:14px;}
+    .compare-col ul{padding-left:18px;font-size:0.92rem;line-height:1.75;}
+    .compare-col ul li{margin-bottom:8px;}
+
+    .cat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:32px;}
+    .cat{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:22px;}
+    .cat-num{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:8px;background:var(--accent-light);color:var(--accent);font-family:'Sora',sans-serif;font-weight:700;margin-bottom:12px;}
+    .cat h3{font-family:'Sora',sans-serif;font-size:1rem;color:var(--text-primary);margin-bottom:6px;}
+    .cat p{font-size:0.88rem;line-height:1.6;}
+
+    .audience{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:24px;}
+    .aud{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;font-size:0.9rem;color:var(--text-primary);font-weight:500;text-align:center;}
+
+    .deliver-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:24px;}
+    .deliver{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:22px;display:flex;gap:14px;}
+    .deliver-icon{flex-shrink:0;width:36px;height:36px;border-radius:8px;background:var(--accent-light);color:var(--accent);display:flex;align-items:center;justify-content:center;}
+    .deliver-icon svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;}
+    .deliver h3{font-family:'Sora',sans-serif;font-size:0.96rem;color:var(--text-primary);margin-bottom:4px;}
+    .deliver p{font-size:0.86rem;line-height:1.6;}
+
+    .norm-banner{background:linear-gradient(135deg,#0c0f1a 0%,#1e293b 100%);color:white;padding:28px 32px;border-radius:16px;margin-top:32px;}
+    .norm-banner h3{font-family:'Sora',sans-serif;font-size:1.1rem;color:white;margin-bottom:10px;}
+    .norm-banner p{color:rgba(255,255,255,0.72);font-size:0.92rem;line-height:1.65;margin-bottom:14px;}
+    .norm-banner ul{list-style:none;padding:0;display:flex;gap:8px;flex-wrap:wrap;}
+    .norm-banner li{background:rgba(20,184,166,0.15);color:#5eead4;padding:5px 12px;border-radius:99px;font-size:0.78rem;font-weight:600;letter-spacing:0.02em;}
+
+    .cta-section{background:var(--bg-warm);padding:80px 0;text-align:center;}
+    .cta-section h2{font-family:'Sora',sans-serif;font-size:clamp(1.6rem,3vw,2.2rem);font-weight:700;color:var(--text-primary);letter-spacing:-0.02em;margin-bottom:14px;}
+    .cta-section p{font-size:1rem;max-width:560px;margin:0 auto 28px;}
+    .cta-row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+    .btn-primary-light{background:var(--accent);color:white;padding:14px 28px;border-radius:10px;font-weight:600;font-size:0.96rem;text-decoration:none;display:inline-block;transition:background .2s;}
+    .btn-primary-light:hover{background:var(--accent-hover);}
+    .btn-ghost-light{background:transparent;color:var(--text-primary);padding:14px 26px;border-radius:10px;font-weight:600;font-size:0.96rem;text-decoration:none;border:1px solid var(--border);display:inline-block;transition:background .2s;}
+    .btn-ghost-light:hover{background:var(--surface);}
+
+    footer{background:var(--surface);border-top:1px solid var(--border-light);padding:40px 0;font-size:0.84rem;color:var(--text-muted);}
+    footer .container{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
+    footer a{color:var(--text-secondary);text-decoration:none;}
+    footer a:hover{color:var(--text-primary);}
+
+    @media (max-width:900px){
+      .hero-grid{grid-template-columns:1fr;}
+      .compare-grid{grid-template-columns:1fr;}
+      .cat-grid{grid-template-columns:1fr;}
+      .audience{grid-template-columns:repeat(2,1fr);}
+      .deliver-grid{grid-template-columns:1fr;}
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">annex<span>27</span></a>
+    <a href="/" class="nav-back"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Terug naar home</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="container">
+    <div class="hero-grid">
+      <div>
+        <div class="eyebrow"><span>Zorgspecifiek · NEN 7510:2024+A1:2026</span></div>
+        <h1>Geen ISO 27001-audit met zorgsausje. <span class="accent">Een echte NEN 7510-toets.</span></h1>
+        <p class="lead">27 vragen op basis van ISO/IEC 27001:2022 én NEN 7510-1/-2:2024+A1:2026. Behandelrelatie, EPD-logging, WGBO-bewaartermijnen, BIG/Wkkgz-geheimhouding, ketenpartner-stromen en datalek-meldplicht (AP + IGJ) — alles wat in een generieke audit ontbreekt.</p>
+        <div class="hero-cta">
+          <a href="/gap-analyse?sector=zorg" class="btn-primary">Start zorg-gap-analyse →</a>
+          <a href="#vergelijk" class="btn-ghost">Wat is het verschil?</a>
+        </div>
+      </div>
+      <div class="hero-card">
+        <div class="hero-card-eyebrow">Zorg gap-analyse</div>
+        <div class="price">€795 <small>eenmalig</small></div>
+        <ul>
+          <li>27 vragen — 13 ISO 27001-basis + 14 NEN 7510-deltas</li>
+          <li>Mapping op ISO 27002:2022 + NEN 7510-2 §5.x/§6.x/§7.x/§8.x</li>
+          <li>CMMI-volwassenheid per categorie</li>
+          <li>Geprioriteerde remediatie-acties</li>
+          <li>Persoonlijke review door Lead Auditor (DNV/IRCA)</li>
+          <li>AVG art. 9 + WGBO + NIS2-koppeling</li>
+        </ul>
+        <a href="/gap-analyse?sector=zorg" class="cta">Start direct →</a>
+        <div class="hero-card-foot">Marktconform: zorg-consultancy €5k–€15k. Gericht op huisartsen, GGZ, fysio, tandartsen, eHealth, laboratoria en kleine tot middelgrote zorginstellingen.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="vergelijk">
+  <div class="container">
+    <div class="label">Het verschil</div>
+    <h2 class="section-title">Wat een generieke ISO 27001-audit mist in de zorg</h2>
+    <p class="section-lead">ISO 27001 is universeel. Maar de zorg heeft eigen wet- en regelgeving (WGBO, AVG art. 9, Wkkgz, BIG-tucht) en NEN 7510 vult op 51 van de 93 ISO 27002-controls expliciete zorgrichtlijnen aan. Een generieke audit toetst die niet — en dan koopt u eigenlijk een onvolledig oordeel.</p>
+
+    <div class="compare-grid">
+      <div class="compare-col miss">
+        <h3>Generieke ISO 27001-audit</h3>
+        <ul>
+          <li>Toegang tot dossiers: technisch geregeld, géén toetsing op behandelrelatie</li>
+          <li>Logging: aanwezig of niet, zonder review-proces voor patiëntdossier-toegang</li>
+          <li>Verwerkers: standaard DPA-clausule, géén EPD-/PACS-continuïteit</li>
+          <li>Geheimhouding: NDA, géén verwijzing naar BIG-tucht of Wkkgz</li>
+          <li>Bewaartermijn: organisatiebeleid, niet getoetst aan WGBO 20+ jaar</li>
+          <li>Awareness: algemene phishing-training, geen zorgspecifieke scenario's</li>
+        </ul>
+      </div>
+      <div class="compare-col cover">
+        <h3>Onze zorg-gap-analyse (ISO + NEN 7510)</h3>
+        <ul>
+          <li>Behandelrelatie als toegangsbasis + break-glass-procedure (§5.15)</li>
+          <li>Dossier-toegangslogging mét audit-review (§8.15)</li>
+          <li>Verwerkersovereenkomsten met zorgspecifieke clausules (§5.19/§5.21)</li>
+          <li>Geheimhouding gekoppeld aan BIG/Wkkgz-tucht (§6.6)</li>
+          <li>WGBO-bewaartermijn vertaald naar back-up- en vernietigingsbeleid (§7.10/§8.10/§8.13)</li>
+          <li>Zorgspecifieke awareness met klinische scenario's (§6.3)</li>
+          <li>Sterke authenticatie: UZI/DigiD substantieel/hoog (§5.16/§8.5)</li>
+          <li>Pseudoniem-procedure voor VIP's, slachtoffers, kinderen (§5.34)</li>
+          <li>Datalek-meldplicht: AP binnen 72u + IGJ bij continuïteitsimpact (§6.8)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="alt">
+  <div class="container">
+    <div class="label">De vragenset</div>
+    <h2 class="section-title">27 vragen, 6 categorieën, één rapport</h2>
+    <p class="section-lead">Iedere vraag mappt op een specifieke ISO 27002:2022-control én op de bijbehorende NEN 7510-2-paragraaf. Geen generieke statements — een verdedigbaar oordeel per beheersmaatregel.</p>
+
+    <div class="cat-grid">
+      <div class="cat"><div class="cat-num">1</div><h3>Governance &amp; beleid</h3><p>Patiëntenprivacybeleid (AVG art. 9 + WGBO), Informatiebeveiligingsfunctionaris en adviesgroep volgens NEN 7510 §5.2.</p></div>
+      <div class="cat"><div class="cat-num">2</div><h3>Personeel</h3><p>Geheimhouding gekoppeld aan BIG/Wkkgz-tucht, awareness training met zorgspecifieke risico-scenario's.</p></div>
+      <div class="cat"><div class="cat-num">3</div><h3>Fysiek &amp; assets</h3><p>Asset-register inclusief ketenstromen (Nuts/MedMij/Twiin), bewaartermijn medische dossiers conform WGBO.</p></div>
+      <div class="cat"><div class="cat-num">4</div><h3>Technische controls</h3><p>Behandelrelatie + break-glass, sterke authenticatie (UZI/DigiD), dossier-toegangslogging, encryptie, pseudoniem-registratie.</p></div>
+      <div class="cat"><div class="cat-num">5</div><h3>Operationeel</h3><p>Datalek-meldplicht naar AP én IGJ, verwerkersovereenkomsten zorgketen, back-up + restore EPD/PACS/RIS.</p></div>
+      <div class="cat"><div class="cat-num">6</div><h3>Continuïteit klinisch proces</h3><p>Wettelijke bewaartermijnen vertaald naar back-up-strategie, productie-systeem-bescherming bij audits.</p></div>
+    </div>
+
+    <div class="norm-banner">
+      <h3>Direct gemapt op normvereisten</h3>
+      <p>Iedere bevinding krijgt een verwijzing naar de exacte ISO 27001/27002-control én de NEN 7510-2-paragraaf. Geschikt voor onderbouwing richting auditpartner, certificerende instelling, of toezichthouder.</p>
+      <ul>
+        <li>ISO/IEC 27001:2022</li>
+        <li>NEN 7510-1:2024</li>
+        <li>NEN 7510-2:2024+A1:2026</li>
+        <li>AVG art. 9</li>
+        <li>WGBO</li>
+        <li>Wkkgz</li>
+        <li>NIS2 (essentiële entiteit)</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="label">Voor wie</div>
+    <h2 class="section-title">Welke zorgorganisaties?</h2>
+    <p class="section-lead">Ontworpen voor MKB-zorg en zelfstandige professionals. Voor academische ziekenhuizen en zorgverzekeraars zijn aparte enterprise-trajecten geschikter.</p>
+
+    <div class="audience">
+      <div class="aud">Huisartsenpraktijken</div>
+      <div class="aud">Tandartsen</div>
+      <div class="aud">Fysiotherapie</div>
+      <div class="aud">GGZ-instellingen</div>
+      <div class="aud">Verloskundigen</div>
+      <div class="aud">eHealth / Telezorg</div>
+      <div class="aud">Laboratoria</div>
+      <div class="aud">Kleine zorginstellingen</div>
+    </div>
+  </div>
+</section>
+
+<section class="alt">
+  <div class="container">
+    <div class="label">Wat u krijgt</div>
+    <h2 class="section-title">Het rapport</h2>
+    <p class="section-lead">Geen vinkjeslijst. Een leesbaar rapport dat uw bestuur kan voorleggen aan de toezichthouder of aan uw verzekeraar.</p>
+
+    <div class="deliver-grid">
+      <div class="deliver">
+        <div class="deliver-icon"><svg viewBox="0 0 24 24"><path d="M12 2v20M2 12h20"/></svg></div>
+        <div><h3>Volwassenheidsscore per categorie</h3><p>CMMI 0-4 schaal, gewogen per vraag. Direct vergelijkbaar met benchmark voor zorgsector.</p></div>
+      </div>
+      <div class="deliver">
+        <div class="deliver-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <div><h3>NEN 7510-2 control-mapping</h3><p>Per bevinding een verwijzing naar ISO 27002:2022 en NEN 7510-2-paragraaf met A1:2026-amendementen.</p></div>
+      </div>
+      <div class="deliver">
+        <div class="deliver-icon"><svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
+        <div><h3>Geprioriteerde remediatie</h3><p>Concrete acties met verwijzing naar Annex A-control én NEN 7510-2-paragraaf, inclusief volgorde.</p></div>
+      </div>
+      <div class="deliver">
+        <div class="deliver-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+        <div><h3>Persoonlijke Lead Auditor review</h3><p>Geen AI-rapport zonder oog. Een gecertificeerd Lead Auditor (DNV/IRCA) leest het rapport door en geeft eindoordeel.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <div class="container">
+    <h2>Klaar om geloofwaardig de NEN 7510-conversatie aan te gaan?</h2>
+    <p>27 vragen, 30 minuten, en een rapport dat staat tegen elke toezichthouder. €795 inclusief Lead Auditor review.</p>
+    <div class="cta-row">
+      <a href="/gap-analyse?sector=zorg" class="btn-primary-light">Start zorg-gap-analyse →</a>
+      <a href="/rapport-voorbeeld" class="btn-ghost-light">Bekijk voorbeeldrapport</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div>© 2026 Annex27 · ISO 27001 + NEN 7510 compliance voor het MKB</div>
+    <div><a href="/privacy">Privacy</a> · <a href="/algemene-voorwaarden">AV</a> · <a href="/verwerkersovereenkomst">Verwerkersovereenkomst</a></div>
+  </div>
+</footer>
+
+</body>
+</html>
