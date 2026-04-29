@@ -1172,6 +1172,34 @@
       color: var(--text-secondary);
       line-height: 1.75;
     }
+    .ga-module-progress {
+      margin-top: 18px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .ga-module-progress-bar {
+      flex: 1;
+      height: 6px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+    .ga-module-progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), #34D399);
+      border-radius: 99px;
+      transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .ga-module-progress-pct {
+      font-family: 'Sora', sans-serif;
+      font-size: 0.86rem;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: -0.01em;
+      min-width: 40px;
+      text-align: right;
+    }
 
     .ga-control-card {
       background: var(--surface);
@@ -1313,6 +1341,103 @@
       text-transform: uppercase;
       vertical-align: middle;
     }
+
+    /* Sector-banner — bovenaan gap-analyse om context te geven */
+    .ga-sector-banner {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      background: linear-gradient(135deg, rgba(13,148,136,0.10), rgba(13,148,136,0.03));
+      border: 1px solid rgba(13,148,136,0.28);
+      border-radius: 14px;
+      padding: 18px 22px;
+      margin: 24px 0 20px;
+    }
+    .ga-sector-banner.zorg {
+      background: linear-gradient(135deg, rgba(4,120,87,0.14), rgba(249,115,22,0.06));
+      border-color: rgba(4,120,87,0.35);
+    }
+    .ga-sector-banner-icon {
+      flex-shrink: 0;
+      width: 42px; height: 42px;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--accent);
+    }
+    .ga-sector-banner.zorg .ga-sector-banner-icon { color: #6EE7B7; }
+    .ga-sector-banner-icon svg { width: 22px; height: 22px; }
+    .ga-sector-banner-body { flex: 1; min-width: 0; }
+    .ga-sector-banner-eyebrow {
+      font-size: 0.66rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 4px;
+    }
+    .ga-sector-banner.zorg .ga-sector-banner-eyebrow { color: #6EE7B7; }
+    .ga-sector-banner-title {
+      font-family: 'Sora', sans-serif;
+      font-size: 1.02rem;
+      font-weight: 700;
+      color: white;
+      letter-spacing: -0.01em;
+      margin-bottom: 6px;
+    }
+    .ga-sector-banner-sub {
+      font-size: 0.86rem;
+      color: rgba(255,255,255,0.6);
+      line-height: 1.55;
+    }
+
+    /* Auto-expand evidence highlight bij hoge claim */
+    .ga-evidence.attention {
+      animation: gaEvAttention 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 0 0 2px rgba(217,119,6,0.45), 0 0 32px rgba(217,119,6,0.12);
+    }
+    @keyframes gaEvAttention {
+      0% { transform: scale(1); }
+      35% { transform: scale(1.012); box-shadow: 0 0 0 3px rgba(217,119,6,0.7), 0 0 36px rgba(217,119,6,0.2); }
+      100% { transform: scale(1); }
+    }
+
+    /* Toast — save-feedback bottom-right */
+    .ga-toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: rgba(15,23,42,0.96);
+      color: white;
+      padding: 12px 18px 12px 14px;
+      border-radius: 10px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.86rem;
+      font-weight: 500;
+      box-shadow: 0 12px 32px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.06);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transform: translateY(8px);
+      opacity: 0;
+      pointer-events: none;
+      transition: transform 0.22s ease-out, opacity 0.22s ease-out;
+      z-index: 9999;
+      max-width: calc(100vw - 48px);
+    }
+    .ga-toast.visible { transform: translateY(0); opacity: 1; }
+    .ga-toast svg {
+      width: 18px; height: 18px;
+      flex-shrink: 0;
+      stroke: #34D399;
+      fill: none;
+      stroke-width: 2.4;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .ga-toast.error svg { stroke: #FCA5A5; }
+    .ga-toast-time { color: rgba(255,255,255,0.45); font-size: 0.78rem; margin-left: 4px; }
 
     .ga-answer-grid {
       display: grid;
@@ -4343,13 +4468,32 @@ function renderModuleOverview() {
   });
   const overallPct = totalControls > 0 ? Math.round((totalAnswered / totalControls) * 100) : 0;
 
+  // Tel sector-deep vragen voor banner
+  const sectorDeepCount = (typeof sectorDeepQuestions !== 'undefined' && userSector && sectorDeepQuestions[userSector])
+    ? Object.values(sectorDeepQuestions[userSector]).reduce((a, qs) => a + (qs?.length || 0), 0)
+    : 0;
+  const profile = (typeof sectorProfiles !== 'undefined' && userSector) ? sectorProfiles[userSector] : null;
+  const sectorBanner = (profile && sectorDeepCount > 0) ? `
+    <div class="ga-sector-banner ${userSector === 'zorg' ? 'zorg' : ''}">
+      <div class="ga-sector-banner-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      </div>
+      <div class="ga-sector-banner-body">
+        <div class="ga-sector-banner-eyebrow">Uw versie</div>
+        <div class="ga-sector-banner-title">${esc(profile.label)} &mdash; 93 controls + ${sectorDeepCount} sector-specifieke vragen</div>
+        <div class="ga-sector-banner-sub">${userSector === 'zorg'
+          ? 'NEN 7510-zorgdeltas op behandelrelatie, EPD-logging, WGBO-bewaartermijnen, ketenpartners en BIG/Wkkgz. Sector-vragen zijn gemarkeerd met &ldquo;Sector-diepte&rdquo;.'
+          : 'Sector-specifieke vragen voor uw branche zijn gemarkeerd met &ldquo;Sector-diepte&rdquo;.'}</div>
+      </div>
+    </div>` : '';
+
   let html = `
     <div class="ga-overview">
       <div class="ga-intro">
         <div class="ga-eyebrow">Gap-analyse</div>
         <h1 class="ga-title">Uw ISO 27001 assessment</h1>
         <p class="ga-lead">
-          Beoordeel uw organisatie stap voor stap aan de hand van alle 93 Annex A controls.
+          Beoordeel uw organisatie stap voor stap aan de hand van alle 93 Annex A controls${sectorDeepCount > 0 ? ` plus ${sectorDeepCount} sector-specifieke vragen voor uw ${esc(profile.label)}-profiel` : ''}.
           Het assessment is opgedeeld in vier modules — werk ze in uw eigen tempo door.
         </p>
         <div class="ga-instruction">
@@ -4359,6 +4503,7 @@ function renderModuleOverview() {
           voegen — precies zoals een auditor dat zou doen. Zo levert uw rapport concrete waarde.
         </div>
       </div>
+      ${sectorBanner}
 
       <div class="ga-progress-top">
         <div class="ga-progress-label">
@@ -4436,11 +4581,15 @@ function renderModuleAssessment(cat) {
       </button>
 
       <div class="ga-module-header">
-        <div class="ga-module-step">Module ${esc(moduleLabel(cat))} &middot; ${answered} van ${total}</div>
+        <div class="ga-module-step" id="gaModuleStep">Module ${esc(moduleLabel(cat))} &middot; <span id="gaModuleAnswered">${answered}</span> van ${total}</div>
         <h2 class="ga-module-title">${esc(cat)}</h2>
         <p class="ga-module-intro">
           Deze module bevat ${total} controls. Neem de tijd: voor elke control leest u eerst de context, daarna beoordeelt u uw situatie en onderbouwt u uw antwoord met bewijs.
         </p>
+        <div class="ga-module-progress">
+          <div class="ga-module-progress-bar"><div class="ga-module-progress-fill" id="gaModuleProgressFill" style="width:${total ? Math.round((answered/total)*100) : 0}%"></div></div>
+          <div class="ga-module-progress-pct" id="gaModuleProgressPct">${total ? Math.round((answered/total)*100) : 0}%</div>
+        </div>
       </div>
   `;
 
@@ -4705,11 +4854,32 @@ function setGaAnswer(key, value, btn) {
     const v = gapAnswers[ctrl.id + '_' + qi];
     return v === '4' || v === '3' || v === '2';
   });
+  const isHighClaim = value === '4' || value === '3';
 
   const card = document.getElementById('ctrl_' + ctrl.id.replace(/\./g, '_'));
   if (card) {
     const evSection = card.querySelector('.ga-evidence');
     if (evSection) evSection.classList.toggle('active', anyClaimed);
+
+    // Bij score 3-4: bewijs vereist → auto-expand notitie + visueel highlight indien nog niet onderbouwd
+    if (isHighClaim && evSection) {
+      const ev = getEvidence(ctrl.id);
+      const hasEvidence = (ev.files.length > 0) || (ev.note && ev.note.trim().length > 0);
+      if (!hasEvidence) {
+        const noteWrap = card.querySelector('.ga-evidence-note-wrap');
+        const noteToggle = card.querySelector('.ga-evidence-note-toggle');
+        if (noteWrap && !noteWrap.classList.contains('open')) {
+          noteWrap.classList.add('open');
+          if (noteToggle) {
+            noteToggle.classList.add('open');
+            const txt = noteToggle.querySelector('svg')?.nextSibling;
+            if (txt) txt.textContent = ' Toelichting';
+          }
+        }
+        evSection.classList.add('attention');
+        setTimeout(() => evSection.classList.remove('attention'), 1200);
+      }
+    }
 
     // Show warning if claimed but no evidence
     const ev = getEvidence(ctrl.id);
@@ -4717,6 +4887,51 @@ function setGaAnswer(key, value, btn) {
     const warn = document.getElementById('warn_' + ctrl.id.replace(/\./g, '_'));
     if (warn) warn.classList.toggle('active', anyClaimed && !hasEvidence);
   }
+
+  // Live module-progress refresh (huidige module)
+  if (currentModule) {
+    const { answered: a, total: t } = moduleStatus(currentModule);
+    const pct = t ? Math.round((a / t) * 100) : 0;
+    const ansEl = document.getElementById('gaModuleAnswered');
+    const fillEl = document.getElementById('gaModuleProgressFill');
+    const pctEl = document.getElementById('gaModuleProgressPct');
+    const navInfo = document.querySelector('.ga-nav-info');
+    if (ansEl) ansEl.textContent = a;
+    if (fillEl) fillEl.style.width = pct + '%';
+    if (pctEl) pctEl.textContent = pct + '%';
+    if (navInfo) navInfo.innerHTML = `Module <strong>${moduleLabel(currentModule)}</strong> — ${a}/${t} beoordeeld`;
+  }
+
+  // Toast: subtiele save-feedback (debounced)
+  scheduleSaveToast();
+}
+
+// Toast-helper — save-feedback in rechtsonder
+let _toastTimer = null;
+let _toastEl = null;
+function ensureToast() {
+  if (_toastEl) return _toastEl;
+  _toastEl = document.createElement('div');
+  _toastEl.className = 'ga-toast';
+  document.body.appendChild(_toastEl);
+  return _toastEl;
+}
+function showToast(message, opts = {}) {
+  const el = ensureToast();
+  const time = new Date().toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' });
+  el.classList.toggle('error', !!opts.error);
+  el.innerHTML = `
+    <svg viewBox="0 0 24 24"><polyline points="5 12 10 17 19 7"/></svg>
+    <span>${message}</span>
+    <span class="ga-toast-time">${time}</span>`;
+  el.classList.add('visible');
+  clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(() => el.classList.remove('visible'), opts.duration || 2200);
+}
+let _saveDebounce = null;
+function scheduleSaveToast() {
+  clearTimeout(_saveDebounce);
+  _saveDebounce = setTimeout(() => showToast('Opgeslagen'), 700);
 }
 
 // Save één gestructureerd veld + sync serialized note
@@ -4736,6 +4951,7 @@ function saveEvidenceField(ctrlId, field, value) {
   evidenceData[ctrlId].note = parts.join('\n');
 
   saveEvidenceData();
+  scheduleSaveToast();
 }
 
 function saveEvidenceNote(ctrlId, noteVal) {
@@ -4756,14 +4972,17 @@ function saveEvidenceNote(ctrlId, noteVal) {
 }
 
 async function nextModule() {
-  // Auto-save to Supabase
+  // Auto-save to Supabase (incl. sector voor server-side rapport-routing)
   try {
-    await sb.from('gap_analyse').upsert({
+    const payload = {
       user_id: user.id,
       answers: gapAnswers,
       updated_at: new Date().toISOString()
-    }, { onConflict: 'user_id' });
-  } catch(e) {}
+    };
+    if (userSector) payload.sector = userSector;
+    await sb.from('gap_analyse').upsert(payload, { onConflict: 'user_id' });
+    showToast('Module opgeslagen');
+  } catch(e) { showToast('Kon niet opslaan — probeer opnieuw', { error: true }); }
 
   // Find next incomplete module
   const currentIdx = categories.indexOf(currentModule);
@@ -4790,12 +5009,15 @@ async function nextModule() {
 async function saveGapAnalyse() {
   localStorage.setItem('annex27_gap_' + user.id, JSON.stringify(gapAnswers));
   try {
-    await sb.from('gap_analyse').upsert({
+    const payload = {
       user_id: user.id,
       answers: gapAnswers,
       updated_at: new Date().toISOString()
-    }, { onConflict: 'user_id' });
-  } catch(e) {}
+    };
+    if (userSector) payload.sector = userSector;
+    await sb.from('gap_analyse').upsert(payload, { onConflict: 'user_id' });
+    showToast('Opgeslagen');
+  } catch(e) { showToast('Kon niet opslaan — probeer opnieuw', { error: true }); }
 }
 
 // ── PDF RAPPORT GENERATOR ──
