@@ -386,6 +386,46 @@
     .client-status.in-review { background: rgba(13,148,136,0.12); color: var(--accent-light); }
     .client-status.reviewed { background: rgba(16,185,129,0.12); color: var(--success); }
     .client-status.in-progress { background: rgba(16,24,40,0.06); color: var(--text-muted); }
+
+    /* TEST-badge voor admin/auditor accounts in test-modus */
+    .client-item.is-test { border-left: 3px solid #D97706; padding-left: 17px; }
+    .client-test-badge {
+      position: absolute;
+      right: 16px;
+      top: 16px;
+      background: #D97706;
+      color: white;
+      font-size: 0.62rem;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 4px;
+      letter-spacing: 0.1em;
+      box-shadow: 0 1px 2px rgba(217,119,6,0.3);
+    }
+    .client-item.is-test .client-unread { right: 56px; }
+
+    /* Test-toggle knop in filter-bar */
+    .test-toggle-btn {
+      background: transparent;
+      border: 1px dashed rgba(217,119,6,0.4);
+      color: rgba(217,119,6,0.85);
+      padding: 4px 12px;
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 0.74rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      cursor: pointer;
+      margin-left: auto;
+      transition: all 0.15s;
+    }
+    .test-toggle-btn:hover { background: rgba(217,119,6,0.08); }
+    .test-toggle-btn.active {
+      background: rgba(217,119,6,0.12);
+      border-style: solid;
+      color: #B45309;
+    }
     .client-unread {
       position: absolute;
       right: 16px;
@@ -963,11 +1003,12 @@
       <button class="view-btn" data-view="leads">Aanvragen <span class="badge" id="leadsBadge">0</span></button>
       <button class="view-btn" data-view="settings">Instellingen</button>
     </div>
-    <div class="client-filters">
+    <div class="client-filters" style="display:flex;align-items:center;flex-wrap:wrap;gap:6px;">
       <button class="filter-btn active" data-filter="all">Alle</button>
       <button class="filter-btn" data-filter="review_requested">Te reviewen</button>
       <button class="filter-btn" data-filter="in_progress">In progress</button>
       <button class="filter-btn" data-filter="reviewed">Afgerond</button>
+      <button id="testAccountsToggle" class="test-toggle-btn" onclick="toggleTestAccounts()" title="Toon ook admin/auditor accounts (jouw eigen test-data) in de klantenlijst">Toon test-accounts</button>
     </div>
     <div class="client-list" id="clientList">
       <div class="empty-state">
@@ -1631,6 +1672,12 @@ async function startApp() {
   document.getElementById('loginScreen').style.display = 'none';
   document.getElementById('app').style.display = 'grid';
   await loadControls();
+  // Initialiseer test-toggle-knop label op basis van localStorage state
+  const testBtn = document.getElementById('testAccountsToggle');
+  if (testBtn && showTestAccounts) {
+    testBtn.classList.add('active');
+    testBtn.textContent = '✓ Test-accounts zichtbaar';
+  }
   await loadClientList();
   bindTabs();
   bindFilters();
@@ -3104,9 +3151,16 @@ function bindFilters() {
   });
 }
 
+// Toggle: in test-modus toont admin ook admin/auditor accounts (zoals jouw eigen test-account)
+const SHOW_TEST_ACCOUNTS_KEY = 'annex27_admin_show_test';
+let showTestAccounts = (function() {
+  try { return localStorage.getItem(SHOW_TEST_ACCOUNTS_KEY) === '1'; } catch(e) { return false; }
+})();
+
 async function loadClientList() {
   try {
-    const { data, error } = await sb.rpc('auditor_client_list');
+    const rpcName = showTestAccounts ? 'auditor_client_list_with_admins' : 'auditor_client_list';
+    const { data, error } = await sb.rpc(rpcName);
     if (error) {
       document.getElementById('clientList').innerHTML = `<div class="empty-state">Fout: ${esc(error.message)}<br><small>Heeft u de SQL in supabase-auditor-setup.sql al uitgevoerd?</small></div>`;
       return;
@@ -3117,6 +3171,17 @@ async function loadClientList() {
     console.error('loadClientList:', e);
     document.getElementById('clientList').innerHTML = `<div class="empty-state">Fout bij laden: ${esc(e.message)}</div>`;
   }
+}
+
+function toggleTestAccounts() {
+  showTestAccounts = !showTestAccounts;
+  try { localStorage.setItem(SHOW_TEST_ACCOUNTS_KEY, showTestAccounts ? '1' : '0'); } catch(e) {}
+  const btn = document.getElementById('testAccountsToggle');
+  if (btn) {
+    btn.classList.toggle('active', showTestAccounts);
+    btn.textContent = showTestAccounts ? '✓ Test-accounts zichtbaar' : 'Toon test-accounts';
+  }
+  loadClientList();
 }
 
 function renderClientList() {
@@ -3141,8 +3206,9 @@ function renderClientList() {
       'reviewed': 'Afgerond',
       'deleted': 'Verwijderd'
     }[c.status] || 'In progress';
-    return `<div class="client-item" onclick="selectClient('${esc(c.user_id)}')" data-id="${esc(c.user_id)}">
+    return `<div class="client-item${c.is_test ? ' is-test' : ''}" onclick="selectClient('${esc(c.user_id)}')" data-id="${esc(c.user_id)}">
       ${c.unread_messages > 0 ? `<span class="client-unread">${c.unread_messages}</span>` : ''}
+      ${c.is_test ? '<span class="client-test-badge" title="Admin/auditor-account in test-modus — niet zichtbaar in productie">TEST</span>' : ''}
       <div class="client-head">
         <div class="client-name">${esc(c.bedrijf || c.naam || c.email)}</div>
       </div>
