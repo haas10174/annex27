@@ -231,7 +231,17 @@
       margin-bottom: 16px;
     }
     .cat-row:last-child { margin-bottom: 0; }
+    .cat-row.dim { opacity: 0.55; }
     .cat-name { width: 120px; font-size: 0.82rem; color: var(--text-secondary); font-weight: 500; }
+    .cat-assessed {
+      width: 56px;
+      font-size: 0.74rem;
+      color: var(--text-muted);
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
     .cat-bar {
       flex: 1;
       height: 8px;
@@ -1342,54 +1352,61 @@
       vertical-align: middle;
     }
 
-    /* Sector-banner — bovenaan gap-analyse om context te geven */
+    /* Sector-banner — bovenaan gap-analyse om context te geven (light theme) */
     .ga-sector-banner {
       display: flex;
       gap: 16px;
-      align-items: center;
-      background: linear-gradient(135deg, rgba(13,148,136,0.10), rgba(13,148,136,0.03));
-      border: 1px solid rgba(13,148,136,0.28);
-      border-radius: 14px;
-      padding: 18px 22px;
+      align-items: flex-start;
+      background: linear-gradient(135deg, rgba(13,148,136,0.08), rgba(13,148,136,0.02));
+      border: 1px solid rgba(13,148,136,0.25);
+      border-left: 4px solid var(--accent);
+      border-radius: 12px;
+      padding: 20px 24px;
       margin: 24px 0 20px;
     }
     .ga-sector-banner.zorg {
-      background: linear-gradient(135deg, rgba(4,120,87,0.14), rgba(249,115,22,0.06));
-      border-color: rgba(4,120,87,0.35);
+      background: linear-gradient(135deg, rgba(4,120,87,0.10), rgba(249,115,22,0.05));
+      border-color: rgba(4,120,87,0.28);
+      border-left-color: #047857;
     }
     .ga-sector-banner-icon {
       flex-shrink: 0;
-      width: 42px; height: 42px;
+      width: 44px; height: 44px;
       border-radius: 10px;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.06);
+      background: rgba(13,148,136,0.10);
+      border: 1px solid rgba(13,148,136,0.22);
       display: flex; align-items: center; justify-content: center;
       color: var(--accent);
     }
-    .ga-sector-banner.zorg .ga-sector-banner-icon { color: #6EE7B7; }
+    .ga-sector-banner.zorg .ga-sector-banner-icon {
+      color: #047857;
+      background: rgba(4,120,87,0.10);
+      border-color: rgba(4,120,87,0.22);
+    }
     .ga-sector-banner-icon svg { width: 22px; height: 22px; }
-    .ga-sector-banner-body { flex: 1; min-width: 0; }
+    .ga-sector-banner-body { flex: 1; min-width: 0; padding-top: 2px; }
     .ga-sector-banner-eyebrow {
-      font-size: 0.66rem;
+      font-size: 0.7rem;
       font-weight: 700;
       letter-spacing: 0.14em;
       text-transform: uppercase;
       color: var(--accent);
-      margin-bottom: 4px;
-    }
-    .ga-sector-banner.zorg .ga-sector-banner-eyebrow { color: #6EE7B7; }
-    .ga-sector-banner-title {
-      font-family: 'Sora', sans-serif;
-      font-size: 1.02rem;
-      font-weight: 700;
-      color: white;
-      letter-spacing: -0.01em;
       margin-bottom: 6px;
     }
+    .ga-sector-banner.zorg .ga-sector-banner-eyebrow { color: #047857; }
+    .ga-sector-banner-title {
+      font-family: 'Sora', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: -0.01em;
+      margin-bottom: 6px;
+      line-height: 1.35;
+    }
     .ga-sector-banner-sub {
-      font-size: 0.86rem;
-      color: rgba(255,255,255,0.6);
-      line-height: 1.55;
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
     }
 
     /* Auto-expand evidence highlight bij hoge claim */
@@ -3215,9 +3232,10 @@ function renderDashboard() {
     if (saved) { try { gapAnswers = JSON.parse(saved); } catch(e) {} }
   }
 
-  // Calculate per-category: maturity score (compliance %) + assessed count
+  // Per categorie: maturity score gewogen over ALLE controls (onbeantwoord = 0).
+  // catData.maxAll = alle vragen × 4 (volledige scope); cat.max-answered = alleen beantwoorde × 4.
   const catData = {};
-  categories.forEach(c => { catData[c] = { total: 0, assessed: 0, score: 0, max: 0 }; });
+  categories.forEach(c => { catData[c] = { total: 0, assessed: 0, score: 0, maxAll: 0, maxAnswered: 0 }; });
 
   controls.forEach(ctrl => {
     const cat = catData[ctrl.cat];
@@ -3231,9 +3249,10 @@ function renderDashboard() {
 
     qs.forEach((_, qi) => {
       const val = gapAnswers[ctrl.id + '_' + qi];
+      cat.maxAll += 4; // volledige scope telt mee
       if (val !== undefined && val !== 'nvt') {
         cat.score += parseInt(val);
-        cat.max += 4;
+        cat.maxAnswered += 4;
       }
     });
   });
@@ -3242,43 +3261,60 @@ function renderDashboard() {
   const totalAll = Object.values(catData).reduce((s, c) => s + c.total, 0);
   const totalAssessed = Object.values(catData).reduce((s, c) => s + c.assessed, 0);
   const totalScore = Object.values(catData).reduce((s, c) => s + c.score, 0);
-  const totalMax = Object.values(catData).reduce((s, c) => s + c.max, 0);
+  const totalMaxAll = Object.values(catData).reduce((s, c) => s + c.maxAll, 0);
+  const totalMaxAnswered = Object.values(catData).reduce((s, c) => s + c.maxAnswered, 0);
 
-  // Compliance % = maturity score (not just count of assessed)
-  const pct = totalMax > 0 ? Math.round((totalScore / totalMax) * 100) : 0;
+  // Hoofdgetal = compliance over volledige scope (onbeantwoord telt 0)
+  const pct = totalMaxAll > 0 ? Math.round((totalScore / totalMaxAll) * 100) : 0;
+  // Sub-getal = volwassenheid van wat WEL beoordeeld is (eerlijke "kwaliteit")
+  const maturityPct = totalMaxAnswered > 0 ? Math.round((totalScore / totalMaxAnswered) * 100) : 0;
+  const completionPct = totalAll > 0 ? Math.round((totalAssessed / totalAll) * 100) : 0;
 
   // Ring
   const circ = 2 * Math.PI * 72;
   const offset = circ - (pct / 100) * circ;
-  document.getElementById('dashRingFill').style.strokeDashoffset = offset;
+  const ringFill = document.getElementById('dashRingFill');
+  if (ringFill) {
+    ringFill.style.strokeDashoffset = offset;
+    // Dimmen wanneer < 25% beoordeeld — score is dan niet representatief
+    ringFill.style.opacity = (completionPct < 25 && totalAssessed > 0) ? '0.55' : '1';
+  }
   document.getElementById('dashPct').textContent = pct + '%';
-  document.getElementById('dashScoreSub').textContent = totalAssessed === 0
-    ? 'Start de gap-analyse om uw score te zien'
-    : `${totalAssessed} van ${totalAll} controls beoordeeld`;
+  const subEl = document.getElementById('dashScoreSub');
+  if (subEl) {
+    if (totalAssessed === 0) {
+      subEl.textContent = 'Start de gap-analyse om uw score te zien';
+    } else if (completionPct < 100) {
+      subEl.innerHTML = `<strong>${totalAssessed}/${totalAll}</strong> beoordeeld &middot; <span style="opacity:0.7">voorlopige score &mdash; volwassenheid bij beoordeelde controls: ${maturityPct}%</span>`;
+    } else {
+      subEl.innerHTML = `Alle ${totalAll} controls beoordeeld &middot; volwassenheid: ${maturityPct}%`;
+    }
+  }
 
-  // Category bars — based on maturity score per category
+  // Category bars — gewogen over alle controls per categorie
   let html = '';
   categories.forEach(cat => {
     const c = catData[cat];
-    const catPct = c.max > 0 ? Math.round((c.score / c.max) * 100) : 0;
+    const catPct = c.maxAll > 0 ? Math.round((c.score / c.maxAll) * 100) : 0;
+    const catCompletion = c.total > 0 ? Math.round((c.assessed / c.total) * 100) : 0;
     const level = catPct <= 33 ? 'low' : catPct <= 66 ? 'mid' : 'high';
-    const assessedLabel = c.total > 0 ? ` (${c.assessed}/${c.total})` : '';
-    html += `<div class="cat-row">
+    const dimCls = (c.assessed === 0) ? ' dim' : '';
+    html += `<div class="cat-row${dimCls}">
       <div class="cat-name">${cat}</div>
+      <div class="cat-assessed">${c.assessed}/${c.total}</div>
       <div class="cat-bar"><div class="cat-bar-fill ${level}" style="width:${catPct}%"></div></div>
       <div class="cat-pct ${level}">${catPct}%</div>
     </div>`;
   });
   document.getElementById('dashCats').innerHTML = html;
 
-  // Sector benchmark comparison
-  if (userSector && sectorProfiles[userSector]) {
+  // Sector benchmark — alleen tonen als je voldoende voortgang hebt (>=25%) anders niet representatief
+  if (userSector && sectorProfiles[userSector] && completionPct >= 25) {
     const profile = sectorProfiles[userSector];
-    const benchEl = document.getElementById('dashScoreSub');
-    if (pct > 0) {
+    if (pct > 0 && subEl) {
       const diff = pct - profile.benchmark;
       const comparison = diff > 0 ? `${diff}% boven` : diff < 0 ? `${Math.abs(diff)}% onder` : 'gelijk aan';
-      benchEl.textContent = `${totalDone} van ${totalAll} controls — ${comparison} ${profile.label} gemiddelde (${profile.benchmark}%)`;
+      subEl.innerHTML = `<strong>${totalAssessed}/${totalAll}</strong> beoordeeld &middot; ${comparison} ${esc(profile.label)} gemiddelde (${profile.benchmark}%)`;
     }
   }
 
