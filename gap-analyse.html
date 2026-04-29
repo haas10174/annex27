@@ -1316,6 +1316,330 @@
     @media (max-width: 900px) {
       .sector-insights { grid-template-columns: 1fr; }
     }
+
+    /* ════════════════════════════════════════════════════════════════
+       RESULTS REDESIGN — Editorial Report Style
+       Vervangt het dashboard-look met een magazine/report-cover voelend
+       ontwerp. Kleuren wisselen per sector via --sector-* CSS-variabelen
+       die in JS (applySectorTheme) worden gezet.
+       ════════════════════════════════════════════════════════════════ */
+    #screenResults {
+      background:
+        radial-gradient(circle at 88% -10%, var(--sector-glow, rgba(20,184,166,0.18)) 0%, transparent 55%),
+        radial-gradient(circle at -5% 110%, rgba(217,119,6,0.10) 0%, transparent 50%),
+        linear-gradient(180deg, #0B0E14 0%, #0E1218 60%, #11161F 100%);
+    }
+    #screenResults::before { display: none; }
+    #screenResults .results-topbar {
+      padding: 22px 5%;
+      border-bottom-color: rgba(255,255,255,0.04);
+    }
+    #screenResults .results-topbar > span {
+      font-size: 0.74rem !important;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.42) !important;
+    }
+    #screenResults .results-body {
+      max-width: 1080px;
+      padding: 64px 5% 72px;
+    }
+    #screenResults .results-header {
+      text-align: left;
+      margin-bottom: 56px;
+      max-width: 720px;
+    }
+    #screenResults .results-sector-badge {
+      display: inline-flex !important;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--sector-accent, rgba(94,234,212,0.4));
+      color: var(--sector-accent, #5EEAD4) !important;
+      padding: 6px 14px !important;
+      border-radius: 99px;
+      font-size: 0.7rem !important;
+      font-weight: 700 !important;
+      letter-spacing: 0.16em !important;
+      text-transform: uppercase;
+      margin-bottom: 22px;
+    }
+    #screenResults .results-header h2 {
+      font-family: 'Sora', sans-serif;
+      font-size: clamp(2.4rem, 5.6vw, 4.4rem) !important;
+      font-weight: 800 !important;
+      line-height: 0.98 !important;
+      letter-spacing: -0.035em !important;
+      color: white !important;
+      margin-bottom: 16px !important;
+    }
+    #screenResults .results-header h2 span {
+      background: linear-gradient(120deg, var(--sector-accent, #5EEAD4) 0%, white 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    #screenResults .results-header p {
+      font-size: 1.06rem !important;
+      color: rgba(255,255,255,0.6) !important;
+      line-height: 1.6;
+      max-width: 600px;
+    }
+
+    /* Score-strip — compacte horizontale presentatie ipv ring + bars */
+    #screenResults .results-grid {
+      grid-template-columns: 1fr !important;
+      gap: 0 !important;
+      margin-bottom: 56px !important;
+    }
+    #screenResults .big-ring-wrap {
+      position: static !important;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      grid-template-rows: auto auto;
+      gap: 6px 36px;
+      align-items: center;
+      padding: 36px 38px;
+      background: rgba(255,255,255,0.025);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 22px;
+      margin-bottom: 32px;
+      position: relative;
+      overflow: hidden;
+    }
+    #screenResults .big-ring { grid-row: 1 / span 2; align-self: center; }
+    #screenResults .big-ring-verdict { align-self: end; }
+    #screenResults .big-ring-compare { align-self: start; margin-top: 0 !important; }
+    #screenResults .big-ring-wrap::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 22px;
+      padding: 1px;
+      background: linear-gradient(135deg, var(--sector-accent, rgba(94,234,212,0.3)) 0%, transparent 50%);
+      -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+    }
+    #screenResults .big-ring { width: 168px !important; height: 168px !important; flex-shrink: 0; }
+    #screenResults .big-ring svg { width: 168px !important; height: 168px !important; }
+    #screenResults .big-ring-pct {
+      font-size: 3.2rem !important;
+      font-family: 'Sora', sans-serif;
+      letter-spacing: -0.04em !important;
+    }
+    #screenResults .big-ring-label {
+      font-size: 0.66rem !important;
+      letter-spacing: 0.18em !important;
+      color: rgba(255,255,255,0.5) !important;
+    }
+    #screenResults .big-ring-verdict {
+      display: inline-block !important;
+      margin-top: 14px !important;
+      padding: 7px 14px !important;
+      font-size: 0.74rem !important;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      font-weight: 700 !important;
+      border-radius: 99px !important;
+    }
+    #screenResults .big-ring-compare {
+      text-align: left !important;
+      font-size: 0.84rem !important;
+      color: rgba(255,255,255,0.5) !important;
+      margin-top: 12px !important;
+    }
+    #screenResults .big-ring-compare strong { color: white !important; font-weight: 700 !important; }
+
+    /* Categorie-tiles — grid 3x2 ipv lange balken */
+    #screenResults .results-cats {
+      display: grid !important;
+      grid-template-columns: repeat(3, 1fr) !important;
+      gap: 14px !important;
+    }
+    #screenResults .result-cat {
+      background: rgba(255,255,255,0.02) !important;
+      border: 1px solid rgba(255,255,255,0.06) !important;
+      border-radius: 14px !important;
+      padding: 18px 18px 16px !important;
+      transition: border-color 0.25s, background 0.25s !important;
+      transform: none !important;
+    }
+    #screenResults .result-cat:hover {
+      border-color: var(--sector-accent, rgba(94,234,212,0.3)) !important;
+      background: rgba(255,255,255,0.035) !important;
+      transform: translateY(-2px) !important;
+    }
+    #screenResults .result-cat-header {
+      flex-direction: column;
+      align-items: flex-start !important;
+      gap: 4px;
+      margin-bottom: 14px !important;
+    }
+    #screenResults .result-cat-name {
+      font-size: 0.74rem !important;
+      font-weight: 700 !important;
+      letter-spacing: 0.05em;
+      color: rgba(255,255,255,0.55) !important;
+      text-transform: uppercase;
+    }
+    #screenResults .result-cat-pct {
+      font-family: 'Sora', sans-serif;
+      font-size: 1.85rem !important;
+      font-weight: 800 !important;
+      letter-spacing: -0.03em;
+      line-height: 1 !important;
+    }
+    #screenResults .result-cat-bar { height: 4px !important; margin-bottom: 12px !important; }
+    #screenResults .result-cat-tip {
+      font-size: 0.78rem !important;
+      line-height: 1.55 !important;
+      color: rgba(255,255,255,0.55) !important;
+    }
+
+    /* NIS2-callout — meer editorial */
+    #screenResults .nis2-result {
+      background: linear-gradient(135deg, rgba(217,119,6,0.10), rgba(217,119,6,0.04)) !important;
+      border: 1px solid rgba(217,119,6,0.22) !important;
+      padding: 22px 26px !important;
+      border-radius: 14px !important;
+      margin-top: 14px !important;
+    }
+    #screenResults .nis2-result-title {
+      font-family: 'Sora', sans-serif;
+      font-size: 0.95rem !important;
+      letter-spacing: -0.01em;
+    }
+
+    /* Sector insights — compactere editorial cards */
+    #screenResults .sector-insights {
+      grid-template-columns: 1.2fr 1fr !important;
+      gap: 14px !important;
+      margin-top: 32px !important;
+    }
+    #screenResults .sector-insight-card {
+      background: rgba(255,255,255,0.02) !important;
+      border: 1px solid rgba(255,255,255,0.06) !important;
+      border-radius: 14px !important;
+      padding: 24px 26px !important;
+    }
+    #screenResults .sector-insight-card h4 {
+      font-family: 'Sora', sans-serif;
+      font-size: 0.74rem !important;
+      letter-spacing: 0.16em !important;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.5) !important;
+      font-weight: 700 !important;
+      margin-bottom: 16px !important;
+      padding-bottom: 14px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    #screenResults .sector-insight-card ul li {
+      padding-left: 18px;
+      position: relative;
+      margin-bottom: 10px !important;
+      font-size: 0.88rem !important;
+      line-height: 1.55 !important;
+      color: rgba(255,255,255,0.78) !important;
+    }
+    #screenResults .sector-insight-card ul li::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 9px;
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--sector-accent, #5EEAD4);
+    }
+    #screenResults .soa-preview {
+      background: linear-gradient(165deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%) !important;
+    }
+    #screenResults .soa-stat-num {
+      font-family: 'Sora', sans-serif;
+      font-size: 3rem !important;
+      background: linear-gradient(120deg, white, var(--sector-accent, #5EEAD4));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -0.04em !important;
+    }
+    #screenResults .framework-badges {
+      gap: 6px !important;
+    }
+    #screenResults .framework-badge {
+      font-size: 0.7rem !important;
+      padding: 5px 11px !important;
+      border-radius: 99px !important;
+      background: rgba(255,255,255,0.05) !important;
+      border: 1px solid rgba(255,255,255,0.08) !important;
+      color: rgba(255,255,255,0.7) !important;
+    }
+
+    /* Upsell-block — laat 'm prominent voelen als "next chapter" */
+    #screenResults .upsell-block {
+      margin-top: 36px !important;
+      padding: 40px 44px !important;
+      background:
+        radial-gradient(circle at 95% 0%, var(--sector-glow, rgba(20,184,166,0.22)) 0%, transparent 55%),
+        linear-gradient(160deg, rgba(255,255,255,0.045) 0%, rgba(255,255,255,0.015) 60%, rgba(255,255,255,0.025) 100%) !important;
+      border: 1px solid rgba(255,255,255,0.10) !important;
+      border-radius: 24px !important;
+    }
+    #screenResults .upsell-block::before,
+    #screenResults .upsell-block::after { display: none !important; }
+    #screenResults .upsell-eyebrow {
+      color: var(--sector-accent, #5EEAD4) !important;
+      font-size: 0.68rem !important;
+      letter-spacing: 0.18em !important;
+    }
+    #screenResults .upsell-title {
+      font-size: clamp(1.4rem, 2.4vw, 1.85rem) !important;
+      letter-spacing: -0.025em !important;
+      line-height: 1.15 !important;
+    }
+    #screenResults .upsell-right {
+      background: rgba(0,0,0,0.32) !important;
+      border-color: rgba(255,255,255,0.10) !important;
+      border-radius: 14px !important;
+    }
+    #screenResults .upsell-price {
+      font-size: 2.6rem !important;
+      letter-spacing: -0.04em !important;
+    }
+
+    /* Lead capture — minder dominant, meer "snippet" */
+    #screenResults .lead-capture {
+      background: rgba(255,255,255,0.02) !important;
+      padding: 32px 36px !important;
+      border-radius: 16px !important;
+      border-color: rgba(255,255,255,0.06) !important;
+      margin-top: 14px !important;
+    }
+    #screenResults .lead-capture::before { height: 2px !important; }
+    #screenResults .lead-capture h3 {
+      font-family: 'Sora', sans-serif;
+      font-size: 1.05rem !important;
+      letter-spacing: -0.01em !important;
+    }
+    #screenResults .lead-capture p {
+      font-size: 0.86rem !important;
+      color: rgba(255,255,255,0.5) !important;
+      margin-bottom: 18px !important;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      #screenResults .big-ring-wrap { grid-template-columns: 1fr !important; text-align: center; padding: 28px !important; }
+      #screenResults .big-ring { margin: 0 auto !important; }
+      #screenResults .big-ring-compare { text-align: center !important; }
+      #screenResults .results-cats { grid-template-columns: repeat(2, 1fr) !important; }
+      #screenResults .sector-insights { grid-template-columns: 1fr !important; }
+    }
+    @media (max-width: 600px) {
+      #screenResults .results-cats { grid-template-columns: 1fr !important; }
+      #screenResults .results-header h2 { font-size: 2.2rem !important; }
+      #screenResults .upsell-block { padding: 26px !important; }
+    }
   </style>
 </head>
 <body>
