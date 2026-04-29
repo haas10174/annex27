@@ -1145,15 +1145,13 @@
           <h1 class="main-title" id="clientTitle">&nbsp;</h1>
           <div class="main-subtitle" id="clientInfo">&nbsp;</div>
         </div>
-        <div class="main-actions">
+        <div class="main-actions" id="mainActions">
           <button class="action-btn" onclick="refreshClient()">
             <svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-6.2-8.55"/><polyline points="21 3 21 9 15 9"/></svg>
             Vernieuwen
           </button>
-          <button class="action-btn primary" id="markReviewedBtn" onclick="markReviewed()">
-            <svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>
-            Markeer als afgerond
-          </button>
+          <!-- Conditionele acties worden ge-render door renderClientActions() in selectClient() -->
+          <span id="conditionalActions" style="display:contents;"></span>
         </div>
       </div>
 
@@ -3264,6 +3262,8 @@ async function selectClient(userId) {
   if (typeof updateEvidenceFileCount === 'function') updateEvidenceFileCount(userId);
   // Status-pipeline visualiseren
   if (typeof renderClientPipeline === 'function') renderClientPipeline();
+  // Conditionele actie-knoppen op basis van klant-status
+  if (typeof renderClientActions === 'function') renderClientActions();
   // Pre-fetch invoice count voor tab-badge (laad hele tabel pas als tab geopend)
   sb.from('invoices').select('id', { count: 'exact', head: true }).eq('user_id', userId).then(({ count }) => {
     const el = document.getElementById('invoiceCount');
@@ -3592,6 +3592,144 @@ async function downloadAllEvidence() {
     setLabel('Download alles als ZIP');
   } finally {
     if (btn) btn.disabled = false;
+  }
+}
+
+// ── Conditionele actie-knoppen op klant-detail header ──
+async function renderClientActions() {
+  const cont = document.getElementById('conditionalActions');
+  if (!cont || !currentClient) return;
+  const userId = currentClient.user_id;
+
+  // Haal status van order, assessment en draft parallel
+  const [orderRes, asmRes, draftRes] = await Promise.all([
+    sb.from('orders').select('id, status, confirmed_at, archived_at, plan, naam, bedrijf').eq('user_id', userId).order('created_at', { ascending: false }).limit(1).maybeSingle(),
+    sb.from('assessments').select('status_detail, deleted_at').eq('user_id', userId).maybeSingle(),
+    sb.from('report_drafts').select('id, status, released_at').eq('user_id', userId).order('generated_at', { ascending: false }).limit(1).maybeSingle()
+  ]);
+  const order = orderRes?.data;
+  const asm = asmRes?.data;
+  const draft = draftRes?.data;
+
+  let html = '';
+
+  // Bevestig order — als laatste order paid + niet bevestigd
+  if (order && order.status === 'paid' && !order.confirmed_at) {
+    const label = (order.bedrijf || order.naam || order.plan || 'order');
+    html += `<button class="action-btn" style="background:rgba(217,119,6,0.10);color:#B45309;border-color:rgba(217,119,6,0.4);" onclick="confirmOrder('${esc(order.id)}','${esc(label)}')">
+      <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+      Bevestig order
+    </button>`;
+  }
+
+  // Request review (admin → klant) — als status nog 'in_progress'
+  if (asm?.status_detail === 'in_progress' || !asm?.status_detail) {
+    html += `<button class="action-btn" onclick="requestReviewFromAdmin()" title="Vraag de klant om de gap-analyse af te ronden voor uw review">
+      <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      Verzoek review
+    </button>`;
+  }
+
+  // Mark reviewed — als status review_requested of in_review
+  if (asm?.status_detail === 'review_requested' || asm?.status_detail === 'in_review') {
+    html += `<button class="action-btn primary" id="markReviewedBtn" onclick="markReviewed()">
+      <svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>
+      Markeer afgerond
+    </button>`;
+  }
+
+  // Release rapport — als draft bestaat + niet released
+  if (draft && draft.id && !draft.released_at) {
+    html += `<button class="action-btn" style="background:rgba(13,148,136,0.10);color:var(--accent-light);border-color:rgba(13,148,136,0.4);" onclick="releaseDraft()" title="Geef de AI-draft vrij aan de klant">
+      <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      Release rapport
+    </button>`;
+  }
+
+  // Archiveer — als reviewed
+  if (asm?.status_detail === 'reviewed' && !asm.deleted_at && !order?.archived_at) {
+    html += `<button class="action-btn" onclick="archiveClient()" title="Markeer klant als gearchiveerd — niet zichtbaar in actieve filters">
+      <svg viewBox="0 0 24 24"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+      Archiveer
+    </button>`;
+  }
+
+  // Verwijder — alleen voor test-accounts (extra confirm vereist)
+  if (currentClient.is_test) {
+    html += `<button class="action-btn" style="color:var(--danger);border-color:rgba(220,38,38,0.3);" onclick="deleteTestClient()" title="Verwijder test-data: gap-antwoorden + bevindingen + bewijsvoering. Alleen voor test-accounts.">
+      <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-2 14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2L5 6"/></svg>
+      Wis testdata
+    </button>`;
+  }
+
+  cont.innerHTML = html;
+}
+
+// Verzoek-review — admin pingt klant om gap af te ronden
+async function requestReviewFromAdmin() {
+  if (!currentClient) return;
+  if (!confirm('Klant verzoeken om gap-analyse af te ronden voor review?\n\nBericht wordt naar klant-thread gestuurd.')) return;
+  try {
+    await sb.from('messages').insert({
+      thread_id: currentClient.user_id,
+      user_id: currentClient.user_id,
+      sender_role: 'auditor',
+      subject: 'Verzoek: rond uw gap-analyse af',
+      body: 'Beste,\n\nIk ben klaar om uw self-assessment te reviewen. Kunt u de openstaande controls nog beoordelen en eventuele bewijsvoering uploaden?\n\nZodra u klikt op "Indienen voor Lead Auditor review" pak ik het op.\n\nMet vriendelijke groet,\nRaoul Haas\nLead Auditor — DNV/IRCA'
+    });
+    adminToast('Verzoek verstuurd naar klant');
+    refreshClient();
+  } catch (e) {
+    adminToast('Verzoek mislukt: ' + (e.message || 'onbekend'), { error: true });
+  }
+}
+
+// Archiveer klant — markeert assessment + laatste order als archived
+async function archiveClient() {
+  if (!currentClient) return;
+  if (!confirm(`Klant "${currentClient.bedrijf || currentClient.naam}" archiveren?\n\nVerschijnt niet meer in actieve filters. Data blijft bewaard.`)) return;
+  try {
+    await sb.from('assessments').update({ deleted_at: new Date().toISOString() }).eq('user_id', currentClient.user_id);
+    await sb.from('orders').update({ archived_at: new Date().toISOString() }).eq('user_id', currentClient.user_id).eq('status', 'paid').is('archived_at', null);
+    adminToast('Klant gearchiveerd');
+    await loadClientList();
+  } catch (e) {
+    adminToast('Archiveren mislukt: ' + (e.message || 'onbekend'), { error: true });
+  }
+}
+
+// Verwijder test-data — alleen voor admin/auditor accounts (is_test=true)
+async function deleteTestClient() {
+  if (!currentClient || !currentClient.is_test) return;
+  if (!confirm(`TESTDATA WISSEN voor "${currentClient.email}"?\n\nVerwijdert: gap-antwoorden, bewijsvoering files (Storage), bevindingen, drafts, berichten van laatste 24u, assessment.\n\nDe USER ZELF blijft bestaan. Niet ongedaan te maken.`)) return;
+  if (!confirm('LAATSTE WAARSCHUWING — typ in je hoofd "ja" en klik OK om door te gaan')) return;
+  try {
+    const uid = currentClient.user_id;
+    // 1. Wis gap_analyse + auditor_findings + report_drafts + assessments
+    await sb.from('gap_analyse').delete().eq('user_id', uid);
+    await sb.from('auditor_findings').delete().eq('user_id', uid);
+    await sb.from('report_drafts').delete().eq('user_id', uid);
+    await sb.from('assessments').delete().eq('user_id', uid);
+    // 2. Wis recente berichten (laatste 24u, alleen test-data)
+    const since = new Date(Date.now() - 24*60*60*1000).toISOString();
+    await sb.from('messages').delete().eq('user_id', uid).gt('created_at', since);
+    // 3. Wis storage files (recursief per control-folder)
+    const { data: folders } = await sb.storage.from('evidence').list(uid, { limit: 1000 });
+    if (folders && folders.length) {
+      for (const folder of folders) {
+        if (folder.name) {
+          const { data: subFiles } = await sb.storage.from('evidence').list(`${uid}/${folder.name}`, { limit: 1000 });
+          if (subFiles && subFiles.length) {
+            const paths = subFiles.map(f => `${uid}/${folder.name}/${f.name}`);
+            await sb.storage.from('evidence').remove(paths);
+          }
+        }
+      }
+    }
+    adminToast('Testdata gewist — herlaad voor verse start', { duration: 4000 });
+    setTimeout(() => loadClientList(), 800);
+  } catch (e) {
+    adminToast('Wissen deels mislukt: ' + (e.message || 'onbekend'), { error: true, duration: 6000 });
   }
 }
 
