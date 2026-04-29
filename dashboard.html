@@ -1666,6 +1666,19 @@
       transition: background 0.15s;
     }
     .admin-test-bar .atb-reset:hover { background: rgba(220,38,38,0.14); }
+    .admin-test-bar .atb-fill {
+      background: rgba(13,148,136,0.10);
+      color: var(--accent);
+      border: 1px solid rgba(13,148,136,0.30);
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .admin-test-bar .atb-fill:hover { background: rgba(13,148,136,0.18); }
     .admin-test-bar .atb-admin {
       margin-left: auto;
       color: var(--accent);
@@ -2595,6 +2608,7 @@
           <option value="bouw">Bouw &amp; Techniek</option>
           <option value="overig">Scale-up / Overig</option>
         </select>
+        <button class="atb-fill" onclick="adminFillAllPlanned()" title="Vul alle gap-vragen automatisch met &quot;Gepland&quot; — handig om snel een rapport-preview te draaien">Vul alles met Gepland</button>
         <button class="atb-reset" onclick="adminResetGap()" title="Wist alle antwoorden + bewijsvoering voor verse test">Reset gap</button>
         <a class="atb-admin" href="/admin">Admin →</a>
       </div>
@@ -3316,6 +3330,41 @@ async function adminResetGap() {
   } catch (e) {
     console.error(e);
     if (typeof showToast === 'function') showToast('Reset deels mislukt — zie console', { error: true });
+  }
+}
+
+// Vul automatisch alle gap-vragen met "Gepland" (score 1) — alleen voor admin/auditor.
+// Doel: snelle rapportage-preview zonder 100+ vragen handmatig in te vullen.
+async function adminFillAllPlanned() {
+  if (!isAdminUser()) return;
+  if (!confirm('Alle gap-vragen vullen met "Gepland"?\n\nBestaande antwoorden worden overschreven. Bewijsvoering blijft staan.\n\n(Score wordt overal "Gepland" = 1/4 — laag, maar bedoeld voor preview.)')) return;
+
+  // mergeGapQuestions() heeft gapQuestions al gevuld (basis + sector-deep). Werk daarop.
+  if (typeof gapQuestions !== 'object' || !Object.keys(gapQuestions).length) {
+    if (typeof showToast === 'function') showToast('Gap-vragen nog niet geladen — open eerst de gap-analyse', { error: true, duration: 5000 });
+    return;
+  }
+
+  let total = 0;
+  Object.keys(gapQuestions).forEach(ctrlId => {
+    const qs = gapQuestions[ctrlId] || [];
+    qs.forEach((_, qi) => {
+      gapAnswers[ctrlId + '_' + qi] = '1'; // 'Gepland'
+      total++;
+    });
+  });
+
+  // Persist naar localStorage + Supabase
+  try {
+    localStorage.setItem('annex27_gap_' + user.id, JSON.stringify(gapAnswers));
+    const payload = { user_id: user.id, answers: gapAnswers, updated_at: new Date().toISOString() };
+    if (userSector) payload.sector = userSector;
+    await sb.from('gap_analyse').upsert(payload, { onConflict: 'user_id' });
+    if (typeof showToast === 'function') showToast(`${total} vragen gevuld met "Gepland" — herlaad voor rapport-preview`, { duration: 4000 });
+    setTimeout(() => location.reload(), 800);
+  } catch (e) {
+    console.error('adminFillAllPlanned', e);
+    if (typeof showToast === 'function') showToast('Vullen mislukt — zie console', { error: true });
   }
 }
 
