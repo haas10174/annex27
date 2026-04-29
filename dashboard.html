@@ -3448,14 +3448,32 @@ async function adminFillFromMode(mode) {
       const anyClaim = qs.some((_, qi) => ['2','3','4'].includes(gapAnswers[ctrlId + '_' + qi]));
       if (anyClaim) {
         evidenceData[ctrlId] = evidenceData[ctrlId] || { files: [], note: '', note_fields: {} };
+        // Per control een passende dummy-document set, gekozen op control-categorie
+        const isPolicy   = /^(C\.|A\.5\.[1-9]|A\.5\.31|A\.5\.32|A\.5\.36|A\.5\.37)/.test(ctrlId);
+        const isPersonal = /^A\.6\./.test(ctrlId);
+        const isPhysical = /^A\.7\./.test(ctrlId);
+        const isTech     = /^A\.8\./.test(ctrlId);
+        const docMap = {
+          policy:   { primary: 'beleid_v2.1.pdf',     extra: 'goedkeuring_directie.pdf' },
+          personal: { primary: 'awareness_training_2025.pdf', extra: 'trainingsregister.xlsx' },
+          physical: { primary: 'plattegrond_zones.pdf', extra: 'badge-log_april.csv' },
+          tech:     { primary: 'config_export.json', extra: 'security_scan_rapport.pdf' }
+        };
+        const docs = isPolicy ? docMap.policy : isPersonal ? docMap.personal : isPhysical ? docMap.physical : isTech ? docMap.tech : docMap.policy;
+        const safeId = ctrlId.replace(/\./g, '_');
+        const baseDate = Date.now() - (hash(ctrlId) % 240) * 86400000;
+        // Twee mock-files toevoegen — mock://path zorgt dat download niet faalt zonder echte storage; rapport laat alleen filename + size zien.
+        evidenceData[ctrlId].files = [
+          { name: `${safeId}_${docs.primary}`,  size: 240000 + (hash(ctrlId+'a') % 800000), type: docs.primary.endsWith('.pdf') ? 'application/pdf' : 'application/octet-stream', date: new Date(baseDate).toISOString(), path: `mock://${safeId}/${docs.primary}` },
+          { name: `${safeId}_${docs.extra}`,    size: 45000 + (hash(ctrlId+'b') % 200000),  type: docs.extra.endsWith('.csv') ? 'text/csv' : (docs.extra.endsWith('.xlsx') ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' : 'application/pdf'), date: new Date(baseDate + 86400000*7).toISOString(), path: `mock://${safeId}/${docs.extra}` }
+        ];
         evidenceData[ctrlId].note_fields = {
-          procedure: `Voorbeelddocument voor ${ctrlId} — beleid v2.1 (PDF)`,
+          procedure: `Document: ${docs.primary} — vastgelegd in beleidshandboek`,
           location:  `SharePoint > Compliance > ${ctrlId}`,
-          owner:     'CISO / Information Security Officer',
-          last_verified: new Date(Date.now() - (hash(ctrlId) % 365) * 86400000).toISOString().slice(0, 10),
+          owner:     isPersonal ? 'HR Manager + CISO' : isPhysical ? 'Facility Manager' : isTech ? 'IT Operations Lead' : 'CISO',
+          last_verified: new Date(baseDate).toISOString().slice(0, 10),
           remark:    'Demo-data voor rapport-preview — vervang door echte verwijzing.'
         };
-        // Sync serialized note voor render compatibility
         const nf = evidenceData[ctrlId].note_fields;
         evidenceData[ctrlId].note = `Procedure: ${nf.procedure}\nLocatie: ${nf.location}\nEigenaar: ${nf.owner}\nLaatst gereviewd: ${nf.last_verified}\nOpmerking: ${nf.remark}`;
         evidenceFilled++;
@@ -6115,62 +6133,153 @@ ${unevidencedClaims.length > 0 ? `
   </div>
 </div>
 
-<!-- DETAILED FINDINGS -->
+<!-- DETAILED FINDINGS — Lead Auditor format -->
 <div class="page page-break">
   <div class="label">Gedetailleerde bevindingen</div>
-  <h2>Status per control — met bewijs-evaluatie</h2>
-  <p style="font-size:0.86rem;color:#475569;line-height:1.65;margin-bottom:20px;">
-    Per control hieronder: de status van uw claim, het bewijs dat is aangeleverd en een voorlopig oordeel.
-    Een Lead Auditor (Raoul Haas, DNV/IRCA-gecertificeerd) heeft de bevindingen gereviewed — opmerkingen en correcties zijn verwerkt.
+  <h2>Bevindingen per control</h2>
+  <p style="font-size:0.86rem;color:#475569;line-height:1.65;margin-bottom:14px;">
+    Iedere control hieronder volgt het auditor-format: <strong>Bevinding</strong> &middot; <strong>Bewijs</strong> &middot; <strong>Oordeel</strong> &middot; <strong>Aanbeveling</strong>.
+    Severity-classificatie is voorlopig (<em>auto-geclassificeerd</em>) en wordt definitief vastgesteld door de Lead Auditor in het eindrapport.
   </p>
+  <div style="display:flex;gap:18px;font-size:0.74rem;color:#475569;margin-bottom:20px;flex-wrap:wrap;">
+    <span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#DC2626;vertical-align:middle;margin-right:6px;"></span><strong>Critical</strong> — blokkerend voor certificering</span>
+    <span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#D97706;vertical-align:middle;margin-right:6px;"></span><strong>Major</strong> — significante afwijking</span>
+    <span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#0D9488;vertical-align:middle;margin-right:6px;"></span><strong>Minor</strong> — kleine tekortkoming</span>
+    <span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#94A3B8;vertical-align:middle;margin-right:6px;"></span><strong>Info / OK</strong></span>
+  </div>
   ${categories.map(cat => {
     const ctrls = catScores[cat].controls;
-    return `<div class="findings-section" style="margin-bottom:32px;">
-      <h3>${esc(cat)}</h3>
+    return `<div class="findings-section" style="margin-bottom:36px;">
+      <h3 style="border-bottom:2px solid #0D9488;padding-bottom:6px;margin-bottom:14px;">${esc(cat)}</h3>
       ${ctrls.map(c => {
-        const statusCls = c.status === 'Compliant' ? 'compliant' : c.status === 'Gedeeltelijk' ? 'partial' : c.status === 'Non-compliant' ? 'non-compliant' : 'pending';
         const ev = (typeof evidenceData !== 'undefined' && evidenceData[c.id]) ? evidenceData[c.id] : { files: [], note: '', note_fields: {} };
         const nf = ev.note_fields || {};
         const hasFiles = ev.files && ev.files.length > 0;
         const hasNote = !!(nf.procedure || nf.location || nf.owner || (ev.note && ev.note.trim()));
+        const insight = (typeof getControlInsight === 'function') ? getControlInsight(c.id) : {};
         const claimsCompliance = c.status === 'Compliant' || c.status === 'Gedeeltelijk';
 
-        // Voorlopig auditor-oordeel-template (synthetisch — definitieve formulering komt na Lead-Auditor-review)
-        let verdict = '', verdictColor = '#94A3B8';
-        if (!claimsCompliance) {
-          verdict = 'Geen claim — geen bewijs vereist.';
-          verdictColor = '#94A3B8';
-        } else if (hasFiles && hasNote) {
-          verdict = `Bewijs aangeleverd: ${ev.files.length} bestand(en) + onderbouwing. Voorlopig oordeel: <strong style="color:#059669;">voldoet aan ${esc(c.id)} mits document actueel</strong>.`;
-          verdictColor = '#059669';
-        } else if (hasFiles) {
-          verdict = `Bewijs aangeleverd: ${ev.files.length} bestand(en), zonder context-notitie. Voorlopig oordeel: <strong style="color:#D97706;">bewijs aanwezig — Lead Auditor verifieert inhoud</strong>.`;
-          verdictColor = '#D97706';
-        } else if (hasNote) {
-          verdict = `Onderbouwing alleen via notitie (geen file). Voorlopig oordeel: <strong style="color:#D97706;">claim plausibel — vraag bewijsdocument op bij audit</strong>.`;
-          verdictColor = '#D97706';
-        } else {
-          verdict = `Compliance geclaimd zonder bewijs. <strong style="color:#DC2626;">Niet auditor-ready — onderbouwing vereist vóór certificering</strong>.`;
-          verdictColor = '#DC2626';
+        // Severity-classificatie: gebaseerd op status + categorie + bewijs-status
+        let severity, sevColor, sevBg;
+        if (c.status === 'Niet beoordeeld') { severity = 'Niet beoordeeld'; sevColor = '#94A3B8'; sevBg = '#F1F5F9'; }
+        else if (c.status === 'Non-compliant') {
+          // Critical voor governance/operations, Major voor andere
+          if (/^(C\.5|C\.6\.1|A\.5\.1|A\.5\.24|A\.8\.5|A\.8\.13|A\.8\.15)/.test(c.id)) {
+            severity = 'Critical'; sevColor = '#DC2626'; sevBg = '#FEE2E2';
+          } else { severity = 'Major'; sevColor = '#D97706'; sevBg = '#FEF3C7'; }
+        }
+        else if (c.status === 'Gedeeltelijk') {
+          severity = (hasFiles || hasNote) ? 'Minor' : 'Major';
+          sevColor = severity === 'Major' ? '#D97706' : '#0D9488';
+          sevBg = severity === 'Major' ? '#FEF3C7' : '#CCFBF1';
+        }
+        else if (c.status === 'Compliant') {
+          severity = (hasFiles && hasNote) ? 'OK' : (hasFiles || hasNote) ? 'Info' : 'Minor';
+          sevColor = severity === 'OK' ? '#059669' : severity === 'Info' ? '#94A3B8' : '#0D9488';
+          sevBg = severity === 'OK' ? '#D1FAE5' : severity === 'Info' ? '#F1F5F9' : '#CCFBF1';
         }
 
-        const evidenceBlock = claimsCompliance ? `
-          <div style="background:#F8FAFC;border-radius:6px;padding:10px 14px;margin-top:8px;font-size:0.82rem;line-height:1.6;color:#334155;">
-            ${hasFiles ? `<div style="margin-bottom:4px;"><strong style="color:#0F172A;">Bewijs:</strong> ${ev.files.map(f => esc(f.name)).join(', ')}</div>` : ''}
-            ${nf.procedure ? `<div><strong style="color:#0F172A;">Document:</strong> ${esc(nf.procedure)}</div>` : ''}
+        // Bevinding (observation) — synthetisch op basis van status + insight
+        let bevinding;
+        if (c.status === 'Niet beoordeeld') {
+          bevinding = `Deze control is nog niet beoordeeld. Beoordeling vereist vóór certificering of verwijdering uit de scope (motiveer in SoA).`;
+        } else if (c.status === 'Non-compliant') {
+          bevinding = insight.commonMistake
+            ? `Geen procesimplementatie of beleid aanwezig. ${insight.commonMistake}`
+            : `Geen invulling vastgesteld voor deze control. Vereist gestructureerde aanpak conform ISO 27001:2022 ${esc(c.id)}.`;
+        } else if (c.status === 'Gedeeltelijk') {
+          bevinding = insight.difference
+            ? `Gedeeltelijke implementatie. Aandachtspunt: ${insight.difference}`
+            : `Activiteiten lopen maar zijn niet volledig geformaliseerd of niet consistent toegepast.`;
+        } else { // Compliant
+          bevinding = hasFiles
+            ? `Volledige implementatie geclaimd, onderbouwd met ${ev.files.length} document(en).`
+            : hasNote
+              ? `Volledige implementatie geclaimd, onderbouwd via toelichting.`
+              : `Volledige implementatie geclaimd, maar onderbouwing ontbreekt.`;
+        }
+
+        // Auditor-oordeel
+        let oordeel, oordeelKleur;
+        if (c.status === 'Niet beoordeeld') {
+          oordeel = 'Geen oordeel mogelijk — beoordeling ontbreekt.'; oordeelKleur = '#94A3B8';
+        } else if (!claimsCompliance) {
+          oordeel = 'Niet conform — implementatie + bewijsvoering vereist.'; oordeelKleur = '#DC2626';
+        } else if (hasFiles && hasNote) {
+          oordeel = `Bewijs voldoet op ondersteunende informatie. Lead Auditor verifieert document-actualiteit + inhoud.`;
+          oordeelKleur = '#059669';
+        } else if (hasFiles) {
+          oordeel = `Bewijs aanwezig zonder context-notitie. Lead Auditor verifieert of document de control daadwerkelijk afdekt.`;
+          oordeelKleur = '#D97706';
+        } else if (hasNote) {
+          oordeel = `Toelichting plausibel maar geen documentbewijs. Lead Auditor vraagt artefact op tijdens on-site review.`;
+          oordeelKleur = '#D97706';
+        } else {
+          oordeel = `Niet auditor-ready — onderbouwing ontbreekt voor een claim die wel volledig is verklaard.`;
+          oordeelKleur = '#DC2626';
+        }
+
+        // Aanbeveling — uit insight.evidenceExpected of sector-actions, anders generiek
+        const aanbevelingen = [];
+        if (c.status === 'Non-compliant' || c.status === 'Niet beoordeeld') {
+          if (insight.evidenceExpected && insight.evidenceExpected.length) {
+            insight.evidenceExpected.slice(0, 3).forEach(e => aanbevelingen.push(e));
+          } else {
+            aanbevelingen.push(`Stel beleid + procedure op voor ${esc(c.name).toLowerCase()}`);
+            aanbevelingen.push(`Implementeer in dagelijkse praktijk en wijs eigenaarschap toe`);
+            aanbevelingen.push(`Documenteer minimaal 1 bewijsdocument per kwartaal`);
+          }
+        } else if (c.status === 'Gedeeltelijk') {
+          aanbevelingen.push(`Formaliseer aanpak in beleid/procedure (versie + handtekening directie)`);
+          if (!hasFiles) aanbevelingen.push(`Lever minimaal 1 document op als bewijs`);
+          if (!hasNote)  aanbevelingen.push(`Voeg toelichting toe (procedure, eigenaar, locatie, last reviewed)`);
+        } else if (c.status === 'Compliant' && (!hasFiles || !hasNote)) {
+          if (!hasFiles) aanbevelingen.push(`Upload minimaal 1 document als bewijs (auditor wil het zien)`);
+          if (!hasNote)  aanbevelingen.push(`Voeg toelichting toe — locatie van het bewijs en wie verantwoordelijk is`);
+        }
+
+        return `<div style="background:#fff;border:1px solid #E2E8F0;border-left:4px solid ${sevColor};border-radius:8px;padding:16px 20px;margin-bottom:12px;">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:10px;flex-wrap:wrap;">
+            <div style="flex:1;min-width:200px;">
+              <div style="font-family:'JetBrains Mono',monospace;font-weight:700;color:#0D9488;font-size:0.84rem;">${esc(c.id)}</div>
+              <div style="font-family:'Sora',sans-serif;font-weight:700;color:#0F172A;font-size:0.96rem;line-height:1.35;margin-top:2px;">${esc(c.name)}</div>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;">
+              <span style="display:inline-block;background:${sevBg};color:${sevColor};font-size:0.7rem;font-weight:800;padding:3px 9px;border-radius:99px;letter-spacing:0.06em;text-transform:uppercase;">${esc(severity)}</span>
+              <span style="font-size:0.72rem;color:#94A3B8;font-weight:600;">${esc(c.status)} ${c.score >= 0 ? '· ' + c.score + '%' : ''}</span>
+            </div>
+          </div>
+
+          <div style="font-size:0.84rem;line-height:1.6;color:#334155;margin-bottom:8px;">
+            <strong style="color:#0F172A;font-size:0.74rem;letter-spacing:0.04em;text-transform:uppercase;">Bevinding</strong><br>${bevinding}
+          </div>
+
+          ${claimsCompliance && (hasFiles || hasNote) ? `
+          <div style="background:#F8FAFC;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.82rem;line-height:1.6;color:#334155;">
+            <strong style="color:#0F172A;font-size:0.74rem;letter-spacing:0.04em;text-transform:uppercase;">Aangeleverd bewijs</strong>
+            ${hasFiles ? `<div style="margin-top:4px;"><strong style="color:#0F172A;">Documenten:</strong> ${ev.files.map(f => `<span style="display:inline-block;background:#fff;border:1px solid #E2E8F0;border-radius:4px;padding:2px 8px;margin:2px 4px 2px 0;font-family:'JetBrains Mono',monospace;font-size:0.78rem;">${esc(f.name)}${f.size ? ` <span style='color:#94A3B8;'>· ${(f.size/1024).toFixed(0)} KB</span>` : ''}</span>`).join('')}</div>` : ''}
+            ${nf.procedure ? `<div><strong style="color:#0F172A;">Procedure:</strong> ${esc(nf.procedure)}</div>` : ''}
             ${nf.location ? `<div><strong style="color:#0F172A;">Locatie:</strong> ${esc(nf.location)}</div>` : ''}
             ${nf.owner ? `<div><strong style="color:#0F172A;">Eigenaar:</strong> ${esc(nf.owner)}</div>` : ''}
             ${nf.last_verified ? `<div><strong style="color:#0F172A;">Laatst gereviewd:</strong> ${esc(nf.last_verified)}</div>` : ''}
-            <div style="margin-top:6px;padding-top:6px;border-top:1px solid #E2E8F0;color:${verdictColor};"><strong>Oordeel:</strong> ${verdict}</div>
-          </div>` : '';
+          </div>` : ''}
 
-        return `<div class="finding-row" style="display:block;padding:10px 0;border-bottom:1px solid #F1F5F9;">
-          <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:0.86rem;">
-            <span class="finding-id" style="font-weight:600;color:#0D9488;width:60px;flex-shrink:0;">${esc(c.id)}</span>
-            <span class="finding-name" style="flex:1;color:#334155;">${esc(c.name)}</span>
-            <span class="status-badge status-${statusCls}">${esc(c.status)}</span>
+          <div style="font-size:0.84rem;line-height:1.6;color:${oordeelKleur};margin-top:8px;padding:8px 12px;background:${oordeelKleur === '#059669' ? '#F0FDF4' : oordeelKleur === '#D97706' ? '#FEF3C7' : oordeelKleur === '#DC2626' ? '#FEE2E2' : '#F1F5F9'};border-radius:6px;">
+            <strong style="font-size:0.74rem;letter-spacing:0.04em;text-transform:uppercase;color:${oordeelKleur};">Voorlopig oordeel</strong><br>${oordeel}
           </div>
-          ${evidenceBlock}
+
+          ${aanbevelingen.length ? `
+          <div style="margin-top:10px;font-size:0.84rem;line-height:1.6;color:#334155;">
+            <strong style="color:#0F172A;font-size:0.74rem;letter-spacing:0.04em;text-transform:uppercase;">Aanbeveling</strong>
+            <ul style="margin:4px 0 0 18px;padding:0;">
+              ${aanbevelingen.map(a => `<li style="margin:2px 0;">${esc(a)}</li>`).join('')}
+            </ul>
+          </div>` : ''}
+
+          ${insight.killerQuestion && (c.status === 'Gedeeltelijk' || c.status === 'Compliant') ? `
+          <div style="margin-top:10px;padding:8px 12px;background:#F8FAFC;border-left:3px solid #94A3B8;border-radius:4px;font-size:0.82rem;color:#475569;font-style:italic;">
+            <strong style="color:#0F172A;font-style:normal;font-size:0.74rem;letter-spacing:0.04em;text-transform:uppercase;">Killer-vraag (auditor zal stellen)</strong><br>&ldquo;${esc(insight.killerQuestion)}&rdquo;
+          </div>` : ''}
         </div>`;
       }).join('')}
     </div>`;
