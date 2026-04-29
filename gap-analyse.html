@@ -1443,13 +1443,17 @@
     #screenResults .big-ring-verdict {
       display: inline-block !important;
       margin-top: 14px !important;
-      padding: 7px 14px !important;
-      font-size: 0.74rem !important;
-      letter-spacing: 0.06em;
+      padding: 0 !important;
+      background: none !important;
+      font-size: 0.84rem !important;
+      letter-spacing: 0.04em;
       text-transform: uppercase;
       font-weight: 700 !important;
-      border-radius: 99px !important;
+      border-radius: 0 !important;
     }
+    #screenResults .big-ring-verdict.high { color: #34D399 !important; background: none !important; }
+    #screenResults .big-ring-verdict.mid  { color: #FBBF24 !important; background: none !important; }
+    #screenResults .big-ring-verdict.low  { color: #FCA5A5 !important; background: none !important; }
     #screenResults .big-ring-compare {
       text-align: left !important;
       font-size: 0.84rem !important;
@@ -1570,16 +1574,21 @@
       letter-spacing: -0.04em !important;
     }
     #screenResults .framework-badges {
-      gap: 6px !important;
+      display: block !important;
+      font-size: 0.78rem !important;
+      color: rgba(255,255,255,0.5) !important;
+      line-height: 1.7 !important;
+      margin-top: 6px !important;
     }
     #screenResults .framework-badge {
-      font-size: 0.7rem !important;
-      padding: 5px 11px !important;
-      border-radius: 99px !important;
-      background: rgba(255,255,255,0.05) !important;
-      border: 1px solid rgba(255,255,255,0.08) !important;
+      display: inline !important;
+      padding: 0 !important;
+      background: none !important;
+      border: 0 !important;
       color: rgba(255,255,255,0.7) !important;
+      font-size: inherit !important;
     }
+    #screenResults .framework-badge:not(:last-child)::after { content: ' · '; color: rgba(255,255,255,0.25); margin: 0 2px; }
 
     /* Upsell-block — meer "next chapter" feel binnen results-context */
     #screenResults .upsell-block {
