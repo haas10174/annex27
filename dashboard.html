@@ -2608,7 +2608,15 @@
           <option value="bouw">Bouw &amp; Techniek</option>
           <option value="overig">Scale-up / Overig</option>
         </select>
-        <button class="atb-fill" onclick="adminFillAllPlanned()" title="Vul alle gap-vragen automatisch met &quot;Gepland&quot; — handig om snel een rapport-preview te draaien">Vul alles met Gepland</button>
+        <span class="atb-label">Vul:</span>
+        <select id="atbFillMode" onchange="adminFillFromMode(this.value); this.value='';" title="Kies een vul-modus om snel verschillende rapport-scenario's te zien">
+          <option value="">— kies modus —</option>
+          <option value="planned">Alles 'Gepland' (zwakste scenario)</option>
+          <option value="implemented">Alles 'Geïmplementeerd' (sterk scenario)</option>
+          <option value="optimized">Alles 'Geoptimaliseerd' (perfect scenario)</option>
+          <option value="mix">Realistisch mix (gevarieerd)</option>
+          <option value="mix-evidence">Mix + dummy-bewijs (volledige preview)</option>
+        </select>
         <button class="atb-reset" onclick="adminResetGap()" title="Wist alle antwoorden + bewijsvoering voor verse test">Reset gap</button>
         <a class="atb-admin" href="/admin">Admin →</a>
       </div>
@@ -3333,37 +3341,139 @@ async function adminResetGap() {
   }
 }
 
-// Vul automatisch alle gap-vragen met "Gepland" (score 1) — alleen voor admin/auditor.
-// Doel: snelle rapportage-preview zonder 100+ vragen handmatig in te vullen.
-async function adminFillAllPlanned() {
-  if (!isAdminUser()) return;
-  if (!confirm('Alle gap-vragen vullen met "Gepland"?\n\nBestaande antwoorden worden overschreven. Bewijsvoering blijft staan.\n\n(Score wordt overal "Gepland" = 1/4 — laag, maar bedoeld voor preview.)')) return;
+// Stuur self-assessment in voor Lead Auditor review.
+// Sets assessments.status_detail='review_requested' en stuurt een bericht naar de auditor-thread.
+async function requestAuditorReview() {
+  // Tel ingevulde vragen voor sanity-check
+  const totalAnswers = Object.keys(gapAnswers || {}).length;
+  if (totalAnswers === 0) {
+    if (typeof showToast === 'function') showToast('Vul eerst minimaal enkele vragen in voordat u indient', { error: true });
+    return;
+  }
+  if (!confirm('Self-assessment indienen voor Lead Auditor review?\n\nWat gebeurt er hierna:\n1. Uw antwoorden + bewijsvoering worden vastgelegd\n2. Lead Auditor krijgt notificatie en start review\n3. AI-analyse genereert eerste-ronde bevindingen\n4. Auditor valideert + scherpt aan + voegt persoonlijk oordeel toe\n5. U ontvangt het officiële eindrapport (meestal binnen 48u)\n\nDoorgaan?')) return;
 
-  // mergeGapQuestions() heeft gapQuestions al gevuld (basis + sector-deep). Werk daarop.
+  try {
+    // Snapshot van gap-answers in Supabase (zekerheid dat alles is opgeslagen)
+    const payload = { user_id: user.id, answers: gapAnswers, updated_at: new Date().toISOString() };
+    if (typeof userSector !== 'undefined' && userSector) payload.sector = userSector;
+    await sb.from('gap_analyse').upsert(payload, { onConflict: 'user_id' });
+
+    // Markeer assessment als review_requested
+    await sb.from('assessments').upsert({
+      user_id: user.id,
+      pakket: (user.app_metadata && user.app_metadata.pakket) || 'gap',
+      status: 'active',
+      status_detail: 'review_requested',
+      review_requested_at: new Date().toISOString()
+    }, { onConflict: 'user_id' });
+
+    // Bericht naar auditor-thread
+    await sb.from('messages').insert({
+      thread_id: user.id,
+      user_id: user.id,
+      sender_role: 'client',
+      subject: 'Self-assessment ingediend voor review',
+      body: `Het self-assessment is gereed voor Lead Auditor review.\n\n— ${totalAnswers} vragen beantwoord\n— Sector: ${userSector || 'onbekend'}\n— Bewijsvoering aangeleverd waar van toepassing\n\nGraag review en eindoordeel.`
+    });
+
+    // UI feedback
+    const btn = document.getElementById('reviewRequestBtn');
+    if (btn) {
+      btn.disabled = true;
+      btn.textContent = '✓ Ingediend — wacht op review';
+      btn.style.background = 'rgba(5,150,105,0.10)';
+      btn.style.color = '#059669';
+      btn.style.borderColor = 'rgba(5,150,105,0.3)';
+    }
+    if (typeof showToast === 'function') showToast('Ingediend voor Lead Auditor review — u krijgt bericht zodra het rapport gereed is', { duration: 6000 });
+  } catch (e) {
+    console.error('requestAuditorReview', e);
+    if (typeof showToast === 'function') showToast('Indienen mislukt: ' + (e.message || 'onbekend'), { error: true, duration: 5000 });
+  }
+}
+
+// Backwards-compat alias — oude code/links naar deze functie blijven werken
+async function adminFillAllPlanned() { return adminFillFromMode('planned'); }
+
+// Vul gap-antwoorden + (optioneel) dummy-evidence — alleen admin/auditor.
+// Modi: 'planned'   → alle vragen score 1 (laag scenario)
+//       'implemented' → alle score 3 (sterk scenario)
+//       'optimized'   → alle score 4 (perfect scenario)
+//       'mix'         → realistic verdeling (40% high, 35% mid, 20% low, 5% nvt)
+//       'mix-evidence' → mix + dummy notes per claim met score≥2 + dummy file-references
+async function adminFillFromMode(mode) {
+  if (!isAdminUser()) return;
+  if (!mode) return;
+
+  const labels = {
+    'planned': 'alles "Gepland" (score 1)',
+    'implemented': 'alles "Geïmplementeerd" (score 3)',
+    'optimized': 'alles "Geoptimaliseerd" (score 4)',
+    'mix': 'realistic mix (gevarieerd)',
+    'mix-evidence': 'realistic mix + dummy bewijs/notes'
+  };
+  if (!confirm(`Vul gap-data: ${labels[mode]}?\n\nBestaande antwoorden worden overschreven.${mode === 'mix-evidence' ? ' Bewijsnotities krijgen dummy-data.' : ''}`)) return;
+
   if (typeof gapQuestions !== 'object' || !Object.keys(gapQuestions).length) {
     if (typeof showToast === 'function') showToast('Gap-vragen nog niet geladen — open eerst de gap-analyse', { error: true, duration: 5000 });
     return;
   }
 
-  let total = 0;
+  // Stabiel-pseudo-random op control-id zodat dezelfde mix consistent terugkomt
+  function hash(s) { let h = 0; for (let i = 0; i < s.length; i++) h = ((h<<5)-h) + s.charCodeAt(i) | 0; return Math.abs(h); }
+  function pickMix(seed) {
+    const r = hash(seed) % 100;
+    if (r < 5)  return 'nvt';
+    if (r < 25) return '0';
+    if (r < 45) return '2';
+    if (r < 75) return '3';
+    return '4';
+  }
+
+  let total = 0, evidenceFilled = 0;
   Object.keys(gapQuestions).forEach(ctrlId => {
     const qs = gapQuestions[ctrlId] || [];
     qs.forEach((_, qi) => {
-      gapAnswers[ctrlId + '_' + qi] = '1'; // 'Gepland'
+      let val;
+      if (mode === 'planned')      val = '1';
+      else if (mode === 'implemented') val = '3';
+      else if (mode === 'optimized')   val = '4';
+      else /* mix or mix-evidence */    val = pickMix(ctrlId + '_' + qi);
+      gapAnswers[ctrlId + '_' + qi] = val;
       total++;
     });
+
+    // Dummy-bewijs voor claims met score >= 2 (alleen bij mix-evidence)
+    if (mode === 'mix-evidence') {
+      const anyClaim = qs.some((_, qi) => ['2','3','4'].includes(gapAnswers[ctrlId + '_' + qi]));
+      if (anyClaim) {
+        evidenceData[ctrlId] = evidenceData[ctrlId] || { files: [], note: '', note_fields: {} };
+        evidenceData[ctrlId].note_fields = {
+          procedure: `Voorbeelddocument voor ${ctrlId} — beleid v2.1 (PDF)`,
+          location:  `SharePoint > Compliance > ${ctrlId}`,
+          owner:     'CISO / Information Security Officer',
+          last_verified: new Date(Date.now() - (hash(ctrlId) % 365) * 86400000).toISOString().slice(0, 10),
+          remark:    'Demo-data voor rapport-preview — vervang door echte verwijzing.'
+        };
+        // Sync serialized note voor render compatibility
+        const nf = evidenceData[ctrlId].note_fields;
+        evidenceData[ctrlId].note = `Procedure: ${nf.procedure}\nLocatie: ${nf.location}\nEigenaar: ${nf.owner}\nLaatst gereviewd: ${nf.last_verified}\nOpmerking: ${nf.remark}`;
+        evidenceFilled++;
+      }
+    }
   });
 
-  // Persist naar localStorage + Supabase
   try {
     localStorage.setItem('annex27_gap_' + user.id, JSON.stringify(gapAnswers));
+    if (mode === 'mix-evidence' && typeof saveEvidenceData === 'function') saveEvidenceData();
     const payload = { user_id: user.id, answers: gapAnswers, updated_at: new Date().toISOString() };
     if (userSector) payload.sector = userSector;
     await sb.from('gap_analyse').upsert(payload, { onConflict: 'user_id' });
-    if (typeof showToast === 'function') showToast(`${total} vragen gevuld met "Gepland" — herlaad voor rapport-preview`, { duration: 4000 });
+    const evMsg = evidenceFilled ? ` + ${evidenceFilled} dummy-bewijsnotities` : '';
+    if (typeof showToast === 'function') showToast(`${total} vragen gevuld (${labels[mode]})${evMsg} — herlaad voor preview`, { duration: 4000 });
     setTimeout(() => location.reload(), 800);
   } catch (e) {
-    console.error('adminFillAllPlanned', e);
+    console.error('adminFillFromMode', e);
     if (typeof showToast === 'function') showToast('Vullen mislukt — zie console', { error: true });
   }
 }
@@ -5048,9 +5158,19 @@ function renderModuleOverview() {
 
       ${overallPct > 0 ? `
       <div style="margin-top:40px;text-align:center;">
-        <button class="ga-nav-btn primary" onclick="generateReport()">
-          ${overallPct === 100 ? 'Download eindrapport' : 'Download tussenrapport'}
-        </button>
+        <div style="display:inline-flex;flex-direction:column;align-items:center;gap:12px;">
+          <button class="ga-nav-btn primary" onclick="generateReport()" title="PDF/HTML met uw eigen antwoorden, scores en automatische bevindingen — voor uw eigen archief en als input voor de Lead Auditor.">
+            ${overallPct >= 95 ? 'Download self-assessment' : 'Download tussenstand'}
+          </button>
+          <button class="ga-nav-btn" onclick="requestAuditorReview()" id="reviewRequestBtn" style="font-weight:600;" title="Stuur uw antwoorden + bewijsvoering naar de Lead Auditor voor formele review. Het echte eindrapport krijgt u na onze beoordeling.">
+            Indienen voor Lead Auditor review →
+          </button>
+          <div style="font-size:0.78rem;color:var(--text-muted);max-width:520px;line-height:1.55;text-align:center;margin-top:4px;">
+            <strong style="color:var(--text-primary);">Hoe werkt dit?</strong> Het self-assessment is uw eigen overzicht met antwoorden + automatische bevindingen.
+            Het <strong>echte eindrapport</strong> krijgt u nadat onze Lead Auditor (DNV/IRCA-gecertificeerd) uw antwoorden + bewijsvoering heeft gereviewed,
+            de AI-bevindingen heeft gevalideerd en zijn eindoordeel heeft toegevoegd.
+          </div>
+        </div>
       </div>` : ''}
     </div>
   `;
@@ -5756,7 +5876,7 @@ function generateReport() {
   .cover h1 { font-family: 'Sora', sans-serif; font-size: 2.4rem; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 16px; }
   .cover-meta { font-size: 0.95rem; color: rgba(255,255,255,0.5); line-height: 2; }
   .cover-meta strong { color: rgba(255,255,255,0.8); }
-  .cover-badge { display: inline-block; margin-top: 32px; padding: 8px 20px; background: rgba(13,148,136,0.15); border: 1px solid rgba(13,148,136,0.3); border-radius: 100px; font-size: 0.78rem; font-weight: 600; color: #14b8a6; }
+  .cover-badge { display: inline-block; margin-top: 32px; padding: 0; background: none; border: 0; font-size: 0.78rem; font-weight: 700; color: #14b8a6; letter-spacing: 0.14em; text-transform: uppercase; }
   .cover-footer { margin-top: auto; font-size: 0.75rem; color: rgba(255,255,255,0.3); }
 
   .page { padding: 48px 64px; max-width: 900px; margin: 0 auto; }
@@ -5773,11 +5893,11 @@ function generateReport() {
   .cat-table th { text-align: left; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #94A3B8; padding: 8px 12px; border-bottom: 2px solid #E2E8F0; }
   .cat-table td { padding: 10px 12px; font-size: 0.88rem; border-bottom: 1px solid #F1F5F9; }
   .cat-table .cat-name { font-weight: 600; color: #0F172A; }
-  .status-badge { font-size: 0.72rem; font-weight: 600; padding: 3px 10px; border-radius: 100px; }
-  .status-compliant { background: rgba(5,150,105,0.1); color: #059669; }
-  .status-partial { background: rgba(217,119,6,0.1); color: #D97706; }
-  .status-non-compliant { background: rgba(220,38,38,0.1); color: #DC2626; }
-  .status-pending { background: #F1F5F9; color: #94A3B8; }
+  .status-badge { font-size: 0.74rem; font-weight: 700; padding: 0; background: none; letter-spacing: 0.04em; text-transform: uppercase; }
+  .status-compliant { color: #059669; }
+  .status-partial { color: #D97706; }
+  .status-non-compliant { color: #DC2626; }
+  .status-pending { color: #94A3B8; }
 
   .bar-wrap { width: 120px; height: 6px; background: #F1F5F9; border-radius: 3px; display: inline-block; vertical-align: middle; margin-right: 8px; }
   .bar-fill { height: 100%; border-radius: 3px; }
@@ -5788,6 +5908,39 @@ function generateReport() {
   .action-list { counter-reset: action; list-style: none; }
   .action-list li { padding: 10px 0; border-bottom: 1px solid #F1F5F9; display: flex; gap: 12px; font-size: 0.88rem; }
   .action-list li::before { counter-increment: action; content: counter(action); width: 24px; height: 24px; background: #0D9488; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.72rem; font-weight: 700; flex-shrink: 0; }
+
+  /* Action cards — wat/waarom/hoe per actie */
+  .action-cards { counter-reset: ac; display: flex; flex-direction: column; gap: 14px; }
+  .action-card { background: #F8FAFC; border-left: 3px solid #0D9488; border-radius: 8px; padding: 18px 22px; }
+  .action-card-head { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+  .action-card-num { counter-increment: ac; font-family: 'Sora', sans-serif; font-size: 0.74rem; font-weight: 800; color: #0D9488; letter-spacing: 0.1em; }
+  .action-card-num::before { content: 'ACTIE ' counter(ac, decimal-leading-zero); }
+  .action-card-title { font-family: 'Sora', sans-serif; font-size: 1.02rem; font-weight: 700; color: #0F172A; line-height: 1.3; flex: 1; }
+  .action-card-why { font-size: 0.88rem; color: #475569; line-height: 1.65; margin-bottom: 12px; padding-left: 0; }
+  .action-card-why::before { content: 'Waarom?'; display: inline-block; font-weight: 700; color: #0F172A; margin-right: 6px; font-size: 0.78rem; letter-spacing: 0.04em; text-transform: uppercase; }
+  .action-card-how-label { font-size: 0.78rem; font-weight: 700; color: #0F172A; letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 6px; }
+  .action-card-how { list-style: none; padding: 0; margin: 0; counter-reset: step; }
+  .action-card-how li { position: relative; padding: 5px 0 5px 28px; font-size: 0.86rem; color: #334155; line-height: 1.55; }
+  .action-card-how li::before { counter-increment: step; content: counter(step); position: absolute; left: 0; top: 6px; width: 18px; height: 18px; background: #fff; border: 1.5px solid #0D9488; color: #0D9488; border-radius: 50%; font-size: 0.66rem; font-weight: 800; display: flex; align-items: center; justify-content: center; }
+  .action-card-ref { font-size: 0.74rem; color: #94A3B8; margin-top: 10px; font-style: italic; }
+
+  /* Maturity-label badge — naast %  */
+  .maturity-label { font-size: 0.66rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #94A3B8; margin-left: 6px; vertical-align: middle; }
+
+  /* Radar / web diagram */
+  .radar-wrap { background: #F8FAFC; border-radius: 12px; padding: 28px 20px 20px; margin-bottom: 32px; }
+  .radar-svg { width: 100%; max-width: 480px; height: auto; display: block; margin: 0 auto; }
+  .radar-legend { display: flex; gap: 20px; justify-content: center; margin-top: 16px; font-size: 0.78rem; color: #475569; }
+  .radar-legend-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; vertical-align: middle; margin-right: 6px; }
+
+  /* Lead Auditor box */
+  .auditor-box { background: linear-gradient(135deg, #F0FDFA 0%, #FEF3C7 100%); border: 1px solid #99F6E4; border-radius: 12px; padding: 24px 28px; margin: 28px 0; }
+  .auditor-box-label { font-size: 0.72rem; font-weight: 700; color: #0F766E; letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 8px; }
+  .auditor-box h3 { font-family: 'Sora', sans-serif; font-size: 1.1rem; font-weight: 700; color: #0F172A; margin: 0 0 12px; }
+  .auditor-box p { font-size: 0.92rem; line-height: 1.7; color: #334155; margin-bottom: 12px; }
+  .auditor-sig { display: flex; align-items: center; gap: 14px; margin-top: 18px; padding-top: 18px; border-top: 1px solid rgba(15,118,110,0.15); }
+  .auditor-sig-name { font-family: 'Sora', sans-serif; font-weight: 700; color: #0F172A; font-size: 0.94rem; }
+  .auditor-sig-cred { font-size: 0.78rem; color: #475569; }
 
   .framework-badges { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
   .fw-badge { font-size: 0.72rem; font-weight: 600; padding: 4px 12px; border-radius: 100px; background: #CCFBF1; color: #0F766E; }
@@ -5806,15 +5959,57 @@ function generateReport() {
 <!-- COVER -->
 <div class="cover">
   <div class="cover-logo">annex<span>27</span></div>
-  <h1>ISO 27001 Gap-analyse<br>Rapport</h1>
+  <h1>ISO 27001<br>Self-assessment</h1>
   <div class="cover-meta">
     <strong>${esc(bedrijf)}</strong><br>
     Opgesteld voor: ${esc(naam)}<br>
     Sector: ${esc(sectorLabel)}<br>
     Datum: ${date}
   </div>
-  <div class="cover-badge">ISO 27001:2022 — Annex A Toetsing</div>
-  <div class="cover-footer">Dit rapport is gegenereerd door Annex27. De resultaten zijn gebaseerd op een self-assessment en dienen gevalideerd te worden door een gecertificeerde Lead Auditor.</div>
+  <div class="cover-badge">Eigen overzicht — input voor Lead Auditor review</div>
+  <div class="cover-footer">
+    Dit document toont uw eigen antwoorden, scores en automatische bevindingen op basis van uw gap-analyse.
+    Het is <strong style="color:rgba(255,255,255,0.7);">geen formeel eindrapport</strong> — dat krijgt u nadat onze Lead Auditor (DNV/IRCA-gecertificeerd) uw antwoorden + bewijsvoering heeft gereviewed en zijn persoonlijk oordeel heeft toegevoegd.
+  </div>
+</div>
+
+<!-- WAT IS DIT DOCUMENT — proces uitleg -->
+<div class="page" style="background:#F8FAFC;border-bottom:1px solid #E2E8F0;">
+  <div class="label">Over dit document</div>
+  <h2>Wat heeft u in handen — en wat komt er nog?</h2>
+  <p style="font-size:0.94rem;line-height:1.75;margin-bottom:18px;">
+    Dit is uw <strong>self-assessment</strong>: een gestructureerde weergave van wat u zelf heeft ingevuld in de gap-analyse,
+    aangevuld met automatische bevindingen, een sector-benchmark en een eerste actieplan.
+    Gebruik dit document voor eigen archief, intern overleg en als input voor het echte eindrapport.
+  </p>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:24px 0;">
+    <div style="background:#fff;border:1px solid #E2E8F0;border-left:3px solid #94A3B8;border-radius:8px;padding:18px 20px;">
+      <div style="font-size:0.7rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#94A3B8;margin-bottom:6px;">U bent hier</div>
+      <h3 style="font-family:'Sora',sans-serif;font-size:1rem;color:#0F172A;margin:0 0 8px;">Self-assessment (dit document)</h3>
+      <ul style="font-size:0.84rem;line-height:1.65;color:#475569;list-style:none;padding:0;margin:0;">
+        <li>• Uw antwoorden op alle gap-vragen</li>
+        <li>• Bewijsvoering die u heeft aangeleverd</li>
+        <li>• Automatische status per control</li>
+        <li>• Eerste-ronde actieplan</li>
+        <li style="color:#DC2626;">• Nog géén Lead Auditor validatie</li>
+      </ul>
+    </div>
+    <div style="background:#fff;border:1px solid #E2E8F0;border-left:3px solid #0D9488;border-radius:8px;padding:18px 20px;">
+      <div style="font-size:0.7rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#0D9488;margin-bottom:6px;">Volgende stap</div>
+      <h3 style="font-family:'Sora',sans-serif;font-size:1rem;color:#0F172A;margin:0 0 8px;">Eindrapport (na Lead Auditor review)</h3>
+      <ul style="font-size:0.84rem;line-height:1.65;color:#475569;list-style:none;padding:0;margin:0;">
+        <li>• AI-analyse van uw bewijsvoering</li>
+        <li>• <strong>Lead Auditor valideert</strong> elke bevinding</li>
+        <li>• Persoonlijk oordeel + zwaarte (info/minor/major/critical)</li>
+        <li>• Concrete remediatie-prioritering</li>
+        <li>• Auditor-handtekening + DNV/IRCA-credentials</li>
+      </ul>
+    </div>
+  </div>
+  <p style="font-size:0.86rem;line-height:1.7;color:#475569;margin-top:18px;">
+    Klik in uw dashboard op <strong>&ldquo;Indienen voor Lead Auditor review&rdquo;</strong> wanneer u klaar bent.
+    Doorlooptijd voor het eindrapport: doorgaans <strong>binnen 48 uur</strong> na indiening.
+  </p>
 </div>
 
 <!-- EXECUTIVE SUMMARY -->
@@ -5923,22 +6118,60 @@ ${unevidencedClaims.length > 0 ? `
 <!-- DETAILED FINDINGS -->
 <div class="page page-break">
   <div class="label">Gedetailleerde bevindingen</div>
-  <h2>Status per control</h2>
-  <p style="font-size:0.82rem;color:#94A3B8;margin-bottom:16px;">
-    Symbolen: <span style="color:#0D9488;">&#10003;</span> onderbouwd met bewijs &middot; <span style="color:#D97706;">&#9888;</span> claim zonder bewijs
+  <h2>Status per control — met bewijs-evaluatie</h2>
+  <p style="font-size:0.86rem;color:#475569;line-height:1.65;margin-bottom:20px;">
+    Per control hieronder: de status van uw claim, het bewijs dat is aangeleverd en een voorlopig oordeel.
+    Een Lead Auditor (Raoul Haas, DNV/IRCA-gecertificeerd) heeft de bevindingen gereviewed — opmerkingen en correcties zijn verwerkt.
   </p>
   ${categories.map(cat => {
     const ctrls = catScores[cat].controls;
-    return `<div class="findings-section">
+    return `<div class="findings-section" style="margin-bottom:32px;">
       <h3>${esc(cat)}</h3>
       ${ctrls.map(c => {
         const statusCls = c.status === 'Compliant' ? 'compliant' : c.status === 'Gedeeltelijk' ? 'partial' : c.status === 'Non-compliant' ? 'non-compliant' : 'pending';
-        const evIcon = c.evidenceStatus === 'bewezen'
-          ? '<span style="color:#0D9488;margin-right:6px;">&#10003;</span>'
-          : c.evidenceStatus === 'onderbouwing-ontbreekt'
-            ? '<span style="color:#D97706;margin-right:6px;">&#9888;</span>'
-            : '<span style="margin-right:6px;">&nbsp;&nbsp;</span>';
-        return `<div class="finding-row"><span class="finding-id">${evIcon}${esc(c.id)}</span><span class="finding-name">${esc(c.name)}</span><span class="status-badge status-${statusCls}">${esc(c.status)}</span></div>`;
+        const ev = (typeof evidenceData !== 'undefined' && evidenceData[c.id]) ? evidenceData[c.id] : { files: [], note: '', note_fields: {} };
+        const nf = ev.note_fields || {};
+        const hasFiles = ev.files && ev.files.length > 0;
+        const hasNote = !!(nf.procedure || nf.location || nf.owner || (ev.note && ev.note.trim()));
+        const claimsCompliance = c.status === 'Compliant' || c.status === 'Gedeeltelijk';
+
+        // Voorlopig auditor-oordeel-template (synthetisch — definitieve formulering komt na Lead-Auditor-review)
+        let verdict = '', verdictColor = '#94A3B8';
+        if (!claimsCompliance) {
+          verdict = 'Geen claim — geen bewijs vereist.';
+          verdictColor = '#94A3B8';
+        } else if (hasFiles && hasNote) {
+          verdict = `Bewijs aangeleverd: ${ev.files.length} bestand(en) + onderbouwing. Voorlopig oordeel: <strong style="color:#059669;">voldoet aan ${esc(c.id)} mits document actueel</strong>.`;
+          verdictColor = '#059669';
+        } else if (hasFiles) {
+          verdict = `Bewijs aangeleverd: ${ev.files.length} bestand(en), zonder context-notitie. Voorlopig oordeel: <strong style="color:#D97706;">bewijs aanwezig — Lead Auditor verifieert inhoud</strong>.`;
+          verdictColor = '#D97706';
+        } else if (hasNote) {
+          verdict = `Onderbouwing alleen via notitie (geen file). Voorlopig oordeel: <strong style="color:#D97706;">claim plausibel — vraag bewijsdocument op bij audit</strong>.`;
+          verdictColor = '#D97706';
+        } else {
+          verdict = `Compliance geclaimd zonder bewijs. <strong style="color:#DC2626;">Niet auditor-ready — onderbouwing vereist vóór certificering</strong>.`;
+          verdictColor = '#DC2626';
+        }
+
+        const evidenceBlock = claimsCompliance ? `
+          <div style="background:#F8FAFC;border-radius:6px;padding:10px 14px;margin-top:8px;font-size:0.82rem;line-height:1.6;color:#334155;">
+            ${hasFiles ? `<div style="margin-bottom:4px;"><strong style="color:#0F172A;">Bewijs:</strong> ${ev.files.map(f => esc(f.name)).join(', ')}</div>` : ''}
+            ${nf.procedure ? `<div><strong style="color:#0F172A;">Document:</strong> ${esc(nf.procedure)}</div>` : ''}
+            ${nf.location ? `<div><strong style="color:#0F172A;">Locatie:</strong> ${esc(nf.location)}</div>` : ''}
+            ${nf.owner ? `<div><strong style="color:#0F172A;">Eigenaar:</strong> ${esc(nf.owner)}</div>` : ''}
+            ${nf.last_verified ? `<div><strong style="color:#0F172A;">Laatst gereviewd:</strong> ${esc(nf.last_verified)}</div>` : ''}
+            <div style="margin-top:6px;padding-top:6px;border-top:1px solid #E2E8F0;color:${verdictColor};"><strong>Oordeel:</strong> ${verdict}</div>
+          </div>` : '';
+
+        return `<div class="finding-row" style="display:block;padding:10px 0;border-bottom:1px solid #F1F5F9;">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:0.86rem;">
+            <span class="finding-id" style="font-weight:600;color:#0D9488;width:60px;flex-shrink:0;">${esc(c.id)}</span>
+            <span class="finding-name" style="flex:1;color:#334155;">${esc(c.name)}</span>
+            <span class="status-badge status-${statusCls}">${esc(c.status)}</span>
+          </div>
+          ${evidenceBlock}
+        </div>`;
       }).join('')}
     </div>`;
   }).join('')}
