@@ -340,6 +340,169 @@
     .doc-download:hover { background: var(--accent); color: white; }
     .doc-download svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; }
 
+    /* ── DOC GROUPS — Accordion (per ISO 27001-domein) ── */
+    .doc-group {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      margin-bottom: 12px;
+      overflow: hidden;
+      transition: box-shadow 0.2s;
+    }
+    .doc-group:hover { box-shadow: 0 2px 8px rgba(15,23,42,0.04); }
+    .doc-group.open { box-shadow: 0 4px 16px rgba(13,148,136,0.06); }
+    .doc-group-head {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 18px 22px;
+      background: transparent;
+      border: 0;
+      font-family: inherit;
+      cursor: pointer;
+      text-align: left;
+      transition: background 0.15s;
+    }
+    .doc-group-head:hover { background: rgba(13,148,136,0.04); }
+    .doc-group-icon {
+      flex-shrink: 0;
+      width: 40px; height: 40px;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(13,148,136,0.10);
+      border-radius: 10px;
+      font-size: 1.2rem;
+    }
+    .doc-group-text {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .doc-group-label {
+      font-family: 'Sora', sans-serif;
+      font-size: 1.02rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: -0.01em;
+    }
+    .doc-group-sub {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+    .doc-group-count {
+      flex-shrink: 0;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--accent);
+      background: rgba(13,148,136,0.10);
+      padding: 4px 10px;
+      border-radius: 99px;
+      letter-spacing: 0.02em;
+    }
+    .doc-group-count small {
+      font-size: 0.66rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      margin-left: 4px;
+    }
+    .doc-group-chev {
+      flex-shrink: 0;
+      width: 18px; height: 18px;
+      color: var(--text-muted);
+      transition: transform 0.25s;
+    }
+    .doc-group.open .doc-group-chev { transform: rotate(180deg); color: var(--accent); }
+
+    .doc-group-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .doc-group.open .doc-group-body {
+      max-height: 1800px;
+      border-top: 1px solid var(--border-light);
+    }
+
+    .doc-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 14px 22px;
+      border-bottom: 1px solid var(--border-light);
+      transition: background 0.15s;
+    }
+    .doc-row:last-child { border-bottom: 0; }
+    .doc-row:hover { background: rgba(13,148,136,0.03); }
+    .doc-row.locked { opacity: 0.55; }
+    .doc-row-main { flex: 1; min-width: 0; }
+    .doc-row-title {
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .doc-row-refs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+    .doc-ref {
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      background: var(--bg-warm);
+      padding: 2px 8px;
+      border-radius: 6px;
+      letter-spacing: 0.01em;
+      font-variant-numeric: tabular-nums;
+    }
+    .doc-row-actions {
+      flex-shrink: 0;
+      display: flex;
+      gap: 6px;
+    }
+    .doc-btn-pdf, .doc-btn-word {
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+      border: 1px solid transparent;
+    }
+    .doc-btn-pdf {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+    .doc-btn-pdf:hover { background: var(--accent-hover, #0F766E); }
+    .doc-btn-word {
+      background: transparent;
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+    .doc-btn-word:hover { background: rgba(13,148,136,0.08); }
+    .doc-lock { font-size: 0.9rem; opacity: 0.7; }
+    .doc-locked-msg {
+      font-size: 0.74rem;
+      color: var(--text-muted);
+      font-style: italic;
+      padding: 6px 8px;
+    }
+    @media (max-width: 720px) {
+      .doc-group-head { padding: 14px 16px; }
+      .doc-group-sub { display: none; }
+      .doc-row { padding: 12px 16px; flex-direction: column; align-items: stretch; gap: 10px; }
+      .doc-row-actions { justify-content: flex-end; }
+    }
+
     /* ── CHECKLISTS VIEW ─────────────── */
     .checklist-section {
       background: var(--surface);
@@ -5874,7 +6037,192 @@ function hasDocAccess(packageKey) {
   return required.includes(pakket);
 }
 
+// \u2500\u2500 DOC GROUPS \u2014 ISO 27001-aligned, geen Basis/Premium-split in UI \u2500\u2500
+// Source-veld geeft fysieke folder aan (basispakket/premium/werkinstructies) voor download-routing.
+const DOC_GROUPS = [
+  { id: 'isms', icon: '\uD83D\uDCDA', label: 'ISMS Managementsysteem', sub: 'Clausules 4-10 \u2014 scope, beleid, doelstellingen, risicobeoordeling, audit, review',
+    docs: [
+      { src:'basispakket', file:'01-isms-scope.docx', title:'ISMS Scope', refs:['Cl.4.3'] },
+      { src:'basispakket', file:'23-context-belanghebbenden.docx', title:'Context & belanghebbenden', refs:['Cl.4.1','Cl.4.2'] },
+      { src:'basispakket', file:'02-informatiebeveiligingsbeleid.docx', title:'Informatiebeveiligingsbeleid', refs:['Cl.5.2'] },
+      { src:'basispakket', file:'04-rollen-verantwoordelijkheden.docx', title:'Rollen & verantwoordelijkheden', refs:['Cl.5.3','A.5.2'] },
+      { src:'basispakket', file:'03-doelstellingen.docx', title:'ISMS-doelstellingen', refs:['Cl.6.2'] },
+      { src:'basispakket', file:'05-risicobeoordeling.docx', title:'Risicobeoordeling & behandelingsplan', refs:['Cl.6.1','Cl.8.2'] },
+      { src:'basispakket', file:'06-soa.docx', title:'Statement of Applicability (SoA)', refs:['Cl.6.1.3'] },
+      { src:'basispakket', file:'07-documentbeheer.docx', title:'Documentbeheer', refs:['Cl.7.5'] },
+      { src:'basispakket', file:'25-kpi-meetrapportage.docx', title:'KPI\u2019s & meetrapportage', refs:['Cl.9.1'] },
+      { src:'basispakket', file:'21-interne-audit.docx', title:'Interne audit', refs:['Cl.9.2'] },
+      { src:'basispakket', file:'22-management-review-correctieve-maatregelen.docx', title:'Management review & CAPA', refs:['Cl.9.3','Cl.10.1'] },
+      { src:'basispakket', file:'28-implementatie-roadmap.docx', title:'Implementatie-roadmap', refs:['Cl.6.2'] }
+    ]
+  },
+  { id: 'mensen', icon: '\uD83D\uDC65', label: 'Mensen', sub: 'Annex A.6 \u2014 HR, awareness, gedragsregels, competentie',
+    docs: [
+      { src:'basispakket', file:'09-hr-beleid.docx', title:'HR-beleid', refs:['A.6.1','A.6.2','A.6.5'] },
+      { src:'basispakket', file:'10-awareness-trainingsplan.docx', title:'Awareness & trainingsplan', refs:['A.6.3'] },
+      { src:'basispakket', file:'11-acceptable-use.docx', title:'Acceptable Use Policy', refs:['A.5.10'] },
+      { src:'basispakket', file:'24-competentiematrix.docx', title:'Competentiematrix', refs:['Cl.7.2'] },
+      { src:'premium',     file:'30-mobile-remote-working.docx', title:'Mobile & remote working', refs:['A.6.7','A.7.9'] }
+    ]
+  },
+  { id: 'toegang', icon: '\uD83D\uDD11', label: 'Toegang & Identiteit', sub: 'A.5.15-A.5.18, A.8.5 \u2014 toegangsbeleid, identiteit, authenticatie',
+    docs: [
+      { src:'basispakket', file:'12-toegangsbeleid.docx', title:'Toegangsbeleid', refs:['A.5.15','A.5.18'] },
+      { src:'basispakket', file:'13-wachtwoordbeleid.docx', title:'Wachtwoord- & authenticatiebeleid', refs:['A.5.17','A.8.5'] }
+    ]
+  },
+  { id: 'klassificatie', icon: '\uD83D\uDD0F', label: 'Classificatie & Privacy', sub: 'A.5.12-13, A.5.31, A.5.34 + AVG-procedures (RoPA, DSR, DPIA)',
+    docs: [
+      { src:'basispakket', file:'14-classificatiebeleid.docx', title:'Classificatiebeleid', refs:['A.5.12','A.5.13'] },
+      { src:'basispakket', file:'26-register-wettelijke-vereisten.docx', title:'Register wettelijke vereisten', refs:['A.5.31'] },
+      { src:'basispakket', file:'29-dpia-template.docx', title:'DPIA-template (AVG)', refs:['AVG art. 35'] },
+      { src:'basispakket', file:'30-ropa-verwerkingsregister.pdf', title:'Register Verwerkingsactiviteiten (RoPA)', refs:['AVG art. 30'], pdfOnly:true },
+      { src:'basispakket', file:'31-data-subject-rights-procedure.pdf', title:'Procedure rechten van betrokkenen', refs:['AVG art. 12-22'], pdfOnly:true },
+      { src:'premium',     file:'27-data-retention-deletion.docx', title:'Data retention & deletion', refs:['A.5.33','A.8.10'] },
+      { src:'premium',     file:'33-avg-privacy.docx', title:'AVG & Privacy', refs:['A.5.34'] }
+    ]
+  },
+  { id: 'activa', icon: '\uD83D\uDCE6', label: 'Activa', sub: 'A.5.9 \u2014 asset-register, eigenaarschap, classificatie',
+    docs: [
+      { src:'basispakket', file:'08-asset-register.docx', title:'Asset register', refs:['A.5.9'] }
+    ]
+  },
+  { id: 'fysiek', icon: '\uD83C\uDFE2', label: 'Fysieke beveiliging', sub: 'Annex A.7 \u2014 zones, toegang, apparatuur, secure areas',
+    docs: [
+      { src:'basispakket', file:'15-fysiek-beveiligingsbeleid.docx', title:'Fysiek beveiligingsbeleid', refs:['A.7.1','A.7.2','A.7.7','A.7.14'] }
+    ]
+  },
+  { id: 'tech', icon: '\u2699\uFE0F', label: 'Technologie', sub: 'Annex A.8 \u2014 crypto, patch, logging, change, netwerk, dev',
+    docs: [
+      { src:'basispakket', file:'16-cryptografiebeleid.docx', title:'Cryptografiebeleid', refs:['A.8.24'] },
+      { src:'basispakket', file:'17-patch-kwetsbaarheidsbeheer.docx', title:'Patch- & kwetsbaarhedenbeheer', refs:['A.8.8'] },
+      { src:'basispakket', file:'18-logging-monitoring.docx', title:'Logging & monitoring', refs:['A.8.15','A.8.16'] },
+      { src:'basispakket', file:'27-secure-development.docx', title:'Secure development', refs:['A.8.25','A.8.28','A.8.29'] },
+      { src:'premium',     file:'25-threat-intelligence.docx', title:'Threat intelligence', refs:['A.5.7'] },
+      { src:'premium',     file:'26-cloud-security.docx', title:'Cloud security', refs:['A.5.23'] },
+      { src:'premium',     file:'28-dlp.docx', title:'Data Leakage Prevention (DLP)', refs:['A.8.12'] },
+      { src:'premium',     file:'29-change-management.docx', title:'Change management', refs:['A.8.32'] },
+      { src:'premium',     file:'31-backup-recovery.docx', title:'Backup & recovery', refs:['A.8.13','A.8.14'] },
+      { src:'premium',     file:'32-netwerk-communicatie.docx', title:'Netwerk & communicatie', refs:['A.8.20','A.8.21','A.8.22'] }
+    ]
+  },
+  { id: 'ops', icon: '\uD83D\uDEE1\uFE0F', label: 'Incident & Continu\u00EFteit', sub: 'A.5.24-30 \u2014 incident response, BCP, recovery',
+    docs: [
+      { src:'basispakket', file:'19-incident-response.docx', title:'Incident response plan', refs:['A.5.24','A.5.25','A.5.26','A.5.27','A.5.28'] },
+      { src:'basispakket', file:'20-bcp.docx', title:'Business Continuity Plan', refs:['A.5.29','A.5.30'] }
+    ]
+  },
+  { id: 'leveranciers', icon: '\uD83E\uDD1D', label: 'Leveranciers & Keten', sub: 'A.5.19-A.5.22 \u2014 leveranciersbeleid, beoordeling, onboarding',
+    docs: [
+      { src:'premium', file:'23-leveranciersbeleid.docx', title:'Leveranciersbeleid', refs:['A.5.19','A.5.20'] },
+      { src:'premium', file:'24-leverancier-assessment.docx', title:'Leveranciersbeoordeling', refs:['A.5.21','A.5.22'] },
+      { src:'premium', file:'35-vendor-onboarding-checklist.pdf', title:'Leverancier onboarding checklist', refs:['A.5.19','A.5.20','A.5.21','A.5.22'], pdfOnly:true }
+    ]
+  },
+  { id: 'communicatie', icon: '\uD83D\uDCAC', label: 'Communicatie', sub: 'Cl.7.4 \u2014 interne en externe communicatie ISMS',
+    docs: [
+      { src:'premium', file:'34-communicatiebeleid.docx', title:'Communicatiebeleid', refs:['Cl.7.4'] }
+    ]
+  },
+  { id: 'werkinstructies', icon: '\uD83D\uDCD6', label: 'Werkinstructies per Annex A', sub: 'Implementatiegidsen met concrete stappen + bewijsvoering-checklist',
+    docs: [
+      { src:'werkinstructies', file:'A5-organisatorisch.docx', title:'A.5 Organisatorische maatregelen', refs:['A.5.x'] },
+      { src:'werkinstructies', file:'A6-personeel.docx', title:'A.6 Personeel', refs:['A.6.x'] },
+      { src:'werkinstructies', file:'A7-fysiek.docx', title:'A.7 Fysieke beveiliging', refs:['A.7.x'] },
+      { src:'werkinstructies', file:'A8-technologisch.docx', title:'A.8 Technologische maatregelen', refs:['A.8.x'] }
+    ]
+  }
+];
+
+function userDocAccess() {
+  const pakket = (user.app_metadata && user.app_metadata.pakket) || user.user_metadata?.pakket || 'gap';
+  return {
+    pakket,
+    isAdmin: pakket === 'admin' || (user.app_metadata && user.app_metadata.role === 'auditor'),
+    basis: ['beleid', 'readiness', 'admin', 'beleid_premium'].includes(pakket),
+    premium: ['beleid_premium', 'admin'].includes(pakket),
+    werkinstructies: ['beleid', 'readiness', 'admin', 'beleid_premium'].includes(pakket)
+  };
+}
+
 async function renderDocumenten() {
+  const container = document.getElementById('docsContainer');
+  const sub = document.getElementById('docsSubtitle');
+  const access = userDocAccess();
+  const totalDocs = DOC_GROUPS.reduce((s, g) => s + g.docs.length, 0);
+
+  if (!access.basis && !access.premium && !access.werkinstructies) {
+    sub.textContent = 'Beleidsdocumenten zijn beschikbaar bij het Beleidspakket.';
+    container.innerHTML = `
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:40px;text-align:center;">
+        <div style="font-size:2.2rem;margin-bottom:16px;">\uD83D\uDD12</div>
+        <h2 style="font-family:'Sora',sans-serif;font-size:1.3rem;margin-bottom:8px;">Geen toegang tot beleidsdocumenten</h2>
+        <p style="color:var(--text-muted);max-width:540px;margin:0 auto 24px;line-height:1.65;">
+          U heeft momenteel toegang tot de gap-analyse. Voor directe toegang tot ${totalDocs} ISO 27001-conforme beleidstemplates heeft u het <strong>Beleidspakket</strong> nodig.
+        </p>
+        <a href="https://annex27.nl/bestellen?plan=beleid" target="_blank" style="display:inline-block;background:var(--accent);color:#fff;padding:12px 24px;border-radius:10px;font-weight:700;text-decoration:none;font-size:0.95rem;">Bekijk Beleidspakket &rarr;</a>
+        <p style="margin-top:28px;font-size:0.82rem;color:var(--text-muted);">Al besteld? Mail <a href="mailto:info@annex27.nl" style="color:var(--accent);">info@annex27.nl</a> zodat we uw toegang activeren.</p>
+      </div>`;
+    return;
+  }
+
+  sub.textContent = `${totalDocs} beleidsdocumenten gegroepeerd per ISO 27001-domein. Klik op een groep om uit te klappen.`;
+  let html = '';
+  DOC_GROUPS.forEach((group, gi) => {
+    const accessibleDocs = group.docs.filter(d =>
+      d.src === 'basispakket' ? access.basis :
+      d.src === 'premium' ? access.premium :
+      d.src === 'werkinstructies' ? access.werkinstructies : false
+    );
+    const lockedCount = group.docs.length - accessibleDocs.length;
+    const initiallyOpen = gi === 0;
+
+    html += `
+      <div class="doc-group ${initiallyOpen ? 'open' : ''}">
+        <button class="doc-group-head" onclick="toggleDocGroup(this)" type="button">
+          <span class="doc-group-icon">${group.icon}</span>
+          <span class="doc-group-text">
+            <span class="doc-group-label">${escapeHtml(group.label)}</span>
+            <span class="doc-group-sub">${escapeHtml(group.sub)}</span>
+          </span>
+          <span class="doc-group-count">${group.docs.length}${lockedCount ? ` <small>(${lockedCount} vergrendeld)</small>` : ''}</span>
+          <svg class="doc-group-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="doc-group-body">`;
+
+    group.docs.forEach(d => {
+      const allowed =
+        d.src === 'basispakket' ? access.basis :
+        d.src === 'premium' ? access.premium :
+        d.src === 'werkinstructies' ? access.werkinstructies : false;
+      const refsHtml = (d.refs || []).map(r => `<span class="doc-ref">${escapeHtml(r)}</span>`).join('');
+      const pdfFile = d.pdfOnly ? d.file : d.file.replace(/\.docx$/, '.pdf');
+      const wordBtn = d.pdfOnly ? '' : `<button class="doc-btn-word" onclick="downloadDoc('${escapeAttr(d.src)}','${escapeAttr(d.file)}')" title="Bewerkbare versie (Word)">Word</button>`;
+      const pdfBtn = `<button class="doc-btn-pdf" onclick="downloadDoc('${escapeAttr(d.src)}','${escapeAttr(pdfFile)}')" title="PDF (alleen lezen)">PDF</button>`;
+      const lock = !allowed ? `<span class="doc-lock" title="Geen toegang met uw huidige pakket">\uD83D\uDD12</span>` : '';
+
+      html += `
+        <div class="doc-row ${allowed ? '' : 'locked'}">
+          <div class="doc-row-main">
+            <div class="doc-row-title">${lock}${escapeHtml(d.title)}</div>
+            <div class="doc-row-refs">${refsHtml}</div>
+          </div>
+          <div class="doc-row-actions">${allowed ? pdfBtn + wordBtn : '<span class="doc-locked-msg">Upgrade nodig</span>'}</div>
+        </div>`;
+    });
+
+    html += `</div></div>`;
+  });
+  container.innerHTML = html;
+}
+
+function toggleDocGroup(btn) {
+  const group = btn.closest('.doc-group');
+  if (group) group.classList.toggle('open');
+}
+
+// Backward-compat: oude renderer-pad gebruikt nog DOC_CATALOG-vorm in onbekende oude code-paden.
+async function _renderDocumentenOldUnused() {
   const container = document.getElementById('docsContainer');
   const pakket = (user.app_metadata && user.app_metadata.pakket) || user.user_metadata?.pakket || 'gap';
   const anyAccess = ['beleid', 'beleid_premium', 'admin'].includes(pakket);
@@ -5882,16 +6230,7 @@ async function renderDocumenten() {
 
   if (!anyAccess) {
     sub.textContent = 'Beleidsdocumenten zijn beschikbaar bij het Beleidspakket.';
-    container.innerHTML = `
-      <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:40px;text-align:center;">
-        <div style="font-size:2.2rem;margin-bottom:16px;">\uD83D\uDD12</div>
-        <h2 style="font-family:'Sora',sans-serif;font-size:1.3rem;margin-bottom:8px;">Geen toegang tot beleidsdocumenten</h2>
-        <p style="color:var(--text-muted);max-width:540px;margin:0 auto 24px;line-height:1.65;">
-          U heeft momenteel toegang tot de gap-analyse. Voor directe toegang tot 45 ISO 27001-conforme beleidstemplates (basispakket, premium, werkinstructies per Annex A) heeft u het <strong>Beleidspakket</strong> nodig.
-        </p>
-        <a href="https://annex27.nl/bestellen?plan=beleid" target="_blank" style="display:inline-block;background:var(--accent);color:#fff;padding:12px 24px;border-radius:10px;font-weight:700;text-decoration:none;font-size:0.95rem;">Bekijk Beleidspakket &rarr;</a>
-        <p style="margin-top:28px;font-size:0.82rem;color:var(--text-muted);">Al besteld? Mail <a href="mailto:info@annex27.nl" style="color:var(--accent);">info@annex27.nl</a> zodat we uw toegang activeren.</p>
-      </div>`;
+    container.innerHTML = '';
     return;
   }
 
