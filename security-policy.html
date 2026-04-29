@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Responsible Disclosure & Security Policy — Annex27</title>
+  <meta name="description" content="Annex27 responsible disclosure policy: hoe u kwetsbaarheden kunt melden, scope, contact en SLA voor reactie en oplossing." />
+  <meta name="keywords" content="responsible disclosure, security policy, kwetsbaarheid melden, annex27, vulnerability disclosure" />
+  <link rel="canonical" href="https://annex27.nl/security-policy" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <meta name="theme-color" content="#0D9488" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #FAFAFA; --surface: #FFFFFF; --bg-warm: #F5F3EF;
+      --border: #E5E5E5; --border-light: #F0F0F0;
+      --text-primary: #0F172A; --text-secondary: #475569; --text-muted: #94A3B8;
+      --accent: #0D9488; --accent-hover: #0F766E; --accent-light: #CCFBF1;
+      --warm: #D97706; --danger: #DC2626;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text-secondary); line-height: 1.75; -webkit-font-smoothing: antialiased; }
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(250,250,250,0.85); backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border-light);
+      height: 64px; display: flex; align-items: center; padding: 0 5%;
+    }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; width: 100%; max-width: 1120px; margin: 0 auto; }
+    .nav-logo { font-family: 'Sora', sans-serif; font-size: 1.4rem; font-weight: 700; color: var(--text-primary); text-decoration: none; letter-spacing: -0.03em; }
+    .nav-logo span { color: var(--accent); }
+    .nav-back { color: var(--text-secondary); text-decoration: none; font-weight: 500; font-size: 0.86rem; }
+    .nav-back:hover { color: var(--text-primary); }
+
+    .hero { background: linear-gradient(180deg, var(--bg) 0%, var(--bg-warm) 100%); padding: 64px 24px 48px; text-align: center; border-bottom: 1px solid var(--border-light); }
+    .hero .badge {
+      display: inline-block; background: rgba(13,148,136,0.10); color: var(--accent);
+      padding: 5px 14px; border-radius: 99px; font-size: 0.74rem; font-weight: 700;
+      letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 16px;
+    }
+    .hero h1 { font-family: 'Sora', sans-serif; font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 800; color: var(--text-primary); letter-spacing: -0.025em; margin-bottom: 12px; max-width: 760px; margin-inline: auto; }
+    .hero p { font-size: 1.04rem; max-width: 620px; margin: 0 auto; }
+
+    main { max-width: 760px; margin: 0 auto; padding: 56px 24px 80px; }
+    h2 { font-family: 'Sora', sans-serif; font-size: 1.4rem; font-weight: 700; color: var(--text-primary); letter-spacing: -0.015em; margin-top: 44px; margin-bottom: 14px; }
+    h2:first-child { margin-top: 0; }
+    h3 { font-family: 'Sora', sans-serif; font-size: 1.05rem; font-weight: 700; color: var(--text-primary); margin-top: 24px; margin-bottom: 8px; }
+    p { margin-bottom: 14px; }
+    ul, ol { margin: 12px 0 16px 22px; }
+    li { margin-bottom: 8px; }
+    code { background: var(--bg-warm); padding: 2px 7px; border-radius: 5px; font-size: 0.92em; font-family: 'JetBrains Mono', monospace; }
+    a.contact { color: var(--accent); font-weight: 600; }
+    a.contact:hover { color: var(--accent-hover); }
+
+    .panel {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+      padding: 24px 28px; margin: 24px 0;
+    }
+    .panel.info { border-left: 4px solid var(--accent); }
+    .panel.warn { border-left: 4px solid var(--warm); background: linear-gradient(90deg, rgba(217,119,6,0.04), transparent 60%); }
+    .panel.scope-out { border-left: 4px solid var(--danger); background: linear-gradient(90deg, rgba(220,38,38,0.03), transparent 60%); }
+    .panel-label { font-size: 0.74rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px; }
+    .panel-label.in { color: var(--accent); }
+    .panel-label.out { color: var(--danger); }
+    .panel-label.warn { color: var(--warm); }
+
+    .sla-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 18px 0 28px; }
+    .sla-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 18px 20px; }
+    .sla-card-time { font-family: 'Sora', sans-serif; font-size: 1.6rem; font-weight: 800; color: var(--accent); letter-spacing: -0.02em; line-height: 1; margin-bottom: 4px; }
+    .sla-card-label { font-size: 0.78rem; color: var(--text-muted); font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 8px; }
+    .sla-card-desc { font-size: 0.86rem; color: var(--text-secondary); line-height: 1.55; }
+
+    .pgp-block {
+      background: var(--bg-warm); border: 1px solid var(--border); border-radius: 10px;
+      padding: 14px 18px; font-family: 'JetBrains Mono', monospace; font-size: 0.82rem;
+      color: var(--text-secondary); margin: 10px 0;
+    }
+
+    footer { background: var(--surface); border-top: 1px solid var(--border-light); padding: 32px 5%; font-size: 0.84rem; color: var(--text-muted); text-align: center; }
+    footer a { color: var(--text-secondary); text-decoration: none; margin: 0 8px; }
+    footer a:hover { color: var(--text-primary); }
+
+    @media (max-width: 600px) {
+      .sla-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="nav-inner">
+      <a href="/" class="nav-logo">annex<span>27</span></a>
+      <a href="/" class="nav-back">← Naar home</a>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <span class="badge">Responsible Disclosure</span>
+    <h1>Heeft u een kwetsbaarheid gevonden?</h1>
+    <p>Wij waarderen onderzoekers die ons helpen Annex27 veiliger te maken. Hieronder vindt u onze responsible-disclosure-policy: scope, contactkanaal en de tijdlijnen waarbinnen wij reageren.</p>
+  </section>
+
+  <main>
+    <div class="panel info">
+      <div class="panel-label in">Snelle samenvatting</div>
+      <p style="margin:0;"><strong>Meld kwetsbaarheden eerst privé</strong> via <a class="contact" href="mailto:info@annex27.nl?subject=Security%20disclosure">info@annex27.nl</a> voordat u publiceert. Wij reageren binnen 48 uur en streven naar oplossing binnen 30 dagen voor kritieke issues. <strong>Wij gaan geen juridische actie ondernemen</strong> tegen onderzoekers die zich aan deze policy houden.</p>
+    </div>
+
+    <h2>Onze afspraken met u</h2>
+    <p>Wanneer u een kwetsbaarheid in goed vertrouwen meldt en u zich aan deze policy houdt:</p>
+    <ul>
+      <li>Wij <strong>bevestigen ontvangst</strong> binnen 48 uur (werkdagen).</li>
+      <li>Wij geven u een <strong>realistische tijdlijn</strong> voor onderzoek en oplossing.</li>
+      <li>Wij houden u <strong>op de hoogte</strong> van voortgang en oplossing.</li>
+      <li>Wij <strong>schrijven geen aangifte uit</strong> tegen onderzoekers die zich aan deze policy houden, zelfs als u tijdens onderzoek per ongeluk bepaalde grenzen passeert.</li>
+      <li>Wij vermelden u graag in onze hall-of-fame (na overleg) na publieke disclosure.</li>
+    </ul>
+
+    <h2>Wat wij van u vragen</h2>
+    <ul>
+      <li><strong>Eerst privé melden</strong> — geef ons redelijke tijd om de kwetsbaarheid op te lossen voordat u publiceert (standaard: 90 dagen voor publicatie of na onze bevestigde fix).</li>
+      <li><strong>Geen schade toebrengen</strong> — geen denial-of-service, geen brute-force, geen pogingen om data van anderen te lezen, modificeren of verwijderen.</li>
+      <li><strong>Geen sociale engineering</strong> — geen phishing van onze medewerkers, klanten of leveranciers.</li>
+      <li><strong>Gebruik testdata</strong> — als u een proof-of-concept maakt, gebruik dan eigen test-accounts of dummy-data, niet die van anderen.</li>
+      <li><strong>Stop bij persoonsgegevens</strong> — als u tijdens onderzoek persoonsgegevens van klanten tegenkomt, stop direct en meld het. Lees, kopieer of bewaar geen gegevens van derden.</li>
+    </ul>
+
+    <h2>Reactietijden (SLA)</h2>
+    <div class="sla-grid">
+      <div class="sla-card">
+        <div class="sla-card-time">48u</div>
+        <div class="sla-card-label">Eerste reactie</div>
+        <div class="sla-card-desc">Bevestiging van ontvangst en aanvang triage.</div>
+      </div>
+      <div class="sla-card">
+        <div class="sla-card-time">7d</div>
+        <div class="sla-card-label">Triage afgerond</div>
+        <div class="sla-card-desc">Bevestiging severity, geplande aanpak, tijdlijn voor fix.</div>
+      </div>
+      <div class="sla-card">
+        <div class="sla-card-time">30d</div>
+        <div class="sla-card-label">Fix kritiek</div>
+        <div class="sla-card-desc">Doel: oplossing voor critical/high binnen 30 dagen.</div>
+      </div>
+    </div>
+
+    <h2>Scope</h2>
+
+    <div class="panel">
+      <div class="panel-label in">In scope</div>
+      <ul style="margin-bottom:0;">
+        <li><code>annex27.nl</code> en alle subdomeinen</li>
+        <li>De gap-analyse-tool (publiek + ingelogd)</li>
+        <li>Het klantportaal en dashboard</li>
+        <li>Het admin-paneel en auditor-omgeving</li>
+        <li>Authenticatie, sessie- en autorisatie-flows</li>
+        <li>Supabase-infrastructuur die wij beheren (RLS, edge functions, storage)</li>
+      </ul>
+    </div>
+
+    <div class="panel scope-out">
+      <div class="panel-label out">Buiten scope</div>
+      <ul style="margin-bottom:0;">
+        <li>Third-party diensten (Mollie, Supabase platform, Hostnet) — meld direct bij hen</li>
+        <li>Aanvallen die fysieke toegang vereisen</li>
+        <li>Social engineering, phishing of pretexting</li>
+        <li>Distributed Denial of Service (DDoS)</li>
+        <li>Bekende UX/UI-issues die geen security-impact hebben</li>
+        <li>Theoretische kwetsbaarheden zonder demonstreerbaar risico</li>
+        <li>Missing security headers zonder concrete exploit (we kennen onze headers en updaten regelmatig)</li>
+      </ul>
+    </div>
+
+    <h2>Hoe te melden</h2>
+    <p>Stuur een mail naar <a class="contact" href="mailto:info@annex27.nl?subject=Security%20disclosure">info@annex27.nl</a> met als onderwerp <code>Security disclosure</code>. Vermeld bij voorkeur:</p>
+    <ol>
+      <li>Een <strong>korte beschrijving</strong> van de kwetsbaarheid.</li>
+      <li><strong>Stappen om te reproduceren</strong> (proof-of-concept).</li>
+      <li>De <strong>impact</strong> die u inschat (vertrouwelijkheid / integriteit / beschikbaarheid).</li>
+      <li><strong>Eventuele suggesties</strong> voor mitigatie of fix.</li>
+      <li>Uw contactgegevens en hoe u graag genoemd wordt (of anoniem blijft).</li>
+    </ol>
+
+    <h3>Versleuteling (optioneel)</h3>
+    <p>Voor gevoelige meldingen kunt u uw bericht versleutelen. Vraag onze publieke PGP-sleutel op via dezelfde mail; we sturen 'm dezelfde dag terug.</p>
+
+    <h2>Wat doen wij niet</h2>
+    <ul>
+      <li>Wij keren <strong>geen bug-bounties</strong> uit — Annex27 is een MKB-organisatie zonder bug-bounty-budget. Wel erkennen wij u publiek (na overleg) en helpen u graag verder met andere security-werk.</li>
+      <li>Wij gaan geen <strong>negotiation</strong> aan over uitkering, hush-money of "exclusive disclosure".</li>
+    </ul>
+
+    <h2>Machine-readable</h2>
+    <p>Onze <code>security.txt</code> is beschikbaar op <a class="contact" href="/.well-known/security.txt">/.well-known/security.txt</a> (RFC 9116-conform).</p>
+
+    <h2>Versie en geldigheid</h2>
+    <p>Deze policy is laatst bijgewerkt op <strong>30 april 2026</strong> en geldig tot herziening. Annex27 behoudt zich het recht voor de policy aan te passen — de canonieke versie staat altijd op deze pagina.</p>
+  </main>
+
+  <footer>
+    <div>© 2026 Annex27 · <a href="/">Home</a> · <a href="/privacy">Privacy</a> · <a href="/algemene-voorwaarden">Algemene voorwaarden</a> · <a href="/.well-known/security.txt">security.txt</a></div>
+  </footer>
+</body>
+</html>

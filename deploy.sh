@@ -17,7 +17,7 @@ SRC="C:/Users/raoul/Documents/annex27"
 echo "Deploying to annex27.nl..."
 
 # Root files
-for file in index.html gap-analyse.html portal.html dashboard.html bestellen.html success.html trust.html admin.html faq.html factuur.html privacy.html algemene-voorwaarden.html verwerkersovereenkomst.html nis2.html blog.html rapport-voorbeeld.html analytics.js analytics-admin.js vat-rules.js robots.txt sitemap.xml .htaccess og-image.svg favicon.svg favicon-16x16.png favicon-32x32.png apple-touch-icon.png android-chrome-192x192.png android-chrome-512x512.png site.webmanifest; do
+for file in index.html gap-analyse.html portal.html dashboard.html bestellen.html success.html trust.html admin.html faq.html factuur.html privacy.html algemene-voorwaarden.html verwerkersovereenkomst.html nis2.html blog.html rapport-voorbeeld.html 404.html security-policy.html analytics.js analytics-admin.js vat-rules.js robots.txt sitemap.xml .htaccess og-image.svg favicon.svg favicon-16x16.png favicon-32x32.png apple-touch-icon.png android-chrome-192x192.png android-chrome-512x512.png site.webmanifest; do
   if [ -f "$SRC/$file" ]; then
     echo "  Uploading $file..."
     curl -s --ftp-ssl --user "$FTP_USER" -T "$SRC/$file" "$FTP_HOST$file"
@@ -37,6 +37,17 @@ if [ -d "$SRC/blog" ]; then
       fname=$(basename "$blogfile")
       echo "  Uploading blog/$fname..."
       curl -s --ftp-ssl --user "$FTP_USER" --ftp-create-dirs -T "$blogfile" "$FTP_HOST/blog/$fname"
+    fi
+  done
+fi
+
+# sector/ folder (sector-specifieke landings)
+if [ -d "$SRC/sector" ]; then
+  for sf in "$SRC/sector"/*.html; do
+    if [ -f "$sf" ]; then
+      fname=$(basename "$sf")
+      echo "  Uploading sector/$fname..."
+      curl -s --ftp-ssl --user "$FTP_USER" --ftp-create-dirs -T "$sf" "$FTP_HOST/sector/$fname"
     fi
   done
 fi

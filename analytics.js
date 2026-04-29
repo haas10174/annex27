@@ -5,6 +5,19 @@
 (function () {
   'use strict';
 
+  // Console-warning tegen Self-XSS (industry-standaard: GitHub/Facebook/Google).
+  // Heeft niets te maken met security tegen pentesters — beschermt eindgebruikers
+  // tegen "plak deze code in console om premium te krijgen"-scams.
+  try {
+    if (window.console && console.log) {
+      var bigStyle = 'color:#DC2626;font-size:42px;font-weight:800;font-family:Sora,sans-serif;text-shadow:0 1px 2px rgba(0,0,0,0.1);';
+      var lblStyle = 'color:#0F172A;font-size:14px;font-weight:600;line-height:1.55;';
+      console.log('%cWacht!', bigStyle);
+      console.log('%cDeze browser-console is bedoeld voor onze ontwikkelaars. Plak hier NOOIT code die iemand u toestuurt — ook niet als die persoon zegt te helpen. Dat kan leiden tot account-overname (Self-XSS).\n\nVerdacht iets gezien? Mail info@annex27.nl', lblStyle);
+      console.log('%cMeer info: %chttps://annex27.nl/security-policy', lblStyle, 'color:#0D9488;text-decoration:underline;');
+    }
+  } catch (e) { /* console niet beschikbaar — geen probleem */ }
+
   var GA_ID = 'G-VWXHXN3KV2';
   var CONSENT_KEY = 'annex27_consent_v1';
 

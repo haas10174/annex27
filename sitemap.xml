@@ -106,4 +106,18 @@
     <priority>0.4</priority>
   </url>
 
+  <url>
+    <loc>https://annex27.nl/sector/zorg</loc>
+    <lastmod>2026-04-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
+  <url>
+    <loc>https://annex27.nl/security-policy</loc>
+    <lastmod>2026-04-30</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+
 </urlset>
