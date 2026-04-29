@@ -772,6 +772,32 @@
     .severity-pill.active[data-sev="major"] { background: rgba(239,68,68,0.15); color: var(--danger); border-color: var(--danger); }
     .severity-pill.active[data-sev="critical"] { background: var(--danger); color: white; border-color: var(--danger); }
 
+    /* Quick-finding buttons — speedy validation per control */
+    .qf-btn {
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      cursor: pointer;
+      transition: all 0.15s;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+    .qf-btn:hover { transform: translateY(-1px); }
+    .qf-ok { color: var(--success, #059669); border-color: rgba(5,150,105,0.3); }
+    .qf-ok:hover { background: rgba(5,150,105,0.08); border-color: var(--success, #059669); }
+    .qf-minor { color: var(--accent-light); border-color: rgba(13,148,136,0.3); }
+    .qf-minor:hover { background: rgba(13,148,136,0.08); }
+    .qf-major { color: var(--warning, #D97706); border-color: rgba(217,119,6,0.3); }
+    .qf-major:hover { background: rgba(217,119,6,0.08); border-color: var(--warning, #D97706); }
+    .qf-critical { color: var(--danger, #DC2626); border-color: rgba(220,38,38,0.3); }
+    .qf-critical:hover { background: rgba(220,38,38,0.08); border-color: var(--danger, #DC2626); }
+    .qf-reject { color: var(--text-muted); border-style: dashed; }
+    .qf-reject:hover { background: rgba(0,0,0,0.04); }
+
     .save-status {
       font-size: 0.72rem;
       color: var(--text-dim);
@@ -3346,6 +3372,17 @@ function renderControlRow(ctrl, gapAnswers, existingFinding) {
         <div class="section-label">Uw bevinding (komt in rapport)</div>
 
         <div class="finding-row">
+          <div class="finding-label">Quick-actie</div>
+          <div class="quick-finding" data-ctrl="${esc(ctrl.id)}" style="display:flex;gap:6px;flex-wrap:wrap;">
+            <button type="button" class="qf-btn qf-ok"      onclick="applyFindingTemplate('${esc(ctrl.id)}','ok')"      title="Geen afwijking — bevestig en ga door">✓ OK — geen actie</button>
+            <button type="button" class="qf-btn qf-minor"   onclick="applyFindingTemplate('${esc(ctrl.id)}','minor')"   title="Kleine tekortkoming — Minor + auto-template">⚠ Minor</button>
+            <button type="button" class="qf-btn qf-major"   onclick="applyFindingTemplate('${esc(ctrl.id)}','major')"   title="Significante afwijking — Major + auto-template">🔶 Major</button>
+            <button type="button" class="qf-btn qf-critical" onclick="applyFindingTemplate('${esc(ctrl.id)}','critical')" title="Blokkerend voor certificering — Critical + auto-template">🔴 Critical</button>
+            <button type="button" class="qf-btn qf-reject"  onclick="rejectAiFinding('${esc(ctrl.id)}')" title="Verwerp bestaande tekst en begin opnieuw">✕ Wissen</button>
+          </div>
+        </div>
+
+        <div class="finding-row">
           <div class="finding-label">Severity</div>
           <div class="severity-pills" data-ctrl="${esc(ctrl.id)}">
             <button type="button" class="severity-pill ${sev==='info'?'active':''}" data-sev="info" onclick="setSeverity('${esc(ctrl.id)}','info',this)">Info</button>
@@ -3673,6 +3710,61 @@ function setSeverity(ctrlId, sev, btn) {
   parent.querySelectorAll('.severity-pill').forEach(p => p.classList.remove('active'));
   btn.classList.add('active');
   saveFinding(ctrlId);
+}
+
+// Quick-finding templates — vul finding + severity in 1 klik
+function applyFindingTemplate(ctrlId, kind) {
+  const safeId = ctrlId.replace(/\./g, '_');
+  const ctrl = controls.find(c => c.id === ctrlId) || { id: ctrlId, name: ctrlId };
+  const findingEl = document.getElementById('finding_' + safeId);
+  const recEl = document.getElementById('rec_' + safeId);
+  const sevPills = document.querySelector(`.severity-pills[data-ctrl="${ctrlId}"]`);
+  if (!findingEl || !recEl || !sevPills) return;
+
+  const templates = {
+    ok: {
+      sev: 'info',
+      finding: `${ctrl.id} — Geen afwijking geconstateerd. Implementatie voldoet aan de norm op basis van aangeleverd bewijs en review.`,
+      rec: 'Continueer huidige praktijk. Periodiek (jaarlijks) review tijdens management review aanbevolen.'
+    },
+    minor: {
+      sev: 'minor',
+      finding: `${ctrl.id} — Implementatie aanwezig maar onvolledig. ${ctrl.name} mist gedeeltelijke onderbouwing of consistente toepassing in de praktijk.`,
+      rec: `1. Documenteer ontbrekend onderdeel + handtekening directie\n2. Train betrokken medewerkers op gewijzigde procedure\n3. Volgende review in 6 maanden — verifieer toepassing.`
+    },
+    major: {
+      sev: 'major',
+      finding: `${ctrl.id} — Significante afwijking. ${ctrl.name} is niet adequaat geadresseerd. Bewijs ontbreekt of toont niet aan dat de control structureel werkt.`,
+      rec: `1. Stel beleid + procedure formeel op binnen 30 dagen\n2. Implementeer in dagelijkse praktijk + meet effectiviteit\n3. Lever bewijsdocumenten op (minimaal 1 per kwartaal)\n4. Re-audit voor certificering.`
+    },
+    critical: {
+      sev: 'critical',
+      finding: `${ctrl.id} — KRITISCHE afwijking, blokkerend voor certificering. Implementatie ontbreekt volledig of bewijs is materieel onjuist. Risico op acute compliance-incidenten of audit-failure.`,
+      rec: `DIRECT ACTIE VEREIST:\n1. Stop relevante processen tot beleid + technische maatregel zijn vastgesteld\n2. Risk-acceptance door directie binnen 7 dagen of remediation plan met deadline\n3. Externe pre-audit aanbevolen vóór hervatting certificeringspad.`
+    }
+  };
+  const t = templates[kind];
+  if (!t) return;
+
+  findingEl.value = t.finding;
+  recEl.value = t.rec;
+  sevPills.querySelectorAll('.severity-pill').forEach(p => p.classList.toggle('active', p.dataset.sev === t.sev));
+  saveFinding(ctrlId);
+  adminToast(`Quick-finding toegepast: ${kind.toUpperCase()}`);
+}
+
+function rejectAiFinding(ctrlId) {
+  const safeId = ctrlId.replace(/\./g, '_');
+  const findingEl = document.getElementById('finding_' + safeId);
+  const recEl = document.getElementById('rec_' + safeId);
+  const sevPills = document.querySelector(`.severity-pills[data-ctrl="${ctrlId}"]`);
+  if (findingEl) findingEl.value = '';
+  if (recEl) recEl.value = '';
+  if (sevPills) {
+    sevPills.querySelectorAll('.severity-pill').forEach(p => p.classList.toggle('active', p.dataset.sev === 'info'));
+  }
+  saveFinding(ctrlId);
+  adminToast('Tekst gewist — typ uw eigen bevinding');
 }
 
 async function saveFinding(ctrlId) {
