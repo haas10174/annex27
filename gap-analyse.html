@@ -1462,6 +1462,68 @@
     }
     #screenResults .big-ring-compare strong { color: white !important; font-weight: 700 !important; }
 
+    /* Benchmark mini-component */
+    #screenResults .bench { display: flex; flex-direction: column; gap: 8px; max-width: 360px; }
+    #screenResults .bench-row {
+      display: grid;
+      grid-template-columns: 70px 1fr 44px;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.78rem;
+    }
+    #screenResults .bench-label {
+      color: rgba(255,255,255,0.55);
+      letter-spacing: 0.04em;
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.66rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    #screenResults .bench-bar {
+      display: block;
+      height: 8px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 99px;
+      overflow: hidden;
+      position: relative;
+    }
+    #screenResults .bench-fill {
+      display: block;
+      height: 100%;
+      border-radius: 99px;
+      transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    #screenResults .bench-fill.you {
+      background: linear-gradient(90deg, var(--sector-cta, #14B8A6) 0%, var(--sector-accent, #5EEAD4) 100%);
+      box-shadow: 0 0 12px var(--sector-cta-shadow, rgba(20,184,166,0.4));
+    }
+    #screenResults .bench-fill.sector {
+      background: rgba(255,255,255,0.22);
+    }
+    #screenResults .bench-val {
+      font-family: 'Sora', sans-serif;
+      font-weight: 700;
+      color: white;
+      font-size: 0.85rem;
+      text-align: right;
+      letter-spacing: -0.01em;
+    }
+    #screenResults .bench-delta {
+      margin-top: 4px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 0 0;
+    }
+    #screenResults .bench-delta.down { color: #FCA5A5; }
+    #screenResults .bench-delta.up   { color: #34D399; }
+    #screenResults .bench-delta.eq   { color: rgba(255,255,255,0.55); }
+
     /* Categorie-tiles — grid 3x2 ipv lange balken */
     #screenResults .results-cats {
       display: grid !important;
@@ -2528,7 +2590,26 @@ function showResults() {
   // Compare — sector-specific benchmark
   const profile = sectorProfiles[selectedSector] || sectorProfiles.overig;
   const benchmark = profile.benchmark;
-  document.getElementById('bigCompare').innerHTML = `Uw score: <strong>${pct}%</strong> · Gemiddelde ${profile.label}: <strong>${benchmark}%</strong>`;
+  // Benchmark-vergelijking — visuele mini-bars in plaats van platte tekst
+  const delta = pct - benchmark;
+  const deltaClass = delta < 0 ? 'down' : (delta > 0 ? 'up' : 'eq');
+  const deltaText = delta < 0 ? `${Math.abs(delta)}% onder sectorgemiddelde`
+                  : delta > 0 ? `${delta}% boven sectorgemiddelde`
+                  : `gelijk aan sectorgemiddelde`;
+  document.getElementById('bigCompare').innerHTML = `
+    <div class="bench">
+      <div class="bench-row">
+        <span class="bench-label">U</span>
+        <span class="bench-bar"><span class="bench-fill you" style="width:${pct}%"></span></span>
+        <span class="bench-val">${pct}%</span>
+      </div>
+      <div class="bench-row">
+        <span class="bench-label">${profile.label}</span>
+        <span class="bench-bar"><span class="bench-fill sector" style="width:${benchmark}%"></span></span>
+        <span class="bench-val">${benchmark}%</span>
+      </div>
+      <div class="bench-delta ${deltaClass}">${delta < 0 ? '▼' : delta > 0 ? '▲' : '＝'} ${deltaText}</div>
+    </div>`;
 
   // Sector badge
   const badge = document.getElementById('resultsSectorBadge');
