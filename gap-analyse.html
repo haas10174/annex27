@@ -804,7 +804,7 @@
     }
     .upsell-stats {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(3, 1fr);
       border-top: 1px solid rgba(255,255,255,0.06);
       border-bottom: 1px solid rgba(255,255,255,0.06);
     }
@@ -895,9 +895,9 @@
     .upsell-alt:hover { color: rgba(255,255,255,0.75); }
     @media (max-width: 720px) {
       .upsell-hero { padding: 32px 28px 24px; }
-      .upsell-stats { grid-template-columns: repeat(2, 1fr); }
-      .us:nth-child(2) { border-right: 0; }
-      .us:nth-child(1), .us:nth-child(2) { border-bottom: 1px solid rgba(255,255,255,0.05); }
+      .upsell-stats { grid-template-columns: 1fr; }
+      .us { border-right: 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+      .us:last-child { border-bottom: 0; }
       .upsell-foot { grid-template-columns: 1fr; padding: 24px 28px 28px; gap: 16px; text-align: center; }
       .upsell-price-row { align-items: center; }
       .upsell-cta-bold { width: 100%; justify-content: center; }
@@ -2457,12 +2457,11 @@ function applyUpsellContent() {
     if (ctaLabel) ctaLabel.textContent = 'Klaar voor de echte gap-analyse?';
   }
 
-  // Update stats (alle 4 tegels)
+  // Update stats (3 tegels)
   stats.innerHTML = `
     <div class="us"><span class="us-n">${s1}</span><span class="us-l">${s1l}</span></div>
     <div class="us"><span class="us-n">${s2}</span><span class="us-l">${s2l}</span></div>
-    <div class="us"><span class="us-n">48u</span><span class="us-l">tot rapport</span></div>
-    <div class="us"><span class="us-n">DNV</span><span class="us-l">Lead Auditor</span></div>`;
+    <div class="us"><span class="us-n">48u</span><span class="us-l">tot rapport</span></div>`;
 }
 
 function showResults() {
