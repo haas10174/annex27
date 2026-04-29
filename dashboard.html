@@ -1514,31 +1514,20 @@
       margin: 0;
     }
     .ga-evidence-status {
-      font-size: 0.72rem;
-      font-weight: 600;
-      padding: 4px 10px;
-      border-radius: 999px;
-      letter-spacing: 0.02em;
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 0;
+      background: none !important;
+      border: 0 !important;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
     }
-    .ga-evidence-status.ok {
-      background: rgba(20,184,166,0.1);
-      color: #0D9488;
-      border: 1px solid rgba(20,184,166,0.32);
-    }
-    .ga-evidence-status.missing {
-      background: rgba(217,119,6,0.08);
-      color: #B45309;
-      border: 1px solid rgba(217,119,6,0.28);
-    }
-    .ga-evidence-status.required {
-      background: rgba(220,38,38,0.08);
-      color: #B91C1C;
-      border: 1px solid rgba(220,38,38,0.28);
-      animation: a27-pulse 2s ease-in-out infinite;
-    }
+    .ga-evidence-status.ok      { color: #0D9488; }
+    .ga-evidence-status.missing { color: #B45309; }
+    .ga-evidence-status.required{ color: #B91C1C; animation: a27-pulse 2s ease-in-out infinite; }
     @keyframes a27-pulse {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(220,38,38,0); }
-      50% { box-shadow: 0 0 0 4px rgba(220,38,38,0.08); }
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.55; }
     }
     .ga-ctrl-flash {
       animation: a27-flash 1.2s ease-in-out 2;
@@ -1550,10 +1539,53 @@
       50% { background: rgba(220,38,38,0.06); }
     }
     .ga-evidence-hint {
-      font-size: 0.85rem;
+      font-size: 0.86rem;
       line-height: 1.6;
       color: var(--text-secondary);
       margin-bottom: 16px;
+    }
+    .ga-evidence-hint-prompt {
+      font-style: italic;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+    .ga-evidence-hint-toggle {
+      background: none;
+      border: 0;
+      padding: 0;
+      font-family: inherit;
+      font-size: 0.82rem;
+      color: var(--accent);
+      cursor: pointer;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      letter-spacing: 0.01em;
+    }
+    .ga-evidence-hint-toggle:hover { text-decoration: underline; }
+    .ga-evidence-hint-toggle svg {
+      width: 12px; height: 12px;
+      transition: transform 0.2s;
+    }
+    .ga-evidence-hint-toggle.open svg { transform: rotate(180deg); }
+    .ga-evidence-hint-detail {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.25s ease-out, padding 0.25s ease-out;
+      padding: 0 14px;
+      margin-top: 0;
+      background: rgba(13,148,136,0.04);
+      border-left: 2px solid rgba(13,148,136,0.4);
+      border-radius: 0 8px 8px 0;
+      color: var(--text-secondary);
+      font-size: 0.84rem;
+      line-height: 1.65;
+    }
+    .ga-evidence-hint-detail.open {
+      max-height: 800px;
+      padding: 12px 14px;
+      margin-top: 10px;
     }
     .ga-evidence-hint strong {
       color: var(--text-primary);
@@ -4744,7 +4776,8 @@ function renderControlCard(ctrl, idx, total) {
   const evidenceMissing = highClaim && !hasEvidence;
 
   const noteOpen = hasStructuredNote || !!(evidence.note && evidence.note.trim().length > 0);
-  const hintFormatted = esc(evHint).replace(/^Upload:\s*/i, '<strong>Wat een auditor verifieert: </strong>');
+  const hintFormatted = esc(evHint).replace(/^Upload:\s*/i, '');
+  const hintId = 'hint_' + ctrl.id.replace(/\./g, '_');
 
   const statusClass = hasEvidence ? 'ok' : (evidenceMissing ? 'required' : 'missing');
   const statusText = hasEvidence
@@ -4759,7 +4792,14 @@ function renderControlCard(ctrl, idx, total) {
           ${statusText}
         </div>
       </div>
-      <div class="ga-evidence-hint">${hintFormatted}</div>
+      <div class="ga-evidence-hint">
+        <div class="ga-evidence-hint-prompt">Wat zou een auditor hier toetsen — heeft u dat documenteerbaar?</div>
+        <button type="button" class="ga-evidence-hint-toggle" onclick="const d=document.getElementById('${hintId}'); d.classList.toggle('open'); this.classList.toggle('open');">
+          Voorbeelden van bewijs
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="ga-evidence-hint-detail" id="${hintId}">${hintFormatted}</div>
+      </div>
       <div class="ga-evidence-files">
   `;
 
