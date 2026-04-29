@@ -1369,21 +1369,7 @@
       margin-bottom: 56px;
       max-width: 720px;
     }
-    #screenResults .results-sector-badge {
-      display: inline-flex !important;
-      align-items: center;
-      gap: 8px;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid var(--sector-accent, rgba(94,234,212,0.4));
-      color: var(--sector-accent, #5EEAD4) !important;
-      padding: 6px 14px !important;
-      border-radius: 99px;
-      font-size: 0.7rem !important;
-      font-weight: 700 !important;
-      letter-spacing: 0.16em !important;
-      text-transform: uppercase;
-      margin-bottom: 22px;
-    }
+    #screenResults .results-sector-badge { display: none !important; }
     #screenResults .results-header h2 {
       font-family: 'Sora', sans-serif;
       font-size: clamp(2.4rem, 5.6vw, 4.4rem) !important;
@@ -1846,7 +1832,6 @@
     <!-- Upsell-block: pakkende "next chapter" CTA naar €795 echte gap-analyse -->
     <div class="upsell-block" id="upsellBlock">
       <div class="upsell-hero">
-        <div class="upsell-tag" id="upsellEyebrow">VOLLEDIGE ISO 27001-TOETS</div>
         <h3 class="upsell-h" id="upsellTitle">Dit is een indicatie. <em>De echte audit komt nu.</em></h3>
         <p class="upsell-sub" id="upsellLead">U beantwoordde 14 vragen op hoofdlijnen. De volledige gap-analyse toetst alle 93 ISO 27002:2022-controls én clausules 4-10 — met bewijsvoering per claim en Lead Auditor review.</p>
       </div>
@@ -2433,34 +2418,34 @@ function applyUpsellContent() {
     lead.innerHTML = `U beantwoordde ${totalQ} hoofdlijn-vragen. De volledige zorg-gap toetst alle 93 ISO 27002-controls plus 16 NEN 7510-zorgdeltas (§5.x/§6.x/§7.x/§8.x) — behandelrelatie, EPD-logging, WGBO-bewaartermijnen, BIG/Wkkgz-tucht.`;
     s1 = '93+16'; s1l = 'controls + NEN 7510';
     s2 = '§5–§8'; s2l = 'zorgdeltas';
-    if (ctaLabel) ctaLabel.textContent = 'Bestel zorg-gap-analyse';
+    if (ctaLabel) ctaLabel.textContent = 'Klaar voor de echte gap-analyse?';
   } else if (selectedSector === 'overheid') {
     eyebrow.textContent = 'Volledige BIO + ISO 27001';
     title.innerHTML = 'Indicatie binnen. <em>Stap door naar audit-ready.</em>';
     lead.innerHTML = `U beantwoordde ${totalQ} hoofdlijn-vragen. De volledige gap toetst alle 93 Annex A-controls tegen BIO-thema-uitwerkingen, met bewijsvoering per control en Lead Auditor review.`;
     s1 = '93'; s1l = 'BIO-controls';
     s2 = '7';  s2l = 'ISMS-clausules';
-    if (ctaLabel) ctaLabel.textContent = 'Bestel BIO-gap-analyse';
+    if (ctaLabel) ctaLabel.textContent = 'Klaar voor de echte BIO-gap?';
   } else if (selectedSector === 'bouw') {
     eyebrow.textContent = 'Volledige ISO 27001';
     title.innerHTML = 'Quickscan gedaan. <em>Klaar voor de echte toets?</em>';
     lead.innerHTML = `U beantwoordde ${totalQ} hoofdlijn-vragen. De volledige gap toetst alle 93 Annex A-controls met focus op onderaannemer-keten, BIM/CDE en projectdata — plus bewijsvoering per control.`;
-    if (ctaLabel) ctaLabel.textContent = 'Bestel volledige gap-analyse';
+    if (ctaLabel) ctaLabel.textContent = 'Klaar voor de echte gap-analyse?';
   } else if (selectedSector === 'it') {
     eyebrow.textContent = 'Volledige ISO 27001-toets';
     title.innerHTML = 'Een schatting is geen audit. <em>Dit is wel een audit.</em>';
     lead.innerHTML = `U beantwoordde ${totalQ} hoofdlijn-vragen. De volledige gap toetst alle 93 Annex A-controls met klant-isolatie, PAM, incident-respons en supplier-keten — bewijs per claim.`;
-    if (ctaLabel) ctaLabel.textContent = 'Bestel volledige gap-analyse';
+    if (ctaLabel) ctaLabel.textContent = 'Klaar voor de echte gap-analyse?';
   } else if (selectedSector === 'saas') {
     eyebrow.textContent = 'Volledige ISO 27001-toets';
     title.innerHTML = 'SOC 2-aspirant? <em>Begin hier.</em>';
     lead.innerHTML = `U beantwoordde ${totalQ} hoofdlijn-vragen. De volledige gap toetst alle 93 Annex A-controls voor multi-tenant isolatie, secure SDLC, supplier-keten en API-security — bewijs per claim.`;
-    if (ctaLabel) ctaLabel.textContent = 'Bestel volledige gap-analyse';
+    if (ctaLabel) ctaLabel.textContent = 'Klaar voor de echte gap-analyse?';
   } else {
     eyebrow.textContent = 'Volledige ISO 27001-toets';
     title.innerHTML = 'Dit is een indicatie. <em>De echte audit komt nu.</em>';
     lead.innerHTML = `U beantwoordde ${totalQ} hoofdlijn-vragen. De volledige gap-analyse toetst alle 93 ISO 27002:2022-controls én clausules 4-10 met bewijsvoering per claim — een rapport dat een auditor kan gebruiken.`;
-    if (ctaLabel) ctaLabel.textContent = 'Bestel volledige gap-analyse';
+    if (ctaLabel) ctaLabel.textContent = 'Klaar voor de echte gap-analyse?';
   }
 
   // Update stats (alle 4 tegels)
