@@ -22,6 +22,8 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css" />
   <script defer src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.min.js" integrity="sha384-2zrRDgDHSYB/GN3nFW3fsZXoxEhKIr3N2h63Tc6DEOB9JJdFIu8xMJT2Cph/gBil" crossorigin="anonymous"></script>
+  <!-- JSZip voor evidence ZIP-export (ca. 30KB gzip). Geen integrity-hash zodat patches automatisch komen. -->
+  <script defer src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -1032,6 +1034,18 @@
 
       <!-- Findings tab: control-by-control review -->
       <div class="panel active" id="panelFindings">
+        <div class="findings-toolbar" style="display:flex;justify-content:space-between;align-items:center;gap:14px;padding:10px 14px;background:var(--bg-warm,#f8fafc);border:1px solid var(--border);border-radius:10px;margin-bottom:14px;flex-wrap:wrap;">
+          <div style="font-size:0.84rem;color:var(--text-muted);">
+            <strong style="color:var(--text);">Bewijsvoering & bevindingen</strong> &middot;
+            <span id="evidenceFileCount">…</span> files in storage
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <button onclick="downloadAllEvidence()" id="dlAllEvBtn" style="background:var(--accent);color:#fff;border:0;border-radius:8px;padding:8px 16px;font-size:0.84rem;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:8px;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              <span id="dlAllEvLabel">Download alles als ZIP</span>
+            </button>
+          </div>
+        </div>
         <div class="control-list" id="controlList"></div>
       </div>
 
@@ -3073,6 +3087,9 @@ async function selectClient(userId) {
   document.getElementById('clientTitle').textContent = currentClient.bedrijf || currentClient.naam || currentClient.email;
   document.getElementById('clientInfo').textContent = `${currentClient.naam || ''} · ${currentClient.email} · ${currentClient.pakket || 'gap'}-pakket`;
 
+  // Update evidence file-count voor toolbar (async, blokkeert geen render)
+  if (typeof updateEvidenceFileCount === 'function') updateEvidenceFileCount(userId);
+
   await Promise.all([
     loadClientFindings(userId),
     loadClientMessages(userId),
@@ -3241,6 +3258,168 @@ async function previewEvidence(path, name) {
     window.open(data.signedUrl, '_blank', 'noopener');
   } catch(e) {
     alert('Kon bewijsvoering niet openen: ' + e.message);
+  }
+}
+
+// ── Bulk-export bewijsvoering als ZIP ──
+// Doel: Lead Auditor (Raoul) downloadt in 1 klik alle bewijsvoering + metadata
+// per klant voor offline analyse. ZIP-structuur:
+//   evidence/{control_id}/{filename}
+//   manifest.json   — file metadata (timestamps, control-mapping, sizes)
+//   notes.txt       — gestructureerde notes per control (procedure/locatie/eigenaar/last_verified/remark)
+//   bevindingen.json — auditor_findings rows voor deze klant
+//   gap-answers.json — gap_analyse.answers voor traceability
+async function downloadAllEvidence() {
+  if (!currentClient) { adminToast('Selecteer eerst een klant', { warn: true }); return; }
+  if (typeof JSZip === 'undefined') { adminToast('JSZip niet geladen — herlaad de pagina', { error: true }); return; }
+  const userId = currentClient.user_id;
+  const cleanLabel = (currentClient.bedrijf || currentClient.naam || 'klant').replace(/[^a-zA-Z0-9.\-_]/g, '_').slice(0, 60);
+
+  const btn = document.getElementById('dlAllEvBtn');
+  const lbl = document.getElementById('dlAllEvLabel');
+  if (btn) btn.disabled = true;
+  const setLabel = t => { if (lbl) lbl.textContent = t; };
+  setLabel('Inventariseren…');
+
+  try {
+    // 1. Lijst alle control-folders voor deze user
+    const { data: rootFolders, error: rootErr } = await sb.storage.from('evidence').list(userId, { limit: 1000 });
+    if (rootErr) throw rootErr;
+    const folders = (rootFolders || []).filter(f => f.id === null || f.metadata == null); // folders hebben null id/metadata
+
+    // 2. Verzamel parallel: alle evidence files, gap-answers, auditor findings
+    const [filesPerCtrl, gaRes, findRes] = await Promise.all([
+      Promise.all(folders.map(async folder => {
+        const { data, error } = await sb.storage.from('evidence').list(`${userId}/${folder.name}`, { limit: 500 });
+        if (error) return { ctrl: folder.name, files: [], error: error.message };
+        return { ctrl: folder.name, files: (data || []).filter(f => f.id !== null) };
+      })),
+      sb.from('gap_analyse').select('answers, sector, updated_at').eq('user_id', userId).maybeSingle(),
+      sb.from('auditor_findings').select('*').eq('user_id', userId)
+    ]);
+
+    const totalFiles = filesPerCtrl.reduce((s, f) => s + f.files.length, 0);
+    if (totalFiles === 0) {
+      adminToast('Deze klant heeft nog geen bewijsvoering geüpload', { warn: true, duration: 5000 });
+      if (btn) btn.disabled = false;
+      setLabel('Download alles als ZIP');
+      return;
+    }
+
+    setLabel(`0/${totalFiles} files…`);
+
+    // 3. Bouw ZIP
+    const zip = new JSZip();
+    const evDir = zip.folder('evidence');
+    const manifest = {
+      klant: { user_id: userId, naam: currentClient.naam || null, bedrijf: currentClient.bedrijf || null, email: currentClient.email || null, sector: gaRes?.data?.sector || null },
+      generated_at: new Date().toISOString(),
+      total_files: totalFiles,
+      total_controls: filesPerCtrl.filter(f => f.files.length > 0).length,
+      files: []
+    };
+    let done = 0;
+    let failed = 0;
+
+    for (const { ctrl, files, error: lsErr } of filesPerCtrl) {
+      if (lsErr) {
+        manifest.files.push({ control: ctrl, list_error: lsErr });
+        continue;
+      }
+      const ctrlDir = evDir.folder(ctrl);
+      for (const f of files) {
+        const path = `${userId}/${ctrl}/${f.name}`;
+        try {
+          const { data: signedRes, error: signErr } = await sb.storage.from('evidence').createSignedUrl(path, 300);
+          if (signErr) throw signErr;
+          const resp = await fetch(signedRes.signedUrl);
+          if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+          const blob = await resp.blob();
+          ctrlDir.file(f.name, blob);
+          manifest.files.push({
+            control: ctrl,
+            filename: f.name,
+            path: path,
+            size_bytes: f.metadata?.size || blob.size,
+            content_type: f.metadata?.mimetype || resp.headers.get('content-type') || null,
+            uploaded_at: f.created_at || null,
+            updated_at: f.updated_at || null
+          });
+          done++;
+        } catch (fe) {
+          failed++;
+          manifest.files.push({ control: ctrl, filename: f.name, path: path, error: fe.message || String(fe) });
+        }
+        setLabel(`${done}/${totalFiles} files…`);
+      }
+    }
+
+    // 4. Notes (uit gap_answers note_fields per control)
+    const gapAnswers = gaRes?.data?.answers || {};
+    const noteLines = [];
+    Object.keys(gapAnswers).forEach(k => {
+      const a = gapAnswers[k];
+      if (a && typeof a === 'object' && a.note_fields) {
+        const nf = a.note_fields;
+        const parts = [];
+        if (nf.procedure) parts.push(`Procedure/document: ${nf.procedure}`);
+        if (nf.location) parts.push(`Locatie: ${nf.location}`);
+        if (nf.owner) parts.push(`Eigenaar: ${nf.owner}`);
+        if (nf.last_verified) parts.push(`Laatst gereviewd: ${nf.last_verified}`);
+        if (nf.remark) parts.push(`Opmerking: ${nf.remark}`);
+        if (parts.length) noteLines.push(`### ${k}\n${parts.join('\n')}\n`);
+      }
+    });
+    const notesText = noteLines.length
+      ? `# Klant-notities per control\n# ${manifest.klant.bedrijf || manifest.klant.naam || userId}\n# Geëxporteerd: ${manifest.generated_at}\n\n` + noteLines.join('\n')
+      : '# Geen gestructureerde notes ingevuld\n';
+    zip.file('notes.txt', notesText);
+
+    // 5. Bevindingen + gap-answers
+    zip.file('bevindingen.json', JSON.stringify(findRes?.data || [], null, 2));
+    zip.file('gap-answers.json', JSON.stringify(gapAnswers, null, 2));
+    zip.file('manifest.json', JSON.stringify(manifest, null, 2));
+
+    // 6. Genereer ZIP + trigger download
+    setLabel('ZIP bouwen…');
+    const zipBlob = await zip.generateAsync({ type: 'blob', compression: 'DEFLATE', compressionOptions: { level: 5 } });
+    const url = URL.createObjectURL(zipBlob);
+    const a = document.createElement('a');
+    const ts = new Date().toISOString().slice(0, 10);
+    a.href = url;
+    a.download = `evidence_${cleanLabel}_${ts}.zip`;
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(() => { URL.revokeObjectURL(url); document.body.removeChild(a); }, 200);
+
+    const sizeMB = (zipBlob.size / 1024 / 1024).toFixed(2);
+    adminToast(`ZIP klaar: ${done} files, ${sizeMB} MB${failed ? ` (${failed} mislukt)` : ''}`, { duration: 5000 });
+    setLabel('Download alles als ZIP');
+  } catch (e) {
+    console.error('downloadAllEvidence', e);
+    adminToast('ZIP-export mislukt: ' + (e.message || e), { error: true, duration: 6000 });
+    setLabel('Download alles als ZIP');
+  } finally {
+    if (btn) btn.disabled = false;
+  }
+}
+
+// Update file-count in toolbar wanneer een klant geselecteerd wordt
+async function updateEvidenceFileCount(userId) {
+  const el = document.getElementById('evidenceFileCount');
+  if (!el) return;
+  el.textContent = '…';
+  try {
+    const { data: folders } = await sb.storage.from('evidence').list(userId, { limit: 500 });
+    const folderArr = (folders || []).filter(f => f.id === null);
+    let total = 0;
+    for (const f of folderArr) {
+      const { data: subFiles } = await sb.storage.from('evidence').list(`${userId}/${f.name}`, { limit: 500 });
+      total += (subFiles || []).filter(x => x.id !== null).length;
+    }
+    el.textContent = total;
+  } catch (e) {
+    el.textContent = '?';
   }
 }
 
