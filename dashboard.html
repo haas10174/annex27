@@ -1456,6 +1456,62 @@
     .ga-toast.error svg { stroke: #FCA5A5; }
     .ga-toast-time { color: rgba(255,255,255,0.45); font-size: 0.78rem; margin-left: 4px; }
 
+    /* Admin test-bar — alleen zichtbaar voor admin/auditor */
+    .admin-test-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      background: linear-gradient(135deg, rgba(217,119,6,0.10), rgba(217,119,6,0.04));
+      border: 1px solid rgba(217,119,6,0.32);
+      border-radius: 10px;
+      padding: 10px 16px;
+      margin-bottom: 20px;
+      font-size: 0.86rem;
+    }
+    .admin-test-bar .atb-tag {
+      background: var(--warning, #D97706);
+      color: white;
+      padding: 3px 9px;
+      border-radius: 6px;
+      font-size: 0.66rem;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+    }
+    .admin-test-bar .atb-label { color: var(--text-secondary); font-weight: 600; }
+    .admin-test-bar select {
+      padding: 7px 14px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--surface);
+      color: var(--text-primary);
+      font-family: inherit;
+      font-size: 0.86rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .admin-test-bar .atb-reset {
+      background: rgba(220,38,38,0.08);
+      color: #B91C1C;
+      border: 1px solid rgba(220,38,38,0.25);
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .admin-test-bar .atb-reset:hover { background: rgba(220,38,38,0.14); }
+    .admin-test-bar .atb-admin {
+      margin-left: auto;
+      color: var(--accent);
+      font-weight: 600;
+      text-decoration: none;
+      font-size: 0.84rem;
+    }
+    .admin-test-bar .atb-admin:hover { text-decoration: underline; }
+
     .ga-answer-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -2364,6 +2420,21 @@
 
     <!-- Dashboard View -->
     <div class="view" id="viewDashboard">
+      <div id="adminTestBar" class="admin-test-bar" style="display:none;">
+        <span class="atb-tag">TEST MODE</span>
+        <span class="atb-label">Sector:</span>
+        <select id="atbSectorSelect" onchange="adminSwitchSector(this.value)">
+          <option value="">— niet gekozen —</option>
+          <option value="saas">SaaS &amp; Cloud</option>
+          <option value="it">IT-dienstverlener / MSP</option>
+          <option value="zorg">Zorg &amp; Medisch</option>
+          <option value="overheid">Overheid</option>
+          <option value="bouw">Bouw &amp; Techniek</option>
+          <option value="overig">Scale-up / Overig</option>
+        </select>
+        <button class="atb-reset" onclick="adminResetGap()" title="Wist alle antwoorden + bewijsvoering voor verse test">Reset gap</button>
+        <a class="atb-admin" href="/admin">Admin →</a>
+      </div>
       <h1 class="page-title" id="welcomeTitle">Welkom terug</h1>
       <p class="page-subtitle">Uw ISO 27001 compliance overzicht</p>
 
@@ -3009,6 +3080,12 @@ let user = null;
   loadEvidenceData();
   loadSector();
   document.getElementById('loading').style.display = 'none';
+  // URL-override: ?sector=zorg → admin/auditor kunnen testen zonder dropdown
+  const urlSector = new URLSearchParams(location.search).get('sector');
+  if (urlSector && ['saas','it','zorg','overheid','bouw','overig'].includes(urlSector) && isAdminUser()) {
+    await saveSector(urlSector);
+  }
+
   if (!userSector) {
     showSectorPicker();
   } else {
@@ -3018,10 +3095,66 @@ let user = null;
     renderChecklists();
     updateUnreadBadge();
     updateRapportBadge();
+    showAdminTestBar();
     // Poll for new messages + rapport every 60 seconds
     setInterval(() => { updateUnreadBadge(); updateRapportBadge(); }, 60000);
   }
 })();
+
+// Test-mode helpers — alleen zichtbaar voor admin/auditor accounts
+function isAdminUser() {
+  const meta = user?.app_metadata || {};
+  return meta.pakket === 'admin' || meta.role === 'auditor';
+}
+
+function showAdminTestBar() {
+  if (!isAdminUser()) return;
+  const bar = document.getElementById('adminTestBar');
+  const sel = document.getElementById('atbSectorSelect');
+  if (bar) bar.style.display = 'flex';
+  if (sel && userSector) sel.value = userSector;
+}
+
+async function adminSwitchSector(newSector) {
+  if (!isAdminUser()) return;
+  if (!newSector) return;
+  // Wis lokale gap-cache zodat sector-deep vragen vers laden
+  try { localStorage.removeItem('annex27_gap_' + user.id); } catch(e) {}
+  gapAnswers = {};
+  await saveSector(newSector);
+  if (typeof showToast === 'function') showToast(`Sector gewisseld naar ${newSector}`);
+  // Volledig herladen — eenvoudigste manier om alle views consistent te krijgen
+  setTimeout(() => location.reload(), 400);
+}
+
+async function adminResetGap() {
+  if (!isAdminUser()) return;
+  if (!confirm('Reset alle antwoorden + bewijsvoering voor jouw account? (Storage-files worden gewist)')) return;
+  try {
+    // Wis Supabase row + alle storage files voor deze user
+    await sb.from('gap_analyse').delete().eq('user_id', user.id);
+    const { data: files } = await sb.storage.from('evidence').list(user.id, { limit: 1000 });
+    if (files && files.length) {
+      // Recursief — list per control-folder
+      for (const folder of files) {
+        if (folder.name) {
+          const { data: subFiles } = await sb.storage.from('evidence').list(`${user.id}/${folder.name}`, { limit: 1000 });
+          if (subFiles && subFiles.length) {
+            const paths = subFiles.map(f => `${user.id}/${folder.name}/${f.name}`);
+            await sb.storage.from('evidence').remove(paths);
+          }
+        }
+      }
+    }
+    localStorage.removeItem('annex27_gap_' + user.id);
+    localStorage.removeItem('annex27_evidence_' + user.id);
+    if (typeof showToast === 'function') showToast('Gap-data + bewijsvoering gewist — verse test mogelijk');
+    setTimeout(() => location.reload(), 600);
+  } catch (e) {
+    console.error(e);
+    if (typeof showToast === 'function') showToast('Reset deels mislukt — zie console', { error: true });
+  }
+}
 
 let userPakket = 'gap'; // default: gap-analyse only. Options: 'gap', 'readiness', 'admin'
 
