@@ -981,11 +981,97 @@
       .ov-row, .ov-row.ov-row-3 { grid-template-columns: 1fr; }
     }
 
+    /* ── Mobile / responsive ──────────────────────────── */
+    .mobile-topbar {
+      display: none;
+      position: sticky; top: 0; z-index: 90;
+      background: var(--sidebar, #fff);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 16px;
+      align-items: center;
+      gap: 12px;
+    }
+    .mobile-topbar .ham-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      width: 40px; height: 40px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      color: var(--text);
+    }
+    .mobile-topbar .ham-btn svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 2; }
+    .mobile-topbar-title { font-family: 'Sora', sans-serif; font-weight: 700; font-size: 1.05rem; flex: 1; }
+    .mobile-backdrop {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.4);
+      z-index: 99;
+    }
+
+    @media (max-width: 1100px) {
+      .ov-kpi-grid { grid-template-columns: repeat(2, 1fr) !important; }
+    }
     @media (max-width: 900px) {
-      .app { grid-template-columns: 1fr; }
-      .sidebar { display: none; }
-      .sidebar.mobile-open { display: flex; position: fixed; inset: 0; z-index: 100; }
+      .app { grid-template-columns: 1fr !important; }
+      .sidebar {
+        display: none;
+        position: fixed;
+        inset: 0 auto 0 0;
+        width: 320px;
+        max-width: 86vw;
+        z-index: 100;
+        flex-direction: column;
+        box-shadow: 2px 0 24px rgba(0,0,0,0.18);
+        overflow-y: auto;
+      }
+      .sidebar.mobile-open { display: flex; }
+      .sidebar.mobile-open ~ .mobile-backdrop { display: block; }
+      .mobile-topbar { display: flex; }
       .finding-row { grid-template-columns: 1fr; }
+      .main-header {
+        padding: 14px 16px;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+      .main-actions {
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+      .main-actions .action-btn {
+        font-size: 0.78rem;
+        padding: 7px 12px;
+      }
+      .tabs {
+        padding: 0 12px;
+        overflow-x: auto;
+        scrollbar-width: thin;
+      }
+      .tab { white-space: nowrap; flex-shrink: 0; padding: 12px 14px; font-size: 0.86rem; }
+      .panel { padding: 16px; }
+
+      /* Tables — horizontal scroll bij overflow */
+      table { display: block; overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch; }
+
+      /* Filter-bar scrollable */
+      .client-filters { overflow-x: auto; padding-bottom: 8px; flex-wrap: nowrap !important; }
+      .filter-btn { white-space: nowrap; flex-shrink: 0; }
+      .test-toggle-btn { flex-shrink: 0; margin-left: 0 !important; }
+
+      /* Quick-finding btns wrap */
+      .quick-finding { gap: 6px !important; }
+      .qf-btn { font-size: 0.74rem; padding: 5px 10px; }
+
+      /* Modal */
+      .modal-card { padding: 20px !important; max-width: 92vw !important; max-height: 86vh; overflow-y: auto; }
+    }
+
+    @media (max-width: 600px) {
+      .ov-kpi-grid { grid-template-columns: 1fr !important; }
+      .pipe-step { min-width: 60px !important; padding: 4px 4px !important; }
+      .pipe-arrow { display: none !important; }
+      .client-pipeline { padding: 10px 12px !important; }
+      .main-title { font-size: 1.1rem !important; }
     }
 
     :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
@@ -1015,8 +1101,19 @@
 <!-- Main app (hidden until auth ok) -->
 <div class="app" id="app" style="display:none;">
 
+  <!-- Mobile top-bar: hamburger + brand (alleen <900px zichtbaar) -->
+  <div class="mobile-topbar">
+    <button class="ham-btn" onclick="toggleMobileSidebar()" aria-label="Menu">
+      <svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+    <div class="mobile-topbar-title">annex<span style="color:var(--accent);">27</span> — Admin</div>
+  </div>
+
+  <!-- Backdrop voor mobile drawer -->
+  <div class="mobile-backdrop" onclick="closeMobileSidebar()"></div>
+
   <!-- Sidebar: client list -->
-  <aside class="sidebar">
+  <aside class="sidebar" id="sidebar">
     <div class="sidebar-header">
       <div class="brand">annex<span>27</span></div>
     </div>
@@ -2578,6 +2675,23 @@ async function loadInboxCount() {
     document.getElementById('inboxBadge').textContent = count || 0;
   } catch(e) { /* silent */ }
 }
+
+// ── Mobile sidebar drawer ──
+function toggleMobileSidebar() {
+  const sb = document.getElementById('sidebar');
+  if (!sb) return;
+  sb.classList.toggle('mobile-open');
+}
+function closeMobileSidebar() {
+  const sb = document.getElementById('sidebar');
+  if (sb) sb.classList.remove('mobile-open');
+}
+// Auto-close bij klant-selectie of view-switch op mobile
+document.addEventListener('click', (e) => {
+  if (window.innerWidth > 900) return;
+  const t = e.target.closest('.client-item, .view-btn');
+  if (t) setTimeout(closeMobileSidebar, 150);
+});
 
 // ── Realtime: subscribe op nieuwe klant-berichten ──
 // Toast + auto-refresh inbox + huidige thread bij INSERT vanuit klant.
