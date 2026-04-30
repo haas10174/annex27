@@ -1712,6 +1712,7 @@ async function startApp() {
   loadLeadsCount();
   loadInvoicesCount();
   startGa4Widget();
+  subscribeToRealtimeMessages();
   // Initial: active tab is Overzicht — verberg klant-filters/list
   const cf = document.querySelector('.client-filters'); if (cf) cf.style.display = 'none';
   const cl = document.getElementById('clientList'); if (cl) cl.style.display = 'none';
@@ -2576,6 +2577,68 @@ async function loadInboxCount() {
       .eq('is_read', false);
     document.getElementById('inboxBadge').textContent = count || 0;
   } catch(e) { /* silent */ }
+}
+
+// ── Realtime: subscribe op nieuwe klant-berichten ──
+// Toast + auto-refresh inbox + huidige thread bij INSERT vanuit klant.
+let _realtimeMsgChannel = null;
+async function subscribeToRealtimeMessages() {
+  if (_realtimeMsgChannel) return; // al gesubscribed
+  try {
+    _realtimeMsgChannel = sb.channel('admin-messages-' + Date.now())
+      .on('postgres_changes', {
+        event: 'INSERT',
+        schema: 'public',
+        table: 'messages',
+        filter: 'sender_role=eq.client'
+      }, async (payload) => {
+        const msg = payload.new;
+        if (!msg) return;
+
+        // Haal klantnaam op (uit reeds geladen clients of via fallback)
+        const client = clients.find(c => c.user_id === msg.user_id);
+        const klantLabel = client ? (client.bedrijf || client.naam || client.email) : 'klant';
+        const preview = (msg.subject || msg.body || '').slice(0, 80);
+
+        // Toast met klant + preview
+        adminToast(`📩 ${klantLabel}: ${preview}`, { duration: 7000 });
+
+        // Update inbox-badge counter
+        const badge = document.getElementById('inboxBadge');
+        if (badge) {
+          const current = parseInt(badge.textContent || '0', 10) || 0;
+          badge.textContent = current + 1;
+        }
+
+        // Prepend in inbox-array + re-render als inbox-view open
+        if (Array.isArray(inboxMessages)) {
+          inboxMessages.unshift(msg);
+          const inboxList = document.getElementById('inboxList');
+          if (inboxList && document.getElementById('viewInbox')?.classList.contains('active')) {
+            renderInbox();
+          }
+        }
+
+        // Als huidige geselecteerde klant matcht: thread refreshen
+        if (currentClient && currentClient.user_id === msg.user_id) {
+          if (typeof loadClientMessages === 'function') {
+            await loadClientMessages(msg.user_id);
+            const msgPanel = document.getElementById('panelMessages');
+            if (msgPanel) msgPanel.scrollTop = 0;
+          }
+          // Browser-tab notificatie via title-flash
+          const orig = document.title;
+          document.title = '🔔 Nieuw bericht — Annex27';
+          setTimeout(() => { document.title = orig; }, 4000);
+        }
+      })
+      .subscribe((status) => {
+        if (status === 'SUBSCRIBED') console.log('[realtime] messages: subscribed');
+        if (status === 'CHANNEL_ERROR') console.warn('[realtime] messages: kanaal-fout — controleer of realtime aan staat in Supabase');
+      });
+  } catch (e) {
+    console.warn('[realtime] subscribe failed:', e);
+  }
 }
 
 async function loadInbox() {

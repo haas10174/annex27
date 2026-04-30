@@ -5846,7 +5846,7 @@ function generateReport() {
 <meta charset="UTF-8">
 <title>ISO 27001 Gap-analyse Rapport — ${esc(bedrijf)}</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600&family=Caveat:wght@400;700&display=swap');
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: 'Inter', sans-serif; color: #334155; line-height: 1.7; padding: 0; }
   @media print {
@@ -5959,6 +5959,65 @@ function generateReport() {
   .auditor-sig { display: flex; align-items: center; gap: 14px; margin-top: 18px; padding-top: 18px; border-top: 1px solid rgba(15,118,110,0.15); }
   .auditor-sig-name { font-family: 'Sora', sans-serif; font-weight: 700; color: #0F172A; font-size: 0.94rem; }
   .auditor-sig-cred { font-size: 0.78rem; color: #475569; }
+
+  /* Lead Auditor sign-off section */
+  .sign-off-page { page-break-before: always; }
+  .sign-off-card {
+    background: linear-gradient(135deg, #FAFAFA 0%, #F0FDFA 100%);
+    border: 1px solid #99F6E4;
+    border-left: 6px solid #0D9488;
+    border-radius: 12px;
+    padding: 32px 36px;
+    margin-top: 18px;
+  }
+  .sign-off-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: #fff;
+    border: 1px solid #E2E8F0;
+    padding: 10px 16px;
+    border-radius: 99px;
+    font-size: 0.88rem;
+    color: #475569;
+  }
+  .sign-off-status svg { color: #94A3B8; }
+  .sign-off-status.sign-off-pending { border-color: #FBBF24; color: #B45309; }
+  .sign-off-status.sign-off-pending svg { color: #D97706; }
+  .sign-off-status.sign-off-released { border-color: #34D399; color: #065F46; background: #F0FDF4; }
+  .sign-off-status.sign-off-released svg { color: #059669; }
+  .sign-off-block {
+    background: #fff;
+    border-radius: 10px;
+    padding: 28px 32px 22px;
+    margin: 22px 0;
+    text-align: center;
+  }
+  .sign-off-line {
+    width: 60%;
+    max-width: 320px;
+    height: 1px;
+    background: #CBD5E1;
+    margin: 0 auto 8px;
+  }
+  .sign-off-name { font-family: 'Caveat', cursive; font-size: 2rem; color: #0F172A; line-height: 1.1; min-height: 50px; display: flex; align-items: center; justify-content: center; }
+  .sign-off-name em { color: #94A3B8; }
+  .sign-off-name strong { font-family: 'Caveat', 'Brush Script MT', cursive; font-weight: 700; font-style: italic; }
+  .sign-off-meta {
+    margin-top: 14px;
+    font-size: 0.84rem;
+    color: #475569;
+    line-height: 1.65;
+  }
+  .sign-off-meta strong { color: #0F172A; font-family: 'Sora', sans-serif; font-weight: 700; }
+  .sign-off-process {
+    background: #fff;
+    border: 1px dashed #CBD5E1;
+    border-radius: 8px;
+    padding: 18px 22px;
+    margin-top: 18px;
+  }
+  .sign-off-process strong { font-size: 0.92rem; }
 
   .framework-badges { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
   .fw-badge { font-size: 0.72rem; font-weight: 600; padding: 4px 12px; border-radius: 100px; background: #CCFBF1; color: #0F766E; }
@@ -6307,6 +6366,45 @@ ${unevidencedClaims.length > 0 ? `
     }).join('')}
     </tbody>
   </table>` : ''}
+</div>
+
+<!-- LEAD AUDITOR SIGN-OFF -->
+<div class="page page-break sign-off-page">
+  <div class="label">Lead Auditor sign-off</div>
+  <h2>Beoordeling</h2>
+
+  <div class="sign-off-card">
+    <div class="sign-off-status sign-off-pending">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      <strong>Status:</strong> Self-assessment — wacht op Lead Auditor review
+    </div>
+    <p style="font-size:0.92rem;line-height:1.7;color:#475569;margin:14px 0;">
+      Dit document is uw eigen overzicht van antwoorden, scores en automatische bevindingen. Het is <strong>nog niet gevalideerd</strong> door een gecertificeerd Lead Auditor. Voor een formeel rapport — met audit-grade onderbouwing van élke bevinding — dient u dit self-assessment in voor Lead Auditor review via uw dashboard.
+    </p>
+
+    <div class="sign-off-block">
+      <div class="sign-off-line"></div>
+      <div class="sign-off-name">
+        <em style="font-family:'Caveat','Brush Script MT',cursive;font-size:1.6rem;color:#cbd5e1;">— wacht op handtekening —</em>
+      </div>
+      <div class="sign-off-meta">
+        <strong>Raoul Haas</strong>, Lead Auditor<br>
+        DNV Lead Auditor ISO/IEC 27001:2022 &middot; IRCA-gecertificeerd<br>
+        Annex27 — annex27.nl &middot; info@annex27.nl
+      </div>
+    </div>
+
+    <div class="sign-off-process">
+      <strong style="color:#0F172A;">Wat doet de Lead Auditor in de review?</strong>
+      <ol style="margin:10px 0 0 22px;font-size:0.88rem;line-height:1.7;color:#475569;">
+        <li>Verifieert élke compliance-claim tegen aangeleverd bewijs (document-actualiteit, inhoud, eigenaarschap)</li>
+        <li>Stelt severity definitief vast per bevinding (Info / Minor / Major / Critical)</li>
+        <li>Voegt sector-specifieke nuance + ervaring toe — wat je niet uit ISO/NEN 7510 leest, maar uit duizenden audit-uren</li>
+        <li>Schrijft executive summary in heldere taal voor directie + auditpartner</li>
+        <li>Tekent voor de bevindingen — naam, DNV-credentials, datum</li>
+      </ol>
+    </div>
+  </div>
 </div>
 
 <!-- DISCLAIMER -->
