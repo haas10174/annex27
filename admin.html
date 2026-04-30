@@ -3117,11 +3117,14 @@ function renderRapportPanel() {
         </div>
 
         <div style="display:flex;flex-direction:column;gap:16px;">
+          ${renderComplianceMetrics(s)}
           ${renderDraftSection('Executive summary', 'executive_summary', s.executive_summary||'')}
           ${renderDraftSection('Score-samenvatting', 'score_summary', s.score_summary||'')}
           ${renderCategorySection(s.findings_by_category||{})}
           ${renderPriorities(s.top_priorities||[])}
           ${renderDetailedFindings(s.detailed_findings||[])}
+          ${s.sector_specific_observations ? renderDraftSection('Sector-specifieke observaties', 'sector_specific_observations', s.sector_specific_observations) : ''}
+          ${renderNextSteps(s.next_steps_30_60_90||{})}
           ${renderDraftSection('AI-disclosure (ondertekening)', 'disclosure', s.disclosure||'')}
         </div>
       </div>`;
@@ -3183,18 +3186,81 @@ function renderPriorities(list) {
 
 function renderDetailedFindings(arr) {
   const esc = (s) => String(s ?? '').replace(/[<>&"]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c]));
+  const sevColor = { critical: '#dc2626', major: '#D97706', minor: '#0D9488', info: '#94A3B8' };
   return `
     <div class="draft-section">
       <label style="font-size:0.74rem;font-weight:800;letter-spacing:0.06em;text-transform:uppercase;color:var(--accent);margin-bottom:8px;display:block;">Detailed findings (${arr.length})</label>
-      <div style="display:flex;flex-direction:column;gap:10px;max-height:380px;overflow-y:auto;padding-right:4px;">
-        ${arr.map((f,i) => `
-          <div style="background:var(--bg-warm);padding:12px;border-radius:8px;border-left:3px solid ${f.status==='critical'?'#dc2626':f.status==='gap'?'#D97706':'#059669'};">
-            <div style="display:flex;justify-content:space-between;gap:8px;margin-bottom:6px;flex-wrap:wrap;">
-              <strong style="font-size:0.84rem;font-family:'Sora',sans-serif;">${esc(f.control_id||'?')}</strong>
-              <span style="font-size:0.7rem;font-weight:700;padding:2px 8px;border-radius:99px;background:${f.status==='critical'?'rgba(220,38,38,0.12)':f.status==='gap'?'rgba(217,119,6,0.12)':'rgba(16,185,129,0.12)'};color:${f.status==='critical'?'#dc2626':f.status==='gap'?'#D97706':'#059669'};text-transform:uppercase;">${esc(f.status||'?')}</span>
+      <div style="display:flex;flex-direction:column;gap:10px;max-height:480px;overflow-y:auto;padding-right:4px;">
+        ${arr.map((f,i) => {
+          const sevC = sevColor[f.severity] || sevColor[f.status] || '#94A3B8';
+          return `
+          <div style="background:var(--bg-warm);padding:14px;border-radius:8px;border-left:3px solid ${sevC};">
+            <div style="display:flex;justify-content:space-between;gap:8px;margin-bottom:8px;flex-wrap:wrap;align-items:center;">
+              <strong style="font-size:0.86rem;font-family:'Sora',sans-serif;color:#0F172A;">${esc(f.control_id||'?')}</strong>
+              <div style="display:flex;gap:6px;align-items:center;">
+                ${f.severity ? `<span style="font-size:0.66rem;font-weight:800;padding:2px 8px;border-radius:99px;background:${sevC}22;color:${sevC};letter-spacing:0.06em;text-transform:uppercase;">${esc(f.severity)}</span>` : ''}
+                ${f.status ? `<span style="font-size:0.66rem;font-weight:700;padding:2px 8px;border-radius:99px;background:rgba(15,23,42,0.06);color:#475569;text-transform:uppercase;">${esc(f.status)}</span>` : ''}
+              </div>
             </div>
-            <div style="font-size:0.82rem;margin-bottom:6px;"><strong>Finding:</strong> ${esc(f.finding||'')}</div>
-            <div style="font-size:0.82rem;color:var(--text-secondary);"><strong>Aanbeveling:</strong> ${esc(f.recommendation||'')}</div>
+            <div style="font-size:0.82rem;margin-bottom:6px;line-height:1.55;"><strong style="color:#0F172A;">Bevinding:</strong> ${esc(f.finding||'')}</div>
+            ${f.evidence_assessment ? `<div style="font-size:0.78rem;color:#475569;margin-bottom:6px;line-height:1.55;background:rgba(15,23,42,0.03);padding:6px 10px;border-radius:4px;"><strong style="color:#0F172A;">Bewijs-evaluatie:</strong> ${esc(f.evidence_assessment)}</div>` : ''}
+            <div style="font-size:0.82rem;color:var(--text-secondary);line-height:1.55;"><strong style="color:#0F172A;">Aanbeveling:</strong> ${esc(f.recommendation||'')}</div>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>`;
+}
+
+// Compliance estimate + severity-distribution mini-dashboard (top van rapport)
+function renderComplianceMetrics(s) {
+  const esc = (x) => String(x ?? '').replace(/[<>&"]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c]));
+  const score = parseInt(s.compliance_estimate || 0, 10);
+  const scoreColor = score >= 70 ? '#059669' : score >= 40 ? '#D97706' : '#dc2626';
+  const sd = s.severity_distribution || {};
+  const sdItems = [
+    { key: 'critical', label: 'Critical', color: '#dc2626' },
+    { key: 'major',    label: 'Major',    color: '#D97706' },
+    { key: 'minor',    label: 'Minor',    color: '#0D9488' },
+    { key: 'info',     label: 'Info',     color: '#94A3B8' }
+  ];
+  return `
+    <div class="draft-section" style="background:linear-gradient(135deg,#f8fafc,#f0fdfa);border:1px solid #99F6E4;border-radius:10px;padding:16px 20px;">
+      <div style="display:grid;grid-template-columns:auto 1fr;gap:24px;align-items:center;">
+        <div style="text-align:center;">
+          <div style="font-family:'Sora',sans-serif;font-size:2.6rem;font-weight:800;color:${scoreColor};line-height:1;letter-spacing:-0.04em;">${score}%</div>
+          <div style="font-size:0.7rem;color:var(--text-muted);font-weight:600;letter-spacing:0.08em;text-transform:uppercase;margin-top:2px;">AI compliance-schatting</div>
+        </div>
+        <div>
+          <div style="font-size:0.7rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted);margin-bottom:8px;">Severity-verdeling</div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;">
+            ${sdItems.map(it => `<div style="display:flex;align-items:center;gap:6px;font-size:0.84rem;"><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${it.color};"></span><strong>${parseInt(sd[it.key]||0,10)}</strong> ${it.label}</div>`).join('')}
+          </div>
+        </div>
+      </div>
+    </div>`;
+}
+
+// Next steps 30/60/90 — visueel als drie kolommen
+function renderNextSteps(steps) {
+  const esc = (s) => String(s ?? '').replace(/[<>&"]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c]));
+  const buckets = [
+    { key: '30_dagen', label: '30 dagen', color: '#dc2626', desc: 'Direct + quick-wins' },
+    { key: '60_dagen', label: '60 dagen', color: '#D97706', desc: 'Middellange termijn' },
+    { key: '90_dagen', label: '90 dagen', color: '#059669', desc: 'Strategisch' }
+  ];
+  const total = buckets.reduce((s, b) => s + (Array.isArray(steps[b.key]) ? steps[b.key].length : 0), 0);
+  if (!total) return '';
+  return `
+    <div class="draft-section">
+      <label style="font-size:0.74rem;font-weight:800;letter-spacing:0.06em;text-transform:uppercase;color:var(--accent);margin-bottom:8px;display:block;">Roadmap 30 / 60 / 90 dagen</label>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;">
+        ${buckets.map(b => `
+          <div style="background:#fff;border:1px solid var(--border);border-top:3px solid ${b.color};border-radius:8px;padding:12px 14px;">
+            <div style="font-family:'Sora',sans-serif;font-weight:700;color:${b.color};font-size:0.92rem;margin-bottom:2px;">${b.label}</div>
+            <div style="font-size:0.7rem;color:var(--text-muted);margin-bottom:8px;letter-spacing:0.04em;">${b.desc}</div>
+            <ul style="margin:0;padding:0 0 0 18px;font-size:0.82rem;color:var(--text);line-height:1.55;">
+              ${(Array.isArray(steps[b.key]) ? steps[b.key] : []).map(s => `<li style="margin-bottom:4px;">${esc(s)}</li>`).join('') || '<li style="color:var(--text-muted);font-style:italic;list-style:none;margin-left:-18px;">(geen)</li>'}
+            </ul>
           </div>`).join('')}
       </div>
     </div>`;
