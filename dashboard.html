@@ -1996,6 +1996,23 @@
     }
     .ga-ef-input-date { max-width: 180px; }
     .ga-ef-textarea { min-height: 54px; resize: vertical; line-height: 1.5; }
+    .ga-ef-textarea.ga-ef-remark {
+      min-height: 180px;
+      font-size: 0.94rem;
+      line-height: 1.7;
+      padding: 14px 16px;
+      background: #FFFEF7;
+      border: 1.5px dashed rgba(13,148,136,0.35);
+      transition: all 0.2s;
+    }
+    .ga-ef-textarea.ga-ef-remark:focus {
+      background: #fff;
+      border-style: solid;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px rgba(13,148,136,0.08);
+      min-height: 240px;
+    }
+    .ga-ef-textarea.ga-ef-remark::placeholder { color: rgba(15,23,42,0.32); font-style: italic; line-height: 1.6; }
     .ga-ef-input:focus, .ga-ef-textarea:focus {
       border-color: var(--accent);
       box-shadow: 0 0 0 3px rgba(20,184,166,0.12);
@@ -5402,7 +5419,6 @@ function renderControlCard(ctrl, idx, total) {
         </div>
       </div>
       <div class="ga-evidence-hint">
-        <div class="ga-evidence-hint-prompt">Wat zou een auditor hier toetsen — heeft u dat documenteerbaar?</div>
         <button type="button" class="ga-evidence-hint-toggle" onclick="const d=document.getElementById('${hintId}'); d.classList.toggle('open'); this.classList.toggle('open');">
           Voorbeelden van bewijs
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
@@ -5467,10 +5483,15 @@ function renderControlCard(ctrl, idx, total) {
             </div>
           </div>
           <div class="ga-ef-row">
-            <label class="ga-ef-label">Opmerking (optioneel)</label>
-            <textarea class="ga-ef-textarea" data-field="remark"
+            <label class="ga-ef-label" style="font-size:0.86rem;font-weight:700;color:var(--text-primary);margin-bottom:6px;">Toelichting in eigen woorden &mdash; <span style="font-weight:400;color:var(--text-muted);">tekstueel bewijs naast uw documenten</span></label>
+            <div style="font-size:0.78rem;color:var(--text-muted);margin-bottom:8px;line-height:1.55;">
+              Beschrijf hoe u deze maatregel toepast in de praktijk: welke procedure volgt u, hoe controleert u de werking, wat gaat goed en waar zit nog werk?
+              De Lead Auditor leest dit als aanvulling op uw documenten \u2014 uitgebreide toelichting versterkt uw zaak.
+            </div>
+            <textarea class="ga-ef-textarea ga-ef-remark" data-field="remark"
                       onblur="saveEvidenceField('${esc(ctrl.id)}','remark',this.value)"
-                      placeholder="Context, afwijkingen, scope-afbakeningen, lopende verbetering\u2026">${esc(nf.remark || '')}</textarea>
+                      placeholder="Bijvoorbeeld: &quot;Wij hebben dit beleid in 2024 geformaliseerd na een datalek-incident. Het wordt jaarlijks gereviewd door de directie. Onlangs hebben we de procedure aangescherpt voor remote work. We zien nog ruimte voor verbetering in de awareness-training \u2014 dat staat op de roadmap voor Q2 2026...&quot;">${esc(nf.remark || '')}</textarea>
+            <div style="font-size:0.74rem;color:var(--text-muted);margin-top:6px;text-align:right;font-style:italic;">Vrij in te vullen &middot; geen tekenlimiet</div>
           </div>
         </div>
       </div>
