@@ -7,6 +7,11 @@ RewriteEngine On
 RewriteCond %{HTTPS} off
 RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
+# ─── Blog canoniek op /blog/ (directory met index.html) ──────
+# blog.html en /blog (zonder slash) beide 301 → /blog/  voorkomt 'Alternatieve canonical' duplicate-content
+RewriteRule ^blog\.html$ /blog/ [L,R=301,NE]
+RewriteRule ^blog$ /blog/ [L,R=301,NE]
+
 # ─── Clean URLs (hide .html extension) ───────────────────────
 # 1. Redirect /page.html → /page (external 301 for SEO)
 RewriteCond %{THE_REQUEST} \s/+([^?\s]+?)\.html[\s?] [NC]

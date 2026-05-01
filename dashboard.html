@@ -3310,8 +3310,14 @@ function isAdminUser() {
 }
 
 function showAdminTestBar() {
-  if (!isAdminUser()) return;
   const bar = document.getElementById('adminTestBar');
+  // Defense-in-depth: voor NIET-admin gebruikers verwijderen we het hele DOM-element
+  // én blokkeren we de fill-functies (zie isAdminUser-guard in elke handler).
+  // Een klant kan dus niet via DevTools display:flex forceren — element is er gewoon niet meer.
+  if (!isAdminUser()) {
+    if (bar) bar.remove();
+    return;
+  }
   const sel = document.getElementById('atbSectorSelect');
   if (bar) bar.style.display = 'flex';
   if (sel && userSector) sel.value = userSector;
