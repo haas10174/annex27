@@ -3275,7 +3275,7 @@ async function generateAIDraft(regenerate) {
   if (status) { status.style.display = 'block'; status.textContent = 'Claude Opus analyseert quickscan + evidence... (10-60 sec)'; }
   adminToast('AI-draft genereren — kan 30-60s duren', { duration: 7000 });
 
-  const r = await invokeEdgeFn('generate-report', { user_id: currentClient.user_id }, { timeoutMs: 90000 });
+  const r = await invokeEdgeFn('generate-report', { user_id: currentClient.user_id }, { timeoutMs: 180000 });
   if (!r.ok) {
     adminToast(`Generatie mislukt (${r.ms}ms): ${r.error}`, { error: true, duration: 8000 });
     if (btn) { btn.disabled = false; btn.textContent = 'Genereer AI-draft'; }
