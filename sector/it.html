@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <meta name="theme-color" content="#0D9488" />
+  <script src="/analytics.js"></script>
+  <title>ISO 27001 Gap-analyse voor IT-dienstverleners en MSP&#x27;s | Annex27</title>
+  <meta name="description" content="ISO 27001 voor MSP&#x27;s en IT-bureaus: cross-tenant boundaries, privileged access, RMM/PSA-tooling. €795 incl. Lead Auditor review. Klanten vragen het — u levert het zonder consultancy-tarief." />
+  <meta name="keywords" content="ISO 27001 MSP, ISO 27001 IT-bureau, MSP security, RMM security, multi-tenant MSP, MSSP audit, ISO 27001 hosting, IT-dienstverlener compliance" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://annex27.nl/sector/it" />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://annex27.nl/sector/it" />
+  <meta property="og:title" content="ISO 27001 Gap-analyse voor IT-dienstverleners en MSP&#x27;s | Annex27" />
+  <meta property="og:description" content="ISO 27001 voor MSP&#x27;s en IT-bureaus: cross-tenant boundaries, privileged access, RMM/PSA-tooling. €795 incl. Lead Auditor review. Klanten vragen het — u levert het zonder consultancy-tarief." />
+  <meta property="og:image" content="https://annex27.nl/og-image.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"FAQPage",
+    "mainEntity":[
+      {"@type":"Question","name":"Wij doen al ISO 27001 — waarom dit?","acceptedAnswer":{"@type":"Answer","text":"Een gewone ISO-audit toetst je managementsysteem maar niet specifiek je multi-tenant operations. Klanten met een ISO 27001-vereiste lezen jouw rapport en willen weten: hoe scheidt jij data? Hoe werkt jullie privileged access? Hoe gaan jullie om met RMM-supply-chain? Onze gap-analyse maakt die antwoorden auditeerbaar."}},
+      {"@type":"Question","name":"Voor welke IT-bedrijven is dit geschikt?","acceptedAnswer":{"@type":"Answer","text":"MSP's, MSSP's, ICT-dienstverleners, hosting-providers, cloud-resellers, software-houses, DevOps-consultancies, IT-detacheerders. Beste fit: bedrijven met enterprise-klanten die SOC 2 of ISO 27001-evidence vragen."}},
+      {"@type":"Question","name":"Welke normen worden gedekt?","acceptedAnswer":{"@type":"Answer","text":"ISO/IEC 27001:2022 (managementsysteem), ISO/IEC 27002:2022 (controls), ISO/IEC 27017 (cloud-services), AVG/GDPR, en NIS2 voor managed-service-providers die als belangrijke entiteit kwalificeren. Voor zorg-MSP's mappen we ook NEN 7510."}},
+      {"@type":"Question","name":"Wat krijg ik voor €795?","acceptedAnswer":{"@type":"Answer","text":"De volledige IT/MSP-gap-analyse (107 vragen), een rapport met scores per ISO 27002:2022-categorie, multi-tenant + supply-chain mapping per bevinding, een RMM/PSA-vendor-risk-register-template, en een persoonlijke review door gecertificeerd Lead Auditor (DNV/IRCA)."}}
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"Service",
+    "serviceType":"ISO 27001 gap-analyse — sector IT-dienstverlener / MSP",
+    "name":"IT-dienstverleners & MSPs gap-analyse",
+    "description":"Volledige ISO 27001:2022 gap-analyse op maat voor IT-dienstverleners en MSP's. 107 vragen waaronder 14 IT/MSP-specifieke (multi-tenant, PAM, RMM-supply-chain). Reviewed door gecertificeerd Lead Auditor.",
+    "provider":{"@type":"Organization","name":"Annex27","url":"https://annex27.nl/","@id":"https://annex27.nl/#organization"},
+    "areaServed":[{"@type":"Country","name":"Netherlands"},{"@type":"Country","name":"Belgium"}],
+    "audience":{"@type":"BusinessAudience","audienceType":"MSP's, MSSP's, ICT-dienstverleners, hosting-providers, cloud-resellers, software-houses"},
+    "category":"Compliance audit",
+    "offers":{"@type":"Offer","price":"795","priceCurrency":"EUR","priceValidUntil":"2026-12-31","availability":"https://schema.org/InStock","url":"https://annex27.nl/sector/it"}
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"BreadcrumbList",
+    "itemListElement":[
+      {"@type":"ListItem","position":1,"name":"Home","item":"https://annex27.nl/"},
+      {"@type":"ListItem","position":2,"name":"Sectoren","item":"https://annex27.nl/#sectoren"},
+      {"@type":"ListItem","position":3,"name":"IT-dienstverleners & MSPs","item":"https://annex27.nl/sector/it"}
+    ]
+  }
+  </script>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    :root{
+      --bg:#FAFAFA;
+      --surface:#FFFFFF;
+      --bg-warm:#F1F5F9;
+      --border:#E5E7EB;
+      --border-light:#F1F5F9;
+      --text-primary:#0F172A;
+      --text-secondary:#475569;
+      --text-muted:#94A3B8;
+      --brand:#0D9488;
+      --brand-light:#CCFBF1;
+      --accent:#0EA5E9;
+      --accent-hover:#0284C7;
+      --accent-light:#E0F2FE;
+      --coral:#FBBF24;
+      --coral-hover:#F59E0B;
+      --coral-light:#FEF3C7;
+      --pine:#0F172A;
+      --warning:#D97706;
+      --danger:#B91C1C;
+      --radius:10px;
+      --radius-lg:16px;
+    }
+    html{scroll-behavior:smooth;}
+    body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text-secondary);line-height:1.7;-webkit-font-smoothing:antialiased;}
+    .container{max-width:1080px;margin:0 auto;padding:0 24px;}
+    nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(250,250,250,0.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--border-light);height:64px;display:flex;align-items:center;padding:0 5%;}
+    .nav-inner{display:flex;align-items:center;justify-content:space-between;width:100%;max-width:1120px;margin:0 auto;}
+    .nav-logo{font-family:'Sora',sans-serif;font-size:1.4rem;font-weight:700;color:var(--text-primary);text-decoration:none;letter-spacing:-0.03em;}
+    .nav-logo span{color:var(--brand);}
+    .nav-back{display:inline-flex;align-items:center;gap:6px;font-size:0.85rem;color:var(--text-secondary);text-decoration:none;font-weight:500;}
+    .nav-back:hover{color:var(--text-primary);}
+    .nav-back svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;}
+
+    .hero{padding:120px 0 72px;background:linear-gradient(165deg,var(--pine) 0%,#1E293B 60%,#0F172A 100%);color:white;position:relative;overflow:hidden;}
+    .hero::before{content:'';position:absolute;top:-180px;right:-140px;width:580px;height:580px;background:radial-gradient(circle,#0EA5E933 0%,transparent 65%);pointer-events:none;}
+    .hero::after{content:'';position:absolute;bottom:-220px;left:-140px;width:520px;height:520px;background:radial-gradient(circle,#FBBF2428 0%,transparent 65%);pointer-events:none;}
+    .hero .container{position:relative;z-index:1;}
+    .hero-grid{display:grid;grid-template-columns:1.4fr 1fr;gap:48px;align-items:center;}
+    .eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:0.78rem;font-weight:600;color:#FEF3C7;text-transform:uppercase;letter-spacing:0.14em;margin-bottom:18px;}
+    .eyebrow::before{content:'';width:24px;height:1px;background:var(--coral);}
+    .hero h1{font-family:'Sora',sans-serif;font-size:clamp(2rem,4.4vw,3.2rem);font-weight:700;line-height:1.05;letter-spacing:-0.03em;margin-bottom:18px;color:#F1F5F9;}
+    .hero h1 .accent{color:var(--coral);}
+    .hero p.lead{font-size:1.08rem;color:#CBD5E1;max-width:560px;margin-bottom:28px;}
+    .hero-cta{display:flex;gap:14px;flex-wrap:wrap;}
+    .btn-primary{display:inline-flex;align-items:center;gap:10px;background:var(--coral);color:#0F172A;padding:14px 24px;border-radius:10px;font-weight:700;font-size:0.96rem;text-decoration:none;transition:background .2s,transform .2s,box-shadow .2s;box-shadow:0 6px 24px #FBBF2450;}
+    .btn-primary:hover{background:var(--coral-hover);transform:translateY(-1px);box-shadow:0 10px 30px #FBBF2466;}
+    .btn-ghost{display:inline-flex;align-items:center;gap:10px;background:rgba(255,255,255,0.06);color:white;padding:14px 22px;border-radius:10px;font-weight:600;font-size:0.96rem;text-decoration:none;border:1px solid rgba(255,255,255,0.18);transition:background .2s;}
+    .btn-ghost:hover{background:rgba(255,255,255,0.12);}
+
+    .hero-card{background:rgba(255,255,255,0.045);border:1px solid #0EA5E938;border-radius:16px;padding:24px;backdrop-filter:blur(8px);box-shadow:0 0 0 1px #0EA5E922 inset;}
+    .hero-card-eyebrow{font-size:0.72rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#E0F2FE;margin-bottom:12px;}
+    .hero-card h3{font-family:'Sora',sans-serif;color:white;font-size:1.05rem;font-weight:700;margin-bottom:4px;}
+    .hero-card .price{font-family:'Sora',sans-serif;color:white;font-size:2rem;font-weight:700;margin-bottom:14px;}
+    .hero-card .price small{font-size:0.78rem;font-weight:500;color:rgba(255,255,255,0.55);}
+    .hero-card ul{list-style:none;padding:0;margin:0 0 18px;font-size:0.86rem;color:rgba(255,255,255,0.82);}
+    .hero-card ul li{padding:5px 0;display:flex;gap:8px;align-items:flex-start;}
+    .hero-card ul li::before{content:'✓';color:#FBBF24;font-weight:700;flex-shrink:0;}
+    .hero-card a.cta{display:block;text-align:center;background:var(--coral);color:#0F172A;padding:13px 22px;border-radius:10px;font-weight:700;text-decoration:none;font-size:0.94rem;margin-bottom:8px;transition:background .2s;}
+    .hero-card a.cta:hover{background:var(--coral-hover);}
+    .hero-card-foot{margin-top:14px;font-size:0.74rem;color:rgba(255,255,255,0.46);line-height:1.55;}
+
+    section{padding:80px 0;}
+    section.alt{background:var(--surface);border-top:1px solid var(--border-light);border-bottom:1px solid var(--border-light);}
+    .label{font-size:0.78rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;}
+    h2.section-title{font-family:'Sora',sans-serif;font-size:clamp(1.6rem,3vw,2.2rem);font-weight:700;color:var(--text-primary);letter-spacing:-0.02em;margin-bottom:14px;}
+    .section-lead{font-size:1.02rem;line-height:1.75;max-width:680px;margin-bottom:40px;}
+
+    .compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:24px;}
+    .compare-col{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:24px;box-shadow:0 1px 3px rgba(0,0,0,0.04);}
+    .compare-col.miss{border-left:4px solid var(--danger);background:linear-gradient(180deg,#FFF7F4 0%,var(--surface) 35%);}
+    .compare-col.cover{border-left:4px solid var(--accent);background:linear-gradient(180deg,#E0F2FE 0%,var(--surface) 35%);}
+    .compare-col h3{font-family:'Sora',sans-serif;font-size:1.05rem;color:var(--text-primary);margin-bottom:14px;}
+    .compare-col ul{padding-left:18px;font-size:0.92rem;line-height:1.75;}
+    .compare-col ul li{margin-bottom:8px;}
+    .compare-col.miss ul li::marker{color:var(--danger);}
+    .compare-col.cover ul li::marker{color:var(--accent);}
+
+    .cat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:32px;}
+    .cat{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:22px;transition:border-color .2s,transform .2s;}
+    .cat:hover{border-color:var(--accent);transform:translateY(-2px);}
+    .cat-num{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:8px;background:var(--accent-light);color:var(--accent);font-family:'Sora',sans-serif;font-weight:800;margin-bottom:12px;}
+    .cat h3{font-family:'Sora',sans-serif;font-size:1rem;color:var(--text-primary);margin-bottom:6px;}
+    .cat p{font-size:0.88rem;line-height:1.6;}
+
+    .audience{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:24px;}
+    .aud{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;font-size:0.9rem;color:var(--text-primary);font-weight:500;text-align:center;transition:background .2s,border-color .2s;}
+    .aud:hover{background:var(--coral-light);border-color:var(--coral);}
+
+    .norm-banner{background:linear-gradient(135deg,var(--pine) 0%,#1E293B 60%,#0F172A 100%);color:white;padding:28px 32px;border-radius:16px;margin-top:32px;border:1px solid #0EA5E938;position:relative;overflow:hidden;}
+    .norm-banner::before{content:'';position:absolute;top:-80px;right:-80px;width:280px;height:280px;background:radial-gradient(circle,#FBBF2428 0%,transparent 70%);}
+    .norm-banner > *{position:relative;}
+    .norm-banner h3{font-family:'Sora',sans-serif;font-size:1.1rem;color:white;margin-bottom:10px;}
+    .norm-banner p{color:rgba(255,255,255,0.78);font-size:0.92rem;line-height:1.65;margin-bottom:14px;}
+    .norm-banner ul{list-style:none;padding:0;display:flex;gap:8px;flex-wrap:wrap;}
+    .norm-banner li{background:#0EA5E928;color:#E0F2FE;padding:5px 12px;border-radius:99px;font-size:0.78rem;font-weight:600;letter-spacing:0.02em;border:1px solid #0EA5E93a;}
+
+    .cta-section{background:linear-gradient(180deg,var(--bg-warm) 0%,var(--surface) 100%);padding:80px 0;text-align:center;position:relative;overflow:hidden;}
+    .cta-section::before{content:'';position:absolute;top:-100px;left:50%;transform:translateX(-50%);width:600px;height:300px;background:radial-gradient(ellipse,#FBBF2424 0%,transparent 70%);pointer-events:none;}
+    .cta-section .container{position:relative;}
+    .cta-section h2{font-family:'Sora',sans-serif;font-size:clamp(1.6rem,3vw,2.2rem);font-weight:700;color:var(--text-primary);letter-spacing:-0.02em;margin-bottom:14px;}
+    .cta-section p{font-size:1rem;max-width:560px;margin:0 auto 28px;}
+    .cta-row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+    .btn-primary-light{background:var(--coral);color:#0F172A;padding:14px 28px;border-radius:10px;font-weight:700;font-size:0.96rem;text-decoration:none;display:inline-block;transition:background .2s,transform .2s,box-shadow .2s;box-shadow:0 6px 20px #FBBF2440;}
+    .btn-primary-light:hover{background:var(--coral-hover);transform:translateY(-1px);}
+    .btn-ghost-light{background:transparent;color:var(--text-primary);padding:14px 26px;border-radius:10px;font-weight:600;font-size:0.96rem;text-decoration:none;border:1px solid var(--border);display:inline-block;transition:background .2s,border-color .2s;}
+    .btn-ghost-light:hover{background:var(--surface);border-color:var(--accent);}
+
+    .deliver-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:24px;}
+    .deliver{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:22px;display:flex;gap:14px;}
+    .deliver-icon{flex-shrink:0;width:36px;height:36px;border-radius:8px;background:var(--accent-light);color:var(--accent);display:flex;align-items:center;justify-content:center;}
+    .deliver-icon svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;}
+    .deliver h3{font-family:'Sora',sans-serif;font-size:0.96rem;color:var(--text-primary);margin-bottom:4px;}
+    .deliver p{font-size:0.86rem;line-height:1.6;}
+
+    footer{background:var(--surface);border-top:1px solid var(--border-light);padding:40px 0;font-size:0.84rem;color:var(--text-muted);}
+    footer .container{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
+    footer a{color:var(--text-secondary);text-decoration:none;}
+    footer a:hover{color:var(--text-primary);}
+
+    @media (max-width:900px){
+      .hero-grid{grid-template-columns:1fr;}
+      .compare-grid{grid-template-columns:1fr;}
+      .cat-grid{grid-template-columns:1fr;}
+      .audience{grid-template-columns:repeat(2,1fr);}
+      .deliver-grid{grid-template-columns:1fr;}
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">annex<span>27</span></a>
+    <a href="/" class="nav-back"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Terug naar home</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="container">
+    <div class="hero-grid">
+      <div>
+        <div class="eyebrow"><span>Voor IT-bureaus, MSP's, MSSP's & hosting</span></div>
+        <h1>Uw klanten verwachten ISO 27001. <span class="accent">Wij leveren de audit waar zij gerust mee zijn.</span></h1>
+        <p class="lead">Begin met een gratis IT-quickscan. Geen ISO-audit met een vraagje over multi-tenant — een echte test op cross-tenant data-segregation, RMM/PSA-tooling-security, privileged access (PAM/JIT), endpoint-deployment-hygiene en supply-chain-risico's van EDR/MDR-leveranciers. Voor MSP's, MSSP's, ICT-dienstverleners, hosting-partijen en software-houses.</p>
+        <div class="hero-cta">
+          <a href="/gap-analyse?sector=it" class="btn-primary">Start gratis quickscan →</a>
+          <a href="#vergelijk" class="btn-ghost">Wat is het verschil?</a>
+        </div>
+      </div>
+      <div class="hero-card">
+        <div class="hero-card-eyebrow">Volledige IT-/MSP gap-analyse</div>
+        <div class="price">€795 <small>na de quickscan</small></div>
+        <ul>
+          <li>93 ISO 27002-controls + 14 IT/MSP-deltas</li>
+          <li>Cross-tenant boundary review (klant A mag niet bij klant B)</li>
+          <li>Privileged Access Management (PAM) + just-in-time engineer access</li>
+          <li>RMM/PSA/EDR supply-chain risk-register</li>
+          <li>Customer-ticket-data classification + retention policy</li>
+          <li>Persoonlijke review door Lead Auditor (DNV/IRCA)</li>
+        </ul>
+        <a href="/gap-analyse?sector=it" class="cta">Eerst gratis quickscan →</a>
+        <div class="hero-card-foot">Marktconform: IT-compliance consultancy €10k–€25k. Voor MSP's, MSSP's, ICT-dienstverleners, hosting-providers, cloud-resellers, software-houses.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="vergelijk">
+  <div class="container">
+    <div class="label">Het verschil</div>
+    <h2 class="section-title">Wat een generieke ISO 27001-audit mist in de it-dienstverlener / msp</h2>
+    <p class="section-lead">ISO 27001 is universeel. Maar de it-dienstverlener / msp-context heeft specifieke risico's en regelgeving die een generieke audit niet expliciet toetst — en dan koopt u eigenlijk een onvolledig oordeel.</p>
+
+    <div class="compare-grid">
+      <div class="compare-col miss">
+        <h3>Generieke ISO 27001-audit</h3>
+        <ul>
+          <li>Multi-tenant: &quot;datasegregatie ja&quot;, geen test van service-engineer-tooling</li>
+          <li>Privileged access: er is een admin-account, geen PAM/JIT/break-glass-log</li>
+          <li>RMM/MDM-tooling: aanwezig, geen vendor-supply-chain-risk-classification</li>
+          <li>Klant-tickets: opgeslagen, geen data-classification of retention-beleid</li>
+          <li>Endpoint deployment: gestandaardiseerd, geen drift-detection</li>
+          <li>Engineer-onboarding: NDA, geen privileged-access-onboarding flow</li>
+          <li>Customer-data-recovery: ja, geen scope-isolation per klant</li>
+        </ul>
+      </div>
+      <div class="compare-col cover">
+        <h3>Onze IT/MSP gap-analyse (ISO + supply-chain + tenant-boundary)</h3>
+        <ul>
+          <li>Cross-tenant test: poging tot data-leak van klant A naar engineer-tooling klant B (§5.23)</li>
+          <li>PAM/JIT: alle privileged access tijdsgebonden, gelogd en goedgekeurd (§5.15/§8.2/§8.5)</li>
+          <li>RMM/PSA/EDR: vendor-tier-classification + jaarlijkse evidence-review (§5.19-§5.23)</li>
+          <li>Customer-ticket-data classified op gevoeligheid + retention per klant-DPA (§5.12/§5.13)</li>
+          <li>Endpoint-baseline + drift-detection + auto-remediatie (§8.1/§8.9)</li>
+          <li>Engineer-onboarding: training + privileged-access-grant + offboarding (§6.1-§6.5)</li>
+          <li>Per-klant scope-isolatie in DR-procedure: geen bulk-restore over tenants (§5.30/§8.13)</li>
+          <li>Sub-processor-management: BAA's, DPA's, SOC 2-rapporten, jaarlijkse review (§5.21-§5.23)</li>
+          <li>Customer-side incident-coördinatie: notification SLA + forensics-bewaring (§5.24-§5.27)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="alt">
+  <div class="container">
+    <div class="label">De vragenset</div>
+    <h2 class="section-title">De vragen die klanten al stellen</h2>
+    <p class="section-lead">Vendor-security-questionnaires van enterprise-klanten richten zich op cross-tenant-boundaries, privileged access en supply-chain. Onze gap-analyse beantwoordt exact die vragen — zodat u na review een verdedigbare audit-status heeft i.p.v. een algemene ISO-vinkje.</p>
+
+    <div class="cat-grid">
+      <div class="cat"><div class="cat-num">1</div><h3>Multi-tenant boundary</h3><p>Cross-tenant data-segregation getest, tenant-aware tooling-restrictions, audit-trail per klant gescheiden.</p></div>
+      <div class="cat"><div class="cat-num">2</div><h3>Privileged Access (PAM)</h3><p>Just-in-time admin, alle privileged sessies opgenomen, break-glass-procedure met directie-goedkeuring.</p></div>
+      <div class="cat"><div class="cat-num">3</div><h3>RMM / PSA / EDR-tooling</h3><p>Vendor-tier-classification, supply-chain attack-resilience, jaarlijkse evidence-review (SOC 2/ISO 27001-rapporten leveranciers).</p></div>
+      <div class="cat"><div class="cat-num">4</div><h3>Customer-ticket data</h3><p>Classification per gevoeligheidsniveau, retention per klant-contract, ge-redacted in logs en exports.</p></div>
+      <div class="cat"><div class="cat-num">5</div><h3>Endpoint deployment</h3><p>Hardening-baseline, drift-detection, auto-remediatie, MDM/EDR-monitoring met afwijkings-alerting.</p></div>
+      <div class="cat"><div class="cat-num">6</div><h3>Customer incident-management</h3><p>SLA voor notification, forensische bewaring, customer-side coordination, root-cause delivery template.</p></div>
+    </div>
+
+    <div class="norm-banner">
+      <h3>Direct gemapt op normvereisten</h3>
+      <p>Iedere bevinding verwijst naar de exacte ISO 27001/27002-control plus relevante supply-chain-norm — bruikbaar voor vendor-security-questionnaires en customer-DPA-bijlagen.</p>
+      <ul>
+        <li>ISO/IEC 27001:2022</li>
+        <li>ISO/IEC 27002:2022</li>
+        <li>ISO/IEC 27017 (cloud-services)</li>
+        <li>NEN 7510 (zorg-MSP)</li>
+        <li>AVG / GDPR</li>
+        <li>NIS2 (managed services)</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="label">Voor wie</div>
+    <h2 class="section-title">Welke IT-dienstverleners?</h2>
+    <p class="section-lead">Ontworpen voor Nederlandse en Belgische IT-bureaus die enterprise-klanten bedienen. Met focus op multi-tenant operations en supply-chain risk.</p>
+
+    <div class="audience">
+      <div class="aud">MSP</div>
+      <div class="aud">MSSP</div>
+      <div class="aud">ICT-dienstverlener</div>
+      <div class="aud">Hosting-provider</div>
+      <div class="aud">Cloud reseller</div>
+      <div class="aud">Software-house</div>
+      <div class="aud">DevOps consultancy</div>
+      <div class="aud">Detacheerder</div>
+    </div>
+  </div>
+</section>
+
+<section class="alt">
+  <div class="container">
+    <div class="label">Wat u krijgt</div>
+    <h2 class="section-title">Het rapport</h2>
+    <p class="section-lead">Geen vinkjeslijst. Een leesbaar rapport dat uw bestuur kan voorleggen aan klanten, toezichthouder of opdrachtgever.</p>
+
+    <div class="deliver-grid">
+      <div class="deliver">
+        <div class="deliver-icon"><svg viewBox="0 0 24 24"><path d="M12 2v20M2 12h20"/></svg></div>
+        <div><h3>Volwassenheidsscore per categorie</h3><p>CMMI 0-4 schaal, gewogen per vraag. Direct vergelijkbaar met benchmark voor uw sector.</p></div>
+      </div>
+      <div class="deliver">
+        <div class="deliver-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <div><h3>Norm-mapping per bevinding</h3><p>Verwijzing naar ISO 27002:2022-control én sector-specifieke norm waar relevant.</p></div>
+      </div>
+      <div class="deliver">
+        <div class="deliver-icon"><svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
+        <div><h3>Geprioriteerde remediatie</h3><p>Concrete acties met verwijzing naar Annex A én sector-context, inclusief volgorde van uitvoering.</p></div>
+      </div>
+      <div class="deliver">
+        <div class="deliver-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+        <div><h3>Persoonlijke Lead Auditor review</h3><p>Geen AI-rapport zonder oog. Een gecertificeerd Lead Auditor (DNV/IRCA) leest het rapport door en geeft eindoordeel.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <div class="container">
+    <h2>Klaar om de audit-conversatie aan te gaan met uw klanten?</h2>
+    <p>Begin met de gratis quickscan. Daarna kunt u kiezen of u doorgaat met de volledige gap-analyse — €795 inclusief Lead Auditor review.</p>
+    <div class="cta-row">
+      <a href="/gap-analyse?sector=it" class="btn-primary-light">Start gratis quickscan →</a>
+      <a href="/rapport-voorbeeld" class="btn-ghost-light">Bekijk voorbeeldrapport</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div>© 2026 Annex27 · ISO 27001 + sector-specifieke compliance voor het MKB</div>
+    <div><a href="/privacy">Privacy</a> · <a href="/algemene-voorwaarden">AV</a> · <a href="/verwerkersovereenkomst">Verwerkersovereenkomst</a></div>
+  </div>
+</footer>
+
+</body>
+</html>
