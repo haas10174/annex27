@@ -2631,8 +2631,8 @@
           <option value="planned">Alles 'Gepland' (zwakste scenario)</option>
           <option value="implemented">Alles 'Geïmplementeerd' (sterk scenario)</option>
           <option value="optimized">Alles 'Geoptimaliseerd' (perfect scenario)</option>
-          <option value="mix">Realistisch mix (gevarieerd)</option>
-          <option value="mix-evidence">Mix + dummy-bewijs (volledige preview)</option>
+          <option value="mix">Mix — roteer persona (klik = volgende klant)</option>
+          <option value="mix-evidence">Mix + dummy-bewijs — roteer persona</option>
         </select>
         <button class="atb-reset" onclick="adminResetGap()" title="Wist alle antwoorden + bewijsvoering voor verse test">Reset gap</button>
         <a class="atb-admin" href="/admin">Admin →</a>
@@ -3413,83 +3413,209 @@ async function requestAuditorReview() {
 async function adminFillAllPlanned() { return adminFillFromMode('planned'); }
 
 // Vul gap-antwoorden + (optioneel) dummy-evidence — alleen admin/auditor.
-// Modi: 'planned'   → alle vragen score 1 (laag scenario)
-//       'implemented' → alle score 3 (sterk scenario)
-//       'optimized'   → alle score 4 (perfect scenario)
-//       'mix'         → realistic verdeling (40% high, 35% mid, 20% low, 5% nvt)
-//       'mix-evidence' → mix + dummy notes per claim met score≥2 + dummy file-references
+// Modi: 'planned' → alle score 1 / 'implemented' → score 3 / 'optimized' → score 4
+//       'mix' / 'mix-evidence' → roteren door 5 KLANT-PERSONAS (elke klik = volgende persona)
+//       Persona's: scaleup-saas / familiebedrijf-bouw / zorginstelling / overheid / mkb-it
+//       Elke persona heeft eigen verdeling, doc-set, owners, toon en remark-stijl.
+const ADMIN_PERSONAS = [
+  {
+    key: 'saas-scaleup',
+    label: 'SaaS scale-up (sterk tech, zwak HR/beleid)',
+    bias: { policy: 'low', personal: 'low', physical: 'mid', tech: 'high' },
+    docs: {
+      policy:   { primary: 'security_policy_v0.3_DRAFT.md',  extra: 'kickoff_meeting_notes.docx' },
+      personal: { primary: 'onboarding_checklist.pdf',        extra: 'slack_security_channel_export.txt' },
+      physical: { primary: 'wework_office_access.pdf',        extra: 'laptop_register_2026Q1.xlsx' },
+      tech:     { primary: 'aws_config_export_prod.json',     extra: 'snyk_scan_2026-04-15.pdf' }
+    },
+    owners: { policy: 'CTO (waarnemend CISO)', personal: 'People Ops Lead', physical: 'Office Manager', tech: 'Platform Engineering Lead' },
+    location: 'GitHub > security-policies/ + Notion',
+    remarks: [
+      'Beleid bestaat nog niet in formele vorm — alleen gedeelde Notion-pagina, niet door directie goedgekeurd.',
+      'Tech-controls zijn sterk geautomatiseerd via Terraform, maar HR-processen lopen achter.',
+      'CTO neemt ook security-rol waar — geen aparte CISO. Functiescheiding ontbreekt.'
+    ]
+  },
+  {
+    key: 'familiebedrijf-bouw',
+    label: 'Familiebedrijf bouw (sterk fysiek, zwak digitaal)',
+    bias: { policy: 'low', personal: 'mid', physical: 'high', tech: 'low' },
+    docs: {
+      policy:   { primary: 'huisreglement_2018.pdf',           extra: 'directie_memo_juli2024.pdf' },
+      personal: { primary: 'personeelshandboek_v3.pdf',        extra: 'V&G_instructie_aanwezigheidslijst.pdf' },
+      physical: { primary: 'terrein_plattegrond_camerazones.pdf', extra: 'sleutel_register_2026.xlsx' },
+      tech:     { primary: 'wachtwoord_lijst_kantoor.docx',    extra: 'IT_factuur_externe_partij_2025.pdf' }
+    },
+    owners: { policy: 'Algemeen Directeur', personal: 'HR (extern bureau)', physical: 'Hoofd Bedrijfsvoering', tech: 'Externe IT-leverancier' },
+    location: 'Fysieke ordnermap directiekantoor + netwerkschijf K:\\',
+    remarks: [
+      'Veel kennis zit in hoofden van familieleden — niet schriftelijk vastgelegd.',
+      'IT volledig uitbesteed aan lokaal IT-bureau — geen DPA, geen SLA op security.',
+      'Wachtwoord voor gedeeld systeem staat in Word-bestand op netwerkschijf.'
+    ]
+  },
+  {
+    key: 'zorginstelling',
+    label: 'Zorginstelling middelgroot (sterk beleid, gemiddeld tech)',
+    bias: { policy: 'high', personal: 'high', physical: 'mid', tech: 'mid' },
+    docs: {
+      policy:   { primary: 'ISMS_handboek_v4.2_NEN7510.pdf',   extra: 'directiebeoordeling_Q4_2025.pdf' },
+      personal: { primary: 'awareness_training_AVG_2026.pdf',  extra: 'BIG-register_screening_log.xlsx' },
+      physical: { primary: 'toegangsbeleid_zonering_kliniek.pdf', extra: 'badge_log_zone_C_april.csv' },
+      tech:     { primary: 'EPD_logging_review_maart.pdf',     extra: 'pentest_extern_2025_redacted.pdf' }
+    },
+    owners: { policy: 'CISO + Functionaris Gegevensbescherming', personal: 'HR + Opleidingscoördinator', physical: 'Facilitair Manager', tech: 'IT Security Officer' },
+    location: 'iProva > Documentbeheer > Informatiebeveiliging',
+    remarks: [
+      'Beleidsmatig sterk (NEN 7510-gecertificeerd in 2024), uitvoering wisselt per afdeling.',
+      'EPD-logging actief maar reviews niet altijd binnen 30 dagen afgerond.',
+      'Awareness-training jaarlijks, maar phishing-simulaties pas net opgestart.'
+    ]
+  },
+  {
+    key: 'overheid',
+    label: 'Overheidsorganisatie (sterk beleid, zwakke uitvoering)',
+    bias: { policy: 'high', personal: 'mid', physical: 'mid', tech: 'low' },
+    docs: {
+      policy:   { primary: 'BIO_implementatieplan_2025-2027.pdf', extra: 'collegeagenda_juni2025.pdf' },
+      personal: { primary: 'integriteitsbeleid_ambtenaar.pdf',    extra: 'VOG_register_redacted.xlsx' },
+      physical: { primary: 'huisvestingsbeleid_zones.pdf',        extra: 'bezoekersregistratie_april.csv' },
+      tech:     { primary: 'audit_rapport_BIO_2024_extern.pdf',   extra: 'verbeterpunten_overzicht_open.xlsx' }
+    },
+    owners: { policy: 'CISO Gemeente', personal: 'P&O', physical: 'Huisvesting & Facilitair', tech: 'I&A — Informatie & Automatisering' },
+    location: 'iBabs + zaaksysteem Djuma',
+    remarks: [
+      'BIO-implementatie loopt achter op planning — externe auditor heeft 23 verbeterpunten gerapporteerd.',
+      'Beleid is uitgebreid maar uitvoering is gefragmenteerd over verschillende afdelingen.',
+      'Verantwoordelijkheid voor security ligt bij CISO; mandaat is beperkt.'
+    ]
+  },
+  {
+    key: 'mkb-it',
+    label: 'MKB-IT consultant (fragmentair, veel "gepland")',
+    bias: { policy: 'mid', personal: 'low', physical: 'mid', tech: 'mid' },
+    docs: {
+      policy:   { primary: 'beleid_concept_v0.5.docx',         extra: 'mail_directie_akkoord_concept.pdf' },
+      personal: { primary: 'arbeidsovereenkomst_template.pdf', extra: 'NDA_alle_medewerkers_2025.pdf' },
+      physical: { primary: 'huurcontract_kantoor.pdf',         extra: 'sleutelregister.xlsx' },
+      tech:     { primary: 'M365_admin_export.json',           extra: 'firewall_rules_export.txt' }
+    },
+    owners: { policy: 'Eigenaar/DGA', personal: 'Eigenaar/DGA', physical: 'Eigenaar/DGA', tech: 'Senior Consultant (waarnemend)' },
+    location: 'OneDrive > Bedrijf > Compliance (concept-map)',
+    remarks: [
+      'Klein team, eigenaar draagt meeste rollen. Implementatie loopt achter op intentie.',
+      'Veel zaken "gepland voor Q3" — concrete deadlines ontbreken.',
+      'Geen aparte security-rol; consultancy-werk gaat voor interne compliance.'
+    ]
+  }
+];
+
 async function adminFillFromMode(mode) {
   if (!isAdminUser()) return;
   if (!mode) return;
+
+  // Roteer alleen voor mix-modi
+  const isMix = (mode === 'mix' || mode === 'mix-evidence');
+  let persona = null;
+  if (isMix) {
+    const idx = (parseInt(localStorage.getItem('a27_admin_persona_idx') || '-1') + 1) % ADMIN_PERSONAS.length;
+    localStorage.setItem('a27_admin_persona_idx', String(idx));
+    persona = ADMIN_PERSONAS[idx];
+  }
 
   const labels = {
     'planned': 'alles "Gepland" (score 1)',
     'implemented': 'alles "Geïmplementeerd" (score 3)',
     'optimized': 'alles "Geoptimaliseerd" (score 4)',
-    'mix': 'realistic mix (gevarieerd)',
-    'mix-evidence': 'realistic mix + dummy bewijs/notes'
+    'mix': `mix — persona: ${persona?.label || ''}`,
+    'mix-evidence': `mix + bewijs — persona: ${persona?.label || ''}`
   };
-  if (!confirm(`Vul gap-data: ${labels[mode]}?\n\nBestaande antwoorden worden overschreven.${mode === 'mix-evidence' ? ' Bewijsnotities krijgen dummy-data.' : ''}`)) return;
+  if (!confirm(`Vul gap-data: ${labels[mode]}?\n\nBestaande antwoorden worden overschreven.${mode === 'mix-evidence' ? ' Bewijsnotities krijgen persona-gerichte dummy-data.' : ''}\n\n${persona ? 'Volgende klik roteert naar volgende persona — handig om te zien hoe rapport varieert per klantprofiel.' : ''}`)) return;
 
   if (typeof gapQuestions !== 'object' || !Object.keys(gapQuestions).length) {
     if (typeof showToast === 'function') showToast('Gap-vragen nog niet geladen — open eerst de gap-analyse', { error: true, duration: 5000 });
     return;
   }
 
-  // Stabiel-pseudo-random op control-id zodat dezelfde mix consistent terugkomt
   function hash(s) { let h = 0; for (let i = 0; i < s.length; i++) h = ((h<<5)-h) + s.charCodeAt(i) | 0; return Math.abs(h); }
-  function pickMix(seed) {
-    const r = hash(seed) % 100;
-    if (r < 5)  return 'nvt';
-    if (r < 25) return '0';
-    if (r < 45) return '2';
-    if (r < 75) return '3';
+
+  // Categorie van een control — bepaalt persona-bias
+  function ctrlCategory(id) {
+    if (/^A\.6\./.test(id)) return 'personal';
+    if (/^A\.7\./.test(id)) return 'physical';
+    if (/^A\.8\./.test(id)) return 'tech';
+    return 'policy';
+  }
+
+  // Score-distributies per bias-niveau
+  const distros = {
+    high: { nvt: 3, low: 7,  mid: 20, high: 45, top: 25 },  // sterk gebied
+    mid:  { nvt: 5, low: 20, mid: 35, high: 30, top: 10 },  // gemiddeld
+    low:  { nvt: 8, low: 50, mid: 25, high: 12, top: 5  }   // zwak gebied
+  };
+  function pickFromDistro(d, seedHash) {
+    const r = seedHash % 100;
+    let acc = 0;
+    if (r < (acc += d.nvt))  return 'nvt';
+    if (r < (acc += d.low))  return Math.random() < 0.5 ? '0' : '1';  // 0 = niet, 1 = gepland
+    if (r < (acc += d.mid))  return '2';
+    if (r < (acc += d.high)) return '3';
     return '4';
   }
 
   let total = 0, evidenceFilled = 0;
   Object.keys(gapQuestions).forEach(ctrlId => {
     const qs = gapQuestions[ctrlId] || [];
+    const cat = ctrlCategory(ctrlId);
     qs.forEach((_, qi) => {
       let val;
-      if (mode === 'planned')      val = '1';
+      if (mode === 'planned')          val = '1';
       else if (mode === 'implemented') val = '3';
       else if (mode === 'optimized')   val = '4';
-      else /* mix or mix-evidence */    val = pickMix(ctrlId + '_' + qi);
+      else {
+        // Persona-gestuurde verdeling per categorie + extra rotatie-seed zodat dezelfde persona andere details geeft als je 5x doorklikt
+        const rotSalt = (parseInt(localStorage.getItem('a27_admin_persona_idx') || '0'));
+        const biasLevel = persona.bias[cat] || 'mid';
+        val = pickFromDistro(distros[biasLevel], hash(persona.key + '_' + ctrlId + '_' + qi + '_' + rotSalt));
+      }
       gapAnswers[ctrlId + '_' + qi] = val;
       total++;
     });
 
-    // Dummy-bewijs voor claims met score >= 2 (alleen bij mix-evidence)
     if (mode === 'mix-evidence') {
       const anyClaim = qs.some((_, qi) => ['2','3','4'].includes(gapAnswers[ctrlId + '_' + qi]));
       if (anyClaim) {
         evidenceData[ctrlId] = evidenceData[ctrlId] || { files: [], note: '', note_fields: {} };
-        // Per control een passende dummy-document set, gekozen op control-categorie
-        const isPolicy   = /^(C\.|A\.5\.[1-9]|A\.5\.31|A\.5\.32|A\.5\.36|A\.5\.37)/.test(ctrlId);
-        const isPersonal = /^A\.6\./.test(ctrlId);
-        const isPhysical = /^A\.7\./.test(ctrlId);
-        const isTech     = /^A\.8\./.test(ctrlId);
-        const docMap = {
-          policy:   { primary: 'beleid_v2.1.pdf',     extra: 'goedkeuring_directie.pdf' },
-          personal: { primary: 'awareness_training_2025.pdf', extra: 'trainingsregister.xlsx' },
-          physical: { primary: 'plattegrond_zones.pdf', extra: 'badge-log_april.csv' },
-          tech:     { primary: 'config_export.json', extra: 'security_scan_rapport.pdf' }
-        };
-        const docs = isPolicy ? docMap.policy : isPersonal ? docMap.personal : isPhysical ? docMap.physical : isTech ? docMap.tech : docMap.policy;
+        const docs = persona.docs[cat] || persona.docs.policy;
+        const owner = persona.owners[cat] || persona.owners.policy;
         const safeId = ctrlId.replace(/\./g, '_');
-        const baseDate = Date.now() - (hash(ctrlId) % 240) * 86400000;
-        // Twee mock-files toevoegen — mock://path zorgt dat download niet faalt zonder echte storage; rapport laat alleen filename + size zien.
+        const baseDate = Date.now() - (hash(persona.key + ctrlId) % 240) * 86400000;
+        const remarkPick = persona.remarks[hash(ctrlId) % persona.remarks.length];
+
+        const extType = docs.extra.endsWith('.csv') ? 'text/csv'
+                      : docs.extra.endsWith('.xlsx') ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                      : docs.extra.endsWith('.docx') ? 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+                      : docs.extra.endsWith('.txt')  ? 'text/plain'
+                      : docs.extra.endsWith('.json') ? 'application/json'
+                      : docs.extra.endsWith('.md')   ? 'text/markdown'
+                      : 'application/pdf';
+        const primType = docs.primary.endsWith('.pdf')   ? 'application/pdf'
+                       : docs.primary.endsWith('.docx')  ? 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+                       : docs.primary.endsWith('.xlsx')  ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                       : docs.primary.endsWith('.json')  ? 'application/json'
+                       : docs.primary.endsWith('.md')    ? 'text/markdown'
+                       : 'application/octet-stream';
+
         evidenceData[ctrlId].files = [
-          { name: `${safeId}_${docs.primary}`,  size: 240000 + (hash(ctrlId+'a') % 800000), type: docs.primary.endsWith('.pdf') ? 'application/pdf' : 'application/octet-stream', date: new Date(baseDate).toISOString(), path: `mock://${safeId}/${docs.primary}` },
-          { name: `${safeId}_${docs.extra}`,    size: 45000 + (hash(ctrlId+'b') % 200000),  type: docs.extra.endsWith('.csv') ? 'text/csv' : (docs.extra.endsWith('.xlsx') ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' : 'application/pdf'), date: new Date(baseDate + 86400000*7).toISOString(), path: `mock://${safeId}/${docs.extra}` }
+          { name: `${safeId}_${docs.primary}`, size: 240000 + (hash(persona.key + ctrlId + 'a') % 800000), type: primType, date: new Date(baseDate).toISOString(), path: `mock://${persona.key}/${safeId}/${docs.primary}` },
+          { name: `${safeId}_${docs.extra}`,   size: 45000  + (hash(persona.key + ctrlId + 'b') % 200000), type: extType,  date: new Date(baseDate + 86400000*7).toISOString(), path: `mock://${persona.key}/${safeId}/${docs.extra}` }
         ];
         evidenceData[ctrlId].note_fields = {
-          procedure: `Document: ${docs.primary} — vastgelegd in beleidshandboek`,
-          location:  `SharePoint > Compliance > ${ctrlId}`,
-          owner:     isPersonal ? 'HR Manager + CISO' : isPhysical ? 'Facility Manager' : isTech ? 'IT Operations Lead' : 'CISO',
+          procedure: `Document: ${docs.primary} — ${persona.key === 'saas-scaleup' ? 'in concept, nog niet formeel goedgekeurd' : persona.key === 'familiebedrijf-bouw' ? 'fysieke versie in directiekantoor' : 'opgenomen in handboek'}`,
+          location:  persona.location,
+          owner:     owner,
           last_verified: new Date(baseDate).toISOString().slice(0, 10),
-          remark:    'Demo-data voor rapport-preview — vervang door echte verwijzing.'
+          remark:    remarkPick
         };
         const nf = evidenceData[ctrlId].note_fields;
         evidenceData[ctrlId].note = `Procedure: ${nf.procedure}\nLocatie: ${nf.location}\nEigenaar: ${nf.owner}\nLaatst gereviewd: ${nf.last_verified}\nOpmerking: ${nf.remark}`;
@@ -3505,7 +3631,8 @@ async function adminFillFromMode(mode) {
     if (userSector) payload.sector = userSector;
     await sb.from('gap_analyse').upsert(payload, { onConflict: 'user_id' });
     const evMsg = evidenceFilled ? ` + ${evidenceFilled} dummy-bewijsnotities` : '';
-    if (typeof showToast === 'function') showToast(`${total} vragen gevuld (${labels[mode]})${evMsg} — herlaad voor preview`, { duration: 4000 });
+    const personaMsg = persona ? ` · persona ${(parseInt(localStorage.getItem('a27_admin_persona_idx') || '0') + 1)}/${ADMIN_PERSONAS.length}: ${persona.label}` : '';
+    if (typeof showToast === 'function') showToast(`${total} vragen gevuld${evMsg}${personaMsg} — herlaad voor preview`, { duration: 5000 });
     setTimeout(() => location.reload(), 800);
   } catch (e) {
     console.error('adminFillFromMode', e);
