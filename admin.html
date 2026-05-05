@@ -4595,6 +4595,150 @@ function setSeverity(ctrlId, sev, btn) {
 }
 
 // Quick-finding templates — vul finding + severity in 1 klik
+// ─── CONTROL-SPECIFIEKE FINDING-TEMPLATES ─────────────────────
+// Per control + severity een aanbeveling die past bij de SUBSTANCE van die control.
+// Voor controls niet in deze lijst: dimensie-aware fallback (gebruikt gap-questions-v2.js).
+const CONTROL_TEMPLATES = {
+  'A.5.1': {
+    major: {
+      finding: 'Het informatiebeveiligingsbeleid is niet vastgesteld of mist directiehandtekening. Zonder centraal beleid ontbreekt de basis waarop alle onderliggende controls steunen.',
+      rec: '1. Stel een formeel informatiebeveiligingsbeleid op binnen 30 dagen (kan beleidspakket A27 als startpunt)\n2. Laat de directie het document ondertekenen met datum en review-cyclus (jaarlijks)\n3. Communiceer naar alle medewerkers via intranet + onboarding\n4. Verifieer in volgende audit dat naleving wordt gemonitord.'
+    },
+    critical: {
+      finding: 'Geen vastgesteld informatiebeveiligingsbeleid. Dit is blokkerend voor certificering — de norm vereist een fundamenteel beleid (ISO 27001 A.5.1 + Clause 5.2) dat de scope, doelstellingen en commitment van de directie vastlegt.',
+      rec: 'DIRECT ACTIE:\n1. Beleidsdocument opstellen + ondertekenen door bestuurder binnen 14 dagen\n2. Communicatie naar medewerkers via één centraal kanaal\n3. Versie-historie aanleggen (V1.0, datum, eigenaar)\n4. Bij vervolgaudit moet dit als eerste worden getoond.'
+    }
+  },
+  'A.5.2': {
+    major: {
+      finding: 'Rollen en verantwoordelijkheden voor informatiebeveiliging zijn niet formeel vastgelegd. Zonder duidelijke RACI-matrix is het onduidelijk wie wat doet bij beleid, incident, of audit.',
+      rec: '1. Stel een RACI-matrix op met expliciete IB-rollen (CISO/IB-coördinator, asset-eigenaars, IT, HR, DPO)\n2. Wijs een eindverantwoordelijke aan met directiemandaat\n3. Behandel rollen in onboarding + jaarlijkse awareness-sessie\n4. Documenteer overdracht bij wisseling van personen.'
+    },
+    critical: {
+      finding: 'Geen aanwijsbare verantwoordelijke voor informatiebeveiliging. Bestuur kan zijn NIS2-Art.20-aansprakelijkheid niet aantonen zonder formele rollen-toewijzing.',
+      rec: 'DIRECT ACTIE:\n1. Wijs binnen 7 dagen een CISO of IB-coördinator aan met directie-besluit\n2. Documenteer mandaat (budget, escalatie-rechten, rapportagelijn)\n3. RACI-matrix opstellen voor alle Annex A-rollen\n4. Communiceer aan klanten/leveranciers indien zij contractueel een aanspreekpunt verlangen.'
+    }
+  },
+  'A.5.7': {
+    major: {
+      finding: 'Geen structurele threat intelligence. Dreigingen worden niet systematisch gemonitord, geprioriteerd of vertaald naar maatregelen.',
+      rec: '1. Abonneer op NCSC-NL en CCB-BE feeds + relevante CVE/vendor-feeds\n2. Wijs een verantwoordelijke aan voor wekelijkse triage van dreigingen\n3. Voeg threat-input toe als vast agendapunt in IB-overleg\n4. Documenteer minimaal 1 voorbeeld per kwartaal waar threat intel tot actie heeft geleid.'
+    },
+    critical: {
+      finding: 'Volledig ontbreken van threat intelligence-proces. Bij een gerichte aanval blijft de organisatie blind. Dit is een ernstige tekortkoming voor SaaS/IT-sectoren waar dreigingen snel evolueren.',
+      rec: 'DIRECT ACTIE:\n1. Aansluiten bij ISAC/branchecommunity binnen 30 dagen\n2. Threat-intel platform (commercieel of open-source) implementeren\n3. SOC/MSSP-overweging als interne capaciteit ontbreekt\n4. Eerste threat-rapport binnen 60 dagen aan directie presenteren.'
+    }
+  },
+  'A.5.15': {
+    major: {
+      finding: 'Toegangsbeleid is onvolledig of niet consequent toegepast. Need-to-know en least-privilege worden niet structureel afgedwongen.',
+      rec: '1. Stel formeel toegangsbeleid vast met need-to-know + least-privilege als principes\n2. Implementeer aanvraag-goedkeuringsworkflow (geen ad-hoc rechten)\n3. Halfjaarlijkse access review door asset-eigenaars\n4. Meet stale accounts (>90 dagen inactief) en saneer.'
+    },
+    critical: {
+      finding: 'Toegang wordt niet beheerst — gebruikers hebben overmatige rechten en/of er zijn ghost-accounts van ex-medewerkers actief. Dit is een primair aanvalsvector.',
+      rec: 'DIRECT ACTIE:\n1. Audit alle privileged accounts binnen 7 dagen — verwijder ghost accounts\n2. MFA verplicht voor admin/privileged binnen 14 dagen\n3. Toegangsmatrix opstellen + door directie laten goedkeuren\n4. Volgende access review binnen 90 dagen, daarna per kwartaal.'
+    }
+  },
+  'A.5.24': {
+    major: {
+      finding: 'Incident response plan is onvolledig of niet getest. Bij een incident is onduidelijk wie wat doet, wat de escalatie is, of welke runbooks beschikbaar zijn.',
+      rec: '1. Stel IR-plan op met scope, classificatieschema en escalatie-flow\n2. Wijs IR-coordinator + 24/7 backup aan met contactgegevens\n3. Schrijf runbooks voor top-3 incident-types (ransomware, datalek, account-compromis)\n4. Voer minimaal jaarlijks een tabletop-oefening uit + documenteer lessons learned.'
+    },
+    critical: {
+      finding: 'Geen functionerend incident response plan. Bij een datalek of ransomware-aanval kan niet worden voldaan aan de NIS2-meldingsplicht (24h/72h/30d). Dit is blokkerend voor compliance.',
+      rec: 'DIRECT ACTIE:\n1. Noodprocedure en 24/7 contactlijst opstellen binnen 7 dagen\n2. Tabletop-oefening met directie + IT binnen 30 dagen\n3. Forensische bewaring + chain-of-custody-procedure beschrijven\n4. Externe IR-partij contracteren als interne capaciteit ontbreekt.'
+    }
+  },
+  'A.6.3': {
+    major: {
+      finding: 'Awareness-training is onvoldoende structureel — sommige medewerkers krijgen geen onboarding-training of jaarlijkse refresher.',
+      rec: '1. Stel awareness-plan op met doelgroepen (medewerkers/admins/bestuur), frequentie en onderwerpen\n2. Verplichte security-onboarding binnen 30 dagen na indiensttreding\n3. Jaarlijkse refresher voor alle medewerkers + aparte training voor bestuur (NIS2 Art.20)\n4. Phishing-simulaties uitvoeren, klikratio meten en rapporteren.'
+    },
+    critical: {
+      finding: 'Geen awareness-training in de organisatie. NIS2 vereist expliciete cybersecurity-training voor het bestuur (Art. 20 lid 2) — afwezigheid is direct meldingsplichtig.',
+      rec: 'DIRECT ACTIE:\n1. Bestuurstraining cybersecurity binnen 60 dagen (intern of extern)\n2. Awareness-platform (KnowBe4, Avecto, lokaal alternatief) implementeren\n3. Onboarding-module ontwikkelen voor nieuwe medewerkers\n4. Eerste phishing-simulatie binnen 90 dagen + follow-up.'
+    }
+  },
+  'A.8.5': {
+    major: {
+      finding: 'MFA is niet verplicht voor alle accounts of ontbreekt voor privileged users. Wachtwoordbeleid wordt niet technisch afgedwongen.',
+      rec: '1. MFA verplicht maken op alle accounts met toegang tot bedrijfsdata (incl. SaaS, e-mail, VPN)\n2. MFA óók afdwingen voor admin/privileged accounts (geen uitzonderingen)\n3. Wachtwoordbeleid technisch instellen op IdP-niveau (≥12 tekens, geen hergebruik)\n4. Wachtwoordmanager aanbevelen of verplichten.'
+    },
+    critical: {
+      finding: 'Geen MFA op kritieke systemen + zwak wachtwoordbeleid. Account-compromissen zijn onvermijdelijk en organisatie-breed inpakbaar.',
+      rec: 'DIRECT ACTIE:\n1. MFA enforce op alle externe-accessbare systemen binnen 7 dagen\n2. Privileged accounts onmiddellijk uitschakelen indien geen MFA\n3. Conditional access policies (Geo-blocking, device-trust) implementeren\n4. Audit van alle bestaande accounts op zwakke wachtwoorden.'
+    }
+  },
+  'A.8.7': {
+    major: {
+      finding: 'Endpoint-bescherming (EDR/anti-malware) is onvolledig uitgerold of wordt niet centraal gemonitord.',
+      rec: '1. EDR/anti-malware op alle endpoints (laptops/desktops/servers) — verifieer coverage %\n2. Centrale console of SIEM-integratie voor alarmen\n3. SLA voor opvolging detecties (low/medium/high)\n4. Maandelijkse coverage-rapportage aan IB-coördinator.'
+    },
+    critical: {
+      finding: 'Geen endpoint-bescherming actief op kritieke systemen. Ransomware-aanval treft direct alle data.',
+      rec: 'DIRECT ACTIE:\n1. EDR uitrollen op alle endpoints binnen 14 dagen\n2. Geïsoleerde backup-strategie verifiëren (immutable, air-gap)\n3. SOC/MSSP overwegen voor 24/7 monitoring\n4. Pen-test of compromise assessment plannen binnen 90 dagen.'
+    }
+  },
+  'A.8.13': {
+    major: {
+      finding: 'Backup-strategie voldoet niet aan 3-2-1 of wordt niet getest. RPO is niet vastgesteld per kritiek systeem.',
+      rec: '1. Implementeer 3-2-1 strategie (3 kopieën, 2 media, 1 offsite/immutable)\n2. Stel RPO vast per kritiek systeem op basis van BIA\n3. Encrypteer backups at-rest + bescherm tegen ransomware\n4. Voer minimaal jaarlijks een restore-test uit en documenteer resultaat.'
+    },
+    critical: {
+      finding: 'Geen backup-strategie of backups zijn ransomware-kwetsbaar. Bij incident kan data niet worden hersteld.',
+      rec: 'DIRECT ACTIE:\n1. Immutable backup-target inrichten binnen 30 dagen (S3 Object Lock, Veeam Hardened, equivalent)\n2. Restore-test uitvoeren op meest kritieke systeem binnen 14 dagen\n3. Air-gap of offline kopie creëren\n4. Backup-eigenaar aanwijzen met maandelijkse rapportage.'
+    }
+  },
+  'A.8.24': {
+    major: {
+      finding: 'Cryptografiebeleid ontbreekt of wordt niet consequent toegepast. Sommige systemen gebruiken zwakke ciphers of expired certificaten.',
+      rec: '1. Stel cryptografiebeleid op met goedgekeurde algoritmen (AES-256, RSA-2048+)\n2. Verbod op TLS 1.0/1.1, plain HTTP en zwakke ciphers — afdwingen op load-balancer/CDN\n3. Sleutelbeheer-procedure (generatie, rotatie, intrekking)\n4. Certificate lifecycle monitoring (auto-renewal vóór expiry).'
+    },
+    critical: {
+      finding: 'Onvoldoende encryptie op data met persoonsgegevens of bedrijfskritieke data. Mogelijk niet AVG-conform en directe NIS2-tekortkoming.',
+      rec: 'DIRECT ACTIE:\n1. At-rest encryptie afdwingen op alle databases met persoonsgegevens binnen 30 dagen\n2. TLS 1.2+ enforce op alle externe endpoints binnen 14 dagen\n3. Audit alle expired certificaten + sleutels en roteer\n4. Sleutelbeheer-procedure beschrijven en bestuurlijk laten goedkeuren.'
+    }
+  }
+};
+
+function getFindingTemplate(ctrlId, ctrlName, kind) {
+  // Specifiek per control
+  const specific = CONTROL_TEMPLATES[ctrlId] && CONTROL_TEMPLATES[ctrlId][kind];
+  if (specific) return specific;
+
+  // Universele OK + minor (substantieel zelfde voor alle controls)
+  if (kind === 'ok') {
+    return {
+      finding: `${ctrlId} — Geen afwijking geconstateerd voor "${ctrlName}". Implementatie voldoet aan de norm op basis van aangeleverde evidence en review.`,
+      rec: 'Continueer huidige praktijk. Periodiek (jaarlijks) review tijdens management review aanbevolen.'
+    };
+  }
+  if (kind === 'minor') {
+    return {
+      finding: `${ctrlId} — "${ctrlName}" is gedeeltelijk geïmplementeerd. Beleid of procedure aanwezig maar mist consistente toepassing of bewijs van werking.`,
+      rec: `1. Documenteer ontbrekend onderdeel binnen 60 dagen\n2. Train betrokken medewerkers op de specifieke aspecten van ${ctrlName.toLowerCase()}\n3. Volgende review in 6 maanden — verifieer toepassing in de praktijk.`
+    };
+  }
+
+  // Categorie-fallback voor major/critical met dimensie-aware tekst
+  const cat = ctrlId.startsWith('A.5') ? 'organisatorische' :
+              ctrlId.startsWith('A.6') ? 'personeels-' :
+              ctrlId.startsWith('A.7') ? 'fysieke ' :
+              ctrlId.startsWith('A.8') ? 'technologische ' : '';
+
+  if (kind === 'major') {
+    return {
+      finding: `${ctrlId} — Significante afwijking op ${cat}control "${ctrlName}". Beleid en/of uitvoering is onvolledig: bewijs toont niet aan dat de control structureel werkt in de praktijk.`,
+      rec: `1. Stel concreet beleid + procedure op voor ${ctrlName.toLowerCase()} binnen 30 dagen\n2. Implementeer in dagelijkse praktijk en meet effectiviteit (KPI's)\n3. Lever bewijsdocumenten op (minimaal 1 per kwartaal)\n4. Re-audit van deze control vóór certificering.`
+    };
+  }
+  // critical
+  return {
+    finding: `${ctrlId} — KRITISCHE afwijking op ${cat}control "${ctrlName}". Implementatie ontbreekt of bewijs is materieel onjuist. Blokkerend voor certificering en risico op acute compliance-incidenten.`,
+    rec: `DIRECT ACTIE VEREIST:\n1. Implementeer minimum-maatregel voor ${ctrlName.toLowerCase()} binnen 14 dagen\n2. Risk-acceptance door directie of remediation plan met harde deadline\n3. Externe pre-audit aanbevolen vóór hervatting certificeringstraject.`
+  };
+}
+
 function applyFindingTemplate(ctrlId, kind) {
   const safeId = ctrlId.replace(/\./g, '_');
   const ctrl = controls.find(c => c.id === ctrlId) || { id: ctrlId, name: ctrlId };
@@ -4603,30 +4747,9 @@ function applyFindingTemplate(ctrlId, kind) {
   const sevPills = document.querySelector(`.severity-pills[data-ctrl="${ctrlId}"]`);
   if (!findingEl || !recEl || !sevPills) return;
 
-  const templates = {
-    ok: {
-      sev: 'info',
-      finding: `${ctrl.id} — Geen afwijking geconstateerd. Implementatie voldoet aan de norm op basis van aangeleverd bewijs en review.`,
-      rec: 'Continueer huidige praktijk. Periodiek (jaarlijks) review tijdens management review aanbevolen.'
-    },
-    minor: {
-      sev: 'minor',
-      finding: `${ctrl.id} — Implementatie aanwezig maar onvolledig. ${ctrl.name} mist gedeeltelijke onderbouwing of consistente toepassing in de praktijk.`,
-      rec: `1. Documenteer ontbrekend onderdeel + handtekening directie\n2. Train betrokken medewerkers op gewijzigde procedure\n3. Volgende review in 6 maanden — verifieer toepassing.`
-    },
-    major: {
-      sev: 'major',
-      finding: `${ctrl.id} — Significante afwijking. ${ctrl.name} is niet adequaat geadresseerd. Bewijs ontbreekt of toont niet aan dat de control structureel werkt.`,
-      rec: `1. Stel beleid + procedure formeel op binnen 30 dagen\n2. Implementeer in dagelijkse praktijk + meet effectiviteit\n3. Lever bewijsdocumenten op (minimaal 1 per kwartaal)\n4. Re-audit voor certificering.`
-    },
-    critical: {
-      sev: 'critical',
-      finding: `${ctrl.id} — KRITISCHE afwijking, blokkerend voor certificering. Implementatie ontbreekt volledig of bewijs is materieel onjuist. Risico op acute compliance-incidenten of audit-failure.`,
-      rec: `DIRECT ACTIE VEREIST:\n1. Stop relevante processen tot beleid + technische maatregel zijn vastgesteld\n2. Risk-acceptance door directie binnen 7 dagen of remediation plan met deadline\n3. Externe pre-audit aanbevolen vóór hervatting certificeringspad.`
-    }
-  };
-  const t = templates[kind];
-  if (!t) return;
+  const sevMap = { ok: 'info', minor: 'minor', major: 'major', critical: 'critical' };
+  const tpl = getFindingTemplate(ctrlId, ctrl.name, kind);
+  const t = { sev: sevMap[kind] || 'info', finding: tpl.finding, rec: tpl.rec };
 
   findingEl.value = t.finding;
   recEl.value = t.rec;
