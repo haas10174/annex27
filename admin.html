@@ -1194,6 +1194,7 @@
       <button class="view-btn" data-view="orders">Orders <span class="badge" id="ordersBadge">0</span></button>
       <button class="view-btn" data-view="facturen">Facturen <span class="badge" id="facturenBadge">0</span></button>
       <button class="view-btn" data-view="leads">Aanvragen <span class="badge" id="leadsBadge">0</span></button>
+      <button class="view-btn" data-view="benchmark">Benchmark</button>
       <button class="view-btn" data-view="settings">Instellingen</button>
     </div>
     <div class="client-filters" style="display:flex;align-items:center;flex-wrap:wrap;gap:6px;">
@@ -1574,7 +1575,23 @@
       </div>
     </div>
 
-    <!-- View: Mail (inbound info@annex27.nl via Hostnet IMAP) -->
+    <!-- View: Benchmark — cross-klant gap-analyse statistieken -->
+    <div class="view" id="viewBenchmark">
+      <div class="view-full">
+        <div class="view-header">
+          <h1 style="font-family:'Sora',sans-serif;font-size:1.4rem;font-weight:800;margin:0 0 4px;">Cross-klant benchmark</h1>
+          <p style="color:var(--text-muted);font-size:0.9rem;margin:0 0 20px;">Gemiddelde scores per Annex A control over alle klanten heen — voor sector-vergelijking en patroon-detectie.</p>
+        </div>
+        <div style="display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;">
+          <button class="action-btn" onclick="loadBenchmark()" id="benchmarkRefreshBtn">Vernieuwen</button>
+          <span id="benchmarkMeta" style="font-size:0.82rem;color:var(--text-muted);align-self:center;"></span>
+        </div>
+        <div id="benchmarkContainer" style="background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;">
+          <div class="empty-state" style="padding:40px;text-align:center;color:var(--text-muted);">Klik "Vernieuwen" om data te laden.</div>
+        </div>
+      </div>
+    </div>
+
     <!-- View: Instellingen -->
     <div class="view" id="viewSettings">
       <div class="view-full">
@@ -2416,7 +2433,63 @@ function activateView(target) {
   if (target === 'orders') loadOrders();
   if (target === 'leads') loadLeads();
   if (target === 'facturen') loadInvoicesAdmin();
+  if (target === 'benchmark') loadBenchmark();
   if (target === 'settings') loadSettings();
+}
+
+async function loadBenchmark() {
+  const container = document.getElementById('benchmarkContainer');
+  const meta = document.getElementById('benchmarkMeta');
+  container.innerHTML = '<div class="empty-state" style="padding:40px;text-align:center;color:var(--text-muted);">Laden...</div>';
+  meta.textContent = '';
+
+  const { data, error } = await sb.rpc('cross_klant_control_benchmark');
+  if (error) {
+    container.innerHTML = `<div class="empty-state" style="padding:40px;color:var(--danger);">Fout: ${esc(error.message)}</div>`;
+    return;
+  }
+  if (!data || data.length === 0) {
+    container.innerHTML = '<div class="empty-state" style="padding:40px;color:var(--text-muted);">Nog geen data — er is geen klant met ingevulde gap-antwoorden.</div>';
+    return;
+  }
+
+  const totalClients = Math.max(...data.map(r => Number(r.client_count) || 0));
+  meta.textContent = `${data.length} controls · max ${totalClients} klant${totalClients === 1 ? '' : 'en'} per control`;
+
+  const barColor = (avg) => avg >= 3 ? '#059669' : avg >= 2 ? '#D97706' : '#dc2626';
+
+  const rows = data.map(r => {
+    const avg = Number(r.avg_score) || 0;
+    const pctW = Math.min(100, Math.max(0, (avg / 4) * 100));
+    return `<tr style="border-bottom:1px solid var(--border-light);">
+      <td style="padding:10px 14px;font-family:'Sora',sans-serif;font-weight:700;color:var(--text);width:80px;">${esc(r.control_id)}</td>
+      <td style="padding:10px 14px;width:80px;text-align:right;color:var(--text-muted);">${r.client_count}</td>
+      <td style="padding:10px 14px;width:80px;text-align:right;font-weight:700;color:${barColor(avg)};">${avg.toFixed(2)}</td>
+      <td style="padding:10px 14px;">
+        <div style="background:rgba(15,23,42,0.05);border-radius:99px;height:8px;overflow:hidden;position:relative;">
+          <div style="background:${barColor(avg)};width:${pctW}%;height:100%;transition:width 0.3s;"></div>
+        </div>
+      </td>
+      <td style="padding:10px 14px;width:90px;text-align:right;color:#059669;font-weight:600;">${r.pct_at_or_above_3 || '0'}%</td>
+      <td style="padding:10px 14px;width:90px;text-align:right;color:#dc2626;font-weight:600;">${r.pct_below_2 || '0'}%</td>
+    </tr>`;
+  }).join('');
+
+  container.innerHTML = `
+    <table style="width:100%;border-collapse:collapse;font-size:0.86rem;">
+      <thead>
+        <tr style="background:var(--bg-warm,#f8fafc);">
+          <th style="text-align:left;padding:11px 14px;font-size:0.74rem;font-weight:700;color:var(--text-muted);letter-spacing:0.06em;text-transform:uppercase;border-bottom:1px solid var(--border);">Control</th>
+          <th style="text-align:right;padding:11px 14px;font-size:0.74rem;font-weight:700;color:var(--text-muted);letter-spacing:0.06em;text-transform:uppercase;border-bottom:1px solid var(--border);">Klanten</th>
+          <th style="text-align:right;padding:11px 14px;font-size:0.74rem;font-weight:700;color:var(--text-muted);letter-spacing:0.06em;text-transform:uppercase;border-bottom:1px solid var(--border);">Gem.</th>
+          <th style="text-align:left;padding:11px 14px;font-size:0.74rem;font-weight:700;color:var(--text-muted);letter-spacing:0.06em;text-transform:uppercase;border-bottom:1px solid var(--border);">Score (0-4)</th>
+          <th style="text-align:right;padding:11px 14px;font-size:0.74rem;font-weight:700;color:var(--text-muted);letter-spacing:0.06em;text-transform:uppercase;border-bottom:1px solid var(--border);" title="Percentage klanten met gemiddelde &ge; 3 (geimplementeerd)">% &ge;3</th>
+          <th style="text-align:right;padding:11px 14px;font-size:0.74rem;font-weight:700;color:var(--text-muted);letter-spacing:0.06em;text-transform:uppercase;border-bottom:1px solid var(--border);" title="Percentage klanten met gemiddelde < 2 (zwakke control)">% &lt;2</th>
+        </tr>
+      </thead>
+      <tbody>${rows}</tbody>
+    </table>
+  `;
 }
 
 function navigateView(target, push) {
