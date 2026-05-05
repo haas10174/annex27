@@ -1524,7 +1524,7 @@
             <div><label style="font-size:0.78rem;font-weight:600;">Product</label>
               <select id="invProduct" onchange="updateInvTotal()" style="width:100%;padding:10px 12px;border:1px solid #E5E5E5;border-radius:8px;font-family:inherit;">
                 <option value="gap" data-price="795">Gap-analyse &mdash; &euro;795</option>
-                <option value="beleid" data-price="795">Beleidspakket &mdash; &euro;795</option>
+                <option value="beleid" data-price="395">Beleidspakket &mdash; &euro;395</option>
                 <option value="preaudit" data-price="1495">Pre-audit Review &mdash; vanaf &euro;1.495</option>
                 <option value="nis2" data-price="995">NIS2 Readiness &mdash; &euro;995</option>
                 <option value="custom" data-price="0">Aangepast bedrag</option>
@@ -3871,28 +3871,58 @@ async function loadControlEvidence(ctrlId, userId) {
   target.innerHTML = `<em style="color:var(--text-dim);font-size:0.82rem;">Bewijsvoering ophalen...</em>`;
 
   const folder = `${userId}/${ctrlId}`;
-  const { data, error } = await sb.storage.from('evidence').list(folder, { limit: 100, sortBy: { column: 'created_at', order: 'desc' } });
+  const [filesRes, notesRes] = await Promise.all([
+    sb.storage.from('evidence').list(folder, { limit: 100, sortBy: { column: 'created_at', order: 'desc' } }),
+    sb.from('gap_control_notes').select('procedure_naam, locatie, eigenaar, laatst_gereviewd, toelichting, updated_at').eq('klant_user_id', userId).eq('control_id', ctrlId).order('revision_no', { ascending: false }).limit(1).maybeSingle()
+  ]);
 
-  if (error) {
-    target.innerHTML = `<div class="no-evidence">Kon bewijsvoering niet ophalen: ${esc(error.message)}</div>`;
+  if (filesRes.error) {
+    target.innerHTML = `<div class="no-evidence">Kon bewijsvoering niet ophalen: ${esc(filesRes.error.message)}</div>`;
     return;
   }
 
-  if (!data || data.length === 0) {
-    target.innerHTML = `<div class="no-evidence">Nog geen bewijsvoering geüpload voor ${esc(ctrlId)}.</div>`;
-    return;
-  }
+  const files = filesRes.data || [];
+  const note = notesRes.data || null;
 
   const fmtSize = (b) => !b ? '' : (b < 1024 ? b + ' B' : b < 1024*1024 ? (b/1024).toFixed(0) + ' KB' : (b/(1024*1024)).toFixed(1) + ' MB');
-  target.innerHTML = `<div class="ev-folder">` + data.map(f => {
-    const path = `${folder}/${f.name}`;
-    const size = f.metadata?.size;
-    return `<div class="ev-file" onclick="previewEvidence('${esc(path)}','${esc(f.name)}')">
-      <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/></svg>
-      <span>${esc(f.name)}</span>
-      <span class="ev-size">${fmtSize(size)}</span>
+
+  let html = '';
+
+  // Klant-toelichting (gestructureerd) — boven de bestandenlijst zodat je context hebt vóór je files opent
+  if (note && (note.procedure_naam || note.locatie || note.eigenaar || note.laatst_gereviewd || note.toelichting)) {
+    const fields = [];
+    if (note.procedure_naam) fields.push(`<div><strong style="color:#0F172A;">Procedure/document:</strong> ${esc(note.procedure_naam)}</div>`);
+    if (note.locatie) fields.push(`<div><strong style="color:#0F172A;">Locatie:</strong> ${esc(note.locatie)}</div>`);
+    if (note.eigenaar) fields.push(`<div><strong style="color:#0F172A;">Eigenaar:</strong> ${esc(note.eigenaar)}</div>`);
+    if (note.laatst_gereviewd) fields.push(`<div><strong style="color:#0F172A;">Laatst gereviewd:</strong> ${esc(note.laatst_gereviewd)}</div>`);
+    html += `<div class="evidence-note" style="margin-bottom:10px;background:rgba(13,148,136,0.05);border-left:3px solid var(--accent);padding:12px 14px;border-radius:6px;">
+      <div style="font-size:0.7rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--accent-light);margin-bottom:8px;">Klant-toelichting</div>
+      <div style="display:grid;gap:4px;font-size:0.84rem;line-height:1.55;">${fields.join('')}</div>
+      ${note.toelichting ? `<div style="margin-top:10px;padding-top:10px;border-top:1px solid rgba(13,148,136,0.15);"><div style="font-size:0.74rem;font-weight:700;color:var(--text-muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.05em;">Toelichting in eigen woorden</div><div style="font-size:0.84rem;white-space:pre-wrap;line-height:1.6;color:var(--text);">${esc(note.toelichting)}</div></div>` : ''}
+      <div style="margin-top:8px;font-size:0.7rem;color:var(--text-muted);">Laatst bijgewerkt door klant: ${note.updated_at ? new Date(note.updated_at).toLocaleString('nl-NL') : '—'}</div>
     </div>`;
-  }).join('') + `</div>`;
+  }
+
+  // Bestandenlijst
+  if (files.length === 0) {
+    html += `<div class="no-evidence">Nog geen bestanden geüpload voor ${esc(ctrlId)}.</div>`;
+  } else {
+    html += `<div class="ev-folder">` + files.map(f => {
+      const path = `${folder}/${f.name}`;
+      const size = f.metadata?.size;
+      return `<div class="ev-file" onclick="previewEvidence('${esc(path)}','${esc(f.name)}')">
+        <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/></svg>
+        <span>${esc(f.name)}</span>
+        <span class="ev-size">${fmtSize(size)}</span>
+      </div>`;
+    }).join('') + `</div>`;
+  }
+
+  if (!note && files.length === 0) {
+    target.innerHTML = `<div class="no-evidence">Klant heeft nog geen bewijsvoering of toelichting aangeleverd voor ${esc(ctrlId)}.</div>`;
+  } else {
+    target.innerHTML = html;
+  }
 }
 
 async function previewEvidence(path, name) {

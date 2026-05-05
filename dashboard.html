@@ -5737,7 +5737,8 @@ function scheduleSaveToast() {
   _saveDebounce = setTimeout(() => showToast('Opgeslagen'), 700);
 }
 
-// Save één gestructureerd veld + sync serialized note
+// Save één gestructureerd veld + sync serialized note + push naar Supabase
+const _evidenceSyncTimers = {};
 function saveEvidenceField(ctrlId, field, value) {
   if (!evidenceData[ctrlId]) evidenceData[ctrlId] = { files: [], note: '', note_fields: {} };
   if (!evidenceData[ctrlId].note_fields) evidenceData[ctrlId].note_fields = {};
@@ -5755,6 +5756,35 @@ function saveEvidenceField(ctrlId, field, value) {
 
   saveEvidenceData();
   scheduleSaveToast();
+
+  // Debounced upsert naar gap_control_notes — admin moet dit kunnen lezen
+  if (_evidenceSyncTimers[ctrlId]) clearTimeout(_evidenceSyncTimers[ctrlId]);
+  _evidenceSyncTimers[ctrlId] = setTimeout(() => syncEvidenceNoteToDb(ctrlId), 800);
+}
+
+async function syncEvidenceNoteToDb(ctrlId) {
+  if (!user || !user.id) return;
+  const nf = (evidenceData[ctrlId] && evidenceData[ctrlId].note_fields) || {};
+  const remark = nf.remark || evidenceData[ctrlId]?.note || '';
+  const lastVer = nf.last_verified && /^\d{4}-\d{2}-\d{2}$/.test(nf.last_verified) ? nf.last_verified : null;
+
+  const hasContent = (nf.procedure || nf.location || nf.owner || lastVer || remark);
+  if (!hasContent) return;
+
+  try {
+    await sb.from('gap_control_notes').upsert({
+      klant_user_id: user.id,
+      answered_by: user.id,
+      control_id: ctrlId,
+      revision_no: 1,
+      procedure_naam: (nf.procedure || '').slice(0, 800) || null,
+      locatie: (nf.location || '').slice(0, 800) || null,
+      eigenaar: (nf.owner || '').slice(0, 200) || null,
+      laatst_gereviewd: lastVer,
+      toelichting: (remark || '').slice(0, 5000) || null,
+      updated_at: new Date().toISOString()
+    }, { onConflict: 'klant_user_id,answered_by,control_id,revision_no' });
+  } catch (e) { /* silent — UI heeft al toast */ }
 }
 
 function saveEvidenceNote(ctrlId, noteVal) {
@@ -5772,6 +5802,10 @@ function saveEvidenceNote(ctrlId, noteVal) {
   const hasEvidence = (ev.files.length > 0) || (ev.note && ev.note.trim().length > 0);
   const warn = document.getElementById('warn_' + ctrlId.replace(/\./g, '_'));
   if (warn) warn.classList.toggle('active', anyClaimed && !hasEvidence);
+
+  // Debounced upsert naar gap_control_notes (alleen toelichting bij legacy single-note)
+  if (_evidenceSyncTimers[ctrlId]) clearTimeout(_evidenceSyncTimers[ctrlId]);
+  _evidenceSyncTimers[ctrlId] = setTimeout(() => syncEvidenceNoteToDb(ctrlId), 800);
 }
 
 async function nextModule() {

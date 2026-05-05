@@ -8,158 +8,284 @@
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
   <link rel="manifest" href="/site.webmanifest" />
-  <meta name="theme-color" content="#14b8a6" />
+  <meta name="theme-color" content="#0D9488" />
   <script src="/analytics.js"></script>
 
   <meta http-equiv="X-Content-Type-Options" content="nosniff" />
   <meta name="referrer" content="strict-origin-when-cross-origin" />
-  <title>Bedankt voor uw bestelling — Annex27</title>
+  <title>Bestelling bevestigd &mdash; volgende stappen | Annex27</title>
+  <meta name="robots" content="noindex, nofollow" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #FAF9F6;
+      --surface: #FFFFFF;
+      --border: #E8E4DC;
+      --border-light: #EFEBE3;
+      --text-primary: #0F172A;
+      --text-secondary: #475569;
+      --text-muted: #94A3B8;
+      --accent: #0D9488;
+      --accent-hover: #0F766E;
+      --accent-light: #CCFBF1;
+      --dark: #0c0f1a;
+    }
     body {
       font-family: 'Inter', -apple-system, sans-serif;
-      background: #FAFAFA;
-      color: #475569;
+      background: var(--bg);
+      color: var(--text-secondary);
       line-height: 1.7;
       min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
+      padding: 32px 16px;
     }
-    .success {
-      max-width: 560px;
-      width: 100%;
-      background: white;
-      border-radius: 16px;
-      padding: 56px 48px;
-      text-align: center;
-      box-shadow: 0 12px 32px rgba(0,0,0,0.06);
-    }
+    .wrap { max-width: 820px; margin: 0 auto; }
     .logo {
       font-family: 'Sora', sans-serif;
-      font-size: 1.3rem;
-      font-weight: 700;
-      color: #0F172A;
+      font-size: 1.4rem; font-weight: 700;
+      color: var(--text-primary);
       text-decoration: none;
-      display: inline-block;
-      margin-bottom: 48px;
+      display: inline-block; margin-bottom: 32px;
     }
-    .logo span { color: #0D9488; }
+    .logo span { color: var(--accent); }
+
+    .hero-card {
+      background: var(--surface);
+      border-radius: 16px;
+      padding: 48px 44px;
+      box-shadow: 0 8px 24px rgba(15,23,42,0.05);
+      text-align: center;
+      margin-bottom: 24px;
+    }
     .check-icon {
-      width: 80px; height: 80px;
-      background: #CCFBF1;
+      width: 76px; height: 76px;
+      background: var(--accent-light);
       border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto 24px;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 20px;
     }
     .check-icon svg {
-      width: 40px; height: 40px;
-      stroke: #0D9488;
-      fill: none;
-      stroke-width: 3;
-      stroke-linecap: round;
-      stroke-linejoin: round;
+      width: 38px; height: 38px;
+      stroke: var(--accent);
+      fill: none; stroke-width: 3;
+      stroke-linecap: round; stroke-linejoin: round;
     }
     h1 {
       font-family: 'Sora', sans-serif;
-      font-size: 1.6rem;
-      font-weight: 700;
-      color: #0F172A;
-      margin-bottom: 12px;
+      font-size: 1.7rem; font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 10px;
       letter-spacing: -0.02em;
     }
-    p {
-      font-size: 0.95rem;
-      color: #475569;
-      margin-bottom: 12px;
+    .lede {
+      font-size: 1rem; color: var(--text-secondary);
+      max-width: 540px; margin: 0 auto;
     }
-    .info-box {
-      background: #F8FAFC;
-      border: 1px solid #E2E8F0;
-      border-radius: 10px;
-      padding: 20px;
-      margin: 32px 0;
-      text-align: left;
+
+    .step-card {
+      background: var(--surface);
+      border-radius: 14px;
+      padding: 28px 32px;
+      margin-bottom: 14px;
+      display: grid;
+      grid-template-columns: 56px 1fr;
+      gap: 22px;
+      align-items: flex-start;
+      border-left: 3px solid transparent;
+      transition: border-left-color 0.25s, transform 0.25s;
     }
-    .info-box h3 {
+    .step-card:hover { border-left-color: var(--accent); transform: translateX(2px); }
+    .step-num {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: var(--accent-light);
+      color: var(--accent);
       font-family: 'Sora', sans-serif;
-      font-size: 0.88rem;
-      font-weight: 700;
-      color: #0F172A;
-      margin-bottom: 12px;
+      font-weight: 800; font-size: 1.1rem;
+      display: flex; align-items: center; justify-content: center;
     }
-    .info-box ol {
-      padding-left: 20px;
-      font-size: 0.88rem;
-      line-height: 1.9;
+    .step-title {
+      font-family: 'Sora', sans-serif;
+      font-size: 1.04rem; font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+      letter-spacing: -0.01em;
     }
-    .btn-primary {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: #0D9488;
-      color: white;
-      padding: 14px 32px;
+    .step-eta {
+      font-size: 0.74rem; font-weight: 600;
+      color: var(--accent);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .step-body { font-size: 0.92rem; line-height: 1.7; }
+    .step-body strong { color: var(--text-primary); font-weight: 600; }
+
+    .prep-card {
+      background: var(--surface);
+      border-radius: 14px;
+      padding: 28px 32px;
+      margin-top: 24px;
+    }
+    .prep-card h2 {
+      font-family: 'Sora', sans-serif;
+      font-size: 1.15rem; font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+      letter-spacing: -0.01em;
+    }
+    .prep-card .prep-sub {
+      font-size: 0.88rem; color: var(--text-muted);
+      margin-bottom: 18px;
+    }
+    .prep-list {
+      list-style: none;
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    .prep-list li {
+      display: flex; align-items: flex-start; gap: 12px;
+      font-size: 0.9rem; line-height: 1.65;
+      color: var(--text-secondary);
+    }
+    .prep-list svg {
+      width: 18px; height: 18px;
+      stroke: var(--accent);
+      fill: none; stroke-width: 2.4;
+      flex-shrink: 0; margin-top: 4px;
+    }
+    .prep-list strong { color: var(--text-primary); font-weight: 600; }
+
+    .reassure {
+      background: var(--accent-light);
+      border-radius: 14px;
+      padding: 22px 28px;
+      margin-top: 24px;
+      display: flex; gap: 14px;
+      align-items: flex-start;
+    }
+    .reassure svg {
+      width: 22px; height: 22px;
+      stroke: var(--accent);
+      fill: none; stroke-width: 2.4;
+      flex-shrink: 0; margin-top: 2px;
+    }
+    .reassure-body { font-size: 0.88rem; line-height: 1.65; color: var(--text-primary); }
+    .reassure-body strong { font-weight: 700; }
+
+    .links {
+      margin-top: 32px;
+      display: flex; gap: 14px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 13px 24px;
       border-radius: 10px;
       font-family: 'Sora', sans-serif;
-      font-weight: 700;
-      font-size: 0.95rem;
+      font-weight: 700; font-size: 0.92rem;
       text-decoration: none;
       transition: all 0.2s;
     }
-    .btn-primary:hover {
-      background: #0F766E;
-      transform: translateY(-1px);
+    .btn-primary { background: var(--accent); color: white; }
+    .btn-primary:hover { background: var(--accent-hover); transform: translateY(-1px); }
+    .btn-ghost { background: transparent; border: 1px solid var(--border); color: var(--text-secondary); }
+    .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+    .btn svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2.5; }
+
+    .footer-note {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 0.84rem;
+      color: var(--text-muted);
     }
-    .back-link {
-      display: block;
-      margin-top: 24px;
-      font-size: 0.82rem;
-      color: #94A3B8;
-      text-decoration: none;
+    .footer-note a { color: var(--accent); text-decoration: none; }
+
+    @media (max-width: 640px) {
+      .hero-card, .step-card, .prep-card { padding: 26px 22px; }
+      .step-card { grid-template-columns: 44px 1fr; gap: 16px; }
+      h1 { font-size: 1.4rem; }
     }
-    .back-link:hover { color: #0F172A; }
   </style>
 </head>
 <body>
 
-<div class="success">
+<div class="wrap">
   <a href="/" class="logo">annex<span>27</span></a>
 
-  <div class="check-icon">
-    <svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>
+  <div class="hero-card">
+    <div class="check-icon">
+      <svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>
+    </div>
+    <h1>Betaling ontvangen, welkom bij Annex27.</h1>
+    <p class="lede">Uw bestelling is bevestigd. Hieronder ziet u precies wat er nu gebeurt &mdash; en wat u alvast kunt doen om straks zonder hindernissen te starten.</p>
   </div>
 
-  <h1>Bedankt voor uw bestelling!</h1>
-  <p>Wij hebben uw betaling ontvangen. Uw Lead Auditor bekijkt uw bestelling persoonlijk voordat u toegang krijgt tot het portaal.</p>
-
-  <div class="info-box">
-    <h3>Wat gebeurt er nu?</h3>
-    <ol>
-      <li>Binnen <strong>24 uur</strong> controleert uw Lead Auditor uw bestelling en bereidt de omgeving voor</li>
-      <li>U ontvangt per e-mail uw <strong>persoonlijke uitnodiging</strong> voor het klantportaal</li>
-      <li>U stelt uw wachtwoord in en kunt direct starten met de gap-analyse</li>
-      <li>Vragen tussendoor? Mail <a href="mailto:info@annex27.nl">info@annex27.nl</a> &mdash; u krijgt antwoord binnen 24u</li>
-    </ol>
+  <div class="step-card">
+    <div class="step-num">1</div>
+    <div>
+      <div class="step-eta">Binnen enkele minuten</div>
+      <div class="step-title">Bevestigingsmail in uw inbox</div>
+      <div class="step-body">U ontvangt een e-mail van <strong>info@annex27.nl</strong> met uw factuur en een persoonlijke <strong>uitnodigingslink</strong> om uw wachtwoord te kiezen. Geen mail? Check spam, of mail ons direct &mdash; wij sturen 'm opnieuw.</div>
+    </div>
   </div>
 
-  <a href="/" class="btn-primary">
-    Terug naar annex27.nl
-  </a>
+  <div class="step-card">
+    <div class="step-num">2</div>
+    <div>
+      <div class="step-eta">Direct na inloggen</div>
+      <div class="step-title">U start in het dashboard met uw gap-analyse</div>
+      <div class="step-body">Het dashboard begeleidt u door alle controls die voor uw sector relevant zijn. U scoort op de CMMI-volwassenheidsschaal (0-4), uploadt evidence en vult toelichting in. <strong>U kunt op- en afhaken</strong> &mdash; voortgang wordt continu opgeslagen.</div>
+    </div>
+  </div>
 
-  <a href="/portal" class="back-link">Al een account? Log hier in &rarr;</a>
+  <div class="step-card">
+    <div class="step-num">3</div>
+    <div>
+      <div class="step-eta">Binnen 48 uur na uw afronding</div>
+      <div class="step-title">Lead Auditor review &amp; uw rapport</div>
+      <div class="step-body">Zodra uw gap-analyse compleet is en evidence is geüpload, neemt Lead Auditor <strong>Raoul Haas</strong> uw werk persoonlijk door. AI doet eerste analyse, hij valideert. U ontvangt het rapport als <strong>signed-off PDF</strong> &mdash; klaar om te delen met uw certificeringsinstantie.</div>
+    </div>
+  </div>
+
+  <div class="prep-card">
+    <h2>Bereid u alvast voor</h2>
+    <p class="prep-sub">Klein verschil tussen klanten die in 1 sessie klaar zijn en klanten die in 3 sessies klaar zijn: voorbereiding. Vijf dingen die u nu al kunt verzamelen.</p>
+    <ul class="prep-list">
+      <li><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/></svg><span><strong>Bestaande beleidsdocumenten</strong> &mdash; informatiebeveiligingsbeleid, AUP, wachtwoordbeleid, BCP, indien u die heeft. PDF of Word.</span></li>
+      <li><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6v6H9z"/></svg><span><strong>Asset-overzicht</strong> &mdash; export uit MDM/CMDB, of een spreadsheet met servers/laptops/SaaS-tools.</span></li>
+      <li><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M16 14l-4-2.5V8"/></svg><span><strong>Datum laatste incident-evaluatie of management-review</strong> &mdash; toont actieve governance.</span></li>
+      <li><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 11h-6M19 8v6"/></svg><span><strong>Toegangsmatrix of access-review</strong> &mdash; wie heeft toegang tot wat? Een screenshot uit IAM-tool of een Excel werkt.</span></li>
+      <li><svg viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="14" rx="2"/><path d="M6 10h12M6 14h8"/></svg><span><strong>Leveranciersregister</strong> &mdash; alle SaaS/cloud-providers + verwerkersovereenkomsten. Vooral relevant voor NIS2 supply-chain (Art. 21 maatregel 4).</span></li>
+    </ul>
+  </div>
+
+  <div class="reassure">
+    <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+    <div class="reassure-body">
+      <strong>Geen druk, geen lock-in.</strong> Uw data is van u en blijft EU-only opgeslagen (zie <a href="/trust" style="color:var(--accent);text-decoration:underline;">Trust &amp; Security</a>). U bepaalt het tempo. Vragen tussendoor? Mail Lead Auditor Raoul direct op <a href="mailto:info@annex27.nl" style="color:var(--accent);text-decoration:underline;">info@annex27.nl</a> &mdash; antwoord binnen één werkdag.
+    </div>
+  </div>
+
+  <div class="links">
+    <a href="/portal" class="btn btn-primary">
+      Direct inloggen
+      <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </a>
+    <a href="/werkwijze" class="btn btn-ghost">Bekijk volledige werkwijze</a>
+    <a href="/rapport-voorbeeld" class="btn btn-ghost">Voorbeeldrapport bekijken</a>
+  </div>
+
+  <p class="footer-note">
+    Vergeten waarvoor u betaalde? Bekijk uw factuur in uw mail, of vraag opnieuw aan via <a href="mailto:info@annex27.nl">info@annex27.nl</a>.
+  </p>
 </div>
 
 <script>
 (function () {
   // Fire GA4 purchase event. Mollie redirect = /success?plan=X&value=TOTAL.
-  // Transaction ID komt uit de pending_order (gezet in bestellen.html vóór Mollie redirect).
   try {
     var params = new URLSearchParams(location.search);
     var pending = {};
@@ -169,10 +295,7 @@
     var value = parseFloat(params.get('value') || pending.value || '0');
     if (!isFinite(value) || value <= 0) return;
 
-    // Transaction ID: pending ref > generated uit plan+value+datum (stabiel binnen sessie)
     var txn = pending.ref || ('anx_' + plan + '_' + value + '_' + (pending.ts || Date.now()));
-
-    // Dedup — zelfde transactie-ID nooit 2x tracken
     var dedupKey = 'annex27_purchase_' + txn;
     if (localStorage.getItem(dedupKey)) return;
     localStorage.setItem(dedupKey, '1');
@@ -186,7 +309,6 @@
       });
     }
 
-    // Pending order is afgerond — opruimen
     localStorage.removeItem('annex27_pending_order');
   } catch (e) {}
 })();

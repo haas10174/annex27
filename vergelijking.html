@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <meta name="theme-color" content="#0D9488" />
+  <script src="/analytics.js"></script>
+
+  <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
+  <title>Annex27 vs consultancy, SaaS-tools en DIY | Vergelijking voor MKB</title>
+  <meta name="description" content="Annex27 vergeleken met traditionele consultancy, compliance-SaaS (Vanta/Drata) en DIY-templates. Prijs, doorlooptijd, persoonlijke auditor, NL/BE-focus &mdash; head-to-head." />
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large" />
+  <link rel="canonical" href="https://annex27.nl/vergelijking" />
+
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://annex27.nl/vergelijking" />
+  <meta property="og:title" content="Vergelijking | Annex27" />
+  <meta property="og:description" content="Annex27 vs consultancy, SaaS-tools, DIY-templates &mdash; head-to-head op prijs, tempo, expertise." />
+  <meta property="og:image" content="https://annex27.nl/og-image.svg" />
+  <meta property="og:locale" content="nl_NL" />
+
+  <link rel="alternate" hreflang="nl-NL" href="https://annex27.nl/vergelijking" />
+  <link rel="alternate" hreflang="nl-BE" href="https://annex27.nl/vergelijking" />
+  <link rel="alternate" hreflang="x-default" href="https://annex27.nl/vergelijking" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {"@type":"ListItem","position":1,"name":"Home","item":"https://annex27.nl/"},
+      {"@type":"ListItem","position":2,"name":"Vergelijking","item":"https://annex27.nl/vergelijking"}
+    ]
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #FAF9F6;
+      --bg-alt: #FFFFFF;
+      --bg-warm: #F2EFE8;
+      --surface: #FFFFFF;
+      --border: #E8E4DC;
+      --border-light: #EFEBE3;
+      --text-primary: #0F172A;
+      --text-secondary: #475569;
+      --text-muted: #94A3B8;
+      --accent: #0D9488;
+      --accent-hover: #0F766E;
+      --accent-light: #CCFBF1;
+      --dark: #0c0f1a;
+      --warn: #D97706;
+      --danger: #DC2626;
+      --radius-sm: 6px;
+      --radius: 10px;
+      --radius-lg: 16px;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', -apple-system, system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text-secondary);
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+    .container { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(250,249,246,0.85);
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border-light);
+      height: 64px; display: flex; align-items: center; padding: 0 5%;
+    }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; width: 100%; max-width: 1180px; margin: 0 auto; }
+    .nav-logo { font-family: 'Sora', sans-serif; font-size: 1.4rem; font-weight: 700; color: var(--text-primary); text-decoration: none; letter-spacing: -0.03em; }
+    .nav-logo span { color: var(--accent); }
+    .nav-back { display: inline-flex; align-items: center; gap: 6px; font-size: 0.85rem; color: var(--text-secondary); text-decoration: none; font-weight: 500; }
+    .nav-back svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; }
+
+    .hero {
+      padding: 140px 0 64px;
+      background: var(--dark);
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(circle at 25% 0%, rgba(20,184,166,0.18) 0%, transparent 50%);
+      pointer-events: none;
+    }
+    .hero .container { position: relative; z-index: 1; }
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 10px;
+      font-size: 0.78rem; font-weight: 600;
+      color: rgba(255,255,255,0.5);
+      text-transform: uppercase; letter-spacing: 0.14em;
+      margin-bottom: 20px;
+    }
+    .hero-eyebrow::before { content: ''; width: 24px; height: 1px; background: #14b8a6; }
+    .hero h1 {
+      font-family: 'Sora', sans-serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 700; line-height: 1.1;
+      letter-spacing: -0.03em;
+      margin-bottom: 22px; max-width: 820px; color: white;
+    }
+    .hero h1 em { font-style: normal; color: #5EEAD4; }
+    .hero p {
+      font-size: 1.06rem; color: rgba(255,255,255,0.7);
+      line-height: 1.75; max-width: 700px;
+    }
+
+    .section { padding: 80px 0; }
+    .section-alt { background: var(--surface); border-top: 1px solid var(--border-light); border-bottom: 1px solid var(--border-light); }
+    .section-label {
+      font-size: 0.78rem; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 12px;
+    }
+    .section-title {
+      font-family: 'Sora', sans-serif;
+      font-size: clamp(1.55rem, 2.8vw, 2.1rem);
+      font-weight: 700; color: var(--text-primary);
+      letter-spacing: -0.02em; margin-bottom: 16px;
+    }
+    .section-lead {
+      font-size: 1rem; line-height: 1.8;
+      max-width: 720px; margin-bottom: 40px;
+    }
+
+    /* COMPARISON TABLE */
+    .comparison-wrap {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(15,23,42,0.04);
+    }
+    .ctable {
+      width: 100%; border-collapse: collapse;
+      font-size: 0.92rem;
+    }
+    .ctable thead th {
+      text-align: left; padding: 18px 20px;
+      font-family: 'Sora', sans-serif;
+      font-weight: 700; color: var(--text-primary);
+      background: var(--bg-warm);
+      border-bottom: 1px solid var(--border);
+      vertical-align: bottom;
+      font-size: 0.92rem;
+    }
+    .ctable thead th.us {
+      background: linear-gradient(135deg, #0F766E 0%, #0D9488 100%);
+      color: white;
+    }
+    .ctable thead th.us small {
+      display: block; font-weight: 500;
+      color: rgba(255,255,255,0.75);
+      font-size: 0.74rem; margin-top: 3px;
+      letter-spacing: 0.04em;
+    }
+    .ctable thead th small {
+      display: block; font-weight: 400;
+      color: var(--text-muted);
+      font-size: 0.74rem; margin-top: 3px;
+    }
+    .ctable td {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border-light);
+      vertical-align: top;
+      font-size: 0.9rem;
+    }
+    .ctable td.crit {
+      font-family: 'Sora', sans-serif;
+      font-weight: 700; color: var(--text-primary);
+      width: 22%;
+      background: rgba(15,23,42,0.02);
+    }
+    .ctable td.us {
+      background: rgba(13,148,136,0.04);
+    }
+    .ctable tr:last-child td { border-bottom: 0; }
+
+    .ic-yes, .ic-no, .ic-warn {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-weight: 600; font-size: 0.86rem;
+    }
+    .ic-yes { color: #059669; }
+    .ic-no { color: var(--danger); }
+    .ic-warn { color: var(--warn); }
+    .ic-yes svg, .ic-no svg, .ic-warn svg { width: 16px; height: 16px; stroke-width: 2.6; }
+
+    .price-tag {
+      font-family: 'Sora', sans-serif;
+      font-weight: 700;
+      color: var(--text-primary);
+      font-size: 1.04rem;
+    }
+    .price-tag small {
+      display: block; font-weight: 400;
+      color: var(--text-muted);
+      font-size: 0.76rem; margin-top: 2px;
+    }
+
+    /* USP BLOCKS */
+    .usps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 48px;
+    }
+    .usp {
+      padding: 28px 6px;
+    }
+    .usp-icon {
+      width: 44px; height: 44px;
+      border-radius: var(--radius);
+      background: var(--accent-light);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 16px;
+    }
+    .usp-icon svg { width: 20px; height: 20px; stroke: var(--accent); fill: none; stroke-width: 2; }
+    .usp-title {
+      font-family: 'Sora', sans-serif;
+      font-size: 1.04rem; font-weight: 700;
+      color: var(--text-primary); margin-bottom: 8px;
+      letter-spacing: -0.01em;
+    }
+    .usp-body { font-size: 0.92rem; line-height: 1.7; }
+
+    .cta-card {
+      background: var(--dark);
+      color: white;
+      border-radius: var(--radius-lg);
+      padding: 48px 44px;
+      display: grid;
+      grid-template-columns: 1.6fr 1fr;
+      gap: 36px;
+      align-items: center;
+      margin-top: 48px;
+    }
+    .cta-card h3 {
+      font-family: 'Sora', sans-serif;
+      font-size: 1.4rem; font-weight: 700;
+      color: white; margin-bottom: 10px;
+      letter-spacing: -0.02em;
+    }
+    .cta-card p { color: rgba(255,255,255,0.7); font-size: 0.94rem; line-height: 1.7; }
+    .cta-actions { display: flex; flex-direction: column; gap: 10px; }
+    .cta-btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 13px 22px;
+      background: var(--accent); color: white;
+      text-decoration: none; border-radius: var(--radius);
+      font-family: 'Sora', sans-serif;
+      font-weight: 700; font-size: 0.92rem;
+      transition: background 0.2s;
+    }
+    .cta-btn:hover { background: var(--accent-hover); }
+    .cta-btn.alt { background: transparent; border: 1px solid rgba(255,255,255,0.2); }
+    .cta-btn.alt:hover { background: rgba(255,255,255,0.06); }
+    .cta-btn svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2.5; }
+
+    footer {
+      padding: 48px 0 32px;
+      border-top: 1px solid var(--border-light);
+      background: var(--surface);
+    }
+    .footer-inner { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
+    .footer-legal { font-size: 0.82rem; color: var(--text-muted); }
+    .footer-links { display: flex; gap: 24px; font-size: 0.82rem; }
+    .footer-links a { color: var(--text-secondary); text-decoration: none; }
+    .footer-links a:hover { color: var(--accent); }
+
+    @media (max-width: 1024px) {
+      .ctable { font-size: 0.84rem; }
+      .ctable td, .ctable thead th { padding: 12px 14px; }
+      .usps { grid-template-columns: 1fr; gap: 8px; }
+      .cta-card { grid-template-columns: 1fr; padding: 36px 28px; }
+    }
+    @media (max-width: 768px) {
+      .comparison-wrap { overflow-x: auto; }
+      .ctable { min-width: 720px; }
+    }
+
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">annex<span>27</span></a>
+    <a href="/" class="nav-back">
+      <svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      Terug naar annex27.nl
+    </a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="container">
+    <div class="hero-eyebrow">Vergelijking &middot; Annex27 vs alternatieven</div>
+    <h1>Waarom kiezen klanten <em>Annex27</em> &mdash; en geen consultancy, SaaS-abonnement of DIY?</h1>
+    <p>
+      Vier opties voor het MKB dat ISO 27001 of NIS2-readiness wil regelen. Geen marketing, geen marges achter cijfers verstopt. Hier staat eerlijk waar wij sterk zijn en waar een ander beter past.
+    </p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-label">Head-to-head</div>
+    <h2 class="section-title">Vier paden naar audit-readiness</h2>
+    <p class="section-lead">
+      Vergelijk op prijs, tempo, persoonlijke begeleiding, NL/BE-focus en evidence-validatie. Eerlijke cijfers gebaseerd op publieke tarieven en branche-rapportages.
+    </p>
+
+    <div class="comparison-wrap">
+      <table class="ctable">
+        <thead>
+          <tr>
+            <th>Criterium</th>
+            <th class="us">Annex27<small>NL/BE-Lead-Auditor + AI</small></th>
+            <th>Traditionele consultancy<small>Big4 / lokaal bureau</small></th>
+            <th>Compliance SaaS<small>Vanta / Drata / Secureframe</small></th>
+            <th>DIY-templates<small>Word/Excel-pakketten</small></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="crit">Prijs &mdash; volledig gap-traject</td>
+            <td class="us"><span class="price-tag">&euro;795<small>eenmalig</small></span></td>
+            <td><span class="price-tag">&euro;7.500&ndash;&euro;20.000<small>op uurbasis</small></span></td>
+            <td><span class="price-tag">&euro;7.000&ndash;&euro;25.000<small>jaarlijks abo</small></span></td>
+            <td><span class="price-tag">&euro;50&ndash;&euro;300<small>per template-set</small></span></td>
+          </tr>
+          <tr>
+            <td class="crit">Doorlooptijd tot audit-ready rapport</td>
+            <td class="us"><span class="ic-yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 12 10 17 19 7"/></svg> 48 uur na evidence-upload</span></td>
+            <td><span class="ic-warn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> 6&ndash;12 weken</span></td>
+            <td><span class="ic-warn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> Continu monitoring, geen vast moment</span></td>
+            <td><span class="ic-no"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg> U doet het zelf</span></td>
+          </tr>
+          <tr>
+            <td class="crit">Persoonlijke Lead Auditor (DNV-cert.)</td>
+            <td class="us"><span class="ic-yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 12 10 17 19 7"/></svg> Ja &mdash; 1-op-1 contact</span></td>
+            <td><span class="ic-yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 12 10 17 19 7"/></svg> Ja, vaak senior consultants</span></td>
+            <td><span class="ic-no"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg> Nee, self-service tool</span></td>
+            <td><span class="ic-no"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg> Nee</span></td>
+          </tr>
+          <tr>
+            <td class="crit">Evidence-validatie (kwalitatief)</td>
+            <td class="us"><span class="ic-yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 12 10 17 19 7"/></svg> AI-analyse + Lead Auditor review</span></td>
+            <td><span class="ic-yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 12 10 17 19 7"/></svg> Ja, handmatig</span></td>
+            <td><span class="ic-warn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> Geautomatiseerde checks, geen review</span></td>
+            <td><span class="ic-no"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg> Geen validatie</span></td>
+          </tr>
+          <tr>
+            <td class="crit">NL/BE-focus &mdash; AVG, NIS2, BTW-regels</td>
+            <td class="us"><span class="ic-yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 12 10 17 19 7"/></svg> Volledig &mdash; KBO/KvK + BTW-verlegging</span></td>
+            <td><span class="ic-yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 12 10 17 19 7"/></svg> Vaak ja</span></td>
+            <td><span class="ic-warn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> Primair US, beperkt EU</span></td>
+            <td><span class="ic-warn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> Generiek, geen lokalisatie</span></td>
+          </tr>
+          <tr>
+            <td class="crit">Sector-specifieke aanpassing</td>
+            <td class="us"><span class="ic-yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 12 10 17 19 7"/></svg> SaaS, Zorg (NEN 7510), IT, Overheid (BIO), Bouw</span></td>
+            <td><span class="ic-yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 12 10 17 19 7"/></svg> Op uurbasis</span></td>
+            <td><span class="ic-no"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg> Standaard frameworks, geen sector</span></td>
+            <td><span class="ic-no"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg> Een-maat-past-allen</span></td>
+          </tr>
+          <tr>
+            <td class="crit">Lock-in / abonnement</td>
+            <td class="us"><span class="ic-yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 12 10 17 19 7"/></svg> Geen &mdash; eenmalig, data is van u</span></td>
+            <td><span class="ic-yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 12 10 17 19 7"/></svg> Per opdracht</span></td>
+            <td><span class="ic-no"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg> Jaarabonnement, data hangt eraan</span></td>
+            <td><span class="ic-yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 12 10 17 19 7"/></svg> Geen &mdash; u bezit de templates</span></td>
+          </tr>
+          <tr>
+            <td class="crit">Audit-bewijs voor certificeringsinstantie</td>
+            <td class="us"><span class="ic-yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 12 10 17 19 7"/></svg> Lead Auditor signed-off rapport (PDF)</span></td>
+            <td><span class="ic-yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 12 10 17 19 7"/></svg> Consultancy-rapport</span></td>
+            <td><span class="ic-warn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> Dashboard-export, geen review</span></td>
+            <td><span class="ic-no"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg> U levert zelf bewijs aan</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p style="font-size:0.82rem;color:var(--text-muted);margin-top:14px;">
+      Cijfers gebaseerd op publieke tarieven (Big4-rate cards 2025), Vanta/Drata-pricing pages en Bol.com/Smartsheet template-prijzen. Annex27-prijs: pioneer pricing (eerste 25 klanten).
+    </p>
+
+  </div>
+</section>
+
+<section class="section section-alt">
+  <div class="container">
+    <div class="section-label">Wanneer kiezen klanten ons</div>
+    <h2 class="section-title">Drie redenen die steeds terugkomen</h2>
+    <p class="section-lead">
+      Eerlijk &mdash; als u puur voor laagste prijs gaat, koop dan een DIY-template-set. Als u puur voor merknaam gaat, huur Big4 in. Annex27 is voor de klant die het optimum zoekt: gevalideerd resultaat in audit-tempo voor een MKB-budget.
+    </p>
+
+    <div class="usps">
+      <div class="usp">
+        <div class="usp-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div class="usp-title">Echte auditor, niet een tool</div>
+        <p class="usp-body">U krijgt persoonlijke review door een DNV-gecertificeerd Lead Auditor. SaaS-tools doen geautomatiseerde checks &mdash; die slaan nuance over die uw certificeerder w&eacute;l zal vragen.</p>
+      </div>
+      <div class="usp">
+        <div class="usp-icon">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        </div>
+        <div class="usp-title">MKB-tempo, geen consultant-spiraal</div>
+        <p class="usp-body">Vaste prijs, vast tempo. 48 uur na evidence-upload heeft u uw rapport. Geen offertes, geen "kunt u nog deze sessie inplannen om te verduidelijken".</p>
+      </div>
+      <div class="usp">
+        <div class="usp-icon">
+          <svg viewBox="0 0 24 24"><path d="M3 3h18v18H3z"/><path d="M9 9h6v6H9z"/></svg>
+        </div>
+        <div class="usp-title">NL/BE als eerste &mdash; niet als afterthought</div>
+        <p class="usp-body">AVG, NIS2, BTW-verlegging, NEN 7510, BIO, Belgische omzettingswet. Wij zijn hier opgegroeid &mdash; SaaS-tools uit San Francisco zijn dat niet.</p>
+      </div>
+    </div>
+
+    <div class="cta-card">
+      <div>
+        <h3>Tijd voor de echte vraag.</h3>
+        <p>Niet "wat is het goedkoopst", maar "wat krijg ik in handen waar mijn certificeerder mee uit de voeten kan?". Begin met de gratis quickscan, dan ziet u zelf het verschil.</p>
+      </div>
+      <div class="cta-actions">
+        <a href="/gap-analyse" class="cta-btn">Start gratis quickscan <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+        <a href="/werkwijze" class="cta-btn alt">Bekijk werkwijze</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-legal">&copy; 2026 Annex27 &middot; KBO 1006.203.170 &middot; BTW BE1006.203.170</div>
+      <div class="footer-links">
+        <a href="/">Home</a>
+        <a href="/gap-analyse">Quickscan</a>
+        <a href="/bestellen">Bestellen</a>
+        <a href="/werkwijze">Werkwijze</a>
+        <a href="/trust">Trust</a>
+        <a href="mailto:info@annex27.nl">Contact</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

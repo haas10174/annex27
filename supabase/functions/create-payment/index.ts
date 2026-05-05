@@ -25,7 +25,7 @@ function corsHeaders(origin: string | null): Record<string, string> {
 const PRODUCTS: Record<string, { name: string; price: number; period: string }> = {
   'gap':             { name: 'Gap-analyse',            price: 795,  period: 'eenmalig' },
   'nis2':            { name: 'NIS2 Readiness',         price: 995,  period: 'eenmalig' },
-  'beleid':          { name: 'Beleidspakket',          price: 795,  period: 'eenmalig' },
+  'beleid':          { name: 'Beleidspakket',          price: 395,  period: 'eenmalig' },
   'preaudit':        { name: 'Pre-audit Review',       price: 1495, period: 'eenmalig' },
 };
 
