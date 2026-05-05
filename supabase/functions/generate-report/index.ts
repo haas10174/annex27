@@ -194,8 +194,14 @@ Legenda CMMI-waarden per sub-vraag:
 ${ctrlSummary}
 \`\`\`
 
-**Eerdere auditor-bevindingen (${findings?.length || 0}):**
-${findings && findings.length ? findings.map((f: any) => `- ${f.control_id} (${f.severity}): ${f.finding}`).join('\n') : '(geen)'}
+**Auditor-bevindingen — door Lead Auditor Raoul Haas al beoordeeld (${findings?.length || 0}):**
+> Deze bevindingen zijn HANDMATIG GEVALIDEERD. Neem ze 1-op-1 over in \`detailed_findings\` (zelfde control_id, status afgeleid van severity, finding-tekst en recommendation overnemen). Vul ze aan vanuit evidence-analyse, maar overschrijf ze niet. Als de severity 'critical' is → status='critical'; 'high' → 'gap'; 'medium'/'low' → 'gap' tenzij evidence laat zien dat de control inmiddels in orde is.
+
+${findings && findings.length ? findings.map((f: any) => {
+  const evNote = f.reviewed_evidence ? ` [evidence beoordeeld: ${String(f.reviewed_evidence).slice(0, 200)}]` : '';
+  const recNote = f.recommendation ? `\n  Aanbeveling: ${String(f.recommendation).slice(0, 400)}` : '';
+  return `- ${f.control_id} [severity=${f.severity}]: ${f.finding}${recNote}${evNote}`;
+}).join('\n') : '(geen — baseer detailed_findings volledig op gap-antwoorden + evidence-analyse)'}
 
 **Overige bewijsvoering-bestanden (niet-image, filenames alleen):**
 ${otherFiles.map(f => `- ${f.name} (${Math.round(f.size/1024)}KB)`).join('\n') || '(geen)'}
