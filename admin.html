@@ -3315,6 +3315,8 @@ function renderDetailedFindings(arr) {
               </div>
             </div>
             <div style="font-size:0.82rem;margin-bottom:6px;line-height:1.55;"><strong style="color:#0F172A;">Bevinding:</strong> ${esc(f.finding||'')}</div>
+            ${f.klant_quote ? `<div style="font-size:0.78rem;color:#475569;margin-bottom:6px;line-height:1.55;background:rgba(13,148,136,0.06);padding:6px 10px;border-radius:4px;border-left:2px solid var(--accent);"><strong style="color:#0F172A;">Klant zei:</strong> &ldquo;${esc(f.klant_quote)}&rdquo;</div>` : ''}
+            ${Array.isArray(f.evidence_referenced) && f.evidence_referenced.length ? `<div style="font-size:0.74rem;color:#475569;margin-bottom:6px;display:flex;gap:6px;flex-wrap:wrap;align-items:center;"><strong style="color:#0F172A;">Evidence:</strong> ${f.evidence_referenced.map(fn => `<span style="background:rgba(15,23,42,0.05);padding:2px 8px;border-radius:99px;font-family:monospace;">${esc(fn)}</span>`).join('')}</div>` : ''}
             ${f.evidence_assessment ? `<div style="font-size:0.78rem;color:#475569;margin-bottom:6px;line-height:1.55;background:rgba(15,23,42,0.03);padding:6px 10px;border-radius:4px;"><strong style="color:#0F172A;">Bewijs-evaluatie:</strong> ${esc(f.evidence_assessment)}</div>` : ''}
             <div style="font-size:0.82rem;color:var(--text-secondary);line-height:1.55;"><strong style="color:#0F172A;">Aanbeveling:</strong> ${esc(f.recommendation||'')}</div>
           </div>`;
@@ -3471,7 +3473,11 @@ function previewDraftAsClient() {
     <h2>Top prioriteiten</h2>
     ${(s.top_priorities||[]).map(p=>`<div class="priority">${esc(p)}</div>`).join('')}
     <h2>Detailed findings</h2>
-    ${(s.detailed_findings||[]).map(f=>`<div class="finding ${esc(f.status||'')}"><div class="ctrl">${esc(f.control_id)} — ${esc((f.status||'').toUpperCase())}</div><p><strong>Bevinding:</strong> ${esc(f.finding||'')}</p><p><strong>Aanbeveling:</strong> ${esc(f.recommendation||'')}</p></div>`).join('')}
+    ${(s.detailed_findings||[]).map(f=>{
+      const evList = Array.isArray(f.evidence_referenced) && f.evidence_referenced.length ? `<p style="font-size:0.85em;color:#475569;"><strong>Aangeleverde evidence:</strong> ${f.evidence_referenced.map(x=>esc(x)).join(', ')}</p>` : '';
+      const quote = f.klant_quote ? `<p style="font-size:0.9em;font-style:italic;background:#F0FDFA;padding:8px 12px;border-left:3px solid #0D9488;margin:8px 0;">&ldquo;${esc(f.klant_quote)}&rdquo; <span style="font-style:normal;color:#0D9488;font-weight:600;">— uit klant-toelichting</span></p>` : '';
+      return `<div class="finding ${esc(f.status||'')}"><div class="ctrl">${esc(f.control_id)} — ${esc((f.status||'').toUpperCase())}</div><p><strong>Bevinding:</strong> ${esc(f.finding||'')}</p>${quote}${evList}<p><strong>Aanbeveling:</strong> ${esc(f.recommendation||'')}</p></div>`;
+    }).join('')}
     <div class="disclosure">${esc(s.disclosure||'Dit rapport is opgesteld door Lead Auditor Raoul Haas, met AI-geassisteerde analyse van uw bewijsvoering.')}</div>
     </body></html>`);
   w.document.close();

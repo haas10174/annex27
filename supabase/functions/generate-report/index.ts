@@ -37,7 +37,14 @@ interface ReportSections {
   score_summary: string;
   findings_by_category: { [cat: string]: string };
   top_priorities: string[];
-  detailed_findings: { control_id: string; status: string; finding: string; recommendation: string }[];
+  detailed_findings: {
+    control_id: string;
+    status: string;
+    finding: string;
+    recommendation: string;
+    evidence_referenced?: string[];   // filenames die in evidence-folder van klant stonden
+    klant_quote?: string;              // letterlijk citaat uit klant-toelichting (max 200 tekens)
+  }[];
   disclosure: string;
 }
 
@@ -245,14 +252,27 @@ Geef **ALLEEN JSON** terug (geen markdown-codeblock, geen uitleg buiten de JSON)
   },
   "top_priorities": ["Prioriteit 1: ...", "Prioriteit 2: ...", "Prioriteit 3: ...", "Prioriteit 4: ...", "Prioriteit 5: ..."],
   "detailed_findings": [
-    {"control_id": "A.5.1", "status": "gap|ok|critical", "finding": "wat heb je gezien in evidence", "recommendation": "concrete actie"},
-    ...
+    {
+      "control_id": "A.5.1",
+      "status": "gap|ok|critical",
+      "finding": "Concrete observatie. Refereer letterlijk aan evidence-bestand of klant-toelichting waar relevant.",
+      "recommendation": "Concrete actie",
+      "evidence_referenced": ["informatiebeveiligingsbeleid_v2.pdf", "screenshot_intranet.png"],
+      "klant_quote": "Letterlijk citaat uit klant-toelichting (max 200 tekens) als die de bevinding ondersteunt"
+    }
   ],
   "disclosure": "Dit rapport is opgesteld door Lead Auditor Raoul Haas, met AI-geassisteerde analyse van uw bewijsvoering."
 }
 \`\`\`
 
-Voor \`detailed_findings\`: baseer je alleen op Annex A controls waar je evidence voor zag of waar de klant een antwoord op gaf. Liever 10-15 gefundeerde bevindingen dan 93 oppervlakkige.`
+**Hard-vereisten voor detailed_findings:**
+1. **Refereer concreet aan evidence**. Wanneer een evidence-bestand de bevinding ondersteunt of weerspreekt, vermeld de bestandsnaam in \`evidence_referenced\` EN noem het in de \`finding\`-tekst (bv. "Het document _informatiebeveiligingsbeleid_v2.pdf_ toont een policy uit 2023, niet recent herzien"). Niet generiek "evidence aangeleverd".
+2. **Quote de klant-toelichting** wanneer de klant zelf iets relevants schrijft. Letterlijk citaat in \`klant_quote\`, max 200 tekens. Refereer ernaar in de \`finding\` (bv. "Klant geeft zelf aan: '...'. Dit bevestigt de gap").
+3. **Bij ontbrekende evidence**: zeg expliciet "Geen evidence aangeleverd voor [aspect]" — niet stilzwijgend overslaan. Laat \`evidence_referenced\` leeg.
+4. **Bij ontbrekende toelichting**: laat \`klant_quote\` leeg.
+5. **Liever 10-15 gefundeerde bevindingen dan 93 oppervlakkige**. Baseer je alleen op controls waar je evidence voor zag of waar de klant een toelichting/antwoord gaf.
+
+Doel: het eindrapport moet voor de klant aantoonbaar maken dat zijn aangeleverde materiaal daadwerkelijk gelezen en gewogen is, niet generiek omgezet.`
     });
 
     // Load DNV RAG-corpus uit Supabase Storage (prompt-cached voor cost-savings)
