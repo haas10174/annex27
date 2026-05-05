@@ -664,6 +664,68 @@
     .ci-badge.pending { background: rgba(16,24,40,0.06); color: var(--text-muted); }
     .ci-badge.evidence-yes { background: rgba(13,148,136,0.12); color: var(--accent-light); }
     .ci-badge.evidence-no { background: rgba(245,158,11,0.12); color: var(--warning); }
+    .ci-icon { color: var(--accent-light); display: inline-flex; align-items: center; }
+
+    /* Categorie-header met progress */
+    .cat-header {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 12px;
+      margin: 22px 0 8px;
+      padding: 0 4px;
+    }
+    .cat-title {
+      font-family: 'Sora', sans-serif;
+      font-size: 0.82rem; font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase; letter-spacing: 0.1em;
+    }
+    .cat-progress { display: flex; gap: 10px; align-items: center; }
+    .cat-stat {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 0.74rem; font-weight: 600;
+      color: var(--accent-light);
+      background: rgba(13,148,136,0.08);
+      padding: 3px 9px; border-radius: 100px;
+    }
+    .cat-stat.cat-stat-finding { color: var(--warning); background: rgba(245,158,11,0.10); }
+    .cat-stat svg { stroke: currentColor; flex-shrink: 0; }
+
+    /* Filter-toolbar boven control-list */
+    .ctrl-filter-bar {
+      display: flex; flex-wrap: wrap; gap: 6px;
+      padding: 10px 12px;
+      background: var(--bg-warm,#f8fafc);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      margin-bottom: 14px;
+      align-items: center;
+    }
+    .ctrl-filter-bar-label {
+      font-size: 0.74rem; font-weight: 700;
+      color: var(--text-muted);
+      letter-spacing: 0.06em; text-transform: uppercase;
+      margin-right: 6px;
+    }
+    .ctrl-filter-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 6px 12px;
+      font-size: 0.78rem; font-weight: 600;
+      border-radius: 100px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .ctrl-filter-btn:hover { color: var(--text); border-color: var(--accent); }
+    .ctrl-filter-btn.active {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+    /* Hide rows die niet aan filter voldoen */
+    .control-row.filtered-out { display: none; }
+    /* Verberg lege categorie-headers wanneer filtered */
+    .cat-header.filtered-out { display: none; }
 
     .control-body {
       display: none;
@@ -1294,6 +1356,14 @@
             </button>
           </div>
         </div>
+        <div class="ctrl-filter-bar">
+          <span class="ctrl-filter-bar-label">Toon</span>
+          <button type="button" class="ctrl-filter-btn active" data-filter="all" onclick="setControlFilter('all')">Alle</button>
+          <button type="button" class="ctrl-filter-btn" data-filter="answered" onclick="setControlFilter('answered')">Met antwoord van klant</button>
+          <button type="button" class="ctrl-filter-btn" data-filter="has-evidence" onclick="setControlFilter('has-evidence')">Met bewijsvoering</button>
+          <button type="button" class="ctrl-filter-btn" data-filter="ready-to-review" onclick="setControlFilter('ready-to-review')" title="Antwoord + evidence aanwezig, nog geen bevinding">Klaar voor review</button>
+          <button type="button" class="ctrl-filter-btn" data-filter="has-finding" onclick="setControlFilter('has-finding')">Bevinding gezet</button>
+        </div>
         <div class="control-list" id="controlList"></div>
       </div>
 
@@ -1723,6 +1793,38 @@ let clients = [];
 let controls = [];
 let currentFilter = 'all';
 const findingCache = {};
+let currentControlFilter = 'all';
+
+function setControlFilter(filter) {
+  currentControlFilter = filter;
+  document.querySelectorAll('.ctrl-filter-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.filter === filter);
+  });
+  applyControlFilter(filter);
+}
+
+function applyControlFilter(filter) {
+  const rows = document.querySelectorAll('.control-row');
+  rows.forEach(row => {
+    const state = (row.dataset.state || '').split(' ');
+    let show = true;
+    if (filter === 'answered') show = state.includes('answered');
+    else if (filter === 'has-evidence') show = state.includes('has-evidence');
+    else if (filter === 'has-finding') show = state.includes('has-finding');
+    else if (filter === 'ready-to-review') show = state.includes('answered') && state.includes('has-evidence') && state.includes('no-finding');
+    row.classList.toggle('filtered-out', !show);
+  });
+  // Verberg categorie-headers waar geen zichtbare rows onder vallen
+  document.querySelectorAll('.cat-header').forEach(header => {
+    let next = header.nextElementSibling;
+    let anyVisible = false;
+    while (next && next.classList.contains('control-row')) {
+      if (!next.classList.contains('filtered-out')) { anyVisible = true; break; }
+      next = next.nextElementSibling;
+    }
+    header.classList.toggle('filtered-out', !anyVisible);
+  });
+}
 
 // ── AUTH CHECK ──
 async function checkAdminSession() {
@@ -3545,19 +3647,31 @@ async function loadClientFindings(userId) {
   const findings = findRes.data || [];
   findings.forEach(f => { findingCache[f.control_id] = f; });
 
-  // Group controls by category and render
+  // Set van control_ids waarvoor de klant evidence heeft aangeleverd (folder-aanwezigheid).
+  const evidenceCtrlIds = new Set((evRes.data || []).filter(f => f && f.name && f.id === null).map(f => f.name));
+
+  // Group controls by category and render — per categorie aantal beoordeeld vs totaal.
   let html = '';
   CONTROL_CATS.forEach(cat => {
     const catControls = controls.filter(c => c.cat === cat);
     if (catControls.length === 0) return;
-    html += `<div style="margin-top:20px;margin-bottom:8px;font-family:'Sora',sans-serif;font-size:0.82rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.1em;">${esc(cat)} (${catControls.length})</div>`;
+    const reviewedInCat = catControls.filter(c => Object.keys(gapAnswers).some(k => k.startsWith(c.id + '_'))).length;
+    const findingsInCat = catControls.filter(c => findings.some(f => f.control_id === c.id)).length;
+    html += `<div class="cat-header">
+      <span class="cat-title">${esc(cat)}</span>
+      <span class="cat-progress">
+        <span class="cat-stat" title="Klant beoordeeld"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 12 10 17 19 7"/></svg> ${reviewedInCat}/${catControls.length}</span>
+        ${findingsInCat ? `<span class="cat-stat cat-stat-finding" title="Bevinding gezet"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 22h20L12 2z"/></svg> ${findingsInCat}</span>` : ''}
+      </span>
+    </div>`;
     catControls.forEach(ctrl => {
-      html += renderControlRow(ctrl, gapAnswers, findings.find(f => f.control_id === ctrl.id));
+      html += renderControlRow(ctrl, gapAnswers, findings.find(f => f.control_id === ctrl.id), evidenceCtrlIds.has(ctrl.id));
     });
   });
 
   list.innerHTML = html;
   document.getElementById('findingsCount').textContent = findings.length;
+  applyControlFilter(currentControlFilter);
 
   // Bind control header clicks to expand + lazy-load evidence
   document.querySelectorAll('.control-row').forEach(row => {
@@ -3573,7 +3687,7 @@ async function loadClientFindings(userId) {
   });
 }
 
-function renderControlRow(ctrl, gapAnswers, existingFinding) {
+function renderControlRow(ctrl, gapAnswers, existingFinding, hasEvidence) {
   const safeId = ctrl.id.replace(/\./g, '_');
   // Determine status based on gapAnswers
   const scoreMap = {'4': 3, '3': 2, '2': 1, '1': 0};
@@ -3595,11 +3709,19 @@ function renderControlRow(ctrl, gapAnswers, existingFinding) {
   const findingText = existingFinding?.finding || '';
   const recommendationText = existingFinding?.recommendation || '';
 
-  return `<div class="control-row" id="row_${safeId}">
+  // Filter-state attributes voor de toolbar-filters
+  const stateAttr = [
+    ansCount > 0 ? 'answered' : 'unanswered',
+    hasEvidence ? 'has-evidence' : 'no-evidence',
+    existingFinding ? 'has-finding' : 'no-finding'
+  ].join(' ');
+
+  return `<div class="control-row" id="row_${safeId}" data-state="${stateAttr}">
     <div class="control-header">
       <span class="control-id">${esc(ctrl.id)}</span>
       <span class="control-name">${esc(ctrl.name)}</span>
       <div class="control-indicators">
+        ${hasEvidence ? `<span class="ci-icon" title="Klant heeft bewijsvoering aangeleverd"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg></span>` : ''}
         <span class="ci-badge ${statusCls}">${esc(statusLabel)}</span>
         ${existingFinding ? `<span class="ci-badge evidence-yes">Bevinding gezet</span>` : ''}
       </div>

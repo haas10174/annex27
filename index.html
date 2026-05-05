@@ -299,12 +299,13 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg: #FAFAFA;
+      /* Warmere off-white als basis — minder steriel "tech-app" gevoel */
+      --bg: #FAF9F6;
       --bg-alt: #FFFFFF;
-      --bg-warm: #F5F3EF;
+      --bg-warm: #F2EFE8;
       --surface: #FFFFFF;
-      --border: #E5E5E5;
-      --border-light: #F0F0F0;
+      --border: #E8E4DC;
+      --border-light: #EFEBE3;
 
       --text-primary: #0F172A;
       --text-secondary: #475569;
@@ -1386,27 +1387,32 @@
       margin-top: 56px;
     }
     .faq-item {
-      border: 1px solid var(--border-light);
-      border-radius: var(--radius);
+      border: 0;
+      border-bottom: 1px solid var(--border-light);
+      border-radius: 0;
       overflow: hidden;
-      transition: border-color 0.3s;
+      transition: background-color 0.25s;
     }
-    .faq-item.active { border-color: var(--border); }
+    .faq-item:first-of-type { border-top: 1px solid var(--border-light); }
+    .faq-item.active { background: rgba(13,148,136,0.025); }
     .faq-q {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 18px 24px;
+      gap: 18px;
+      padding: 22px 8px;
       cursor: pointer;
       background: none;
       border: none;
       width: 100%;
       text-align: left;
       font-family: inherit;
-      font-size: 0.95rem;
+      font-size: 0.96rem;
       font-weight: 600;
       color: var(--text-primary);
+      transition: color 0.2s;
     }
+    .faq-q:hover { color: var(--accent); }
     .faq-q svg {
       width: 18px; height: 18px;
       stroke: var(--text-muted);
@@ -1422,7 +1428,7 @@
       transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }
     .faq-a-inner {
-      padding: 0 24px 18px;
+      padding: 0 8px 22px;
       font-size: 0.92rem;
       color: var(--text-secondary);
       line-height: 1.8;
