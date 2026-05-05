@@ -9,14 +9,7 @@
 
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.49.4';
-
-// Plan -> pakket mapping for app_metadata
-const PLAN_TO_PAKKET: Record<string, string> = {
-  'gap': 'gap',
-  'nis2': 'nis2',
-  'beleid': 'beleid',
-  'preaudit': 'admin',
-};
+import { confirmOrder } from '../_shared/confirm-order.ts';
 
 serve(async (req) => {
   try {
@@ -51,10 +44,6 @@ serve(async (req) => {
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
     );
 
-    // Process based on status
-    // NEW FLOW (admin-confirm): webhook only records the payment status.
-    // No user-invite, no invoice creation — that happens manually via the
-    // order-confirm edge function triggered from the admin "Bevestigen" button.
     if (payment.status === 'paid') {
       const email = String(meta.email || '').trim().toLowerCase();
       const naam = String(meta.naam || '').trim().slice(0, 200);
@@ -75,7 +64,7 @@ serve(async (req) => {
       const vatAmountRaw = meta.vat_amount;
       const vatAmount = (typeof vatAmountRaw === 'number') ? vatAmountRaw : (typeof vatAmountRaw === 'string' ? parseFloat(vatAmountRaw) : 0) || 0;
 
-      await supabase.from('orders').upsert({
+      const { data: upserted, error: upsertErr } = await supabase.from('orders').upsert({
         payment_id: payment.id,
         plan: String(meta.plan || '').slice(0, 50),
         amount: parseFloat(payment.amount.value),
@@ -92,8 +81,20 @@ serve(async (req) => {
         btw_nummer: String(meta.btw_nummer || '').slice(0, 50),
         status: 'paid',
         paid_at: new Date().toISOString(),
-        // confirmed_at stays null — admin must confirm manually
-      }, { onConflict: 'payment_id' });
+      }, { onConflict: 'payment_id' }).select('id').maybeSingle();
+
+      if (upsertErr || !upserted) {
+        console.error('Order upsert mislukt:', upsertErr);
+        return new Response('Order upsert failed', { status: 500 });
+      }
+
+      // Auto-confirm: invite user, koppel order, maak factuur. Idempotent — als al bevestigd no-op.
+      const result = await confirmOrder(supabase, upserted.id);
+      if (!result.ok) {
+        // Niet hard falen — webhook moet 200 teruggeven anders blijft Mollie retryen.
+        // Order staat al op paid, admin kan handmatig bevestigen via /admin als auto-confirm faalt.
+        console.error(`Auto-confirm faalde voor order ${upserted.id}: ${result.error}`);
+      }
     } else if (['failed', 'canceled', 'expired'].includes(payment.status)) {
       // Log the failed attempt
       await supabase.from('orders').upsert({
