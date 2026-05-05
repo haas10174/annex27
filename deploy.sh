@@ -17,7 +17,7 @@ SRC="C:/Users/raoul/Documents/annex27"
 echo "Deploying to annex27.nl..."
 
 # Root files
-for file in index.html gap-analyse.html portal.html dashboard.html bestellen.html success.html trust.html admin.html faq.html factuur.html privacy.html algemene-voorwaarden.html verwerkersovereenkomst.html nis2.html blog.html rapport-voorbeeld.html werkwijze.html vergelijking.html gap-questions-v2.js 404.html security-policy.html analytics.js analytics-admin.js vat-rules.js robots.txt sitemap.xml .htaccess og-image.svg favicon.svg favicon-16x16.png favicon-32x32.png apple-touch-icon.png android-chrome-192x192.png android-chrome-512x512.png site.webmanifest; do
+for file in index.html gap-analyse.html portal.html dashboard.html bestellen.html success.html trust.html admin.html faq.html factuur.html privacy.html algemene-voorwaarden.html verwerkersovereenkomst.html nis2.html blog.html rapport-voorbeeld.html werkwijze.html vergelijking.html document-preview.html gap-questions-v2.js document-render.js 404.html security-policy.html analytics.js analytics-admin.js vat-rules.js robots.txt sitemap.xml .htaccess og-image.svg favicon.svg favicon-16x16.png favicon-32x32.png apple-touch-icon.png android-chrome-192x192.png android-chrome-512x512.png site.webmanifest; do
   if [ -f "$SRC/$file" ]; then
     echo "  Uploading $file..."
     curl -s --ftp-ssl --user "$FTP_USER" -T "$SRC/$file" "$FTP_HOST$file"
@@ -48,6 +48,22 @@ if [ -d "$SRC/sector" ]; then
       fname=$(basename "$sf")
       echo "  Uploading sector/$fname..."
       curl -s --ftp-ssl --user "$FTP_USER" --ftp-create-dirs -T "$sf" "$FTP_HOST/sector/$fname"
+    fi
+  done
+fi
+
+# beleidspakket/ folder — alleen .md voor live document-render-engine.
+# PDF/DOCX/HTML versies blijven lokaal/in Supabase storage.
+if [ -d "$SRC/beleidspakket" ]; then
+  for sub in basispakket premium werkinstructies nis2; do
+    if [ -d "$SRC/beleidspakket/$sub" ]; then
+      for md in "$SRC/beleidspakket/$sub"/*.md; do
+        if [ -f "$md" ]; then
+          fname=$(basename "$md")
+          echo "  Uploading beleidspakket/$sub/$fname..."
+          curl -s --ftp-ssl --user "$FTP_USER" --ftp-create-dirs -T "$md" "$FTP_HOST/beleidspakket/$sub/$fname"
+        fi
+      done
     fi
   done
 fi

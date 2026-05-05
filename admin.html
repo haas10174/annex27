@@ -10,6 +10,7 @@
   <link rel="manifest" href="/site.webmanifest" />
   <meta name="theme-color" content="#14b8a6" />
   <script src="/analytics-admin.js"></script>
+  <script src="/gap-questions-v2.js"></script>
 
   <meta http-equiv="X-Content-Type-Options" content="nosniff" />
   <meta name="referrer" content="strict-origin-when-cross-origin" />
@@ -4056,11 +4057,23 @@ function renderControlRow(ctrl, gapAnswers, existingFinding, hasEvidence) {
       <div class="control-section">
         <div class="section-label">Antwoorden van klant</div>
         ${ansCount === 0 ? '<div class="no-evidence">Klant heeft deze control nog niet beoordeeld.</div>' :
-          ansKeys.map(k => {
-            const label = { '4': 'Volledig ingericht', '3': 'Volledig ingericht', '2': 'Gedeeltelijk', '1': 'Niet gestart', '0': 'Weet niet', 'nvt': 'N.v.t.' }[gapAnswers[k]] || gapAnswers[k];
-            const qi = k.split('_').pop();
-            return `<div class="client-answer">Vraag ${parseInt(qi)+1}: <strong>${esc(label)}</strong></div>`;
-          }).join('')
+          (() => {
+            const ctrlQuestions = (typeof window.getGapQuestionsForControl === 'function')
+              ? window.getGapQuestionsForControl(ctrl.id, ctrl.name) : null;
+            return ansKeys.map(k => {
+              const val = gapAnswers[k];
+              const label = { '4': 'Geoptimaliseerd', '3': 'Geïmplementeerd', '2': 'In ontwikkeling', '1': 'Gepland', '0': 'Niet aanwezig', 'nvt': 'N.v.t.' }[val] || val;
+              const qi = parseInt(k.split('_').pop(), 10);
+              const qText = (ctrlQuestions && ctrlQuestions[qi]) ? ctrlQuestions[qi].q : '';
+              const dim = (ctrlQuestions && ctrlQuestions[qi]) ? ctrlQuestions[qi].type : '';
+              const dimBadge = dim ? `<span style="font-size:0.66rem;font-weight:700;color:var(--accent-light);background:rgba(13,148,136,0.10);padding:1px 7px;border-radius:99px;letter-spacing:0.04em;text-transform:uppercase;margin-right:6px;">${esc(dim)}</span>` : '';
+              return `<div class="client-answer" style="display:block;">
+                <div style="font-size:0.74rem;color:var(--text-muted);margin-bottom:4px;font-weight:600;">${dimBadge}Vraag ${qi+1}${qText ? '' : ''}</div>
+                ${qText ? `<div style="font-size:0.86rem;color:var(--text);margin-bottom:6px;line-height:1.5;">${esc(qText)}</div>` : ''}
+                <div style="font-size:0.84rem;"><strong>Antwoord:</strong> <span style="color:var(--accent-light);font-weight:700;">${esc(label)}</span></div>
+              </div>`;
+            }).join('');
+          })()
         }
       </div>
 
