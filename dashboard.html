@@ -10,6 +10,7 @@
   <link rel="manifest" href="/site.webmanifest" />
   <meta name="theme-color" content="#14b8a6" />
   <script src="/analytics-admin.js"></script>
+  <script src="/gap-questions-v2.js" defer></script>
 
   <meta http-equiv="X-Content-Type-Options" content="nosniff" />
   <meta name="referrer" content="strict-origin-when-cross-origin" />
@@ -4277,13 +4278,19 @@ async function cycleStatus(controlId) {
 }
 
 // ── GAP-ANALYSE ──
+// V2: gebruik per-control specifieke vragen of categorie-fallback uit gap-questions-v2.js.
+// Valt terug op v1 generieke 2-vragen-template als script niet geladen is.
 const gapQuestions = {};
 controls.forEach(ctrl => {
-  const qs = [];
-  // Generate 2 contextual questions per control
-  qs.push({ q: `Is ${ctrl.name.toLowerCase()} formeel gedocumenteerd en goedgekeurd?`, type: 'doc' });
-  qs.push({ q: `Wordt ${ctrl.name.toLowerCase()} actief toegepast en periodiek geëvalueerd?`, type: 'impl' });
-  gapQuestions[ctrl.id] = qs;
+  if (typeof window.getGapQuestionsForControl === 'function') {
+    gapQuestions[ctrl.id] = window.getGapQuestionsForControl(ctrl.id, ctrl.name);
+  } else {
+    const lower = ctrl.name.toLowerCase();
+    gapQuestions[ctrl.id] = [
+      { q: `Is ${lower} formeel gedocumenteerd en goedgekeurd?`, type: 'beleid' },
+      { q: `Wordt ${lower} actief toegepast en periodiek geëvalueerd?`, type: 'proces' }
+    ];
+  }
 });
 
 // Control-specifieke evidence-hints — wat een Lead Auditor concreet wil zien.

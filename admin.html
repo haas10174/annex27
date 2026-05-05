@@ -3299,6 +3299,10 @@ function renderRapportPanel() {
             ? '<button onclick="unreleaseDraft()" style="background:rgba(220,38,38,0.08);color:#dc2626;border:1px solid rgba(220,38,38,0.2);border-radius:8px;padding:7px 14px;font-size:0.78rem;font-weight:600;cursor:pointer;">Intrekken</button>'
             : '<button onclick="releaseDraft()" style="background:#0D9488;color:#fff;border:none;border-radius:8px;padding:7px 16px;font-size:0.78rem;font-weight:700;cursor:pointer;">Vrijgeven aan klant</button>'}
           <button onclick="previewDraftAsClient()" style="background:rgba(15,23,42,0.04);color:#0F172A;border:1px solid var(--border);border-radius:8px;padding:7px 14px;font-size:0.78rem;font-weight:600;cursor:pointer;">Preview klant-view</button>
+          <button onclick="exportRapportAsPdf()" style="background:var(--accent);color:#fff;border:0;border-radius:8px;padding:7px 14px;font-size:0.78rem;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:6px;">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download PDF
+          </button>
         </div>
 
         <div style="display:flex;flex-direction:column;gap:16px;">
@@ -3522,37 +3526,280 @@ async function unreleaseDraft() {
 }
 
 function previewDraftAsClient() {
+  renderRapportPrintView({ autoPrint: false });
+}
+
+function exportRapportAsPdf() {
+  renderRapportPrintView({ autoPrint: true });
+}
+
+function renderRapportPrintView({ autoPrint = false } = {}) {
   if (!currentDraft) return;
   const s = currentDraft.sections || {};
   const esc = (str) => String(str ?? '').replace(/[<>&]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]));
   const w = window.open('', '_blank');
   if (!w) { alert('Popup geblokkeerd.'); return; }
-  w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Rapport preview — ${esc(currentClient.bedrijf||'Klant')}</title>
-    <style>body{font-family:-apple-system,system-ui,sans-serif;max-width:780px;margin:40px auto;padding:0 24px;color:#0F172A;line-height:1.7;}
-    h1{font-size:1.8rem;margin-bottom:8px;}h2{font-size:1.2rem;margin-top:32px;color:#0D9488;}h3{font-size:1rem;margin-top:20px;}
-    .meta{color:#64748b;font-size:0.9rem;margin-bottom:32px;}
-    .disclosure{margin-top:48px;padding:14px;background:#f8fafc;border-left:3px solid #0D9488;font-size:0.85rem;color:#475569;}
-    .priority{padding:10px 14px;background:#f0fdfa;border-radius:8px;margin-bottom:6px;}
-    .finding{padding:14px;background:#fff;border:1px solid #e5e5e5;border-left:4px solid #D97706;border-radius:8px;margin-bottom:10px;}
-    .finding.critical{border-left-color:#dc2626;}.finding.ok{border-left-color:#059669;}
-    .ctrl{font-weight:700;font-size:0.9rem;}
-    </style></head><body>
-    <h1>Gap-analyse Rapport — ${esc(currentClient.bedrijf||'Klant')}</h1>
-    <div class="meta">Lead Auditor: Raoul Haas · Opgesteld ${new Date().toLocaleDateString('nl-NL')}</div>
-    <h2>Samenvatting</h2><p>${esc(s.executive_summary||'')}</p>
-    <h2>Score &amp; context</h2><p>${esc(s.score_summary||'')}</p>
-    <h2>Bevindingen per categorie</h2>
-    ${Object.entries(s.findings_by_category||{}).map(([k,v])=>`<h3>${esc(k)}</h3><p>${esc(v)}</p>`).join('')}
-    <h2>Top prioriteiten</h2>
-    ${(s.top_priorities||[]).map(p=>`<div class="priority">${esc(p)}</div>`).join('')}
-    <h2>Detailed findings</h2>
-    ${(s.detailed_findings||[]).map(f=>{
-      const evList = Array.isArray(f.evidence_referenced) && f.evidence_referenced.length ? `<p style="font-size:0.85em;color:#475569;"><strong>Aangeleverde evidence:</strong> ${f.evidence_referenced.map(x=>esc(x)).join(', ')}</p>` : '';
-      const quote = f.klant_quote ? `<p style="font-size:0.9em;font-style:italic;background:#F0FDFA;padding:8px 12px;border-left:3px solid #0D9488;margin:8px 0;">&ldquo;${esc(f.klant_quote)}&rdquo; <span style="font-style:normal;color:#0D9488;font-weight:600;">— uit klant-toelichting</span></p>` : '';
-      return `<div class="finding ${esc(f.status||'')}"><div class="ctrl">${esc(f.control_id)} — ${esc((f.status||'').toUpperCase())}</div><p><strong>Bevinding:</strong> ${esc(f.finding||'')}</p>${quote}${evList}<p><strong>Aanbeveling:</strong> ${esc(f.recommendation||'')}</p></div>`;
-    }).join('')}
-    <div class="disclosure">${esc(s.disclosure||'Dit rapport is opgesteld door Lead Auditor Raoul Haas, met AI-geassisteerde analyse van uw bewijsvoering.')}</div>
-    </body></html>`);
+
+  const klantBedrijf = (currentClient && currentClient.bedrijf) || 'Klant';
+  const klantNaam = (currentClient && currentClient.naam) || '';
+  const today = new Date();
+  const dateStr = today.toLocaleDateString('nl-NL', { day: '2-digit', month: 'long', year: 'numeric' });
+  const reportRef = `ANX-${today.getFullYear()}-${String(currentDraft.id || '').slice(0,8)}`;
+  const releasedAt = currentDraft.released_at ? new Date(currentDraft.released_at).toLocaleDateString('nl-NL', { day: '2-digit', month: 'long', year: 'numeric' }) : null;
+
+  const html = `<!DOCTYPE html>
+<html lang="nl"><head><meta charset="UTF-8">
+<title>Gap-analyse Rapport — ${esc(klantBedrijf)} — ${reportRef}</title>
+<style>
+  @page { size: A4; margin: 18mm 16mm 22mm 16mm; }
+  *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, system-ui, 'Segoe UI', sans-serif;
+    color: #0F172A; line-height: 1.65;
+    background: #fff; font-size: 10.5pt;
+  }
+  .pdf-wrap { max-width: 760px; margin: 0 auto; padding: 0 24px; }
+  .pdf-actions {
+    position: fixed; top: 16px; right: 16px;
+    display: flex; gap: 8px; z-index: 100;
+  }
+  .pdf-actions button {
+    background: #0D9488; color: #fff; border: 0;
+    padding: 10px 18px; border-radius: 8px;
+    font-family: inherit; font-weight: 700; font-size: 0.9rem;
+    cursor: pointer; box-shadow: 0 4px 12px rgba(13,148,136,0.3);
+  }
+  .pdf-actions button.alt { background: #fff; color: #475569; border: 1px solid #E5E5E5; box-shadow: none; }
+  @media print { .pdf-actions { display: none !important; } }
+
+  .pdf-header {
+    border-bottom: 2px solid #0D9488;
+    padding: 24px 0 18px;
+    margin-bottom: 28px;
+    display: flex; justify-content: space-between; align-items: flex-start;
+  }
+  .pdf-logo { font-size: 1.1rem; font-weight: 800; letter-spacing: -0.02em; color: #0F172A; }
+  .pdf-logo span { color: #0D9488; }
+  .pdf-meta-block { text-align: right; font-size: 0.78rem; color: #64748B; line-height: 1.5; }
+  .pdf-meta-block strong { color: #0F172A; font-weight: 600; }
+
+  h1 {
+    font-size: 1.8rem; font-weight: 800;
+    letter-spacing: -0.02em; line-height: 1.15;
+    margin-bottom: 8px; color: #0F172A;
+  }
+  .lead {
+    font-size: 0.95rem; color: #475569;
+    margin-bottom: 28px;
+  }
+
+  h2 {
+    font-size: 1.15rem; font-weight: 700;
+    letter-spacing: -0.01em;
+    color: #0D9488;
+    margin: 28px 0 12px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #E5E5E5;
+    page-break-after: avoid;
+  }
+  h3 {
+    font-size: 1rem; font-weight: 700;
+    color: #0F172A;
+    margin: 18px 0 6px;
+    page-break-after: avoid;
+  }
+  p { margin-bottom: 10px; color: #334155; }
+  p strong { color: #0F172A; }
+
+  .priority {
+    padding: 10px 14px; background: #F0FDFA;
+    border-radius: 6px; margin-bottom: 6px;
+    font-size: 0.92rem; color: #0F172A;
+    page-break-inside: avoid;
+  }
+  .finding {
+    padding: 14px 16px; background: #fff;
+    border: 1px solid #E5E5E5; border-left: 3px solid #D97706;
+    border-radius: 6px; margin-bottom: 10px;
+    page-break-inside: avoid;
+  }
+  .finding.critical { border-left-color: #DC2626; }
+  .finding.ok { border-left-color: #059669; }
+  .finding-head {
+    display: flex; justify-content: space-between; align-items: center;
+    gap: 8px; margin-bottom: 8px; flex-wrap: wrap;
+  }
+  .ctrl-id {
+    font-weight: 800; font-size: 0.92rem;
+    color: #0F172A; letter-spacing: -0.01em;
+  }
+  .ctrl-status {
+    font-size: 0.7rem; font-weight: 800;
+    padding: 2px 8px; border-radius: 99px;
+    background: #FEF3C7; color: #B45309;
+    text-transform: uppercase; letter-spacing: 0.06em;
+  }
+  .ctrl-status.critical { background: #FEE2E2; color: #B91C1C; }
+  .ctrl-status.ok { background: #D1FAE5; color: #065F46; }
+  .quote {
+    font-size: 0.86rem; font-style: italic;
+    background: #F0FDFA; padding: 8px 12px;
+    border-left: 2px solid #0D9488;
+    margin: 8px 0; border-radius: 0 4px 4px 0;
+  }
+  .quote-source {
+    font-style: normal; color: #0D9488;
+    font-weight: 600; font-size: 0.78rem;
+  }
+  .ev-list {
+    font-size: 0.8rem; color: #475569;
+    margin-top: 6px; display: flex; flex-wrap: wrap; gap: 4px;
+  }
+  .ev-list .lbl { font-weight: 600; color: #0F172A; margin-right: 4px; }
+  .ev-pill {
+    display: inline-block;
+    background: rgba(15,23,42,0.05);
+    padding: 1px 8px; border-radius: 99px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.78rem;
+  }
+
+  .signoff {
+    margin-top: 56px; padding: 28px 32px;
+    background: #FAFAFA;
+    border: 1px solid #E5E5E5;
+    border-radius: 8px;
+    page-break-inside: avoid;
+  }
+  .signoff h3 { color: #0D9488; margin-bottom: 12px; }
+  .signoff-grid {
+    display: grid; grid-template-columns: 1.4fr 1fr;
+    gap: 24px; align-items: end;
+    margin-top: 18px;
+  }
+  .sig-line {
+    border-bottom: 1.5px solid #0F172A;
+    padding-bottom: 8px; margin-bottom: 6px;
+    font-family: 'Brush Script MT', 'Lucida Handwriting', cursive;
+    font-size: 1.5rem; color: #0F172A; font-style: italic;
+  }
+  .sig-meta { font-size: 0.78rem; color: #64748B; line-height: 1.55; }
+  .sig-meta strong { color: #0F172A; font-weight: 600; }
+
+  .disclosure {
+    margin-top: 32px; padding: 14px 18px;
+    background: #F8FAFC;
+    border-left: 3px solid #0D9488;
+    font-size: 0.82rem; color: #475569;
+    border-radius: 0 4px 4px 0;
+  }
+
+  .pdf-footer {
+    margin-top: 48px; padding-top: 20px;
+    border-top: 1px solid #E5E5E5;
+    font-size: 0.74rem; color: #94A3B8;
+    text-align: center; line-height: 1.6;
+  }
+  .pdf-footer strong { color: #0F172A; font-weight: 600; }
+
+  /* Print-specifieke optimalisaties */
+  @media print {
+    body { font-size: 10pt; }
+    .pdf-wrap { padding: 0; }
+    h1 { font-size: 1.5rem; }
+    h2 { font-size: 1rem; }
+    .signoff { background: transparent; }
+  }
+</style>
+</head><body>
+
+<div class="pdf-actions">
+  <button onclick="window.print()">Download als PDF / Print</button>
+  <button class="alt" onclick="window.close()">Sluit</button>
+</div>
+
+<div class="pdf-wrap">
+
+  <div class="pdf-header">
+    <div>
+      <div class="pdf-logo">annex<span>27</span></div>
+      <div style="font-size:0.78rem;color:#64748B;margin-top:4px;">Gap-analyse rapport</div>
+    </div>
+    <div class="pdf-meta-block">
+      <strong>Referentie</strong><br>${esc(reportRef)}<br>
+      <strong style="display:block;margin-top:6px;">${releasedAt ? 'Vrijgegeven' : 'Opgesteld'}</strong>${esc(releasedAt || dateStr)}
+    </div>
+  </div>
+
+  <h1>${esc(klantBedrijf)}${klantNaam ? ' &mdash; ' + esc(klantNaam) : ''}</h1>
+  <p class="lead">Onafhankelijke beoordeling tegen ISO 27001:2022 Annex A controls, gebaseerd op klant-zelfassessment en aangeleverde bewijsvoering. Beoordeeld door een DNV-gecertificeerd Lead Auditor.</p>
+
+  <h2>Samenvatting</h2>
+  <p>${esc(s.executive_summary || '')}</p>
+
+  <h2>Score &amp; context</h2>
+  <p>${esc(s.score_summary || '')}</p>
+
+  <h2>Bevindingen per categorie</h2>
+  ${Object.entries(s.findings_by_category || {}).map(([k, v]) => `<h3>${esc(k)}</h3><p>${esc(v)}</p>`).join('')}
+
+  <h2>Top prioriteiten</h2>
+  ${(s.top_priorities || []).map(p => `<div class="priority">${esc(p)}</div>`).join('')}
+
+  <h2>Gedetailleerde bevindingen</h2>
+  ${(s.detailed_findings || []).map(f => {
+    const status = (f.status || 'gap').toLowerCase();
+    const evList = Array.isArray(f.evidence_referenced) && f.evidence_referenced.length
+      ? `<div class="ev-list"><span class="lbl">Evidence:</span>${f.evidence_referenced.map(x => `<span class="ev-pill">${esc(x)}</span>`).join('')}</div>` : '';
+    const quote = f.klant_quote
+      ? `<div class="quote">&ldquo;${esc(f.klant_quote)}&rdquo; <span class="quote-source">&mdash; uit klant-toelichting</span></div>` : '';
+    return `<div class="finding ${esc(status)}">
+      <div class="finding-head">
+        <span class="ctrl-id">${esc(f.control_id || '?')}</span>
+        <span class="ctrl-status ${esc(status)}">${esc(status)}</span>
+      </div>
+      <p><strong>Bevinding:</strong> ${esc(f.finding || '')}</p>
+      ${quote}
+      ${evList}
+      <p style="margin-top:8px;"><strong>Aanbeveling:</strong> ${esc(f.recommendation || '')}</p>
+    </div>`;
+  }).join('')}
+
+  <div class="signoff">
+    <h3>Verklaring Lead Auditor</h3>
+    <p style="font-size:0.86rem;color:#475569;line-height:1.65;">
+      Ondergetekende verklaart dat dit rapport is opgesteld op basis van de door de klant aangeleverde bewijsvoering en zelfassessment, en is gevalideerd volgens de methodiek van DNV Training Auditor / Lead Auditor ISMS ISO 27001:2022. Bevindingen die op evidence zijn gegrond worden expliciet gerefereerd; bevindingen zonder evidence zijn als zodanig benoemd.
+    </p>
+    <div class="signoff-grid">
+      <div>
+        <div class="sig-line">Raoul Haas</div>
+        <div class="sig-meta">
+          <strong>Raoul Haas</strong><br>
+          Lead Auditor ISO 27001 (DNV-gecertificeerd)<br>
+          Annex27 &middot; KBO 1006.203.170
+        </div>
+      </div>
+      <div class="sig-meta">
+        <strong>Datum</strong><br>${esc(releasedAt || dateStr)}<br>
+        <strong style="display:block;margin-top:6px;">Referentie</strong>${esc(reportRef)}
+      </div>
+    </div>
+  </div>
+
+  <div class="disclosure">${esc(s.disclosure || 'Dit rapport is opgesteld door Lead Auditor Raoul Haas, met AI-geassisteerde analyse van de aangeleverde bewijsvoering. De inhoud is bedoeld ter ondersteuning van een formele certificeringsaudit door een geaccrediteerde instelling, niet als vervanging daarvan.')}</div>
+
+  <div class="pdf-footer">
+    <strong>Annex27</strong> &middot; ISO 27001 compliance voor het MKB in Nederland en Belgi&euml; &middot; <a href="https://annex27.nl" style="color:#0D9488;">annex27.nl</a> &middot; info@annex27.nl<br>
+    KBO 1006.203.170 &middot; BTW BE1006.203.170
+  </div>
+
+</div>
+
+${autoPrint ? '<script>window.addEventListener("load", () => setTimeout(() => window.print(), 400));</' + 'script>' : ''}
+
+</body></html>`;
+
+  w.document.write(html);
   w.document.close();
 }
 

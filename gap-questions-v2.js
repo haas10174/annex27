@@ -1,10 +1,6 @@
 // ═════════════════════════════════════════════════════════════════
-// GAP QUESTIONS LIBRARY v2 — control-specifiek, multi-dimensie
+// GAP QUESTIONS LIBRARY v2 — control-specifiek + categorie-fallback
 // ═════════════════════════════════════════════════════════════════
-//
-// V1-probleem: alle 93 controls kregen 2 generieke vragen (doc + impl).
-// V2-aanpak: 4-6 control-specifieke vragen per dimensie, afgestemd op
-// wat een DNV Lead Auditor concreet zou vragen tijdens een audit.
 //
 // 5 dimensies (op CMMI-schaal 0-4):
 //   - beleid:        is er een vastgesteld document/regel?
@@ -13,28 +9,50 @@
 //   - eigenaarschap: is iemand verantwoordelijk + bevoegd?
 //   - effectiviteit: wordt gemeten of het werkt?
 //
-// Niet elke control heeft alle 5 dimensies — alleen die relevant zijn.
+// LAAG 1 — gapQuestionsV2 (specifiek per control, geschreven door Lead Auditor)
+//   25 cruciale controls volledig uitgewerkt. Verwerkt vakkennis ISO 27001:2022 + DNV.
 //
-// Status: PILOT — 8 van 93 controls volledig uitgewerkt.
-// Voor niet-uitgewerkte controls valt de UI terug op v1 (legacy 2 vragen).
+// LAAG 2 — categoryFallback (per Annex A categorie + ISMS-clausule)
+//   Voor controls die nog niet in laag 1 staan, gebruik categorie-specifieke vragen
+//   die rijker zijn dan de v1 generieke 2-vragen-template.
+//
+// LAAG 3 — v1 fallback (allerlaatste vangnet)
+//   Als noch laag 1 noch laag 2 matcht, val terug op v1 generieke vragen.
 
 const gapQuestionsV2 = {
 
   // ═════════════════════════════════════════════════════════════
-  // A.5 ORGANISATORISCHE CONTROLS
+  // A.5 ORGANISATORISCHE CONTROLS — cruciale subset uitgewerkt
   // ═════════════════════════════════════════════════════════════
 
   'A.5.1': {
-    name: 'Informatiebeveiligingsbeleid',
+    name: 'Beleid voor informatiebeveiliging',
     questions: [
-      { dim: 'beleid', q: 'Is er een vastgesteld informatiebeveiligingsbeleid (PDF/intranetpagina) met scope, doelstellingen en commitment?' },
+      { dim: 'beleid', q: 'Is er een vastgesteld informatiebeveiligingsbeleid (PDF/intranet) met scope, doelstellingen en commitment?' },
       { dim: 'eigenaarschap', q: 'Is het beleid formeel ondertekend door de directie of een statutair bestuurder met datum?' },
       { dim: 'proces', q: 'Is het beleid actief gecommuniceerd naar alle medewerkers (onboarding, intranet, jaarlijkse herinnering)?' },
-      { dim: 'effectiviteit', q: 'Wordt het beleid minimaal jaarlijks gereviewed en bij wijzigingen herzien (zichtbaar via versiehistorie of review-log)?' },
+      { dim: 'effectiviteit', q: 'Wordt het beleid minimaal jaarlijks gereviewed en bij wijzigingen herzien (versiehistorie of review-log zichtbaar)?' },
       { dim: 'effectiviteit', q: 'Worden afwijkingen van het beleid gedetecteerd, gemeld en geregistreerd (compliance-monitoring)?' },
     ]
   },
-
+  'A.5.2': {
+    name: 'Rollen en verantwoordelijkheden voor informatiebeveiliging',
+    questions: [
+      { dim: 'beleid', q: 'Is er een RACI-matrix of soortgelijk document waarin IB-rollen formeel zijn vastgelegd?' },
+      { dim: 'eigenaarschap', q: 'Is een specifieke persoon (CISO, IB-coördinator) eindverantwoordelijk voor informatiebeveiliging?' },
+      { dim: 'proces', q: 'Worden IB-rollen behandeld in onboarding en periodieke awareness-sessies?' },
+      { dim: 'effectiviteit', q: 'Worden conflicterende rollen (4-ogen-principe) actief vermeden in kritieke processen?' },
+    ]
+  },
+  'A.5.3': {
+    name: 'Functiescheiding',
+    questions: [
+      { dim: 'beleid', q: 'Is er een overzicht van conflicterende functiecombinaties (segregation of duties matrix)?' },
+      { dim: 'techniek', q: 'Worden conflicterende rechten technisch geblokkeerd in kritieke systemen (ERP, finance, IAM)?' },
+      { dim: 'proces', q: 'Wordt het 4-ogen-principe toegepast bij financiële transacties of toegangstoekenning?' },
+      { dim: 'effectiviteit', q: 'Wordt minimaal halfjaarlijks gecontroleerd of geen medewerker overlappende rechten heeft?' },
+    ]
+  },
   'A.5.7': {
     name: 'Threat intelligence',
     questions: [
@@ -45,19 +63,54 @@ const gapQuestionsV2 = {
       { dim: 'effectiviteit', q: 'Kunt u een voorbeeld tonen waar threat intelligence heeft geleid tot een preventieve maatregel in de afgelopen 12 maanden?' },
     ]
   },
-
+  'A.5.9': {
+    name: 'Inventarisatie van informatie en andere bedrijfsmiddelen',
+    questions: [
+      { dim: 'beleid', q: 'Is er een asset register waarin alle informatie-assets, hardware, software en cloud-diensten staan?' },
+      { dim: 'eigenaarschap', q: 'Heeft elk asset een aangewezen eigenaar (geen "IT in het algemeen")?' },
+      { dim: 'proces', q: 'Wordt het register minimaal jaarlijks gereviewd (datum-stempel zichtbaar)?' },
+      { dim: 'techniek', q: 'Wordt nieuw asset automatisch toegevoegd via MDM/CMDB-koppeling, of handmatig?' },
+    ]
+  },
   'A.5.15': {
     name: 'Toegangsbeleid',
     questions: [
       { dim: 'beleid', q: 'Is er een toegangsbeleid dat need-to-know en least-privilege als principes vastlegt?' },
       { dim: 'proces', q: 'Is er een formele aanvraag- en goedkeuringsworkflow voor nieuwe toegangsrechten (geen ad-hoc toekenning)?' },
       { dim: 'proces', q: 'Worden toegangsrechten minimaal halfjaarlijks gereviewed (access review) door manager of asset-eigenaar?' },
-      { dim: 'techniek', q: 'Wordt least-privilege technisch afgedwongen via groep-gebaseerde rechten of conditional access (geen "everyone-Admin"-shortcuts)?' },
+      { dim: 'techniek', q: 'Wordt least-privilege technisch afgedwongen via groep-gebaseerde rechten of conditional access?' },
       { dim: 'eigenaarschap', q: 'Is er per kritiek systeem een access-owner aangewezen die rechten goedkeurt?' },
       { dim: 'effectiviteit', q: 'Wordt het aantal "stale accounts" (>90 dagen inactief) gemeten en opgelost?' },
     ]
   },
-
+  'A.5.17': {
+    name: 'Authenticatie-informatie',
+    questions: [
+      { dim: 'beleid', q: 'Is er een wachtwoordbeleid met minimum-eisen (lengte, complexiteit, hergebruik)?' },
+      { dim: 'techniek', q: 'Wordt het wachtwoordbeleid technisch afgedwongen op alle bedrijfssystemen?' },
+      { dim: 'proces', q: 'Wordt MFA verplicht aangeboden voor alle accounts met toegang tot bedrijfsdata?' },
+      { dim: 'eigenaarschap', q: 'Is er een procedure voor reset van vergeten wachtwoorden met identiteitsverificatie?' },
+    ]
+  },
+  'A.5.19': {
+    name: 'Informatiebeveiliging in leveranciersrelaties',
+    questions: [
+      { dim: 'beleid', q: 'Is er een leveranciersbeleid met risicoclassificatie-criteria?' },
+      { dim: 'proces', q: 'Wordt elke nieuwe leverancier vooraf beoordeeld op IB-risico (due diligence)?' },
+      { dim: 'eigenaarschap', q: 'Is er een leveranciersregister met per leverancier een verantwoordelijke binnen de organisatie?' },
+      { dim: 'effectiviteit', q: 'Worden kritieke leveranciers minimaal jaarlijks geëvalueerd op naleving en performance?' },
+    ]
+  },
+  'A.5.23': {
+    name: 'Beveiliging in cloud-diensten',
+    questions: [
+      { dim: 'beleid', q: 'Is er een cloud-beleid dat selectie-criteria, datalocatie-eisen en exit-strategieën vastlegt?' },
+      { dim: 'proces', q: 'Worden cloud-diensten formeel goedgekeurd voordat ze in productie gaan (Shadow IT-controle)?' },
+      { dim: 'techniek', q: 'Is data-encryptie at-rest en in-transit afgedwongen voor alle cloud-diensten met bedrijfsdata?' },
+      { dim: 'eigenaarschap', q: 'Is er per cloud-dienst een verantwoordelijke binnen de organisatie aangewezen?' },
+      { dim: 'effectiviteit', q: 'Worden SLA\'s en datalocatie-clausules periodiek geverifieerd in de DPA?' },
+    ]
+  },
   'A.5.24': {
     name: 'Planning en voorbereiding incidentmanagement',
     questions: [
@@ -69,11 +122,38 @@ const gapQuestionsV2 = {
       { dim: 'effectiviteit', q: 'Worden Mean Time To Detect (MTTD) en Mean Time To Respond (MTTR) gemeten en geëvalueerd?' },
     ]
   },
+  'A.5.29': {
+    name: 'Informatiebeveiliging tijdens verstoring',
+    questions: [
+      { dim: 'beleid', q: 'Is er een Business Continuity Plan (BCP) met scope, kritieke processen en herstel-eisen?' },
+      { dim: 'proces', q: 'Zijn RTO en RPO per kritiek proces vastgelegd op basis van een Business Impact Analysis (BIA)?' },
+      { dim: 'proces', q: 'Wordt het BCP minimaal jaarlijks getest via een oefening (full of partial)?' },
+      { dim: 'eigenaarschap', q: 'Is een crisis-team aangewezen met heldere rolverdeling en escalatie?' },
+    ]
+  },
+  'A.5.31': {
+    name: 'Wettelijke, statutaire, regelgevende en contractuele eisen',
+    questions: [
+      { dim: 'beleid', q: 'Is er een register van toepasselijke wetgeving (AVG, NIS2, sectorspecifiek)?' },
+      { dim: 'eigenaarschap', q: 'Is een persoon verantwoordelijk voor het bijhouden van wijzigingen in wetgeving?' },
+      { dim: 'effectiviteit', q: 'Wordt minimaal jaarlijks getoetst of de organisatie nog voldoet aan alle relevante eisen?' },
+      { dim: 'proces', q: 'Worden wetswijzigingen actief vertaald naar bijstelling van beleid en procedures?' },
+    ]
+  },
 
   // ═════════════════════════════════════════════════════════════
   // A.6 PERSONEELS-CONTROLS
   // ═════════════════════════════════════════════════════════════
 
+  'A.6.1': {
+    name: 'Screening',
+    questions: [
+      { dim: 'beleid', q: 'Is er een screening-procedure voor nieuwe medewerkers (VOG/uittreksel, referentiecheck)?' },
+      { dim: 'proces', q: 'Worden screening-resultaten vastgelegd in het personeelsdossier?' },
+      { dim: 'eigenaarschap', q: 'Is HR verantwoordelijk voor uitvoering en archivering van screening?' },
+      { dim: 'beleid', q: 'Worden zwaardere screenings toegepast bij functies met privileged access?' },
+    ]
+  },
   'A.6.3': {
     name: 'Bewustzijn, opleiding en training',
     questions: [
@@ -85,6 +165,56 @@ const gapQuestionsV2 = {
       { dim: 'effectiviteit', q: 'Worden de awareness-resultaten gerapporteerd in de management review en leiden ze tot bijstelling?' },
     ]
   },
+  'A.6.5': {
+    name: 'Verantwoordelijkheden bij beëindiging of wijziging dienstverband',
+    questions: [
+      { dim: 'beleid', q: 'Is er een offboarding-procedure die alle stappen beschrijft (toegang, assets, knowhow-overdracht)?' },
+      { dim: 'proces', q: 'Worden toegangsrechten ingetrokken op de laatste werkdag (geen vertraging)?' },
+      { dim: 'proces', q: 'Worden bedrijfs-assets (laptop, telefoon, badge) op de laatste werkdag geretourneerd en geregistreerd?' },
+      { dim: 'effectiviteit', q: 'Wordt periodiek gecontroleerd dat geen "ghost accounts" van ex-medewerkers bestaan?' },
+    ]
+  },
+
+  // ═════════════════════════════════════════════════════════════
+  // A.7 FYSIEKE CONTROLS
+  // ═════════════════════════════════════════════════════════════
+
+  'A.7.1': {
+    name: 'Fysieke beveiligingsperimeter',
+    questions: [
+      { dim: 'beleid', q: 'Is er een definitie van fysieke beveiligingszones (publiek, intern, kritiek)?' },
+      { dim: 'techniek', q: 'Worden zones afgedwongen via toegangscontrole (badge, code, biometrie)?' },
+      { dim: 'proces', q: 'Worden bezoekers begeleid en geregistreerd?' },
+      { dim: 'effectiviteit', q: 'Wordt fysieke toegang gelogd en periodiek gereviewed op afwijkingen?' },
+    ]
+  },
+  'A.7.4': {
+    name: 'Fysieke beveiliging van werkruimten',
+    questions: [
+      { dim: 'beleid', q: 'Is er een clear-desk en clear-screen-beleid?' },
+      { dim: 'techniek', q: 'Worden schermen automatisch vergrendeld na inactiviteit?' },
+      { dim: 'proces', q: 'Worden gevoelige documenten geshredderd of in beveiligde containers verzameld?' },
+      { dim: 'effectiviteit', q: 'Wordt naleving van clear-desk periodiek visueel gecontroleerd?' },
+    ]
+  },
+  'A.7.7': {
+    name: 'Clear desk en clear screen',
+    questions: [
+      { dim: 'beleid', q: 'Is er een clear-desk en clear-screen-beleid (PDF of intranet) dat medewerkers kennen?' },
+      { dim: 'techniek', q: 'Worden schermen automatisch vergrendeld na max. 10 minuten inactiviteit?' },
+      { dim: 'proces', q: 'Wordt het beleid behandeld in de awareness-training?' },
+      { dim: 'effectiviteit', q: 'Worden steekproefcontroles op clear-desk uitgevoerd en gerapporteerd?' },
+    ]
+  },
+  'A.7.10': {
+    name: 'Opslagmedia',
+    questions: [
+      { dim: 'beleid', q: 'Is er een beleid voor het gebruik van USB-sticks, externe schijven en andere opslagmedia?' },
+      { dim: 'techniek', q: 'Wordt USB-toegang technisch beperkt (alleen geautoriseerde devices) of geblokkeerd?' },
+      { dim: 'proces', q: 'Is er een procedure voor veilige verwijdering/vernietiging van opslagmedia?' },
+      { dim: 'effectiviteit', q: 'Wordt media-gebruik gelogd of gemonitord in DLP-tooling?' },
+    ]
+  },
 
   // ═════════════════════════════════════════════════════════════
   // A.8 TECHNOLOGISCHE CONTROLS
@@ -94,73 +224,165 @@ const gapQuestionsV2 = {
     name: 'Veilige authenticatie',
     questions: [
       { dim: 'beleid', q: 'Is er een wachtwoordbeleid met eisen aan lengte (≥12), complexiteit en hergebruik?' },
-      { dim: 'techniek', q: 'Is multifactorauthenticatie verplicht voor alle accounts met toegang tot bedrijfsdata (incl. SaaS, e-mail, VPN)?' },
+      { dim: 'techniek', q: 'Is multifactorauthenticatie verplicht voor alle accounts met toegang tot bedrijfsdata?' },
       { dim: 'techniek', q: 'Is MFA óók verplicht voor privileged/admin-accounts (geen ontheffingen)?' },
-      { dim: 'techniek', q: 'Worden wachtwoorden technisch afgedwongen op systeemniveau (geen "vrijwillige" wachtwoordlengte)?' },
-      { dim: 'proces', q: 'Wordt aanbevolen of verplicht een wachtwoordmanager (Bitwarden, 1Password, KeePass) te gebruiken?' },
+      { dim: 'techniek', q: 'Worden wachtwoorden technisch afgedwongen op systeemniveau?' },
+      { dim: 'proces', q: 'Wordt aanbevolen of verplicht een wachtwoordmanager te gebruiken?' },
       { dim: 'effectiviteit', q: 'Wordt MFA-coverage gemeten (% accounts met MFA) en op 100% gebracht?' },
     ]
   },
-
+  'A.8.7': {
+    name: 'Bescherming tegen malware',
+    questions: [
+      { dim: 'techniek', q: 'Is endpoint-bescherming (EDR/anti-malware) actief op alle laptops, desktops en servers?' },
+      { dim: 'proces', q: 'Worden malware-detecties automatisch gerapporteerd aan een SOC of IR-coordinator?' },
+      { dim: 'effectiviteit', q: 'Wordt de coverage van endpoint-bescherming periodiek gecontroleerd (% systemen)?' },
+      { dim: 'beleid', q: 'Is er een procedure voor het isoleren en analyseren van malware-incidenten?' },
+    ]
+  },
+  'A.8.8': {
+    name: 'Beheer van technische kwetsbaarheden',
+    questions: [
+      { dim: 'beleid', q: 'Is er een patch-beleid met SLA per kwetsbaarheidsniveau (critical/high/medium/low)?' },
+      { dim: 'techniek', q: 'Worden vulnerability-scans periodiek uitgevoerd op alle systemen?' },
+      { dim: 'proces', q: 'Worden gevonden kwetsbaarheden geregistreerd in een register met owner en deadline?' },
+      { dim: 'effectiviteit', q: 'Wordt de SLA-naleving van patch-deadlines gemeten en gerapporteerd?' },
+    ]
+  },
   'A.8.13': {
     name: 'Informatie back-up',
     questions: [
       { dim: 'beleid', q: 'Is er een backup-beleid met retentie-eisen, frequentie per data-type en eigenaar?' },
       { dim: 'techniek', q: 'Worden backups versleuteld bewaard (at-rest encryption op backup-target)?' },
       { dim: 'techniek', q: 'Voldoet de backup-strategie aan 3-2-1 (3 kopieën, 2 media, 1 offsite/immutable)?' },
-      { dim: 'proces', q: 'Wordt minimaal jaarlijks een restore-test uitgevoerd en gedocumenteerd (geen "we vertrouwen erop dat het werkt")?' },
+      { dim: 'proces', q: 'Wordt minimaal jaarlijks een restore-test uitgevoerd en gedocumenteerd?' },
       { dim: 'techniek', q: 'Zijn backups beschermd tegen ransomware (immutable storage, air-gap, write-once)?' },
       { dim: 'effectiviteit', q: 'Wordt RPO (Recovery Point Objective) per kritiek systeem gemeten en gehaald?' },
     ]
   },
-
+  'A.8.16': {
+    name: 'Monitoringactiviteiten',
+    questions: [
+      { dim: 'techniek', q: 'Is er centrale logging/SIEM voor alle kritieke systemen?' },
+      { dim: 'proces', q: 'Worden security-alerts 24/7 gemonitord (eigen SOC of MSSP)?' },
+      { dim: 'beleid', q: 'Is er een retention-beleid voor logs (minimaal 6-12 maanden)?' },
+      { dim: 'effectiviteit', q: 'Worden de meest voorkomende false positives geanalyseerd en weggewerkt?' },
+    ]
+  },
   'A.8.24': {
     name: 'Gebruik van cryptografie',
     questions: [
-      { dim: 'beleid', q: 'Is er een cryptografiebeleid met goedgekeurde algoritmen (AES-256, RSA-2048+, etc.) en verboden zwakke algoritmen?' },
+      { dim: 'beleid', q: 'Is er een cryptografiebeleid met goedgekeurde algoritmen (AES-256, RSA-2048+) en verboden zwakke algoritmen?' },
       { dim: 'techniek', q: 'Wordt at-rest encryptie afgedwongen op alle data-stores met persoonsgegevens of bedrijfskritieke data?' },
-      { dim: 'techniek', q: 'Wordt in-transit encryptie afgedwongen via TLS 1.2+ op alle externe communicatie (geen TLS 1.0/1.1, geen plain HTTP)?' },
-      { dim: 'proces', q: 'Is er een sleutelbeheer-procedure (generatie, rotatie, intrekking, escrow) met bekende verantwoordelijke?' },
-      { dim: 'eigenaarschap', q: 'Is er een proces voor certificate lifecycle (renewal vóór expiry, monitoring expiring certs)?' },
+      { dim: 'techniek', q: 'Wordt in-transit encryptie afgedwongen via TLS 1.2+ op alle externe communicatie?' },
+      { dim: 'proces', q: 'Is er een sleutelbeheer-procedure (generatie, rotatie, intrekking, escrow)?' },
+      { dim: 'eigenaarschap', q: 'Is er een proces voor certificate lifecycle (renewal vóór expiry)?' },
       { dim: 'effectiviteit', q: 'Worden cryptografische zwakheden (zwakke ciphers, expired certs) actief gescand en opgelost?' },
     ]
   },
-
-  // ═════════════════════════════════════════════════════════════
-  // FALLBACK voor niet-uitgewerkte controls — zelfde 2 generieke
-  // vragen als v1 totdat ze uitgewerkt zijn. Triggert v2-formaat
-  // zodat de UI consistent blijft.
-  // ═════════════════════════════════════════════════════════════
-  // Voorbeeld voor controls die nog op v1 staan:
-  // 'A.5.2': null (gebruik fallback)
+  'A.8.28': {
+    name: 'Veilige codering',
+    questions: [
+      { dim: 'beleid', q: 'Zijn er secure coding-richtlijnen voor de gebruikte talen/frameworks?' },
+      { dim: 'techniek', q: 'Worden code-reviews verplicht uitgevoerd vóór merge naar main/production?' },
+      { dim: 'techniek', q: 'Wordt SAST (static application security testing) automatisch uitgevoerd in CI/CD?' },
+      { dim: 'proces', q: 'Krijgen ontwikkelaars periodiek security-training (OWASP top 10, secure design)?' },
+    ]
+  },
 };
 
-// Helper: vraag-set ophalen, met fallback naar v1 voor niet-uitgewerkte controls
+// ═════════════════════════════════════════════════════════════════
+// LAAG 2 — categorie-fallbacks
+// Voor controls die nog niet expliciet zijn uitgewerkt, gebruik deze
+// rijkere set die past bij de categorie. Geen meer 2 generieke vragen.
+// ═════════════════════════════════════════════════════════════════
+
+const categoryFallback = {
+  // A.5 — organisatorisch
+  'A.5': (ctrl) => [
+    { dim: 'beleid', q: `Is er een vastgesteld document of regelset voor "${ctrl.name.toLowerCase()}" (PDF of intranet)?` },
+    { dim: 'eigenaarschap', q: `Is een specifieke persoon of rol verantwoordelijk voor de uitvoering van deze control?` },
+    { dim: 'proces', q: `Is er een procedure die beschrijft hoe ${ctrl.name.toLowerCase()} in de praktijk wordt toegepast?` },
+    { dim: 'effectiviteit', q: `Wordt de werking van deze control periodiek gemeten of geëvalueerd?` },
+  ],
+  // A.6 — personeel
+  'A.6': (ctrl) => [
+    { dim: 'beleid', q: `Is "${ctrl.name.toLowerCase()}" formeel vastgelegd in HR-beleid of arbeidsvoorwaarden?` },
+    { dim: 'proces', q: `Wordt deze maatregel toegepast bij indiensttreding én bij wijzigingen in dienstverband?` },
+    { dim: 'eigenaarschap', q: `Is HR of de manager verantwoordelijk voor uitvoering en archivering?` },
+    { dim: 'effectiviteit', q: `Wordt naleving van deze HR-maatregel periodiek gecontroleerd?` },
+  ],
+  // A.7 — fysiek
+  'A.7': (ctrl) => [
+    { dim: 'beleid', q: `Is "${ctrl.name.toLowerCase()}" vastgelegd in een fysiek beveiligingsbeleid?` },
+    { dim: 'techniek', q: `Wordt de maatregel technisch ondersteund (badge, camera, slot, sensor)?` },
+    { dim: 'proces', q: `Is er een procedure voor uitzonderingsgevallen en bezoekers?` },
+    { dim: 'effectiviteit', q: `Worden incidenten of overtredingen gelogd en periodiek gereviewed?` },
+  ],
+  // A.8 — technologisch
+  'A.8': (ctrl) => [
+    { dim: 'beleid', q: `Is er beleid dat "${ctrl.name.toLowerCase()}" verplicht stelt (PDF of intranet)?` },
+    { dim: 'techniek', q: `Wordt deze maatregel technisch afgedwongen (configuratie, tooling, monitoring)?` },
+    { dim: 'eigenaarschap', q: `Is er een team of persoon verantwoordelijk voor configuratie en onderhoud?` },
+    { dim: 'proces', q: `Is er een wijzigingsprocedure die de maatregel beschermt tegen drift?` },
+    { dim: 'effectiviteit', q: `Wordt de werking gemonitord en gerapporteerd in een SOC/dashboard?` },
+  ],
+  // C — ISMS-clausules (4-10 in ISO 27001:2022)
+  'C': (ctrl) => [
+    { dim: 'beleid', q: `Is "${ctrl.name.toLowerCase()}" gedocumenteerd als onderdeel van het ISMS?` },
+    { dim: 'eigenaarschap', q: `Is er bestuurlijke betrokkenheid en aanwijsbare verantwoordelijkheid voor deze clausule?` },
+    { dim: 'proces', q: `Is er een procedure die beschrijft hoe deze clausule wordt uitgevoerd?` },
+    { dim: 'effectiviteit', q: `Wordt deze clausule meegenomen in de management review (ISMS-022)?` },
+  ],
+};
+
+// ═════════════════════════════════════════════════════════════════
+// PUBLIC API
+// ═════════════════════════════════════════════════════════════════
+
 function getGapQuestionsForControl(controlId, controlName) {
-  const v2 = gapQuestionsV2[controlId];
-  if (v2 && Array.isArray(v2.questions) && v2.questions.length > 0) {
-    return v2.questions.map((qq, idx) => ({
-      q: qq.q,
-      type: qq.dim,
-      v2: true
-    }));
+  // Laag 1 — expliciet uitgewerkt
+  const explicit = gapQuestionsV2[controlId];
+  if (explicit && Array.isArray(explicit.questions) && explicit.questions.length > 0) {
+    return explicit.questions.map(qq => ({ q: qq.q, type: qq.dim, v2: true, source: 'explicit' }));
   }
-  // Fallback v1 — generieke 2 vragen
+
+  // Laag 2 — categorie-fallback (rijker dan v1)
+  const cat = (controlId.match(/^([A-C])\.\d/)?.[1]) || '';
+  const catKey = controlId.startsWith('A.5') ? 'A.5'
+              : controlId.startsWith('A.6') ? 'A.6'
+              : controlId.startsWith('A.7') ? 'A.7'
+              : controlId.startsWith('A.8') ? 'A.8'
+              : controlId.startsWith('C') ? 'C'
+              : null;
+  if (catKey && categoryFallback[catKey]) {
+    return categoryFallback[catKey]({ id: controlId, name: controlName || controlId })
+      .map(qq => ({ q: qq.q, type: qq.dim, v2: true, source: 'category' }));
+  }
+
+  // Laag 3 — v1 fallback (laatste vangnet)
   const lower = (controlName || '').toLowerCase();
   return [
-    { q: `Is ${lower} formeel gedocumenteerd en goedgekeurd?`, type: 'beleid', v2: false },
-    { q: `Wordt ${lower} actief toegepast en periodiek geëvalueerd?`, type: 'proces', v2: false }
+    { q: `Is ${lower} formeel gedocumenteerd en goedgekeurd?`, type: 'beleid', v2: false, source: 'v1' },
+    { q: `Wordt ${lower} actief toegepast en periodiek geëvalueerd?`, type: 'proces', v2: false, source: 'v1' }
   ];
 }
 
-// Lijst van controls die in v2 zijn uitgewerkt — voor dashboard-progress-indicator
 function v2CoverageList() {
-  return Object.keys(gapQuestionsV2).filter(k => gapQuestionsV2[k] !== null);
+  return Object.keys(gapQuestionsV2);
 }
 
-// Globaal beschikbaar maken (geen import-systeem in dashboard.html)
+function v2CoverageStats(controlList) {
+  const explicit = v2CoverageList();
+  const total = (controlList || []).length;
+  const covered = explicit.filter(id => (controlList || []).some(c => c.id === id)).length;
+  return { total, explicit: covered, fallbackCategory: total - covered, percent: total ? Math.round((covered / total) * 100) : 0 };
+}
+
 if (typeof window !== 'undefined') {
   window.gapQuestionsV2 = gapQuestionsV2;
+  window.categoryFallback = categoryFallback;
   window.getGapQuestionsForControl = getGapQuestionsForControl;
   window.v2CoverageList = v2CoverageList;
+  window.v2CoverageStats = v2CoverageStats;
 }
