@@ -21,6 +21,14 @@
   <!-- Leaflet (admin-only realtime map) - via jsdelivr (in CSP allowlist) -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css" />
   <script defer src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+  <style>
+    .ga4-map-tip {
+      background: #0F172A; color: #fff; border: 0; padding: 4px 9px;
+      font-size: 0.74rem; font-weight: 600; border-radius: 6px;
+      box-shadow: 0 2px 6px rgba(15,23,42,0.18);
+    }
+    .ga4-map-tip::before { display: none; }
+  </style>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.min.js" integrity="sha384-2zrRDgDHSYB/GN3nFW3fsZXoxEhKIr3N2h63Tc6DEOB9JJdFIu8xMJT2Cph/gBil" crossorigin="anonymous"></script>
   <!-- JSZip voor evidence ZIP-export (ca. 30KB gzip). Geen integrity-hash zodat patches automatisch komen. -->
   <script defer src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
@@ -2564,13 +2572,12 @@ async function ga4RenderMarkers(byCity, byCountry) {
   ga4MapMarkers = [];
   const max = Math.max(1, ...(byCity || []).map(c => c.value), ...(byCountry || []).map(c => c.value));
   const drawMarker = (coord, label, value, precision) => {
-    const radius = 8 + (value / max) * 14;
+    const radius = 11 + (value / max) * 14;
     const marker = L.circleMarker(coord, {
-      radius, color: '#0d9488', weight: 2, fillColor: '#14b8a6', fillOpacity: 0.55,
+      radius, color: '#0d9488', weight: 3, fillColor: '#14b8a6', fillOpacity: 0.7,
     }).addTo(ga4Map).bindTooltip(
-      `<strong>${label}</strong> &middot; ${value} bezoeker${value > 1 ? 's' : ''}` +
-      (precision === 'country' ? ' (land-niveau)' : precision === 'geocoded' ? '' : ''),
-      { direction: 'top' }
+      `${label} · ${value}` + (precision === 'country' ? ' (land)' : ''),
+      { permanent: true, direction: 'top', offset: [0, -8], className: 'ga4-map-tip' }
     );
     ga4MapMarkers.push(marker);
     return marker;
