@@ -2749,7 +2749,14 @@ function submitLead(e) {
     a.href = 'bestellen.html?' + params.toString();
   });
 
-  if (window.annex27Track) {
+  if (window.annex27TrackConversion) {
+    window.annex27TrackConversion('quickscan_completed', {
+      sector: lead.sector || 'onbekend',
+      score: lead.score || '',
+      value: 0,
+      currency: 'EUR'
+    });
+  } else if (window.annex27Track) {
     window.annex27Track('quickscan_completed', {
       sector: lead.sector || 'onbekend',
       score: lead.score || ''

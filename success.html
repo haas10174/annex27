@@ -300,6 +300,13 @@
     if (localStorage.getItem(dedupKey)) return;
     localStorage.setItem(dedupKey, '1');
 
+    if (window.annex27TrackConversion) {
+      window.annex27TrackConversion('purchase_completed', {
+        transaction_id: txn,
+        currency: 'EUR',
+        value: value
+      });
+    }
     if (window.annex27Track) {
       window.annex27Track('purchase', {
         transaction_id: txn,

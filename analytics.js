@@ -19,6 +19,16 @@
   } catch (e) { /* console niet beschikbaar — geen probleem */ }
 
   var GA_ID = 'G-VWXHXN3KV2';
+  // Google Ads conversion-account-ID. Vul in zodra je het Google Ads-account hebt aangemaakt.
+  // Format: 'AW-1234567890'. Laat leeg om Google Ads-tracking uit te schakelen.
+  var GADS_ID = '';
+  // Conversion-action labels per event-type (uit Google Ads → Tools → Conversions).
+  // Vul de labels in zodra de conversion-actions in Google Ads zijn aangemaakt.
+  var GADS_CONVERSIONS = {
+    quickscan_completed: '',  // bv. 'AbCdEfGhIj'
+    lead_submitted: '',       // bv. 'KlMnOpQrSt'
+    purchase_completed: ''    // bv. 'UvWxYzAbCd'
+  };
   var CONSENT_KEY = 'annex27_consent_v1';
 
   // 1. dataLayer + gtag stub (MUST run before any gtag event)
@@ -60,9 +70,32 @@
     send_page_view: true
   });
 
-  // 5. Event-helper
+  // Google Ads conversion-tracking (alleen als ID is ingevuld + consent voor ads)
+  if (GADS_ID) {
+    gtag('config', GADS_ID);
+  }
+
+  // 5. Event-helper (GA4)
   window.annex27Track = function (name, params) {
     try { gtag('event', name, params || {}); } catch (e) {}
+  };
+
+  // 5b. Google Ads conversion-helper. Vuurt zowel GA4-event als Ads-conversion.
+  // Gebruik: annex27TrackConversion('quickscan_completed', { value: 0, currency: 'EUR' })
+  window.annex27TrackConversion = function (eventKey, params) {
+    params = params || {};
+    try { gtag('event', eventKey, params); } catch (e) {}
+    try {
+      var label = GADS_CONVERSIONS[eventKey];
+      if (GADS_ID && label) {
+        gtag('event', 'conversion', {
+          send_to: GADS_ID + '/' + label,
+          value: params.value || 0,
+          currency: params.currency || 'EUR',
+          transaction_id: params.transaction_id || ''
+        });
+      }
+    } catch (e) {}
   };
 
   // 6. Auto-tracking via data-attributes + outbound/mailto/tel
