@@ -215,7 +215,7 @@
   }
   </script>
 
-  <!-- Structured Data: WebSite with SiteNavigationElement -->
+  <!-- Structured Data: WebSite with SearchAction (sitelinks searchbox) -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -223,9 +223,18 @@
     "@id": "https://annex27.nl/#website",
     "url": "https://annex27.nl",
     "name": "Annex27",
-    "description": "ISO 27001 Compliance voor het MKB",
+    "alternateName": ["annex27", "annex 27"],
+    "description": "ISO 27001 Compliance platform voor MKB in Nederland en België",
     "publisher": {"@id": "https://annex27.nl/#organization"},
-    "inLanguage": "nl-NL"
+    "inLanguage": "nl-NL",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": {
+        "@type": "EntryPoint",
+        "urlTemplate": "https://annex27.nl/?q={search_term_string}"
+      },
+      "query-input": "required name=search_term_string"
+    }
   }
   </script>
 

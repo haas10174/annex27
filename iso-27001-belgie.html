@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="nl-BE">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <meta name="theme-color" content="#0D9488" />
+  <script src="/analytics.js"></script>
+
+  <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
+  <title>ISO 27001 België · Wat moet u nu regelen na NIS2-deadline | Annex27</title>
+  <meta name="description" content="ISO 27001 voor Belgische MKB. NIS2-wet 26 april 2024 actief, CCB controleert, conformity-deadline 18 april 2026 verstreken. Gap-analyse vanaf €795 met Lead Auditor review. KBO-conform, BTW-verlegging Art. 196." />
+  <meta name="keywords" content="ISO 27001 Belgie, ISO 27001 Belgie MKB, NIS2 Belgie, CCB compliance, NIS2 boetes Belgie, gap analyse Belgie, KBO ISO 27001" />
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large" />
+  <link rel="canonical" href="https://annex27.nl/iso-27001-belgie" />
+
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://annex27.nl/iso-27001-belgie" />
+  <meta property="og:title" content="ISO 27001 voor Belgische MKB · Annex27" />
+  <meta property="og:description" content="NIS2-deadline 18 april 2026 verstreken. Wat doet u nu? Gap-analyse vanaf €795 met Lead Auditor review." />
+  <meta property="og:image" content="https://annex27.nl/og-image.svg" />
+  <meta property="og:locale" content="nl_BE" />
+  <meta property="og:site_name" content="Annex27" />
+
+  <link rel="alternate" hreflang="nl-BE" href="https://annex27.nl/iso-27001-belgie" />
+  <link rel="alternate" hreflang="nl-NL" href="https://annex27.nl/iso-27001-nederland" />
+  <link rel="alternate" hreflang="x-default" href="https://annex27.nl/iso-27001-belgie" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {"@type":"ListItem","position":1,"name":"Home","item":"https://annex27.nl/"},
+      {"@type":"ListItem","position":2,"name":"ISO 27001 België","item":"https://annex27.nl/iso-27001-belgie"}
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "ISO 27001 in België na NIS2: wat moet u nu regelen?",
+    "description": "Praktische gids voor Belgische MKB-bedrijven. NIS2-wet 26 april 2024, CCB als toezichthouder, conformity-deadline 18 april 2026 verstreken. Wat doet u nu?",
+    "author": {"@type":"Person","name":"Raoul Haas","jobTitle":"ISO 27001 Lead Auditor"},
+    "publisher": {"@type":"Organization","name":"Annex27","url":"https://annex27.nl"},
+    "datePublished": "2026-05-08",
+    "dateModified": "2026-05-08",
+    "image": "https://annex27.nl/og-image.svg",
+    "inLanguage": "nl-BE",
+    "mainEntityOfPage": "https://annex27.nl/iso-27001-belgie"
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #FAF9F6;
+      --surface: #FFFFFF;
+      --border: #E8E4DC;
+      --border-light: #EFEBE3;
+      --text-primary: #0F172A;
+      --text-secondary: #475569;
+      --text-muted: #94A3B8;
+      --accent: #0D9488;
+      --accent-hover: #0F766E;
+      --accent-light: #CCFBF1;
+      --warning: #B45309;
+      --warning-bg: #FFFBEB;
+      --danger: #B91C1C;
+      --danger-bg: #FEF2F2;
+      --dark: #0c0f1a;
+      --radius: 10px;
+      --radius-lg: 16px;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', -apple-system, system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text-secondary);
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+    .container { max-width: 880px; margin: 0 auto; padding: 0 24px; }
+    h1, h2, h3 { font-family: 'Sora', sans-serif; color: var(--text-primary); letter-spacing: -0.02em; }
+
+    nav {
+      position: sticky; top: 0; z-index: 50;
+      background: rgba(250,249,246,0.92);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border-light);
+      height: 60px;
+      display: flex; align-items: center;
+    }
+    .nav-inner { display: flex; justify-content: space-between; align-items: center; width: 100%; max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+    .nav-logo { font-family: 'Sora', sans-serif; font-weight: 800; font-size: 1.2rem; color: var(--text-primary); text-decoration: none; }
+    .nav-logo span { color: var(--accent); }
+    .nav-back { font-size: 0.85rem; color: var(--text-secondary); text-decoration: none; font-weight: 500; }
+    .nav-back:hover { color: var(--text-primary); }
+
+    .urgent-banner {
+      background: linear-gradient(90deg, #B91C1C, #DC2626);
+      color: white;
+      padding: 10px 24px;
+      text-align: center;
+      font-size: 0.84rem;
+      font-weight: 500;
+    }
+    .urgent-banner strong { font-weight: 700; }
+
+    .hero {
+      padding: 64px 0 48px;
+    }
+    .hero-eyebrow {
+      display: inline-block;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 14px;
+      padding: 4px 12px;
+      background: var(--accent-light);
+      border-radius: 99px;
+    }
+    .hero h1 {
+      font-size: 2.5rem;
+      line-height: 1.15;
+      font-weight: 800;
+      margin-bottom: 18px;
+    }
+    .hero h1 em {
+      color: var(--accent);
+      font-style: normal;
+    }
+    .hero-lead {
+      font-size: 1.05rem;
+      line-height: 1.7;
+      color: var(--text-secondary);
+      max-width: 680px;
+    }
+    .hero-cta {
+      display: flex; gap: 12px; margin-top: 28px; flex-wrap: wrap;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: white;
+      padding: 12px 24px;
+      border-radius: var(--radius);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.95rem;
+      transition: background 0.15s;
+    }
+    .btn-primary:hover { background: var(--accent-hover); }
+    .btn-secondary {
+      background: var(--surface);
+      color: var(--text-primary);
+      padding: 12px 24px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+    .btn-secondary:hover { border-color: var(--text-muted); }
+
+    section { padding: 48px 0; }
+    .section-title {
+      font-size: 1.65rem;
+      font-weight: 800;
+      margin-bottom: 14px;
+    }
+    .section-lead {
+      font-size: 1rem;
+      color: var(--text-secondary);
+      margin-bottom: 28px;
+      max-width: 700px;
+    }
+
+    .deadline-box {
+      background: var(--danger-bg);
+      border: 1px solid #FECACA;
+      border-left: 4px solid var(--danger);
+      border-radius: var(--radius-lg);
+      padding: 24px 28px;
+      margin: 28px 0;
+    }
+    .deadline-box h3 {
+      font-size: 1.05rem;
+      color: var(--danger);
+      margin-bottom: 8px;
+    }
+    .deadline-box p {
+      font-size: 0.94rem;
+      color: var(--text-primary);
+    }
+
+    .law-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-top: 24px;
+    }
+    .law-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px;
+    }
+    .law-card-eyebrow {
+      font-family: 'Sora', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 6px;
+    }
+    .law-card h4 {
+      font-family: 'Sora', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+    .law-card p { font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6; }
+
+    .penalty-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--surface);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      border: 1px solid var(--border);
+      margin: 24px 0;
+    }
+    .penalty-table th, .penalty-table td {
+      padding: 12px 16px;
+      text-align: left;
+      font-size: 0.88rem;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .penalty-table th {
+      background: var(--bg);
+      font-family: 'Sora', sans-serif;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: 0.02em;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+    }
+    .penalty-table td:last-child { color: var(--danger); font-weight: 700; }
+
+    .why-list {
+      list-style: none;
+      display: flex; flex-direction: column; gap: 14px;
+      margin-top: 24px;
+    }
+    .why-list li {
+      display: flex; gap: 12px; align-items: flex-start;
+    }
+    .why-list li::before {
+      content: '\2713';
+      flex-shrink: 0;
+      color: var(--accent);
+      font-weight: 700;
+      width: 22px; height: 22px;
+      display: inline-flex; align-items: center; justify-content: center;
+      background: var(--accent-light);
+      border-radius: 50%;
+      font-size: 0.78rem;
+    }
+    .why-list li strong { color: var(--text-primary); font-weight: 600; }
+
+    .faq-list { margin-top: 28px; display: flex; flex-direction: column; gap: 10px; }
+    .faq-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .faq-q {
+      width: 100%;
+      padding: 16px 20px;
+      background: transparent;
+      border: 0;
+      font-family: 'Sora', sans-serif;
+      font-size: 0.96rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      cursor: pointer;
+      text-align: left;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .faq-q::after { content: '+'; font-size: 1.4rem; color: var(--accent); transition: transform 0.2s; }
+    .faq-item.open .faq-q::after { transform: rotate(45deg); }
+    .faq-a {
+      max-height: 0; overflow: hidden;
+      transition: max-height 0.3s ease;
+      padding: 0 20px;
+    }
+    .faq-item.open .faq-a { max-height: 600px; padding: 0 20px 18px; }
+    .faq-a p { font-size: 0.92rem; line-height: 1.7; color: var(--text-secondary); }
+
+    .cta-box {
+      background: linear-gradient(135deg, #0c0f1a, #1e293b);
+      color: white;
+      border-radius: var(--radius-lg);
+      padding: 40px 36px;
+      text-align: center;
+      margin: 48px 0;
+    }
+    .cta-box h2 { color: white; font-size: 1.6rem; margin-bottom: 12px; }
+    .cta-box p { color: rgba(255,255,255,0.78); font-size: 1rem; margin-bottom: 22px; max-width: 540px; margin-left: auto; margin-right: auto; }
+    .cta-box .btn-primary {
+      background: var(--accent);
+      box-shadow: 0 6px 20px rgba(13,148,136,0.3);
+    }
+
+    footer {
+      border-top: 1px solid var(--border-light);
+      padding: 32px 24px;
+      text-align: center;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+    }
+    footer a { color: var(--text-secondary); text-decoration: none; margin: 0 8px; }
+    footer a:hover { color: var(--accent); }
+
+    @media (max-width: 720px) {
+      .hero h1 { font-size: 1.85rem; }
+      .law-grid { grid-template-columns: 1fr; }
+      .section-title { font-size: 1.35rem; }
+      .cta-box { padding: 28px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="urgent-banner">
+  <strong>NIS2-deadline 18 april 2026 verstreken.</strong> CCB controleert actief, boetes tot &euro;10M. Niet conform? Tijd om nu te starten.
+</div>
+
+<nav>
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">annex<span>27</span></a>
+    <a href="/" class="nav-back">&larr; Terug naar Annex27</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="container">
+    <div class="hero-eyebrow">Voor Belgische MKB</div>
+    <h1>ISO 27001 in België: <em>na de NIS2-deadline</em></h1>
+    <p class="hero-lead">
+      De NIS2-wet van 26 april 2024 is actief sinds oktober 2024. De conformity-deadline voor essentiële en belangrijke entiteiten was 18 april 2026. Bent u nog niet conform? U bent niet alleen, en u kunt nog steeds in actie komen. Hieronder hoe.
+    </p>
+    <div class="hero-cta">
+      <a href="/gap-analyse" class="btn-primary" data-ga-event="quickscan_started" data-ga-cta-location="be_hero">Start gratis quickscan</a>
+      <a href="/bestellen" class="btn-secondary">Bekijk pakketten</a>
+    </div>
+  </div>
+</section>
+
+<section style="background: var(--surface); border-top: 1px solid var(--border-light); border-bottom: 1px solid var(--border-light);">
+  <div class="container">
+    <h2 class="section-title">Wettelijk kader België</h2>
+    <p class="section-lead">
+      België heeft de NIS2-richtlijn omgezet in nationale wetgeving via de wet van 26 april 2024. Sinds 18 oktober 2024 is deze van kracht. Het Centre for Cybersecurity Belgium (CCB) is verantwoordelijke autoriteit en handhaaft via Safeonweb at Work.
+    </p>
+
+    <div class="law-grid">
+      <div class="law-card">
+        <div class="law-card-eyebrow">NIS2-wet</div>
+        <h4>Wet van 26 april 2024</h4>
+        <p>Omzetting van EU-richtlijn 2022/2555. In werking sinds 18 oktober 2024. Conformity-deadline voor Basic-niveau was 18 april 2026.</p>
+      </div>
+      <div class="law-card">
+        <div class="law-card-eyebrow">Toezicht</div>
+        <h4>CCB (Centre for Cybersecurity Belgium)</h4>
+        <p>Centrale autoriteit. Sectorale toezichthouders aanvullend (FOD Volksgezondheid, FSMA, CREG enz.). Meldingen via atwork.ccb.belgium.be.</p>
+      </div>
+      <div class="law-card">
+        <div class="law-card-eyebrow">Drempel</div>
+        <h4>50+ FTE of &euro;10M omzet</h4>
+        <p>Geldt voor essentiële + belangrijke entiteiten in 18 sectoren. Kleinere bedrijven vaak niet direct, wel indirect via supply-chain-eisen van grote klanten.</p>
+      </div>
+      <div class="law-card">
+        <div class="law-card-eyebrow">Sectoren</div>
+        <h4>Essentieel + belangrijk</h4>
+        <p>Energie, transport, financiën, gezondheid, water, digitale infrastructuur, ICT-management, openbaar bestuur, ruimte (essentieel) plus post, afval, voedsel, fabricage en meer (belangrijk).</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <h2 class="section-title">Boetes en sancties</h2>
+    <p class="section-lead">
+      Niet-naleving van NIS2 in België leidt tot administratieve boetes. Voor essentiële entiteiten zijn de boetes hoger dan voor belangrijke entiteiten. Bestuurders kunnen persoonlijk worden aangesproken.
+    </p>
+
+    <table class="penalty-table">
+      <thead>
+        <tr>
+          <th>Type entiteit</th>
+          <th>Maximum boete</th>
+          <th>Of</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Essentiële entiteit</strong></td>
+          <td>&euro;10.000.000</td>
+          <td>2% wereldwijde jaaromzet</td>
+        </tr>
+        <tr>
+          <td><strong>Belangrijke entiteit</strong></td>
+          <td>&euro;7.000.000</td>
+          <td>1.4% wereldwijde jaaromzet</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="deadline-box">
+      <h3>De deadline van 18 april 2026 is verstreken</h3>
+      <p>Entiteiten die voor het Basic-niveau hebben gekozen moesten op die datum beschikken over een conformity assessment door een geaccrediteerde instelling. Bent u te laat? Start nu, vraag binnen 30 dagen een conformity-traject aan, en u beperkt schade. CCB hanteert tot 31 december 2026 een ramp-up-benadering.</p>
+    </div>
+  </div>
+</section>
+
+<section style="background: var(--surface); border-top: 1px solid var(--border-light);">
+  <div class="container">
+    <h2 class="section-title">Waarom ISO 27001 als fundament voor NIS2</h2>
+    <p class="section-lead">
+      Hoewel ISO 27001 niet formeel verplicht is, ziet de Europese Commissie en CCB de norm als sterk fundament voor NIS2-compliance. ISO 27001:2022 dekt circa 80% van de Art. 21 NIS2-eisen.
+    </p>
+
+    <ul class="why-list">
+      <li><strong>Risicogebaseerd</strong>: ISO 27001 dwingt een risicobeoordeling af. NIS2 vraagt ook om risicogebaseerde maatregelen.</li>
+      <li><strong>Internationaal erkend</strong>: makkelijker te communiceren met klanten en regulators dan alleen NIS2-certificaten.</li>
+      <li><strong>Aantoonbaar</strong>: certificaat door geaccrediteerde instelling is harder bewijs dan zelfverklaring.</li>
+      <li><strong>Klant-driven</strong>: enterprise-klanten vragen ISO 27001 in supply-chain-due-diligence, vaker dan NIS2.</li>
+      <li><strong>Combineerbaar</strong>: ISMS uit ISO 27001 dekt ook AVG, NEN 7510 (zorg), TISAX (auto), SOC 2 (SaaS).</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <h2 class="section-title">Annex27 voor België specifiek</h2>
+    <p class="section-lead">
+      Annex27 is gevestigd in België (KBO 1006.203.170, BTW BE1006.203.170). Onze Lead Auditor Raoul Haas is DNV/IRCA-gecertificeerd. We werken in het Nederlands en kennen de Belgische context: KBO, BTW-regels, CCB-meldingsstructuur, FOD Volksgezondheid voor zorg.
+    </p>
+
+    <ul class="why-list">
+      <li><strong>BTW-conform</strong>: standaard 21% of BTW-verlegging conform Art. 196 EU-richtlijn 2006/112 voor B2B-leveringen binnen EU.</li>
+      <li><strong>KBO-correct factureren</strong>: alle facturen zijn boekhoudkundig conform Belgische verplichtingen.</li>
+      <li><strong>NCS 7510 voor zorg</strong>: voor Belgische zorginstellingen kennen we de aanvullende eisen op NEN 7510.</li>
+      <li><strong>NL/FR-talig</strong>: alle communicatie in Nederlands. Frans-talige documenten op aanvraag.</li>
+      <li><strong>EU-only data</strong>: opslag in Frankfurt (Supabase EU-region). Geen US-overdracht.</li>
+    </ul>
+  </div>
+</section>
+
+<section style="background: var(--surface); border-top: 1px solid var(--border-light); border-bottom: 1px solid var(--border-light);">
+  <div class="container">
+    <h2 class="section-title">Veelgestelde vragen Belgische ondernemers</h2>
+
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-q">Val ik onder NIS2 als Belgisch MKB?</button>
+        <div class="faq-a"><p>Direct als u 50+ FTE heeft of &euro;10M+ omzet en in een NIS2-sector werkt. Indirect altijd als uw klanten NIS2-plichtig zijn. Onze gratis quickscan geeft binnen 5 minuten antwoord op de scope-vraag.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">Wat als ik de deadline van 18 april 2026 heb gemist?</button>
+        <div class="faq-a"><p>Niet acuut beboet, wel strikt te ondernemen. Start een conformity-traject binnen 30 dagen en documenteer dat u in ramp-up bent. CCB hanteert tot 31 december 2026 redelijkheid bij MKB-conformity, mits aantoonbaar bezig.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">Wat kost ISO 27001 voor Belgisch MKB?</button>
+        <div class="faq-a"><p>Belgische consultancy-trajecten gemiddeld &euro;15.000-25.000. Annex27 doet de gap-analyse vanaf &euro;795 inclusief Lead Auditor review, daarna optioneel beleidspakket (&euro;395) en pre-audit (&euro;1.495). Externe certificeringsaudit door geaccrediteerde instelling apart (&euro;4.000-12.000 afhankelijk van scope).</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">Welke geaccrediteerde instelling voor de externe audit?</button>
+        <div class="faq-a"><p>BELAC-geaccrediteerde instellingen voor België: DNV België, BSI België, Vinçotte (zekerheidsattest), Lloyd's Register, AIB-Vinçotte. Wij introduceren u bij de partij die past bij uw scope en sector.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">Hoe lang duurt het hele traject?</button>
+        <div class="faq-a"><p>Quickscan: 5 minuten. Gap-analyse: 25-40 minuten self-assessment + 48 uur Lead Auditor review. Beleidsimplementatie: 6-12 weken afhankelijk van bestaande situatie. Externe Stage 1+2 audit: 2-4 weken na oplevering. Totaal eerste certificaat: 3-6 maanden vanaf nu, afhankelijk van uitgangspositie.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">Geldt NIS2 ook voor Vlaanderen, Wallonië en Brussel apart?</button>
+        <div class="faq-a"><p>Nee. De NIS2-wet is federaal. CCB is centrale toezichthouder voor heel België. Wel zijn sectorale toezichthouders soms regionaal (zorg via FOD Volksgezondheid, energie via CREG/regionale regulatoren).</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="cta-box">
+      <h2>Start uw ISO 27001-traject vandaag</h2>
+      <p>Gratis quickscan in 5 minuten. Krijg direct inzicht in uw NIS2-positie en concrete next steps. Geen account, geen verplichtingen.</p>
+      <a href="/gap-analyse" class="btn-primary" data-ga-event="quickscan_started" data-ga-cta-location="be_bottom">Start gratis quickscan &rarr;</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div>&copy; 2026 Annex27 &middot; KBO 1006.203.170 &middot; BTW BE1006.203.170</div>
+  <div style="margin-top:8px;">
+    <a href="/">Home</a>
+    <a href="/iso-27001-nederland">ISO 27001 Nederland</a>
+    <a href="/werkwijze">Werkwijze</a>
+    <a href="/bestellen">Pakketten</a>
+    <a href="/faq">FAQ</a>
+    <a href="/trust">Trust</a>
+  </div>
+</footer>
+
+<script>
+  document.querySelectorAll('.faq-q').forEach(q => {
+    q.addEventListener('click', () => q.closest('.faq-item').classList.toggle('open'));
+  });
+</script>
+
+</body>
+</html>

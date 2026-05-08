@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="nl-NL">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <meta name="theme-color" content="#0D9488" />
+  <script src="/analytics.js"></script>
+
+  <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
+  <title>ISO 27001 Nederland · Cyberbeveiligingswet 1 juli 2026 | Annex27</title>
+  <meta name="description" content="ISO 27001 voor Nederlands MKB. Cyberbeveiligingswet (NIS2-NL) ingang 1 juli 2026, 10.000+ organisaties direct plichtig, 50.000-100.000 indirect via supply chain. Gap-analyse vanaf €795 met Lead Auditor review." />
+  <meta name="keywords" content="ISO 27001 Nederland, ISO 27001 Nederland MKB, NIS2 Nederland, Cyberbeveiligingswet, NCSC compliance, gap analyse Nederland, KvK ISO 27001" />
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large" />
+  <link rel="canonical" href="https://annex27.nl/iso-27001-nederland" />
+
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://annex27.nl/iso-27001-nederland" />
+  <meta property="og:title" content="ISO 27001 voor Nederlands MKB · Annex27" />
+  <meta property="og:description" content="Cyberbeveiligingswet ingang 1 juli 2026. 10.000+ direct plichtig, 50.000+ indirect via supply chain. Gap-analyse vanaf €795 met Lead Auditor review." />
+  <meta property="og:image" content="https://annex27.nl/og-image.svg" />
+  <meta property="og:locale" content="nl_NL" />
+  <meta property="og:site_name" content="Annex27" />
+
+  <link rel="alternate" hreflang="nl-NL" href="https://annex27.nl/iso-27001-nederland" />
+  <link rel="alternate" hreflang="nl-BE" href="https://annex27.nl/iso-27001-belgie" />
+  <link rel="alternate" hreflang="x-default" href="https://annex27.nl/iso-27001-nederland" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {"@type":"ListItem","position":1,"name":"Home","item":"https://annex27.nl/"},
+      {"@type":"ListItem","position":2,"name":"ISO 27001 Nederland","item":"https://annex27.nl/iso-27001-nederland"}
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "ISO 27001 in Nederland: Cyberbeveiligingswet 1 juli 2026",
+    "description": "Praktische gids voor Nederlands MKB. Cyberbeveiligingswet (NIS2-NL) per 1 juli 2026, NCSC-NL als toezichthouder, 10.000-16.000 organisaties direct plichtig.",
+    "author": {"@type":"Person","name":"Raoul Haas","jobTitle":"ISO 27001 Lead Auditor"},
+    "publisher": {"@type":"Organization","name":"Annex27","url":"https://annex27.nl"},
+    "datePublished": "2026-05-08",
+    "dateModified": "2026-05-08",
+    "image": "https://annex27.nl/og-image.svg",
+    "inLanguage": "nl-NL",
+    "mainEntityOfPage": "https://annex27.nl/iso-27001-nederland"
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #FAF9F6;
+      --surface: #FFFFFF;
+      --border: #E8E4DC;
+      --border-light: #EFEBE3;
+      --text-primary: #0F172A;
+      --text-secondary: #475569;
+      --text-muted: #94A3B8;
+      --accent: #0D9488;
+      --accent-hover: #0F766E;
+      --accent-light: #CCFBF1;
+      --warning: #B45309;
+      --warning-bg: #FFFBEB;
+      --info-bg: #EFF6FF;
+      --info: #1D4ED8;
+      --dark: #0c0f1a;
+      --radius: 10px;
+      --radius-lg: 16px;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', -apple-system, system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text-secondary);
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+    .container { max-width: 880px; margin: 0 auto; padding: 0 24px; }
+    h1, h2, h3 { font-family: 'Sora', sans-serif; color: var(--text-primary); letter-spacing: -0.02em; }
+
+    nav {
+      position: sticky; top: 0; z-index: 50;
+      background: rgba(250,249,246,0.92);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border-light);
+      height: 60px;
+      display: flex; align-items: center;
+    }
+    .nav-inner { display: flex; justify-content: space-between; align-items: center; width: 100%; max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+    .nav-logo { font-family: 'Sora', sans-serif; font-weight: 800; font-size: 1.2rem; color: var(--text-primary); text-decoration: none; }
+    .nav-logo span { color: var(--accent); }
+    .nav-back { font-size: 0.85rem; color: var(--text-secondary); text-decoration: none; font-weight: 500; }
+    .nav-back:hover { color: var(--text-primary); }
+
+    .countdown-banner {
+      background: linear-gradient(90deg, #0F766E, #0D9488, #14b8a6);
+      color: white;
+      padding: 10px 24px;
+      text-align: center;
+      font-size: 0.84rem;
+      font-weight: 500;
+    }
+    .countdown-banner strong { font-weight: 700; }
+
+    .hero { padding: 64px 0 48px; }
+    .hero-eyebrow {
+      display: inline-block;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 14px;
+      padding: 4px 12px;
+      background: var(--accent-light);
+      border-radius: 99px;
+    }
+    .hero h1 {
+      font-size: 2.5rem;
+      line-height: 1.15;
+      font-weight: 800;
+      margin-bottom: 18px;
+    }
+    .hero h1 em {
+      color: var(--accent);
+      font-style: normal;
+    }
+    .hero-lead {
+      font-size: 1.05rem;
+      line-height: 1.7;
+      color: var(--text-secondary);
+      max-width: 680px;
+    }
+    .hero-cta {
+      display: flex; gap: 12px; margin-top: 28px; flex-wrap: wrap;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: white;
+      padding: 12px 24px;
+      border-radius: var(--radius);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.95rem;
+      transition: background 0.15s;
+    }
+    .btn-primary:hover { background: var(--accent-hover); }
+    .btn-secondary {
+      background: var(--surface);
+      color: var(--text-primary);
+      padding: 12px 24px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+    .btn-secondary:hover { border-color: var(--text-muted); }
+
+    section { padding: 48px 0; }
+    .section-title { font-size: 1.65rem; font-weight: 800; margin-bottom: 14px; }
+    .section-lead {
+      font-size: 1rem;
+      color: var(--text-secondary);
+      margin-bottom: 28px;
+      max-width: 700px;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin: 28px 0;
+    }
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 22px 20px;
+      text-align: center;
+      position: relative;
+    }
+    .stat-card::before {
+      content: '';
+      position: absolute; left: 0; right: 0; top: 0;
+      height: 3px;
+      background: var(--accent);
+      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    }
+    .stat-num {
+      font-family: 'Sora', sans-serif;
+      font-size: 1.85rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      letter-spacing: -0.02em;
+    }
+    .stat-label {
+      font-size: 0.84rem;
+      color: var(--text-secondary);
+      margin-top: 4px;
+    }
+
+    .law-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-top: 24px;
+    }
+    .law-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px;
+    }
+    .law-card-eyebrow {
+      font-family: 'Sora', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 6px;
+    }
+    .law-card h4 { font-family: 'Sora', sans-serif; font-size: 1rem; font-weight: 700; color: var(--text-primary); margin-bottom: 8px; }
+    .law-card p { font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6; }
+
+    .why-list {
+      list-style: none;
+      display: flex; flex-direction: column; gap: 14px;
+      margin-top: 24px;
+    }
+    .why-list li { display: flex; gap: 12px; align-items: flex-start; }
+    .why-list li::before {
+      content: '\2713';
+      flex-shrink: 0;
+      color: var(--accent);
+      font-weight: 700;
+      width: 22px; height: 22px;
+      display: inline-flex; align-items: center; justify-content: center;
+      background: var(--accent-light);
+      border-radius: 50%;
+      font-size: 0.78rem;
+    }
+    .why-list li strong { color: var(--text-primary); font-weight: 600; }
+
+    .faq-list { margin-top: 28px; display: flex; flex-direction: column; gap: 10px; }
+    .faq-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .faq-q {
+      width: 100%;
+      padding: 16px 20px;
+      background: transparent;
+      border: 0;
+      font-family: 'Sora', sans-serif;
+      font-size: 0.96rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      cursor: pointer;
+      text-align: left;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .faq-q::after { content: '+'; font-size: 1.4rem; color: var(--accent); transition: transform 0.2s; }
+    .faq-item.open .faq-q::after { transform: rotate(45deg); }
+    .faq-a { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; padding: 0 20px; }
+    .faq-item.open .faq-a { max-height: 600px; padding: 0 20px 18px; }
+    .faq-a p { font-size: 0.92rem; line-height: 1.7; color: var(--text-secondary); }
+
+    .cta-box {
+      background: linear-gradient(135deg, #0c0f1a, #1e293b);
+      color: white;
+      border-radius: var(--radius-lg);
+      padding: 40px 36px;
+      text-align: center;
+      margin: 48px 0;
+    }
+    .cta-box h2 { color: white; font-size: 1.6rem; margin-bottom: 12px; }
+    .cta-box p { color: rgba(255,255,255,0.78); font-size: 1rem; margin-bottom: 22px; max-width: 540px; margin-left: auto; margin-right: auto; }
+    .cta-box .btn-primary { background: var(--accent); box-shadow: 0 6px 20px rgba(13,148,136,0.3); }
+
+    footer {
+      border-top: 1px solid var(--border-light);
+      padding: 32px 24px;
+      text-align: center;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+    }
+    footer a { color: var(--text-secondary); text-decoration: none; margin: 0 8px; }
+    footer a:hover { color: var(--accent); }
+
+    @media (max-width: 720px) {
+      .hero h1 { font-size: 1.85rem; }
+      .law-grid, .stats-grid { grid-template-columns: 1fr; }
+      .section-title { font-size: 1.35rem; }
+      .cta-box { padding: 28px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="countdown-banner">
+  <strong>Cyberbeveiligingswet ingang 1 juli 2026.</strong> 10.000+ NL-organisaties direct plichtig. Tijd om te starten.
+</div>
+
+<nav>
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">annex<span>27</span></a>
+    <a href="/" class="nav-back">&larr; Terug naar Annex27</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="container">
+    <div class="hero-eyebrow">Voor Nederlands MKB</div>
+    <h1>ISO 27001 in Nederland: <em>klaar voor 1 juli 2026</em></h1>
+    <p class="hero-lead">
+      De Cyberbeveiligingswet (de Nederlandse omzetting van NIS2) treedt naar verwachting in werking op 1 juli 2026. 10.000 tot 16.000 organisaties zijn direct plichtig. Nog eens 50.000 tot 100.000 MKB-bedrijven krijgen indirecte druk via hun klanten in de supply chain. Wat doet u nu?
+    </p>
+    <div class="hero-cta">
+      <a href="/gap-analyse" class="btn-primary" data-ga-event="quickscan_started" data-ga-cta-location="nl_hero">Start gratis quickscan</a>
+      <a href="/bestellen" class="btn-secondary">Bekijk pakketten</a>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-num">10.000+</div>
+        <div class="stat-label">Direct plichtig in NL</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">50-100k</div>
+        <div class="stat-label">Indirect via supply chain</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">+42%</div>
+        <div class="stat-label">GRC compliance markt 2026</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="background: var(--surface); border-top: 1px solid var(--border-light); border-bottom: 1px solid var(--border-light);">
+  <div class="container">
+    <h2 class="section-title">Wettelijk kader Nederland</h2>
+    <p class="section-lead">
+      De Cyberbeveiligingswet (Cbw) is de Nederlandse implementatie van EU-richtlijn NIS2. Het wetsvoorstel is 15 april 2026 aangenomen door de Tweede Kamer. Verwachte inwerkingtreding: 1 juli 2026.
+    </p>
+
+    <div class="law-grid">
+      <div class="law-card">
+        <div class="law-card-eyebrow">Cyberbeveiligingswet</div>
+        <h4>Inwerkingtreding 1 juli 2026</h4>
+        <p>Nederlandse implementatie NIS2-richtlijn. Vereist passende technische, operationele en organisatorische maatregelen voor cyberveiligheid + meldplicht bij significante incidenten.</p>
+      </div>
+      <div class="law-card">
+        <div class="law-card-eyebrow">Toezicht</div>
+        <h4>NCSC-NL + RDI + sectorale toezichthouders</h4>
+        <p>Nationaal Cyber Security Centrum Nederland is centrale autoriteit. Rijksinspectie Digitale Infrastructuur (RDI) handhaaft. Sectoraal: NZa (zorg), DNB/AFM (financiën), ACM (telecom).</p>
+      </div>
+      <div class="law-card">
+        <div class="law-card-eyebrow">Drempel</div>
+        <h4>50+ FTE of &euro;10M omzet</h4>
+        <p>Geldt voor essentiële + belangrijke entiteiten in 18 sectoren. Kleinere bedrijven vaak niet direct plichtig, wel indirect via supply-chain-eisen van grote klanten.</p>
+      </div>
+      <div class="law-card">
+        <div class="law-card-eyebrow">Boetes</div>
+        <h4>&euro;10M of 2% jaaromzet</h4>
+        <p>Maximumboete voor essentiële entiteiten. Voor belangrijke entiteiten: &euro;7M of 1.4%. Bestuurders kunnen persoonlijk worden aangesproken bij verzuim.</p>
+      </div>
+    </div>
+
+    <div style="margin-top: 28px; padding: 20px 24px; background: var(--info-bg); border-left: 4px solid var(--info); border-radius: var(--radius-lg);">
+      <strong style="color: var(--text-primary);">Awareness-gap:</strong> Volgens RSM Nederland weet 85% van werknemers niet dat hun organisatie onder NIS2 valt. Slechts 45% van ICT'ers in NIS2-sectoren is bekend met de richtlijn. Dit betekent dat directie en MT vaak nog moeten worden wakker geschud, niet de IT-afdeling alleen.
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <h2 class="section-title">Sectoren onder NIS2 in Nederland</h2>
+    <p class="section-lead">
+      18 sectoren vallen onder NIS2. Welke sector u valt onder welke entiteit-classificatie hangt af van uw activiteit en grootte.
+    </p>
+
+    <div class="law-grid">
+      <div class="law-card">
+        <div class="law-card-eyebrow">Essentieel</div>
+        <h4>Hoge plicht-niveau</h4>
+        <p>Energie, transport, financiën, gezondheidszorg, drinkwater, afvalwater, digitale infrastructuur, ICT-managementdiensten, openbaar bestuur, ruimtevaart.</p>
+      </div>
+      <div class="law-card">
+        <div class="law-card-eyebrow">Belangrijk</div>
+        <h4>Standaard plicht-niveau</h4>
+        <p>Post- en koeriersdiensten, afvalstoffenbeheer, vervaardiging chemische stoffen, voedingsproducten, kritieke fabricage, digitale aanbieders, onderzoek.</p>
+      </div>
+      <div class="law-card">
+        <div class="law-card-eyebrow">BIO</div>
+        <h4>Overheid (apart kader)</h4>
+        <p>Gemeenten, provincies, waterschappen en rijksoverheid moeten Baseline Informatiebeveiliging Overheid (BIO) volgen. Aanvullend op NIS2. Wij dekken beide met sector-specifieke vragenlijst.</p>
+      </div>
+      <div class="law-card">
+        <div class="law-card-eyebrow">Zorg</div>
+        <h4>NEN 7510 (apart)</h4>
+        <p>Zorginstellingen zijn wettelijk verplicht aantoonbaar te voldoen aan NEN 7510 (informatiebeveiliging in de zorg). Per 20 februari 2027 alle bestaande certificaten over op NEN 7510:2024.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="background: var(--surface); border-top: 1px solid var(--border-light);">
+  <div class="container">
+    <h2 class="section-title">Waarom ISO 27001 als fundament voor NIS2</h2>
+    <p class="section-lead">
+      ISO 27001 is niet formeel verplicht onder de Cyberbeveiligingswet, maar Nederlandse toezichthouders zien de norm als sterk fundament. ISO 27001:2022 dekt circa 80% van de Art. 21 NIS2-eisen.
+    </p>
+
+    <ul class="why-list">
+      <li><strong>Ministeries leiden voor</strong>: ISO 27001 is voor de Rijksoverheid verplicht via "comply or explain"-principe.</li>
+      <li><strong>Aanbestedingen vragen het</strong>: in publieke aanbestedingen is ISO 27001 of gelijkwaardig vaak een gunningscriterium.</li>
+      <li><strong>Klant-driven</strong>: enterprise-klanten (banken, verzekeraars, telco's, retail) eisen ISO 27001 in hun supply-chain DPA's.</li>
+      <li><strong>Geaccepteerd internationaal</strong>: makkelijker uit te leggen aan internationale partners dan alleen NIS2-certificaat.</li>
+      <li><strong>Combineerbaar</strong>: ISMS uit ISO 27001 dekt ook AVG, NEN 7510, BIO, SOC 2 (SaaS).</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <h2 class="section-title">Annex27 voor Nederland specifiek</h2>
+    <p class="section-lead">
+      Annex27 werkt vanuit de Benelux-context. Onze Lead Auditor Raoul Haas is DNV/IRCA-gecertificeerd en kent de Nederlandse handhavingscontext: NCSC, RDI, AP, IGJ.
+    </p>
+
+    <ul class="why-list">
+      <li><strong>BTW-conform</strong>: standaard 21% NL BTW op Nederlandse facturen. Voor BTW-verlegging EU-B2B (Art. 196): geautomatiseerd in onze factuurtool.</li>
+      <li><strong>BIO-sectorprofiel</strong>: voor gemeenten en provincies kennen we ENSIA-rapportage en in-control-statement.</li>
+      <li><strong>NEN 7510 voor zorg</strong>: NL-specifieke zorgcontext (WGBO, Wkkgz, BIG-tucht).</li>
+      <li><strong>EU-only data</strong>: opslag in Frankfurt (Supabase EU-region). Geen US-overdracht.</li>
+      <li><strong>RvA-link</strong>: introductie bij RvA-geaccrediteerde certificeringsinstellingen (DEKRA, KIWA, BSI, DNV, LRQA, T&Uuml;V).</li>
+    </ul>
+  </div>
+</section>
+
+<section style="background: var(--surface); border-top: 1px solid var(--border-light); border-bottom: 1px solid var(--border-light);">
+  <div class="container">
+    <h2 class="section-title">Veelgestelde vragen Nederlandse ondernemers</h2>
+
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-q">Val ik onder de Cyberbeveiligingswet als Nederlands MKB?</button>
+        <div class="faq-a"><p>Direct als u 50+ FTE heeft of &euro;10M+ omzet en in een NIS2-sector werkt. Indirect altijd als uw klanten NIS2-plichtig zijn. Onze gratis quickscan geeft binnen 5 minuten antwoord op de scope-vraag.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">Wanneer treedt de Cyberbeveiligingswet in werking?</button>
+        <div class="faq-a"><p>Verwachte ingangsdatum 1 juli 2026. De Tweede Kamer heeft het wetsvoorstel op 15 april 2026 aangenomen. Eerste Kamer-behandeling in mei-juni 2026. Daarna handhaving uitrol per Q3-Q4 2026.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">Wat kost ISO 27001 voor Nederlands MKB?</button>
+        <div class="faq-a"><p>Nederlandse consultancy-trajecten gemiddeld &euro;15.000-25.000. Annex27 doet de gap-analyse vanaf &euro;795 inclusief Lead Auditor review, daarna optioneel beleidspakket (&euro;395) en pre-audit (&euro;1.495). Externe certificeringsaudit door geaccrediteerde instelling apart (&euro;4.000-12.000 afhankelijk van scope).</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">Welke geaccrediteerde instelling voor de externe audit?</button>
+        <div class="faq-a"><p>RvA-geaccrediteerde instellingen voor Nederland: DEKRA, KIWA, BSI Nederland, DNV Nederland, LRQA, T&Uuml;V Nord, SGS. Wij introduceren u bij de partij die past bij uw scope en sector. Selectie afhankelijk van uw locatie en gewenste audit-stijl.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">Hoe verhoudt ISO 27001 zich tot BIO en NEN 7510?</button>
+        <div class="faq-a"><p>BIO en NEN 7510 zijn Nederlandse sector-specifieke aanvullingen op ISO 27001. BIO geldt voor overheid, NEN 7510 voor zorg. Beide gaan uit van een ISO 27001-fundament + extra eisen. Onze gap-analyse herkent uw sector en past de juiste norm-set toe.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">Wat als mijn klant ISO 27001 eist maar ik niet onder NIS2 val?</button>
+        <div class="faq-a"><p>Dan bent u indirect plichtig via supply-chain. Een groot deel van Nederlandse MKB krijgt deze druk: enterprise-klanten gebruiken hun NIS2-Art. 21-verplichting voor leveranciersbeheer als reden om ISO 27001 te eisen. Onze gap-analyse + beleidspakket dekt deze klant-eis af.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="cta-box">
+      <h2>Start uw ISO 27001-traject vandaag</h2>
+      <p>Gratis quickscan in 5 minuten. Krijg direct inzicht in uw NIS2-positie en concrete next steps. Geen account, geen verplichtingen.</p>
+      <a href="/gap-analyse" class="btn-primary" data-ga-event="quickscan_started" data-ga-cta-location="nl_bottom">Start gratis quickscan &rarr;</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div>&copy; 2026 Annex27 &middot; KBO 1006.203.170 &middot; BTW BE1006.203.170</div>
+  <div style="margin-top:8px;">
+    <a href="/">Home</a>
+    <a href="/iso-27001-belgie">ISO 27001 België</a>
+    <a href="/werkwijze">Werkwijze</a>
+    <a href="/bestellen">Pakketten</a>
+    <a href="/faq">FAQ</a>
+    <a href="/trust">Trust</a>
+  </div>
+</footer>
+
+<script>
+  document.querySelectorAll('.faq-q').forEach(q => {
+    q.addEventListener('click', () => q.closest('.faq-item').classList.toggle('open'));
+  });
+</script>
+
+</body>
+</html>
