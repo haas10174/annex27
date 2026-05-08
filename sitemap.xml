@@ -100,6 +100,20 @@
   </url>
 
   <url>
+    <loc>https://annex27.nl/blog/nis2-melding-stap-voor-stap</loc>
+    <lastmod>2026-05-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
+  <url>
+    <loc>https://annex27.nl/blog/iso-27001-saas-startups</loc>
+    <lastmod>2026-05-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
     <loc>https://annex27.nl/rapport-voorbeeld</loc>
     <lastmod>2026-04-17</lastmod>
     <changefreq>monthly</changefreq>

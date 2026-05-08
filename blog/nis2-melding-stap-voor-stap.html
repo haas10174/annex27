@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <meta name="theme-color" content="#0D9488" />
+  <script src="/analytics.js"></script>
+  <title>NIS2-melding stap voor stap: 24h, 72h en 30 dagen | Annex27</title>
+  <meta name="description" content="Significant cyberincident? Onder NIS2 moet u melden binnen 24 uur, 72 uur en 30 dagen. Concreet stappenplan voor melders in Nederland (NCSC) en België (CCB), met templates en escalatie-flow." />
+  <meta name="keywords" content="NIS2 melding, NIS2 meldingsplicht, NCSC melden, CCB melden, NIS2 incident melden, cyberincident melden NIS2, NIS2 24 uur 72 uur 30 dagen" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://annex27.nl/blog/nis2-melding-stap-voor-stap" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="NIS2-melding stap voor stap: 24h, 72h en 30 dagen" />
+  <meta property="og:description" content="Concreet stappenplan voor de NIS2-meldingsplicht. NCSC-NL en CCB-BE, met templates en wat u wel/niet moet melden." />
+  <meta property="og:image" content="https://annex27.nl/og-image.svg" />
+  <meta property="article:author" content="Raoul Haas" />
+  <meta property="article:published_time" content="2026-05-08T08:00:00+02:00" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"Article",
+    "headline":"NIS2-melding stap voor stap: 24h, 72h en 30 dagen",
+    "description":"Concreet stappenplan voor de NIS2-meldingsplicht: 24-uurs early warning, 72-uurs incident notification en 30-dagen final report. Per land (NL/BE) wat te doen.",
+    "image":["https://annex27.nl/og-image.svg"],
+    "datePublished":"2026-05-08T08:00:00+02:00",
+    "dateModified":"2026-05-08T08:00:00+02:00",
+    "author":{"@type":"Person","name":"Raoul Haas","url":"https://annex27.nl/#raoul","jobTitle":"ISO 27001 Lead Auditor (DNV/IRCA)"},
+    "publisher":{"@type":"Organization","name":"Annex27","logo":{"@type":"ImageObject","url":"https://annex27.nl/og-image.svg","width":1200,"height":630}},
+    "mainEntityOfPage":{"@type":"WebPage","@id":"https://annex27.nl/blog/nis2-melding-stap-voor-stap"},
+    "articleSection":"NIS2",
+    "wordCount":1320,
+    "inLanguage":"nl-NL",
+    "keywords":"NIS2 melding, NIS2 meldingsplicht, NCSC melden, CCB melden, cyberincident melden NIS2"
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"BreadcrumbList",
+    "itemListElement":[
+      {"@type":"ListItem","position":1,"name":"Home","item":"https://annex27.nl/"},
+      {"@type":"ListItem","position":2,"name":"Kennisbank","item":"https://annex27.nl/blog/"},
+      {"@type":"ListItem","position":3,"name":"NIS2-melding stap voor stap","item":"https://annex27.nl/blog/nis2-melding-stap-voor-stap"}
+    ]
+  }
+  </script>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    :root{--bg:#FAFAFA;--surface:#FFF;--bg-warm:#F5F3EF;--border:#E5E5E5;--border-light:#F0F0F0;--text-primary:#0F172A;--text-secondary:#475569;--text-muted:#94A3B8;--accent:#0D9488;--accent-light:#CCFBF1;--dark:#0c0f1a;--warning:#D97706;--danger:#dc2626;--radius:10px;}
+    body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text-secondary);line-height:1.75;-webkit-font-smoothing:antialiased;}
+    .container{max-width:780px;margin:0 auto;padding:0 24px;}
+    nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(250,250,250,0.85);backdrop-filter:blur(16px);border-bottom:1px solid var(--border-light);height:64px;display:flex;align-items:center;padding:0 5%;}
+    .nav-inner{display:flex;align-items:center;justify-content:space-between;width:100%;max-width:1120px;margin:0 auto;}
+    .nav-logo{font-family:'Sora',sans-serif;font-size:1.4rem;font-weight:700;color:var(--text-primary);text-decoration:none;letter-spacing:-0.03em;}
+    .nav-logo span{color:var(--accent);}
+    .nav-back{display:inline-flex;align-items:center;gap:6px;font-size:0.85rem;color:var(--text-secondary);text-decoration:none;font-weight:500;}
+    .nav-back svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;}
+    .hero{padding:130px 0 56px;background:var(--dark);color:white;}
+    .meta-row{display:flex;gap:14px;font-size:0.78rem;font-weight:600;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:16px;flex-wrap:wrap;}
+    .meta-row .pill{background:rgba(20,184,166,0.15);color:#5eead4;padding:4px 10px;border-radius:20px;}
+    .hero h1{font-family:'Sora',sans-serif;font-size:clamp(1.8rem,4vw,2.4rem);font-weight:700;line-height:1.2;letter-spacing:-0.02em;margin-bottom:14px;}
+    .hero p.lead{font-size:1.05rem;color:rgba(255,255,255,0.65);}
+    article{padding:48px 0 80px;}
+    .tldr{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--accent);border-radius:10px;padding:20px 24px;margin-bottom:36px;}
+    .tldr-label{font-size:0.74rem;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent);margin-bottom:8px;}
+    .tldr p{margin:0;color:var(--text-primary);font-weight:500;}
+    article h2{font-family:'Sora',sans-serif;font-size:1.5rem;font-weight:700;color:var(--text-primary);margin:42px 0 14px;letter-spacing:-0.02em;}
+    article h3{font-family:'Sora',sans-serif;font-size:1.1rem;font-weight:700;color:var(--text-primary);margin:26px 0 8px;}
+    article p{margin-bottom:16px;}
+    article ul,article ol{margin:0 0 18px 22px;}
+    article li{margin-bottom:6px;}
+    article a{color:var(--accent);text-decoration:underline;text-underline-offset:2px;}
+    article strong{color:var(--text-primary);}
+    article table{width:100%;border-collapse:collapse;margin:16px 0 24px;font-size:0.92rem;}
+    article th,article td{text-align:left;padding:12px 14px;border-bottom:1px solid var(--border-light);vertical-align:top;}
+    article th{background:var(--surface);font-weight:700;color:var(--text-primary);font-size:0.82rem;text-transform:uppercase;letter-spacing:0.04em;}
+    .callout{background:var(--bg-warm);border:1px solid var(--border);border-radius:10px;padding:18px 22px;margin:20px 0;}
+    .callout strong{color:var(--text-primary);}
+    .callout-warn{background:rgba(217,119,6,0.06);border-color:rgba(217,119,6,0.3);}
+    .callout-danger{background:rgba(220,38,38,0.06);border-color:rgba(220,38,38,0.3);}
+    .step-box{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px;margin:18px 0;border-left:4px solid var(--accent);}
+    .step-box.urgent{border-left-color:var(--danger);}
+    .step-box.warning{border-left-color:var(--warning);}
+    .step-box-time{display:inline-block;font-family:'Sora',sans-serif;font-size:0.74rem;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);margin-bottom:6px;}
+    .step-box.urgent .step-box-time{color:var(--danger);}
+    .step-box.warning .step-box-time{color:var(--warning);}
+    .step-box h4{font-family:'Sora',sans-serif;font-size:1.05rem;font-weight:700;color:var(--text-primary);margin-bottom:10px;}
+    .end-cta{background:linear-gradient(135deg,#0c0f1a 0%,#1e293b 100%);color:white;border-radius:14px;padding:32px;margin-top:48px;text-align:center;}
+    .end-cta h3{font-family:'Sora',sans-serif;color:white;font-size:1.3rem;margin-bottom:8px;}
+    .end-cta p{color:rgba(255,255,255,0.7);margin-bottom:18px;}
+    .end-cta a{display:inline-block;background:#14b8a6;color:white;padding:12px 24px;border-radius:8px;font-weight:600;text-decoration:none;}
+    .related{margin-top:48px;padding-top:32px;border-top:1px solid var(--border-light);}
+    .related h3{font-family:'Sora',sans-serif;font-size:1rem;color:var(--text-primary);margin-bottom:14px;letter-spacing:0.02em;}
+    .related-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;}
+    .related-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px 18px;text-decoration:none;transition:transform 0.15s,border-color 0.15s;}
+    .related-card:hover{transform:translateY(-2px);border-color:var(--accent);}
+    .related-card-eyebrow{font-size:0.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px;}
+    .related-card-title{font-family:'Sora',sans-serif;font-size:0.94rem;color:var(--text-primary);font-weight:600;line-height:1.4;}
+    footer{background:var(--surface);border-top:1px solid var(--border-light);padding:40px 0;font-size:0.84rem;color:var(--text-muted);}
+    footer .container{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
+    footer a{color:var(--text-secondary);text-decoration:none;}
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">annex<span>27</span></a>
+    <a href="/blog" class="nav-back"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Terug naar blog</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="container">
+    <div class="meta-row"><span class="pill">NIS2 incident</span><span>8 mei 2026</span><span>·</span><span>10 min lezen</span></div>
+    <h1>NIS2-melding stap voor stap: 24h, 72h en 30 dagen</h1>
+    <p class="lead">Onder NIS2 moet u significante cyberincidenten in drie fases melden. Wie meldt aan wie, binnen welke termijn, en wat zet u in de melding? Praktisch stappenplan voor MKB in Nederland en België.</p>
+  </div>
+</section>
+
+<article>
+  <div class="container">
+    <div class="tldr">
+      <div class="tldr-label">Snel-overzicht</div>
+      <p>Bij een significant cyberincident: <strong>24h</strong> early warning + <strong>72h</strong> incident notification + <strong>30d</strong> final report. In NL aan NCSC-NL via meldformulier. In BE aan CCB via Safeonweb at Work. Stuur direct ook naar uw sectorale toezichthouder.</p>
+    </div>
+
+    <h2>Wanneer moet u melden?</h2>
+    <p>NIS2 (artikel 23) verplicht een meldplicht voor <strong>significante incidenten</strong>. Dat zijn incidenten die:</p>
+    <ul>
+      <li>operationele verstoring van uw dienst veroorzaken (downtime, gegevensverlies, integriteitsverlies);</li>
+      <li>financiële schade tot gevolg hebben voor de getroffen entiteit of derden;</li>
+      <li>aanzienlijke materiële of immateriële schade kunnen veroorzaken bij andere natuurlijke of rechtspersonen.</li>
+    </ul>
+    <p>Het hoeft niet bewezen te zijn dat het kwaadwillig was. Een ransomware-aanval, datalek, ddos die uw API platgooit voor uw klanten, of een supply-chain-compromise vallen er allemaal onder. Een individuele phishing-mail die niemand klikte: niet.</p>
+
+    <div class="callout callout-warn">
+      <strong>Klok start bij awareness.</strong> De 24-uurstermijn begint zodra uw organisatie zich bewust wordt van het significante incident, niet wanneer de oorzaak bekend is. In de praktijk: zodra de eerste alert binnenkomt op uw security-team start de tijd. Documenteer dit moment.
+    </div>
+
+    <h2>De drie fases</h2>
+
+    <div class="step-box urgent">
+      <span class="step-box-time">Fase 1 · binnen 24 uur</span>
+      <h4>Early warning</h4>
+      <p>Een korte melding aan de toezichthouder dat er een significant incident is. Hier hoeft nog geen oorzaakanalyse in. Wel: datum + tijdstip awareness, type incident (ransomware, datalek, ddos, supply-chain, ander), eerste inschatting van impact (welke dienst, hoeveel klanten), of het mogelijk grensoverschrijdend is.</p>
+      <p><strong>Doel:</strong> de toezichthouder kan vroegtijdig coordineren als meerdere meldingen binnenkomen op vergelijkbaar incident.</p>
+    </div>
+
+    <div class="step-box warning">
+      <span class="step-box-time">Fase 2 · binnen 72 uur</span>
+      <h4>Incident notification</h4>
+      <p>Uitgebreidere melding met initiële beoordeling: welke systemen zijn geraakt, welke data, hoeveel betrokkenen, hoe lang duurde de verstoring (of hoe lang nog), welke directe maatregelen zijn al genomen. Indien mogelijk ook eerste hypotheses over root cause.</p>
+      <p><strong>Doel:</strong> toezichthouder krijgt voldoende beeld om eventuele bredere waarschuwing of ondersteuning te organiseren. Voor essentiële entiteiten kan dit ook publieke informatie over de aanvalsmethode betreffen.</p>
+    </div>
+
+    <div class="step-box">
+      <span class="step-box-time">Fase 3 · binnen 30 dagen</span>
+      <h4>Final report</h4>
+      <p>Volledig rapport met root-cause analyse, exacte impact (klanten, data, downtime, financieel), genomen herstelmaatregelen, lessons learned en preventie. Dit is feitelijk uw post-mortem voor de toezichthouder.</p>
+      <p><strong>Doel:</strong> verantwoording, evaluatie, en mogelijk input voor sectorale waarschuwingen of beleidsupdates.</p>
+    </div>
+
+    <h2>Aan wie meldt u?</h2>
+    <table>
+      <thead>
+        <tr><th>Land</th><th>Primaire kanaal</th><th>Aanvullend</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>🇳🇱 Nederland</td>
+          <td>NCSC-NL of CSIRT-DSP via meldformulier op <a href="https://www.ncsc.nl" target="_blank" rel="noopener">ncsc.nl</a></td>
+          <td>RDI (Rijksinspectie Digitale Infrastructuur) als sectorale toezichthouder. Voor zorg ook NZa, voor financiën DNB/AFM.</td>
+        </tr>
+        <tr>
+          <td>🇧🇪 België</td>
+          <td>CCB via Safeonweb at Work-platform: <a href="https://atwork.ccb.belgium.be" target="_blank" rel="noopener">atwork.ccb.belgium.be</a></td>
+          <td>Sectorale toezichthouder zoals FOD Volksgezondheid (zorg), FSMA (financiën), CREG (energie).</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>Tip: meld <strong>parallel</strong> aan beide kanalen. CCB en NCSC-NL coordineren onderling in grensoverschrijdende incidenten, maar als melder bent u zelf verantwoordelijk voor de melding aan uw sectorale autoriteit.</p>
+
+    <div class="callout callout-danger">
+      <strong>Boetes voor niet-melden:</strong> tot &euro;10M of 2% wereldwijde jaaromzet voor essentiële entiteiten. Voor belangrijke entiteiten &euro;7M of 1.4%. Bestuurders kunnen persoonlijk worden aangesproken bij verzuim. In België is de wet sinds 18 oktober 2024 van kracht. In Nederland verwacht 1 juli 2026.
+    </div>
+
+    <h2>Wat zet u in de melding?</h2>
+    <p>Een goed meldformulier bevat minstens:</p>
+    <ol>
+      <li><strong>Identificatie</strong>: organisatie-naam, KvK/KBO-nummer, contactpersoon, telefoonnummer 24/7-bereikbaar.</li>
+      <li><strong>Tijdslijn</strong>: moment van detectie, moment van escalatie naar security-team, eerste vermoeden van root-cause.</li>
+      <li><strong>Aard van incident</strong>: ransomware, datalek, ddos, ongeautoriseerde toegang, malware, supply-chain, andere.</li>
+      <li><strong>Geraakte assets</strong>: welke systemen, applicaties, datasets. Specificeer of klantdata betrokken is.</li>
+      <li><strong>Impact</strong>: hoeveel klanten geraakt, welke diensten verstoord, geschatte downtime, financiële impact (zo bekend).</li>
+      <li><strong>Grensoverschrijdend</strong>: ja/nee, en zo ja welke landen/lidstaten geraakt zijn.</li>
+      <li><strong>Maatregelen</strong>: wat heeft u tot nu gedaan om de impact te beperken.</li>
+      <li><strong>AVG-overlap</strong>: bij persoonsgegevens-betrokkenheid: ook melden aan AP (NL) of GBA (BE) binnen 72 uur conform artikel 33 AVG.</li>
+    </ol>
+
+    <h2>Praktische tips voor de meldprocedure</h2>
+
+    <h3>1. Bereid templates voor</h3>
+    <p>U wilt op moment X niet uw 24-uurs early warning gaan opstellen vanaf nul. Maak nu vooraf templates voor de drie fases, klaar in een gedeelde Notion/SharePoint-folder. Ons NIS2-pakket bevat kant-en-klare meldingstemplates voor zowel NCSC-NL als CCB.</p>
+
+    <h3>2. Stel een incident-commander aan</h3>
+    <p>Tijdens een incident zijn er twee rollen kritiek: een commander die beslissingen neemt + communiceert, en een scribe die alles tijdgestempeld vastlegt. Zonder scribe komt uw final report niet rond. Train deze rollen jaarlijks via een tabletop-exercise.</p>
+
+    <h3>3. Documenteer awareness-moment</h3>
+    <p>De 24-uurs klok start bij awareness. Zorg dat uw incident-tickets dat tijdstip exact vastleggen (bijv. eerste PagerDuty-alert, eerste Slack-melding in #security). Dit is uw bewijslast.</p>
+
+    <h3>4. Communiceer parallel met klanten</h3>
+    <p>Naast de toezichthouder-melding moet u ook uw eigen klanten informeren als hun data geraakt is. Onder NIS2 + AVG geldt vaak een 72-uurstermijn richting betrokkenen. Bereid customer-comms-template voor.</p>
+
+    <h3>5. Test minimaal jaarlijks</h3>
+    <p>Doe minstens één tabletop-oefening per jaar waar u de complete meldketen doorloopt: detectie → triage → 24h melding → 72h notification → 30d final report. Pas na die exercise weet u of uw runbook werkt.</p>
+
+    <h2>Veelgemaakte fouten</h2>
+    <ul>
+      <li><strong>Te lang wachten met melden omdat root-cause nog onbekend is.</strong> De 24-uurs early warning hoeft geen RCA te bevatten. Beter een snelle melding op feiten en later corrigeren.</li>
+      <li><strong>Alleen bij CSIRT melden, niet bij sectorale toezichthouder.</strong> Beide zijn vaak verplicht. Lees uw sector-specifieke richtlijnen.</li>
+      <li><strong>Geen 24/7-bereikbaar telefoonnummer in de melding.</strong> Toezichthouders willen kunnen terugbellen. Geef een nummer dat ook 's nachts wordt opgenomen.</li>
+      <li><strong>Customer-data niet apart specificeren.</strong> Dat triggert AVG-meldplicht. Wees expliciet over scope.</li>
+      <li><strong>Geen scribe.</strong> Zonder gestructureerde tijdsregistratie kunt u uw final report niet onderbouwen, en kunt u niet verantwoorden waarom maatregelen X-tijd duurden.</li>
+    </ul>
+
+    <h2>Wat doet Annex27 hierin?</h2>
+    <p>Onze NIS2-readiness check toetst of uw organisatie is voorbereid op meldingsplicht (Art. 23). Het NIS2-pakket bevat:</p>
+    <ul>
+      <li>Klant-en-klare meldingstemplates voor NCSC-NL én CCB-BE;</li>
+      <li>Bestuursverklaring + due-diligence-log voor Art. 20 governance;</li>
+      <li>Mapping van Art. 21 naar 10 concrete technische en organisatorische maatregelen;</li>
+      <li>Classificatie-formulier om vast te stellen of u essentiële of belangrijke entiteit bent.</li>
+    </ul>
+
+    <div class="end-cta">
+      <h3>Onzeker of u onder NIS2 valt?</h3>
+      <p>Onze gratis quickscan geeft binnen 5 minuten antwoord. Geen account, geen verplichtingen.</p>
+      <a href="/gap-analyse" data-ga-event="quickscan_started" data-ga-cta-location="blog_nis2_melding">Start gratis quickscan &rarr;</a>
+    </div>
+
+    <div class="related">
+      <h3>Verwante artikelen</h3>
+      <div class="related-grid">
+        <a href="/blog/nis2-deadline-2026" class="related-card">
+          <div class="related-card-eyebrow">Deadlines</div>
+          <div class="related-card-title">NIS2-deadline 2026: wat moet u nu doen?</div>
+        </a>
+        <a href="/iso-27001-belgie" class="related-card">
+          <div class="related-card-eyebrow">België</div>
+          <div class="related-card-title">ISO 27001 in België na NIS2-deadline</div>
+        </a>
+        <a href="/iso-27001-nederland" class="related-card">
+          <div class="related-card-eyebrow">Nederland</div>
+          <div class="related-card-title">ISO 27001 Nederland: klaar voor 1 juli 2026</div>
+        </a>
+        <a href="/blog/iso-27001-vs-soc-2" class="related-card">
+          <div class="related-card-eyebrow">Vergelijking</div>
+          <div class="related-card-title">ISO 27001 vs SOC 2: welke past bij jouw SaaS?</div>
+        </a>
+      </div>
+    </div>
+  </div>
+</article>
+
+<footer>
+  <div class="container">
+    <div>&copy; 2026 Annex27 &middot; KBO 1006.203.170</div>
+    <div><a href="/">Home</a> &middot; <a href="/blog">Blog</a> &middot; <a href="/faq">FAQ</a> &middot; <a href="/trust">Trust</a></div>
+  </div>
+</footer>
+
+</body>
+</html>
