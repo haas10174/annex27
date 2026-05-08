@@ -10,7 +10,7 @@
   <link rel="manifest" href="/site.webmanifest" />
   <meta name="theme-color" content="#14b8a6" />
   <script src="/analytics-admin.js"></script>
-  <title>Factuur &mdash; Annex27</title>
+  <title>Factuur &middot; Annex27</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -295,7 +295,7 @@ function fmt(n) { return '\u20AC ' + Number(n).toLocaleString('nl-NL', { minimum
   const productLabel = PRODUCT_LABELS[data.product] || data.product;
   const productDescr = data.omschrijving || PRODUCT_DESCR[data.product] || '';
 
-  document.title = 'Factuur ' + data.invoice_number + ' — Annex27';
+  document.title = 'Factuur ' + data.invoice_number + ' · Annex27';
 
   const deliverables = PRODUCT_DELIVERABLES[data.product] || [];
 
@@ -307,7 +307,7 @@ function fmt(n) { return '\u20AC ' + Number(n).toLocaleString('nl-NL', { minimum
     if (rule === 'reverse_charge' || inv.btw_regime === 'reverse_charge') {
       return {
         kind: 'reverse_charge',
-        note: 'BTW verlegd &mdash; Art. 196 Richtlijn 2006/112/EG. BTW-aangifte door afnemer.',
+        note: 'BTW verlegd. Art. 196 Richtlijn 2006/112/EG. BTW-aangifte door afnemer.',
         hasVatLine: false,
       };
     }
@@ -322,7 +322,7 @@ function fmt(n) { return '\u20AC ' + Number(n).toLocaleString('nl-NL', { minimum
     if (rule === 'exempt_56bis' || rule === 'exempt_56bis_eu' || (inv.btw_regime === 'none' && rate === 0)) {
       return {
         kind: 'exempt_56bis',
-        note: 'Historische vrijstelling kleine onderneming (Art. 56bis W.BTW) &mdash; regime per 22-04-2026 omgezet naar standaard BTW-regime.',
+        note: 'Historische vrijstelling kleine onderneming (Art. 56bis W.BTW). Regime per 22-04-2026 omgezet naar standaard BTW-regime.',
         hasVatLine: false,
       };
     }
@@ -435,15 +435,15 @@ function fmt(n) { return '\u20AC ' + Number(n).toLocaleString('nl-NL', { minimum
               <li>U ontvangt binnen enkele minuten een bevestigingsmail.</li>
               <li>Binnen 24 uur sturen wij de logingegevens voor uw klantportaal.</li>
               <li>Log in op <a href="https://annex27.nl/portal" style="color:var(--accent);">annex27.nl/portal</a> en start direct met uw traject.</li>
-              <li>Bij vragen: antwoord op deze e-mail of mail naar info@annex27.nl &mdash; persoonlijk contact met uw Lead Auditor.</li>
+              <li>Bij vragen: antwoord op deze e-mail of mail naar info@annex27.nl. Persoonlijk contact met uw Lead Auditor.</li>
             </ol>
           </div>
         </div>
 
         <div class="thanks">
-          <strong>Dank voor uw vertrouwen in Annex27.</strong> Wij kijken ernaar uit uw organisatie te begeleiden naar ISO 27001 compliance &mdash; zonder overbodige complexiteit, met persoonlijke expertise.
+          <strong>Dank voor uw vertrouwen in Annex27.</strong> Wij kijken ernaar uit uw organisatie te begeleiden naar ISO 27001 compliance. Zonder overbodige complexiteit, met persoonlijke expertise.
           <br/><br/>
-          &mdash; Raoul Haas, ISO 27001 Lead Auditor
+          Raoul Haas, ISO 27001 Lead Auditor
         </div>
       </div>
     </div>
