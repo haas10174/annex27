@@ -2073,6 +2073,29 @@
       </div>
     </div>
 
+    <!-- Lead Auditor split-section met stockfoto -->
+    <div class="auditor-split">
+      <div class="auditor-split-image">
+        <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=900&q=80&auto=format&fit=crop" alt="Lead Auditor aan het werk: laptop met aantekenboek en review-documentatie" loading="lazy" />
+        <div class="auditor-split-image-overlay">
+          <div class="auditor-split-image-tag">DNV / IRCA gecertificeerd</div>
+        </div>
+      </div>
+      <div class="auditor-split-text">
+        <div class="auditor-split-eyebrow">Achter elk rapport</div>
+        <h2 class="auditor-split-title">Een mens als auditor, geen algoritme</h2>
+        <p class="auditor-split-lead">
+          AI versnelt de analyse, maar een gecertificeerde ISO 27001 Lead Auditor reviewt elke bevinding voordat u het rapport ontvangt. Zo weet u zeker dat de aanbevelingen <strong>methodologisch kloppen</strong> en niet "AI-hallucinaties" zijn.
+        </p>
+        <ul class="auditor-split-list">
+          <li><strong>DNV / IRCA-gecertificeerd</strong> volgens internationaal erkende auditor-norm</li>
+          <li><strong>Persoonlijke handtekening</strong> op elk rapport, met naam en datum</li>
+          <li><strong>NL/BE-context</strong>: KBO, KvK, NIS2-NL en NIS2-BE, NEN 7510, BIO</li>
+          <li><strong>Direct contact</strong> via e-mail bij vragen, geen support-ticket-systeem</li>
+        </ul>
+      </div>
+    </div>
+
     <!-- Stats strip -->
     <div class="why-stats-strip">
       <div class="why-stat-block">
@@ -2230,10 +2253,128 @@
   text-transform: uppercase;
   letter-spacing: 0.06em;
 }
+/* Auditor split-section — foto + tekst */
+.auditor-split {
+  display: grid;
+  grid-template-columns: 0.95fr 1.05fr;
+  gap: 40px;
+  margin: 56px 0;
+  align-items: stretch;
+}
+.auditor-split-image {
+  position: relative;
+  border-radius: 18px;
+  overflow: hidden;
+  min-height: 380px;
+  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.12);
+}
+.auditor-split-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: saturate(1.05) contrast(1.02);
+}
+.auditor-split-image::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(13,148,136,0.08), rgba(15,23,42,0.20) 70%);
+  pointer-events: none;
+}
+.auditor-split-image-overlay {
+  position: absolute;
+  bottom: 18px; left: 18px;
+  z-index: 2;
+}
+.auditor-split-image-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  background: rgba(255,255,255,0.96);
+  backdrop-filter: blur(6px);
+  border-radius: 999px;
+  font-family: 'Sora', sans-serif;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+.auditor-split-image-tag::before {
+  content: '';
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+.auditor-split-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.auditor-split-eyebrow {
+  font-family: 'Sora', sans-serif;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 10px;
+}
+.auditor-split-title {
+  font-family: 'Sora', sans-serif;
+  font-size: 1.85rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin-bottom: 14px;
+}
+.auditor-split-lead {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  margin-bottom: 20px;
+}
+.auditor-split-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.auditor-split-list li {
+  position: relative;
+  padding-left: 26px;
+  font-size: 0.92rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+.auditor-split-list li::before {
+  content: '\2713';
+  position: absolute;
+  left: 0; top: 1px;
+  width: 18px; height: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--accent-light);
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 0.7rem;
+}
+.auditor-split-list li strong { color: var(--text-primary); font-weight: 600; }
+
 @media (max-width: 980px) {
   .why-cards-grid { grid-template-columns: repeat(2, 1fr); }
   .why-stats-strip { grid-template-columns: repeat(3, 1fr); padding: 28px 20px; }
   .why-stat-block .why-stat-num { font-size: 1.8rem; }
+  .auditor-split { grid-template-columns: 1fr; gap: 28px; }
+  .auditor-split-image { min-height: 280px; }
+  .auditor-split-title { font-size: 1.5rem; }
 }
 @media (max-width: 600px) {
   .why-cards-grid { grid-template-columns: 1fr; gap: 14px; }

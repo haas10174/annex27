@@ -107,10 +107,35 @@
       border-radius: 50%;
       background: white;
     }
-    .plan-name { font-size: 0.95rem; font-weight: 600; color: #0F172A; }
+    .plan-name { font-size: 0.95rem; font-weight: 600; color: #0F172A; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
     .plan-desc { font-size: 0.78rem; color: #94A3B8; }
-    .plan-price { margin-left: auto; font-size: 1.1rem; font-weight: 700; color: #0F172A; white-space: nowrap; }
+    .plan-price { margin-left: auto; font-size: 1.1rem; font-weight: 700; color: #0F172A; white-space: nowrap; text-align: right; }
     .plan-period { font-size: 0.72rem; font-weight: 400; color: #94A3B8; }
+    .plan-market {
+      display: block;
+      font-size: 0.7rem;
+      font-weight: 500;
+      color: #94A3B8;
+      margin-top: 3px;
+      letter-spacing: 0.01em;
+    }
+    .plan-market s { color: #CBD5E1; }
+    .plan-popular-tag {
+      font-family: 'Sora', sans-serif;
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #0D9488;
+      background: #CCFBF1;
+      padding: 3px 8px;
+      border-radius: 999px;
+      line-height: 1;
+    }
+    .plan-option.featured {
+      background: linear-gradient(135deg, #F0FDFA 0%, #FAFAFA 60%);
+      border-left-color: #0D9488;
+    }
 
     .order-summary {
       background: white;
@@ -331,29 +356,32 @@
       </div>
     </div>
 
-    <div class="plan-option selected" onclick="selectPlan(this, 'gap', 795, 'eenmalig')">
+    <div class="plan-option selected featured" onclick="selectPlan(this, 'gap', 795, 'eenmalig')">
       <div class="plan-radio"></div>
-      <div>
-        <div class="plan-name">Gap-analyse</div>
+      <div style="flex:1;">
+        <div class="plan-name">Gap-analyse <span class="plan-popular-tag">Meest gekozen</span></div>
         <div class="plan-desc">Alle 93 Annex A controls, met verplichte bewijsvoering en Lead Auditor review</div>
+        <div class="plan-market">Markt-prijs consultancy: <s>&euro;2.500&ndash;&euro;3.000</s></div>
       </div>
       <div class="plan-price">&euro;795 <span class="plan-period">eenmalig</span></div>
     </div>
 
     <div class="plan-option" onclick="selectPlan(this, 'nis2', 995, 'eenmalig')">
       <div class="plan-radio"></div>
-      <div>
+      <div style="flex:1;">
         <div class="plan-name">NIS2 Readiness</div>
         <div class="plan-desc">Alle 10 NIS2 maatregelen (Art. 21) + meldingsplicht + bestuursaansprakelijkheid</div>
+        <div class="plan-market">Markt-prijs NIS2-traject: <s>&euro;3.500&ndash;&euro;6.000</s></div>
       </div>
       <div class="plan-price">&euro;995 <span class="plan-period">eenmalig</span></div>
     </div>
 
     <div class="plan-option" onclick="selectPlan(this, 'beleid', 395, 'eenmalig')">
       <div class="plan-radio"></div>
-      <div>
+      <div style="flex:1;">
         <div class="plan-name">Beleidspakket</div>
         <div class="plan-desc">Alle ISO 27001 beleidsdocumenten + werkinstructies + NIS2-pakket, sector-specifiek en gevalideerd door Lead Auditor</div>
+        <div class="plan-market">Markt-prijs templates: <s>&euro;800&ndash;&euro;1.500</s></div>
       </div>
       <div class="plan-price">&euro;395 <span class="plan-period">eenmalig</span></div>
     </div>
