@@ -2295,6 +2295,158 @@
       .ga-nav-btn { flex: 1; }
     }
 
+    /* Custom modal — voor submit-review en download-popup */
+    .a27-modal-backdrop {
+      position: fixed; inset: 0;
+      background: rgba(15, 23, 42, 0.5);
+      backdrop-filter: blur(3px);
+      z-index: 1000;
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+    .a27-modal-backdrop.open { opacity: 1; }
+    .a27-modal {
+      background: var(--surface);
+      border-radius: 18px;
+      max-width: 560px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 24px 60px rgba(15, 23, 42, 0.25);
+      transform: scale(0.96);
+      transition: transform 0.22s ease;
+    }
+    .a27-modal-backdrop.open .a27-modal { transform: scale(1); }
+    .a27-modal-header {
+      padding: 28px 32px 20px;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .a27-modal-eyebrow {
+      font-family: 'Sora', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+    .a27-modal-title {
+      font-family: 'Sora', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      letter-spacing: -0.02em;
+      margin-bottom: 8px;
+      line-height: 1.25;
+    }
+    .a27-modal-lead {
+      font-size: 0.92rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+    .a27-modal-steps {
+      list-style: none;
+      padding: 24px 32px;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .a27-modal-steps li {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+    }
+    .a27-modal-step-num {
+      flex-shrink: 0;
+      width: 26px; height: 26px;
+      border-radius: 50%;
+      background: var(--accent-light);
+      color: var(--accent);
+      font-family: 'Sora', sans-serif;
+      font-weight: 700;
+      font-size: 0.82rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .a27-modal-step-title {
+      font-weight: 600;
+      color: var(--text-primary);
+      font-size: 0.93rem;
+      margin-bottom: 2px;
+      line-height: 1.4;
+    }
+    .a27-modal-step-sub {
+      font-size: 0.84rem;
+      color: var(--text-secondary);
+      line-height: 1.55;
+    }
+    .a27-modal-actions {
+      padding: 20px 32px 28px;
+      border-top: 1px solid var(--border-light);
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+    }
+    .a27-modal-btn {
+      padding: 11px 20px;
+      border-radius: 10px;
+      font-family: inherit;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+      display: inline-flex;
+      align-items: center;
+    }
+    .a27-modal-btn-cancel {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+    }
+    .a27-modal-btn-cancel:hover { border-color: var(--text-muted); color: var(--text-primary); }
+    .a27-modal-btn-primary {
+      background: var(--accent);
+      border: 0;
+      color: white;
+      font-weight: 700;
+      box-shadow: 0 4px 12px rgba(13, 148, 136, 0.2);
+    }
+    .a27-modal-btn-primary:hover { background: var(--accent-hover); transform: translateY(-1px); }
+    .a27-modal-btn-warning {
+      background: #FFFBEB;
+      color: #B45309;
+      border: 1px solid #FDE68A;
+    }
+    .a27-modal-btn-warning:hover { background: #FEF3C7; }
+
+    .a27-modal-missing-list {
+      list-style: none;
+      padding: 12px 32px 4px;
+      margin: 0;
+      max-height: 240px;
+      overflow-y: auto;
+      font-size: 0.86rem;
+      color: var(--text-secondary);
+    }
+    .a27-modal-missing-list li {
+      padding: 6px 0;
+      border-bottom: 1px solid var(--border-light);
+      line-height: 1.5;
+    }
+    .a27-modal-missing-list li:last-child { border-bottom: 0; }
+    .a27-modal-missing-list li strong { color: var(--accent); font-family: 'Sora', sans-serif; font-weight: 700; }
+    .a27-modal-missing-list .a27-modal-list-more { color: var(--text-muted); font-style: italic; }
+    @media (max-width: 600px) {
+      .a27-modal-header, .a27-modal-steps, .a27-modal-actions { padding-left: 22px; padding-right: 22px; }
+      .a27-modal-actions { flex-direction: column-reverse; }
+      .a27-modal-btn { width: 100%; justify-content: center; }
+    }
+
     /* Print styling — alleen rapport-content op PDF */
     @media print {
       body { background: #fff; }
@@ -3677,7 +3829,8 @@ async function requestAuditorReview() {
     if (typeof showToast === 'function') showToast('Vul eerst minimaal enkele vragen in voordat u indient', { error: true });
     return;
   }
-  if (!confirm('Self-assessment indienen voor Lead Auditor review?\n\nWat gebeurt er hierna:\n1. Uw antwoorden + bewijsvoering worden vastgelegd\n2. Lead Auditor krijgt notificatie en start review\n3. AI-analyse genereert eerste-ronde bevindingen\n4. Auditor valideert + scherpt aan + voegt persoonlijk oordeel toe\n5. U ontvangt het officiële eindrapport (meestal binnen 48u)\n\nDoorgaan?')) return;
+  const confirmed = await showSubmitReviewModal(totalAnswers);
+  if (!confirmed) return;
 
   try {
     // Snapshot van gap-answers in Supabase (zekerheid dat alles is opgeslagen)
@@ -3717,6 +3870,141 @@ async function requestAuditorReview() {
     console.error('requestAuditorReview', e);
     if (typeof showToast === 'function') showToast('Indienen mislukt: ' + (e.message || 'onbekend'), { error: true, duration: 5000 });
   }
+}
+
+// Custom modal voor Lead Auditor review submission
+function showSubmitReviewModal(totalAnswers) {
+  return new Promise(resolve => {
+    let modal = document.getElementById('submitReviewModal');
+    if (modal) modal.remove();
+    modal = document.createElement('div');
+    modal.id = 'submitReviewModal';
+    modal.className = 'a27-modal-backdrop';
+    modal.innerHTML = `
+      <div class="a27-modal" role="dialog" aria-labelledby="submitReviewTitle">
+        <div class="a27-modal-header">
+          <div class="a27-modal-eyebrow">Self-assessment indienen</div>
+          <h2 id="submitReviewTitle" class="a27-modal-title">Klaar voor Lead Auditor review?</h2>
+          <p class="a27-modal-lead">U heeft <strong>${totalAnswers}</strong> vragen beantwoord. Hieronder ziet u wat er na bevestiging gebeurt.</p>
+        </div>
+        <ol class="a27-modal-steps">
+          <li>
+            <span class="a27-modal-step-num">1</span>
+            <div>
+              <div class="a27-modal-step-title">Antwoorden + bewijsvoering vastgelegd</div>
+              <div class="a27-modal-step-sub">Uw scores en geüploade evidence worden onveranderlijk gemarkeerd voor de review.</div>
+            </div>
+          </li>
+          <li>
+            <span class="a27-modal-step-num">2</span>
+            <div>
+              <div class="a27-modal-step-title">Lead Auditor krijgt notificatie</div>
+              <div class="a27-modal-step-sub">Raoul ontvangt direct bericht en start de review binnen één werkdag.</div>
+            </div>
+          </li>
+          <li>
+            <span class="a27-modal-step-num">3</span>
+            <div>
+              <div class="a27-modal-step-title">AI-analyse genereert eerste draft</div>
+              <div class="a27-modal-step-sub">Claude Opus leest uw antwoorden + evidence en stelt bevindingen voor.</div>
+            </div>
+          </li>
+          <li>
+            <span class="a27-modal-step-num">4</span>
+            <div>
+              <div class="a27-modal-step-title">Auditor valideert + tekent</div>
+              <div class="a27-modal-step-sub">Lead Auditor toetst elke bevinding handmatig, scherpt aan, voegt persoonlijk oordeel toe.</div>
+            </div>
+          </li>
+          <li>
+            <span class="a27-modal-step-num">5</span>
+            <div>
+              <div class="a27-modal-step-title">Officieel eindrapport vrijgegeven</div>
+              <div class="a27-modal-step-sub">Meestal binnen 48 uur in uw rapportage-tab beschikbaar als signed-off PDF.</div>
+            </div>
+          </li>
+        </ol>
+        <div class="a27-modal-actions">
+          <button class="a27-modal-btn a27-modal-btn-cancel" id="srmCancel">Nog niet, ik wil eerst nog kijken</button>
+          <button class="a27-modal-btn a27-modal-btn-primary" id="srmConfirm">
+            Indienen voor review
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="margin-left:6px;"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(modal);
+    requestAnimationFrame(() => modal.classList.add('open'));
+
+    function close(value) {
+      modal.classList.remove('open');
+      setTimeout(() => modal.remove(), 220);
+      resolve(value);
+    }
+    modal.querySelector('#srmCancel').addEventListener('click', () => close(false));
+    modal.querySelector('#srmConfirm').addEventListener('click', () => close(true));
+    modal.addEventListener('click', (e) => { if (e.target === modal) close(false); });
+    document.addEventListener('keydown', function esc(e) {
+      if (e.key === 'Escape') { close(false); document.removeEventListener('keydown', esc); }
+    });
+  });
+}
+
+// Modal voor "Onderbouwing ontbreekt" bij download — geeft 3 keuzes
+// returns: 'fix' | 'continue' | null
+function showMissingEvidenceModal(missingControls) {
+  return new Promise(resolve => {
+    let modal = document.getElementById('missingEvidenceModal');
+    if (modal) modal.remove();
+    modal = document.createElement('div');
+    modal.id = 'missingEvidenceModal';
+    modal.className = 'a27-modal-backdrop';
+    const list = missingControls.slice(0, 10).map(c =>
+      `<li><strong>${esc(c.id)}</strong> &middot; ${esc(c.name || '')}</li>`
+    ).join('');
+    const more = missingControls.length > 10
+      ? `<li class="a27-modal-list-more">+ ${missingControls.length - 10} meer controls</li>` : '';
+    modal.innerHTML = `
+      <div class="a27-modal" role="dialog" aria-labelledby="meTitle">
+        <div class="a27-modal-header">
+          <div class="a27-modal-eyebrow" style="color:#B45309;">Onderbouwing ontbreekt</div>
+          <h2 id="meTitle" class="a27-modal-title">${missingControls.length} control(s) zonder bewijs</h2>
+          <p class="a27-modal-lead">U claimt "Grotendeels" of "Volledig" compliant op deze controls, maar er is geen bewijsstuk of toelichting aangeleverd. Voor een auditor-ready rapport is per claim minimaal één van deze vereist:</p>
+          <ul style="margin:14px 0 0;padding-left:20px;font-size:0.88rem;color:var(--text-secondary);line-height:1.65;">
+            <li>Een bewijsbestand (upload, bv. beleid, screenshot, export)</li>
+            <li>Een ingevulde toelichting (procedure, locatie, eigenaar)</li>
+          </ul>
+        </div>
+        <ul class="a27-modal-missing-list">
+          ${list}
+          ${more}
+        </ul>
+        <div class="a27-modal-actions">
+          <button class="a27-modal-btn a27-modal-btn-cancel" id="meAbort">Annuleren</button>
+          <button class="a27-modal-btn a27-modal-btn-warning" id="meContinue">Toch downloaden (zonder review)</button>
+          <button class="a27-modal-btn a27-modal-btn-primary" id="meFix">
+            Naar eerste control
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="margin-left:6px;"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(modal);
+    requestAnimationFrame(() => modal.classList.add('open'));
+
+    function close(value) {
+      modal.classList.remove('open');
+      setTimeout(() => modal.remove(), 220);
+      resolve(value);
+    }
+    modal.querySelector('#meAbort').addEventListener('click', () => close(null));
+    modal.querySelector('#meContinue').addEventListener('click', () => close('continue'));
+    modal.querySelector('#meFix').addEventListener('click', () => close('fix'));
+    modal.addEventListener('click', (e) => { if (e.target === modal) close(null); });
+    document.addEventListener('keydown', function esc(e) {
+      if (e.key === 'Escape') { close(null); document.removeEventListener('keydown', esc); }
+    });
+  });
 }
 
 // Backwards-compat alias — oude code/links naar deze functie blijven werken
@@ -6264,7 +6552,7 @@ async function saveGapAnalyse() {
 }
 
 // ── PDF RAPPORT GENERATOR ──
-function generateReport() {
+async function generateReport() {
   // Pre-flight: bij "Grotendeels" of "Volledig" compliant (3 of 4) is onderbouwing vereist
   const missingEvidence = [];
   controls.forEach(ctrl => {
@@ -6284,26 +6572,21 @@ function generateReport() {
   });
 
   if (missingEvidence.length > 0) {
-    const preview = missingEvidence.slice(0, 8).map(c => '• ' + c.id + ' — ' + (c.name || '')).join('\n');
-    const more = missingEvidence.length > 8 ? `\n\n…en nog ${missingEvidence.length - 8} controls` : '';
-    alert(
-      `Onderbouwing ontbreekt bij ${missingEvidence.length} control(s) waar u "Grotendeels" of "Volledig" compliant claimt:\n\n` +
-      preview + more +
-      `\n\nVoor een auditor-ready rapport is per zulke claim minimaal één van deze vereist:\n` +
-      `  1) Een bewijsbestand (upload), of\n` +
-      `  2) Een toelichting (procedure, locatie, eigenaar ingevuld).\n\n` +
-      `U wordt nu naar de eerste ontbrekende control gescrolled.`
-    );
-    missingEvidence.forEach(c => {
-      const el = document.getElementById('ctrl_' + c.id.replace(/\./g, '_'));
-      if (el) {
-        el.classList.add('ga-ctrl-flash');
-        setTimeout(() => el.classList.remove('ga-ctrl-flash'), 3000);
-      }
-    });
-    const first = document.getElementById('ctrl_' + missingEvidence[0].id.replace(/\./g, '_'));
-    if (first) first.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    return;
+    const choice = await showMissingEvidenceModal(missingEvidence);
+    if (choice === 'fix') {
+      missingEvidence.forEach(c => {
+        const el = document.getElementById('ctrl_' + c.id.replace(/\./g, '_'));
+        if (el) {
+          el.classList.add('ga-ctrl-flash');
+          setTimeout(() => el.classList.remove('ga-ctrl-flash'), 3000);
+        }
+      });
+      const first = document.getElementById('ctrl_' + missingEvidence[0].id.replace(/\./g, '_'));
+      if (first) first.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+    if (choice !== 'continue') return;
+    // 'continue' → ga door met genereren ondanks ontbrekend bewijs
   }
 
   // Collect data

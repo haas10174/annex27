@@ -11,6 +11,7 @@
   <meta name="theme-color" content="#14b8a6" />
   <script src="/analytics-admin.js"></script>
   <script src="/gap-questions-v2.js"></script>
+  <script src="/mock-evidence.js"></script>
 
   <meta http-equiv="X-Content-Type-Options" content="nosniff" />
   <meta name="referrer" content="strict-origin-when-cross-origin" />
@@ -490,6 +491,54 @@
       display: flex;
       gap: 8px;
     }
+    /* Test-account banner — duidelijke visuele markering bovenaan klant-detail */
+    .test-account-banner {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: linear-gradient(90deg, #FEF3C7 0%, #FFFBEB 100%);
+      border: 1px solid #FCD34D;
+      border-left: 4px solid #D97706;
+      border-radius: 10px;
+      padding: 12px 16px;
+      margin-bottom: 16px;
+    }
+    .test-account-banner-icon {
+      flex-shrink: 0;
+      width: 32px; height: 32px;
+      border-radius: 8px;
+      background: rgba(217,119,6,0.15);
+      display: flex; align-items: center; justify-content: center;
+      color: #B45309;
+    }
+    .test-account-banner-icon svg { width: 18px; height: 18px; fill: none; stroke: currentColor; }
+    .test-account-banner-text {
+      flex: 1;
+      font-size: 0.86rem;
+      color: #78350F;
+      line-height: 1.5;
+    }
+    .test-account-banner-text strong {
+      color: #92400E;
+      letter-spacing: 0.08em;
+      font-family: 'Sora', sans-serif;
+      font-weight: 800;
+      margin-right: 8px;
+      font-size: 0.78rem;
+    }
+    .test-account-banner-close {
+      flex-shrink: 0;
+      background: transparent;
+      border: 0;
+      color: #B45309;
+      font-size: 1.4rem;
+      cursor: pointer;
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      transition: background 0.15s;
+    }
+    .test-account-banner-close:hover { background: rgba(217,119,6,0.15); }
+
     /* AI-draft progress UX */
     .aidraft-status-running { display: block !important; padding: 16px 0 0; color: rgba(255,255,255,0.85); }
     .aidraft-progress-bar {
@@ -1368,6 +1417,17 @@
     </div>
 
     <div id="mainContent" style="display:none;">
+      <!-- Test-account banner — alleen zichtbaar bij is_test=true -->
+      <div id="testAccountBanner" class="test-account-banner" style="display:none;">
+        <div class="test-account-banner-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+        </div>
+        <div class="test-account-banner-text">
+          <strong>TEST-ACCOUNT</strong>
+          <span id="testAccountBannerSub">Dit account is gemarkeerd als test (admin/auditor of test- prefix). Wijzigingen tellen niet voor productie-statistieken.</span>
+        </div>
+        <button class="test-account-banner-close" onclick="document.getElementById('testAccountBanner').style.display='none';" aria-label="Sluiten">×</button>
+      </div>
       <div class="main-header">
         <div>
           <h1 class="main-title" id="clientTitle">&nbsp;</h1>
@@ -4041,6 +4101,24 @@ async function selectClient(userId) {
   document.getElementById('mainEmpty').style.display = 'none';
   document.getElementById('mainContent').style.display = 'block';
 
+  // Test-account banner zichtbaar maken bij is_test
+  const banner = document.getElementById('testAccountBanner');
+  if (banner) {
+    if (currentClient.is_test) {
+      banner.style.display = 'flex';
+      const sub = document.getElementById('testAccountBannerSub');
+      if (sub) {
+        const reason = currentClient.pakket === 'admin' ? 'admin-pakket'
+          : (currentClient.email && /^test[-_]/i.test(currentClient.email)) ? 'e-mail prefix test-'
+          : (currentClient.email && /\.test$|@annex27\.test/i.test(currentClient.email)) ? '.test-domein'
+          : 'is_test-flag in metadata';
+        sub.textContent = `Gemarkeerd via: ${reason}. Wijzigingen tellen niet voor productie-statistieken. Gebruik "Seed test-data" om realistisch bewijs in te vullen of "Wis testdata" om te resetten.`;
+      }
+    } else {
+      banner.style.display = 'none';
+    }
+  }
+
   document.getElementById('clientTitle').textContent = currentClient.bedrijf || currentClient.naam || currentClient.email;
   document.getElementById('clientInfo').textContent = `${currentClient.naam || ''} · ${currentClient.email} · ${currentClient.pakket || 'gap'}-pakket`;
 
@@ -4502,8 +4580,12 @@ async function renderClientActions() {
     </button>`;
   }
 
-  // Verwijder — alleen voor test-accounts (extra confirm vereist)
+  // Verwijder + Seed — alleen voor test-accounts
   if (currentClient.is_test) {
+    html += `<button class="action-btn" style="background:rgba(13,148,136,0.10);color:var(--accent);border-color:rgba(13,148,136,0.4);" onclick="seedMockData()" title="Vul realistische mock-bewijsvoering in voor alle 114 controls. Voor training en AI-rapport-validatie.">
+      <svg viewBox="0 0 24 24"><path d="M12 2L4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6l-8-4z"/><polyline points="9.5 12.5 11 14 14.5 10.5"/></svg>
+      Seed test-data
+    </button>`;
     html += `<button class="action-btn" style="color:var(--danger);border-color:rgba(220,38,38,0.3);" onclick="deleteTestClient()" title="Verwijder test-data: gap-antwoorden + bevindingen + bewijsvoering. Alleen voor test-accounts.">
       <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-2 14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2L5 6"/></svg>
       Wis testdata
@@ -4544,6 +4626,181 @@ async function archiveClient() {
   } catch (e) {
     adminToast('Archiveren mislukt: ' + (e.message || 'onbekend'), { error: true });
   }
+}
+
+// Seed mock-evidence — alleen voor test-accounts (is_test=true)
+async function seedMockData() {
+  if (!currentClient || !currentClient.is_test) {
+    adminToast('Alleen beschikbaar voor test-accounts', { error: true, duration: 4000 });
+    return;
+  }
+  if (!window.MockEvidence || typeof window.MockEvidence.seedMockEvidence !== 'function') {
+    adminToast('mock-evidence.js niet geladen', { error: true, duration: 5000 });
+    return;
+  }
+  if (!confirm(`Seed realistische mock-bewijsvoering voor "${currentClient.email}"?\n\nVult voor alle 114 controls (93 Annex A + 21 ISMS Clausules):\n• gestructureerde bewijsvoering (procedure, locatie, eigenaar, datum, toelichting)\n• gap-antwoorden per dimensie (CMMI 0-4)\n• realistische mix van strong / medium / weak / nvt\n\nBestaande data wordt overschreven.`)) return;
+
+  // Bouw lijst van alle controls (Annex A + ISMS Clausules)
+  // Wij hebben deze niet in admin.html staan, dus halen via Supabase of hardcoded.
+  // Strategie: gebruik dezelfde controls-array als dashboard.html. Hier hardcoden voor robustness.
+  const allControls = await loadControlsForSeed();
+
+  // Bouw gapQuestions-map
+  const gapQuestionsMap = {};
+  allControls.forEach(c => {
+    if (typeof window.getGapQuestionsForControl === 'function') {
+      gapQuestionsMap[c.id] = window.getGapQuestionsForControl(c.id, c.name);
+    } else {
+      gapQuestionsMap[c.id] = [];
+    }
+  });
+
+  const btn = document.querySelector('[onclick="seedMockData()"]');
+  if (btn) { btn.disabled = true; btn.style.opacity = '0.6'; btn.innerHTML = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg> Seeding…'; }
+
+  adminToast('Mock-data seeden voor ' + allControls.length + ' controls...', { duration: 6000 });
+
+  try {
+    const result = await window.MockEvidence.seedMockEvidence(sb, currentClient.user_id, allControls, gapQuestionsMap, {
+      onProgress: (p) => {
+        if (p.phase === 'control' && p.i % 20 === 0) {
+          if (btn) btn.innerHTML = `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg> ${p.i}/${p.total}…`;
+        }
+      }
+    });
+    adminToast(`Klaar: ${result.notes} bewijsvoering-records, ${result.answers} antwoorden geseed.`, { duration: 6000 });
+    setTimeout(() => loadKlantDetail(currentClient.user_id), 1200);
+  } catch (e) {
+    console.error(e);
+    adminToast('Seed mislukt: ' + (e.message || 'onbekend'), { error: true, duration: 8000 });
+  } finally {
+    if (btn) { btn.disabled = false; btn.style.opacity = ''; btn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M12 2L4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6l-8-4z"/><polyline points="9.5 12.5 11 14 14.5 10.5"/></svg> Seed test-data'; }
+  }
+}
+
+// Bouw controls-lijst voor seed (gelijk aan dashboard.html)
+async function loadControlsForSeed() {
+  return [
+    // ISMS Clausules
+    { cat: 'ISMS Clausules', id: 'C.4.1', name: 'Context van de organisatie' },
+    { cat: 'ISMS Clausules', id: 'C.4.2', name: 'Behoeften en verwachtingen van belanghebbenden' },
+    { cat: 'ISMS Clausules', id: 'C.4.3', name: 'Scope van het ISMS' },
+    { cat: 'ISMS Clausules', id: 'C.5.1', name: 'Leiderschap en commitment van de directie' },
+    { cat: 'ISMS Clausules', id: 'C.5.2', name: 'Informatiebeveiligingsbeleid' },
+    { cat: 'ISMS Clausules', id: 'C.5.3', name: 'Rollen, verantwoordelijkheden en bevoegdheden' },
+    { cat: 'ISMS Clausules', id: 'C.6.1', name: 'Risicobeoordeling en risicobehandeling' },
+    { cat: 'ISMS Clausules', id: 'C.6.2', name: 'Informatiebeveiligingsdoelstellingen en planning' },
+    { cat: 'ISMS Clausules', id: 'C.7.1', name: 'Middelen voor het ISMS' },
+    { cat: 'ISMS Clausules', id: 'C.7.2', name: 'Competentie van ISMS-betrokkenen' },
+    { cat: 'ISMS Clausules', id: 'C.7.3', name: 'Bewustwording bij alle medewerkers' },
+    { cat: 'ISMS Clausules', id: 'C.7.4', name: 'Communicatie over informatiebeveiliging' },
+    { cat: 'ISMS Clausules', id: 'C.7.5', name: 'Gedocumenteerde informatie en documentbeheer' },
+    { cat: 'ISMS Clausules', id: 'C.8.1', name: 'Operationele planning en beheersing' },
+    { cat: 'ISMS Clausules', id: 'C.8.2', name: 'Uitvoering risicobeoordeling' },
+    { cat: 'ISMS Clausules', id: 'C.8.3', name: 'Uitvoering risicobehandeling' },
+    { cat: 'ISMS Clausules', id: 'C.9.1', name: 'Monitoring, meting, analyse en evaluatie' },
+    { cat: 'ISMS Clausules', id: 'C.9.2', name: 'Interne audit' },
+    { cat: 'ISMS Clausules', id: 'C.9.3', name: 'Managementreview' },
+    { cat: 'ISMS Clausules', id: 'C.10.1', name: 'Non-conformiteiten en correctieve maatregelen' },
+    { cat: 'ISMS Clausules', id: 'C.10.2', name: 'Continue verbetering' },
+    // A.5 Organisatorisch
+    { cat: 'Organisatorisch', id: 'A.5.1', name: 'Beleid voor informatiebeveiliging' },
+    { cat: 'Organisatorisch', id: 'A.5.2', name: 'Rollen en verantwoordelijkheden' },
+    { cat: 'Organisatorisch', id: 'A.5.3', name: 'Scheiding van taken' },
+    { cat: 'Organisatorisch', id: 'A.5.4', name: 'Managementverantwoordelijkheden' },
+    { cat: 'Organisatorisch', id: 'A.5.5', name: 'Contact met autoriteiten' },
+    { cat: 'Organisatorisch', id: 'A.5.6', name: 'Contact met speciale belangengroepen' },
+    { cat: 'Organisatorisch', id: 'A.5.7', name: 'Threat intelligence' },
+    { cat: 'Organisatorisch', id: 'A.5.8', name: 'IB in projectmanagement' },
+    { cat: 'Organisatorisch', id: 'A.5.9', name: 'Inventarisatie van assets' },
+    { cat: 'Organisatorisch', id: 'A.5.10', name: 'Acceptabel gebruik' },
+    { cat: 'Organisatorisch', id: 'A.5.11', name: 'Teruggave van assets' },
+    { cat: 'Organisatorisch', id: 'A.5.12', name: 'Classificatie van informatie' },
+    { cat: 'Organisatorisch', id: 'A.5.13', name: 'Labeling van informatie' },
+    { cat: 'Organisatorisch', id: 'A.5.14', name: 'Informatieoverdracht' },
+    { cat: 'Organisatorisch', id: 'A.5.15', name: 'Toegangsbeveiliging' },
+    { cat: 'Organisatorisch', id: 'A.5.16', name: 'Identiteitsbeheer' },
+    { cat: 'Organisatorisch', id: 'A.5.17', name: 'Authenticatie-informatie' },
+    { cat: 'Organisatorisch', id: 'A.5.18', name: 'Toegangsrechten' },
+    { cat: 'Organisatorisch', id: 'A.5.19', name: 'IB in leveranciersrelaties' },
+    { cat: 'Organisatorisch', id: 'A.5.20', name: 'IB in leveranciersovereenkomsten' },
+    { cat: 'Organisatorisch', id: 'A.5.21', name: 'ICT-toeleveringsketen' },
+    { cat: 'Organisatorisch', id: 'A.5.22', name: 'Monitoring leveranciersdiensten' },
+    { cat: 'Organisatorisch', id: 'A.5.23', name: 'Clouddiensten beveiliging' },
+    { cat: 'Organisatorisch', id: 'A.5.24', name: 'Incidentmanagement planning' },
+    { cat: 'Organisatorisch', id: 'A.5.25', name: 'Beoordeling IB-gebeurtenissen' },
+    { cat: 'Organisatorisch', id: 'A.5.26', name: 'Respons op incidenten' },
+    { cat: 'Organisatorisch', id: 'A.5.27', name: 'Leren van incidenten' },
+    { cat: 'Organisatorisch', id: 'A.5.28', name: 'Verzameling van bewijsmateriaal' },
+    { cat: 'Organisatorisch', id: 'A.5.29', name: 'IB tijdens verstoring' },
+    { cat: 'Organisatorisch', id: 'A.5.30', name: 'ICT-gereedheid bedrijfscontinuïteit' },
+    { cat: 'Organisatorisch', id: 'A.5.31', name: 'Wettelijke vereisten' },
+    { cat: 'Organisatorisch', id: 'A.5.32', name: 'Intellectuele eigendomsrechten' },
+    { cat: 'Organisatorisch', id: 'A.5.33', name: 'Bescherming van registraties' },
+    { cat: 'Organisatorisch', id: 'A.5.34', name: 'Privacy en PII' },
+    { cat: 'Organisatorisch', id: 'A.5.35', name: 'Onafhankelijke beoordeling IB' },
+    { cat: 'Organisatorisch', id: 'A.5.36', name: 'Naleving beleid en normen' },
+    { cat: 'Organisatorisch', id: 'A.5.37', name: 'Gedocumenteerde procedures' },
+    // A.6 Personeel
+    { cat: 'Personeel', id: 'A.6.1', name: 'Screening' },
+    { cat: 'Personeel', id: 'A.6.2', name: 'Arbeidsvoorwaarden' },
+    { cat: 'Personeel', id: 'A.6.3', name: 'Bewustwording en training' },
+    { cat: 'Personeel', id: 'A.6.4', name: 'Disciplinair proces' },
+    { cat: 'Personeel', id: 'A.6.5', name: 'Verantwoordelijkheden bij beëindiging' },
+    { cat: 'Personeel', id: 'A.6.6', name: 'Geheimhoudingsovereenkomsten' },
+    { cat: 'Personeel', id: 'A.6.7', name: 'Werken op afstand' },
+    { cat: 'Personeel', id: 'A.6.8', name: 'Rapportage IB-gebeurtenissen' },
+    // A.7 Fysiek
+    { cat: 'Fysiek', id: 'A.7.1', name: 'Fysieke beveiligingsperimeters' },
+    { cat: 'Fysiek', id: 'A.7.2', name: 'Fysieke toegang' },
+    { cat: 'Fysiek', id: 'A.7.3', name: 'Beveiliging kantoren en faciliteiten' },
+    { cat: 'Fysiek', id: 'A.7.4', name: 'Fysieke beveiligingsmonitoring' },
+    { cat: 'Fysiek', id: 'A.7.5', name: 'Bescherming tegen omgevingsdreigingen' },
+    { cat: 'Fysiek', id: 'A.7.6', name: 'Werken in beveiligde zones' },
+    { cat: 'Fysiek', id: 'A.7.7', name: 'Clear desk en clear screen' },
+    { cat: 'Fysiek', id: 'A.7.8', name: 'Plaatsing apparatuur' },
+    { cat: 'Fysiek', id: 'A.7.9', name: 'Beveiliging assets buiten terrein' },
+    { cat: 'Fysiek', id: 'A.7.10', name: 'Opslagmedia' },
+    { cat: 'Fysiek', id: 'A.7.11', name: 'Ondersteunende nutsvoorzieningen' },
+    { cat: 'Fysiek', id: 'A.7.12', name: 'Beveiliging bekabeling' },
+    { cat: 'Fysiek', id: 'A.7.13', name: 'Onderhoud apparatuur' },
+    { cat: 'Fysiek', id: 'A.7.14', name: 'Veilige verwijdering apparatuur' },
+    // A.8 Technologie
+    { cat: 'Technologie', id: 'A.8.1', name: 'Gebruikersapparatuur' },
+    { cat: 'Technologie', id: 'A.8.2', name: 'Geprivilegieerde toegangsrechten' },
+    { cat: 'Technologie', id: 'A.8.3', name: 'Beperking toegang tot informatie' },
+    { cat: 'Technologie', id: 'A.8.4', name: 'Toegang tot broncode' },
+    { cat: 'Technologie', id: 'A.8.5', name: 'Beveiligde authenticatie' },
+    { cat: 'Technologie', id: 'A.8.6', name: 'Capaciteitsbeheer' },
+    { cat: 'Technologie', id: 'A.8.7', name: 'Bescherming tegen malware' },
+    { cat: 'Technologie', id: 'A.8.8', name: 'Beheer technische kwetsbaarheden' },
+    { cat: 'Technologie', id: 'A.8.9', name: 'Configuratiebeheer' },
+    { cat: 'Technologie', id: 'A.8.10', name: 'Verwijdering van informatie' },
+    { cat: 'Technologie', id: 'A.8.11', name: 'Datamaskering' },
+    { cat: 'Technologie', id: 'A.8.12', name: 'Preventie gegevenslekken' },
+    { cat: 'Technologie', id: 'A.8.13', name: 'Back-up van informatie' },
+    { cat: 'Technologie', id: 'A.8.14', name: 'Redundantie faciliteiten' },
+    { cat: 'Technologie', id: 'A.8.15', name: 'Logging' },
+    { cat: 'Technologie', id: 'A.8.16', name: 'Monitoringactiviteiten' },
+    { cat: 'Technologie', id: 'A.8.17', name: 'Kloksynchronisatie' },
+    { cat: 'Technologie', id: 'A.8.18', name: 'Geprivilegieerde hulpprogramma\'s' },
+    { cat: 'Technologie', id: 'A.8.19', name: 'Software op operationele systemen' },
+    { cat: 'Technologie', id: 'A.8.20', name: 'Netwerkbeveiliging' },
+    { cat: 'Technologie', id: 'A.8.21', name: 'Beveiliging netwerkdiensten' },
+    { cat: 'Technologie', id: 'A.8.22', name: 'Segmentatie van netwerken' },
+    { cat: 'Technologie', id: 'A.8.23', name: 'Webfiltering' },
+    { cat: 'Technologie', id: 'A.8.24', name: 'Gebruik van cryptografie' },
+    { cat: 'Technologie', id: 'A.8.25', name: 'Veilige ontwikkellevenscyclus' },
+    { cat: 'Technologie', id: 'A.8.26', name: 'Beveiligingseisen applicaties' },
+    { cat: 'Technologie', id: 'A.8.27', name: 'Veilige systeemarchitectuur' },
+    { cat: 'Technologie', id: 'A.8.28', name: 'Veilig coderen' },
+    { cat: 'Technologie', id: 'A.8.29', name: 'Beveiligingstesten' },
+    { cat: 'Technologie', id: 'A.8.30', name: 'Uitbestede ontwikkeling' },
+    { cat: 'Technologie', id: 'A.8.31', name: 'Scheiding omgevingen' },
+    { cat: 'Technologie', id: 'A.8.32', name: 'Wijzigingsbeheer' },
+    { cat: 'Technologie', id: 'A.8.33', name: 'Testinformatie' },
+    { cat: 'Technologie', id: 'A.8.34', name: 'Bescherming tijdens audittesten' }
+  ];
 }
 
 // Verwijder test-data — alleen voor admin/auditor accounts (is_test=true)
