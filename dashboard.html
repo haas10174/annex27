@@ -1689,30 +1689,172 @@
     }
     .admin-test-bar .atb-admin:hover { text-decoration: underline; }
 
+    /* Question wrapper — groups question text + dim-badge */
+    .ga-q-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .ga-q-row .ga-control-question { margin-bottom: 0; flex: 1; }
+    .ga-dim-badge {
+      flex-shrink: 0;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 9px;
+      font-family: 'Sora', sans-serif;
+      font-size: 0.64rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      border-radius: 999px;
+      border: 1px solid;
+      line-height: 1.3;
+      white-space: nowrap;
+      margin-top: 2px;
+    }
+    .ga-dim-badge.dim-beleid        { color: #1E40AF; background: #EFF6FF; border-color: #BFDBFE; }
+    .ga-dim-badge.dim-proces        { color: #6B21A8; background: #FAF5FF; border-color: #E9D5FF; }
+    .ga-dim-badge.dim-techniek      { color: #0E7490; background: #ECFEFF; border-color: #A5F3FC; }
+    .ga-dim-badge.dim-eigenaarschap { color: #B45309; background: #FFFBEB; border-color: #FDE68A; }
+    .ga-dim-badge.dim-effectiviteit { color: #047857; background: #ECFDF5; border-color: #A7F3D0; }
+
     .ga-answer-grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 8px;
-      margin-bottom: 20px;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 6px;
+      margin-bottom: 22px;
     }
     .ga-answer-btn {
-      padding: 14px 10px;
+      position: relative;
+      padding: 10px 6px 10px;
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: var(--radius);
       font-family: 'Inter', sans-serif;
-      font-size: 0.85rem;
+      font-size: 0.78rem;
       font-weight: 500;
       color: var(--text-secondary);
       cursor: pointer;
-      transition: all 0.2s;
+      transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
       text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      line-height: 1.25;
+      min-height: 64px;
     }
-    .ga-answer-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .ga-answer-btn::before {
+      content: attr(data-score);
+      font-family: 'Sora', sans-serif;
+      font-size: 0.66rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+    .ga-answer-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: translateY(-1px);
+      box-shadow: 0 2px 6px rgba(13,148,136,0.08);
+    }
+    .ga-answer-btn:focus-visible {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(13,148,136,0.18);
+    }
     .ga-answer-btn.selected { background: var(--accent); color: white; border-color: var(--accent); font-weight: 600; }
     .ga-answer-btn.selected-partial { background: var(--warning); color: white; border-color: var(--warning); font-weight: 600; }
     .ga-answer-btn.selected-no { background: var(--danger); color: white; border-color: var(--danger); font-weight: 600; }
     .ga-answer-btn.selected-na { background: var(--text-muted); color: white; border-color: var(--text-muted); font-weight: 600; }
+    .ga-answer-btn.selected::before,
+    .ga-answer-btn.selected-partial::before,
+    .ga-answer-btn.selected-no::before,
+    .ga-answer-btn.selected-na::before { color: rgba(255,255,255,0.78); }
+
+    /* Control score chip — top-right of card */
+    .ga-control-meta {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 6px;
+    }
+    .ga-control-meta-left { flex: 1; min-width: 0; }
+    .ga-control-score {
+      flex-shrink: 0;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px 4px 8px;
+      border-radius: 999px;
+      font-family: 'Sora', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      background: #F1F5F9;
+      color: var(--text-muted);
+      border: 1px solid var(--border-light);
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+      white-space: nowrap;
+    }
+    .ga-control-score-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: currentColor;
+      opacity: 0.55;
+    }
+    .ga-control-score.score-good     { background: #ECFDF5; color: #047857; border-color: #A7F3D0; }
+    .ga-control-score.score-mid      { background: #FFFBEB; color: #B45309; border-color: #FDE68A; }
+    .ga-control-score.score-low      { background: #FEF2F2; color: #B91C1C; border-color: #FECACA; }
+    .ga-control-score.score-na       { background: #F1F5F9; color: #64748B; border-color: #E2E8F0; }
+
+    /* TOC strip — control dots in module overview */
+    .ga-toc {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border-light);
+    }
+    .ga-toc-label {
+      width: 100%;
+      font-family: 'Sora', sans-serif;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+    .ga-toc-dot {
+      width: 22px; height: 22px;
+      border-radius: 6px;
+      background: #F1F5F9;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      font-family: 'Sora', sans-serif;
+      font-size: 0.6rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.15s, box-shadow 0.15s, background 0.15s, border-color 0.15s, color 0.15s;
+      padding: 0;
+    }
+    .ga-toc-dot:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    }
+    .ga-toc-dot.done-good { background: #D1FAE5; border-color: #6EE7B7; color: #047857; }
+    .ga-toc-dot.done-mid  { background: #FEF3C7; border-color: #FCD34D; color: #B45309; }
+    .ga-toc-dot.done-low  { background: #FEE2E2; border-color: #FCA5A5; color: #B91C1C; }
+    .ga-toc-dot.done-na   { background: #E2E8F0; border-color: #CBD5E1; color: #475569; }
 
     /* Evidence section — only visible when compliance claimed */
     .ga-evidence {
@@ -5394,6 +5536,21 @@ function renderModuleAssessment(cat) {
           <div class="ga-module-progress-bar"><div class="ga-module-progress-fill" id="gaModuleProgressFill" style="width:${total ? Math.round((answered/total)*100) : 0}%"></div></div>
           <div class="ga-module-progress-pct" id="gaModuleProgressPct">${total ? Math.round((answered/total)*100) : 0}%</div>
         </div>
+        <div class="ga-toc">
+          <div class="ga-toc-label">Spring naar control</div>
+          ${catControls.map((c, ci) => {
+            const cqs = gapQuestions[c.id] || [];
+            const cvals = cqs.map((_, qi) => gapAnswers[c.id + '_' + qi]).filter(v => v !== undefined && v !== 'nvt');
+            let dotCls = '';
+            if (cvals.length) {
+              const cavg = cvals.map(Number).reduce((a,b)=>a+b,0) / cvals.length;
+              dotCls = cavg >= 3 ? 'done-good' : cavg >= 1.5 ? 'done-mid' : 'done-low';
+            } else if (cqs.some((_, qi) => gapAnswers[c.id + '_' + qi] === 'nvt')) {
+              dotCls = 'done-na';
+            }
+            return `<button class="ga-toc-dot ${dotCls}" data-ctrl="${esc(c.id)}" onclick="document.getElementById('ctrl_${c.id.replace(/\./g, '_')}').scrollIntoView({behavior:'smooth',block:'start'})" title="${esc(c.id)} &mdash; ${esc(c.name)}">${ci+1}</button>`;
+          }).join('')}
+        </div>
       </div>
   `;
 
@@ -5462,10 +5619,30 @@ function renderControlCard(ctrl, idx, total) {
   const insight = getControlInsight(ctrl.id);
   const evHint = (typeof evidenceHints !== 'undefined' && evidenceHints[ctrl.id]) || 'Upload bijvoorbeeld beleid, screenshots, logs of procedures die deze claim onderbouwen.';
 
+  // Compute mini-score for this control (avg of answered, ignoring nvt)
+  const scoreVals = qs.map((_, qi) => gapAnswers[ctrl.id + '_' + qi]).filter(v => v !== undefined && v !== 'nvt');
+  let scoreClass = 'score-na', scoreLabel = 'Nog niet beoordeeld';
+  if (scoreVals.length) {
+    const nums = scoreVals.map(v => Number(v));
+    const avg = nums.reduce((a,b) => a+b, 0) / nums.length;
+    const pct = Math.round((avg / 4) * 100);
+    scoreLabel = `${pct}% &middot; ${scoreVals.length}/${qs.length}`;
+    scoreClass = avg >= 3 ? 'score-good' : avg >= 1.5 ? 'score-mid' : 'score-low';
+  } else if (qs.some((_, qi) => gapAnswers[ctrl.id + '_' + qi] === 'nvt')) {
+    scoreLabel = 'N.v.t.'; scoreClass = 'score-na';
+  }
+
   let html = `
     <div class="ga-control-card" id="ctrl_${ctrl.id.replace(/\./g, '_')}">
-      <div class="ga-control-id">${esc(ctrl.id)} &middot; Control ${idx + 1} van ${total}</div>
-      <div class="ga-control-title">${esc(ctrl.name)}</div>
+      <div class="ga-control-meta">
+        <div class="ga-control-meta-left">
+          <div class="ga-control-id">${esc(ctrl.id)} &middot; Control ${idx + 1} van ${total}</div>
+          <div class="ga-control-title">${esc(ctrl.name)}</div>
+        </div>
+        <div class="ga-control-score ${scoreClass}" id="score_${ctrl.id.replace(/\./g, '_')}">
+          <span class="ga-control-score-dot"></span>${scoreLabel}
+        </div>
+      </div>
       <div class="ga-control-context">${esc(insight.context)}</div>
   `;
 
@@ -5518,14 +5695,19 @@ function renderControlCard(ctrl, idx, total) {
     const current = gapAnswers[key];
     const complianceClaimed = current === '4' || current === '3' || current === '2';
     const sectorTag = q.sector ? `<span class="ga-sector-tag" title="Sector-specifieke vraag voor uw ${esc(q.sector)}-profiel">Sector-diepte</span>` : '';
+    const dimBadge = q.dim ? `<span class="ga-dim-badge dim-${esc(q.dim)}" title="Dimensie: ${esc(q.dim)}">${esc(q.dim)}</span>` : '';
 
     html += `
-      <div class="ga-control-question">${esc(q.q)}${sectorTag}</div>
+      <div class="ga-q-row">
+        <div class="ga-control-question">${esc(q.q)}${sectorTag}</div>
+        ${dimBadge}
+      </div>
       <div class="ga-answer-grid">
     `;
     gapOptions.forEach(opt => {
       const selCls = current === opt.value ? opt.cls : '';
-      html += `<button class="ga-answer-btn ${selCls}" onclick="setGaAnswer('${key}','${opt.value}',this)">${esc(opt.label)}</button>`;
+      const scoreLabel = opt.value === 'nvt' ? 'N/A' : opt.value;
+      html += `<button class="ga-answer-btn ${selCls}" data-score="${esc(scoreLabel)}" onclick="setGaAnswer('${key}','${opt.value}',this)" title="${esc(opt.desc || '')}">${esc(opt.label)}</button>`;
     });
     html += `</div>`;
   });
@@ -5702,6 +5884,40 @@ function setGaAnswer(key, value, btn) {
     const hasEvidence = (ev.files.length > 0) || (ev.note && ev.note.trim().length > 0);
     const warn = document.getElementById('warn_' + ctrl.id.replace(/\./g, '_'));
     if (warn) warn.classList.toggle('active', anyClaimed && !hasEvidence);
+  }
+
+  // Live update score-chip voor deze control
+  if (ctrl) {
+    const scEl = document.getElementById('score_' + ctrl.id.replace(/\./g, '_'));
+    if (scEl) {
+      const ctrlQs = gapQuestions[ctrl.id] || [];
+      const vals = ctrlQs.map((_, qi) => gapAnswers[ctrl.id + '_' + qi]).filter(v => v !== undefined && v !== 'nvt');
+      let cls = 'score-na', label = 'Nog niet beoordeeld';
+      if (vals.length) {
+        const nums = vals.map(v => Number(v));
+        const avg = nums.reduce((a,b) => a+b, 0) / nums.length;
+        const pct = Math.round((avg / 4) * 100);
+        label = `${pct}% &middot; ${vals.length}/${ctrlQs.length}`;
+        cls = avg >= 3 ? 'score-good' : avg >= 1.5 ? 'score-mid' : 'score-low';
+      } else if (ctrlQs.some((_, qi) => gapAnswers[ctrl.id + '_' + qi] === 'nvt')) {
+        label = 'N.v.t.'; cls = 'score-na';
+      }
+      scEl.className = 'ga-control-score ' + cls;
+      scEl.innerHTML = `<span class="ga-control-score-dot"></span>${label}`;
+    }
+    // TOC dot live update
+    const tocDot = document.querySelector(`.ga-toc-dot[data-ctrl="${ctrl.id}"]`);
+    if (tocDot) {
+      const ctrlQs = gapQuestions[ctrl.id] || [];
+      const vals = ctrlQs.map((_, qi) => gapAnswers[ctrl.id + '_' + qi]).filter(v => v !== undefined && v !== 'nvt');
+      tocDot.classList.remove('done-good','done-mid','done-low','done-na');
+      if (vals.length) {
+        const avg = vals.map(Number).reduce((a,b)=>a+b,0) / vals.length;
+        tocDot.classList.add(avg >= 3 ? 'done-good' : avg >= 1.5 ? 'done-mid' : 'done-low');
+      } else if (ctrlQs.some((_, qi) => gapAnswers[ctrl.id + '_' + qi] === 'nvt')) {
+        tocDot.classList.add('done-na');
+      }
+    }
   }
 
   // Live module-progress refresh (huidige module)
