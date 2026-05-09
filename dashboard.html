@@ -1759,6 +1759,12 @@
       gap: 6px;
       margin-bottom: 22px;
     }
+    .ga-answer-grid.bool {
+      grid-template-columns: repeat(5, 1fr);
+    }
+    @media (max-width: 720px) {
+      .ga-answer-grid, .ga-answer-grid.bool { grid-template-columns: repeat(2, 1fr); }
+    }
     .ga-answer-btn {
       position: relative;
       padding: 10px 6px 10px;
@@ -6171,9 +6177,11 @@ function renderControlCard(ctrl, idx, total) {
     const sectorTag = q.sector ? `<span class="ga-sector-tag" title="Sector-specifieke vraag voor uw ${esc(q.sector)}-profiel">Sector-diepte</span>` : '';
     const dimBadge = q.dim ? `<span class="ga-dim-badge dim-${esc(q.dim)}" title="Dimensie: ${esc(q.dim)}">${esc(q.dim)}</span>` : '';
 
-    // Kies answer-set op basis van vraag-type. Default cmmi voor backward-compat.
-    const optionSet = q.type === 'bool' ? gapBoolOptions : gapOptions;
-    const gridCls = q.type === 'bool' ? 'ga-answer-grid bool' : 'ga-answer-grid';
+    // Default: ja/grotendeels/deels/nee voor binaire feiten ("is er X" / "wordt Y gedaan").
+    // Alleen procesmaturiteit-vragen gebruiken CMMI: expliciet kind='cmmi' OF dim/type='effectiviteit'.
+    const isCmmi = q.kind === 'cmmi' || q.type === 'effectiviteit' || q.dim === 'effectiviteit';
+    const optionSet = isCmmi ? gapOptions : gapBoolOptions;
+    const gridCls = isCmmi ? 'ga-answer-grid' : 'ga-answer-grid bool';
     html += `
       <div class="ga-q-row">
         <div class="ga-control-question">${esc(q.q)}${sectorTag}</div>
