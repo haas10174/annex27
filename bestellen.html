@@ -250,6 +250,29 @@
     }
     .terms-accept.invalid { border-color: #DC2626; background: #FEF2F2; }
 
+    .discount-toggle { font-size: 0.78rem; color: #64748B; }
+    .discount-toggle summary {
+      cursor: pointer;
+      list-style: none;
+      padding: 6px 0;
+      user-select: none;
+      transition: color 0.15s;
+    }
+    .discount-toggle summary::-webkit-details-marker { display: none; }
+    .discount-toggle summary:hover { color: #0D9488; }
+    .discount-toggle summary::before {
+      content: '+ ';
+      font-weight: 700;
+      color: #0D9488;
+      margin-right: 4px;
+    }
+    .discount-toggle[open] summary::before { content: '− '; }
+    .discount-toggle #discountInput {
+      margin-top: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
     .order-pay {
       width: 100%;
       padding: 16px;
@@ -493,6 +516,11 @@
 
       <!-- Honeypot: hidden field that real users won't fill in; bots often fill all fields -->
       <input type="text" name="website_url" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;opacity:0;pointer-events:none;" aria-hidden="true" />
+
+      <details class="discount-toggle" id="discountToggle">
+        <summary>Heeft u een kortingscode?</summary>
+        <input class="order-input" type="text" name="discount_code" id="discountInput" placeholder="Kortingscode" maxlength="50" autocomplete="off" />
+      </details>
 
       <label class="terms-accept" for="termsCheck">
         <input type="checkbox" id="termsCheck" name="accept_terms" required />
@@ -911,6 +939,8 @@
         subtotal: selectedPrice,
       });
 
+      const discountCode = (document.getElementById('discountInput')?.value || '').trim().toUpperCase();
+
       const { data: result, error } = await sb.functions.invoke('create-payment', {
         body: {
           plan: selectedPlan,
@@ -920,6 +950,7 @@
           btw_nummer: btw,
           country: vatState.country,
           customer_type: vatState.customerType,
+          discount_code: discountCode,
           accept_terms: true,
           terms_version: '2026-04-22',
         },
