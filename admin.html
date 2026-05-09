@@ -4333,8 +4333,30 @@ async function loadControlEvidence(ctrlId, userId) {
   // Klant-toelichting (gestructureerd) — boven de bestandenlijst zodat je context hebt vóór je files opent
   if (note && (note.procedure_naam || note.locatie || note.eigenaar || note.laatst_gereviewd || note.toelichting)) {
     const fields = [];
-    if (note.procedure_naam) fields.push(`<div><strong style="color:#0F172A;">Procedure/document:</strong> ${esc(note.procedure_naam)}</div>`);
-    if (note.locatie) fields.push(`<div><strong style="color:#0F172A;">Locatie:</strong> ${esc(note.locatie)}</div>`);
+    if (note.procedure_naam) {
+      // Match procedure_naam tegen geüploade files (substring of basename, case-insensitive).
+      // Als hit: render als klikbare preview-link; anders pure tekst + zachte hint dat upload ontbreekt.
+      const procLower = note.procedure_naam.toLowerCase().trim();
+      const matched = files.find(f => {
+        const fn = (f.name || '').toLowerCase();
+        return fn === procLower || fn.includes(procLower) || procLower.includes(fn.replace(/\.[^.]+$/, ''));
+      });
+      if (matched) {
+        const matchPath = `${folder}/${matched.name}`;
+        fields.push(`<div><strong style="color:#0F172A;">Procedure/document:</strong> <a href="javascript:void(0)" onclick="previewEvidence('${esc(matchPath)}','${esc(matched.name)}')" style="color:var(--accent);text-decoration:underline;text-underline-offset:2px;cursor:pointer;">${esc(note.procedure_naam)}</a></div>`);
+      } else {
+        fields.push(`<div><strong style="color:#0F172A;">Procedure/document:</strong> ${esc(note.procedure_naam)} <span style="color:var(--text-muted);font-size:0.78rem;font-style:italic;">(geen matching upload gevonden)</span></div>`);
+      }
+    }
+    if (note.locatie) {
+      const loc = note.locatie.trim();
+      const isUrl = /^https?:\/\//i.test(loc);
+      if (isUrl) {
+        fields.push(`<div><strong style="color:#0F172A;">Locatie:</strong> <a href="${esc(loc)}" target="_blank" rel="noopener noreferrer" style="color:var(--accent);text-decoration:underline;text-underline-offset:2px;">${esc(loc)} ↗</a></div>`);
+      } else {
+        fields.push(`<div><strong style="color:#0F172A;">Locatie:</strong> ${esc(loc)}</div>`);
+      }
+    }
     if (note.eigenaar) fields.push(`<div><strong style="color:#0F172A;">Eigenaar:</strong> ${esc(note.eigenaar)}</div>`);
     if (note.laatst_gereviewd) fields.push(`<div><strong style="color:#0F172A;">Laatst gereviewd:</strong> ${esc(note.laatst_gereviewd)}</div>`);
     html += `<div class="evidence-note" style="margin-bottom:10px;background:rgba(13,148,136,0.05);border-left:3px solid var(--accent);padding:12px 14px;border-radius:6px;">
