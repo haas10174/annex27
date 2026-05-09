@@ -5,6 +5,7 @@
 // Idempotent: mag meerdere keren met dezelfde orderId gedraaid worden.
 
 import type { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2.49.4';
+import { sendPaymentConfirmation } from './send-mail.ts';
 
 const PLAN_TO_PAKKET: Record<string, string> = {
   'gap': 'gap',
@@ -41,13 +42,32 @@ export async function confirmOrder(
   }
 
   // Idempotency: al bevestigd? Geef bestaande state terug zonder opnieuw uit te nodigen of factuur te maken.
+  // Maar als de bevestigings-mail nog niet verstuurd is (oude orders, of eerdere mailfout), alsnog versturen.
   if (order.confirmed_at) {
     const { data: inv } = await supabase
       .from('invoices').select('invoice_number').eq('payment_id', order.payment_id).maybeSingle();
+    const invoiceNumberExisting = inv?.invoice_number ?? null;
+
+    if (!order.confirmation_email_sent_at) {
+      const mailResult = await sendPaymentConfirmation(supabase, {
+        orderId: order.id,
+        email,
+        naam,
+        bedrijf,
+        plan: order.plan,
+        amount: parseFloat(order.amount),
+        invoiceNumber: invoiceNumberExisting,
+        invitedNewUser: false,
+      });
+      if (!mailResult.ok) {
+        console.error(`Bevestigings-mail (backfill) mislukt voor order ${order.id}: ${mailResult.error}`);
+      }
+    }
+
     return {
       ok: true,
       user_id: order.user_id || '',
-      invoice_number: inv?.invoice_number ?? null,
+      invoice_number: invoiceNumberExisting,
       invited_new_user: false,
       already_confirmed: true,
     };
@@ -150,6 +170,22 @@ export async function confirmOrder(
       payment_method: 'mollie',
       payment_id: order.payment_id,
     });
+  }
+
+  // 4. Stuur betalingsbevestigings-mail (idempotent, faalt soft).
+  // Faalt deze, log het en ga door — order is correct bevestigd, mail kan handmatig opnieuw.
+  const mailResult = await sendPaymentConfirmation(supabase, {
+    orderId: order.id,
+    email,
+    naam,
+    bedrijf,
+    plan: order.plan,
+    amount: parseFloat(order.amount),
+    invoiceNumber,
+    invitedNewUser: invitedNew,
+  });
+  if (!mailResult.ok) {
+    console.error(`Bevestigings-mail mislukt voor order ${order.id}: ${mailResult.error}`);
   }
 
   return {
