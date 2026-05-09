@@ -5581,12 +5581,21 @@ function mergeGapQuestions() {
 mergeGapQuestions();
 
 let gapAnswers = {};
+// Default CMMI-schaal voor procesmaturiteit-vragen (hoe wordt iets uitgevoerd / in welke mate effectief).
 const gapOptions = [
   { label: 'Geoptimaliseerd', value: '4', cls: 'selected', desc: 'Volledig geïmplementeerd, gedocumenteerd en continu verbeterd' },
   { label: 'Geïmplementeerd', value: '3', cls: 'selected', desc: 'Volledig geïmplementeerd en gedocumenteerd' },
   { label: 'In ontwikkeling', value: '2', cls: 'selected-partial', desc: 'Gedeeltelijk geïmplementeerd of niet gedocumenteerd' },
   { label: 'Gepland', value: '1', cls: 'selected-partial', desc: 'Gepland maar nog niet gestart' },
   { label: 'Niet aanwezig', value: '0', cls: 'selected-no', desc: 'Geen proces of activiteit aanwezig' },
+  { label: 'N.v.t.', value: 'nvt', cls: 'selected-na', desc: 'Niet van toepassing op de organisatie' }
+];
+// Boolean-schaal voor binaire feiten (is er X / wordt Y gedaan). Zelfde score-bereik 0-4 zodat aggregaten compatibel blijven.
+const gapBoolOptions = [
+  { label: 'Ja', value: '4', cls: 'selected', desc: 'Volledig aanwezig of consequent uitgevoerd' },
+  { label: 'Grotendeels', value: '3', cls: 'selected', desc: 'Aanwezig maar met enkele lacunes' },
+  { label: 'Deels', value: '2', cls: 'selected-partial', desc: 'Voor een deel van de scope of organisatie' },
+  { label: 'Nee', value: '0', cls: 'selected-no', desc: 'Niet aanwezig of niet uitgevoerd' },
   { label: 'N.v.t.', value: 'nvt', cls: 'selected-na', desc: 'Niet van toepassing op de organisatie' }
 ];
 
@@ -6162,14 +6171,17 @@ function renderControlCard(ctrl, idx, total) {
     const sectorTag = q.sector ? `<span class="ga-sector-tag" title="Sector-specifieke vraag voor uw ${esc(q.sector)}-profiel">Sector-diepte</span>` : '';
     const dimBadge = q.dim ? `<span class="ga-dim-badge dim-${esc(q.dim)}" title="Dimensie: ${esc(q.dim)}">${esc(q.dim)}</span>` : '';
 
+    // Kies answer-set op basis van vraag-type. Default cmmi voor backward-compat.
+    const optionSet = q.type === 'bool' ? gapBoolOptions : gapOptions;
+    const gridCls = q.type === 'bool' ? 'ga-answer-grid bool' : 'ga-answer-grid';
     html += `
       <div class="ga-q-row">
         <div class="ga-control-question">${esc(q.q)}${sectorTag}</div>
         ${dimBadge}
       </div>
-      <div class="ga-answer-grid">
+      <div class="${gridCls}">
     `;
-    gapOptions.forEach(opt => {
+    optionSet.forEach(opt => {
       const selCls = current === opt.value ? opt.cls : '';
       const scoreLabel = opt.value === 'nvt' ? 'N/A' : opt.value;
       html += `<button class="ga-answer-btn ${selCls}" data-score="${esc(scoreLabel)}" onclick="setGaAnswer('${key}','${opt.value}',this)" title="${esc(opt.desc || '')}">${esc(opt.label)}</button>`;
