@@ -105,7 +105,16 @@ serve(async (req) => {
       max_claimed: number;
       note: string;
     }
-    const cmmiLabel: Record<string, string> = { '0': 'Niet aanwezig', '1': 'Gepland', '2': 'In ontwikkeling', '3': 'Geïmplementeerd', '4': 'Geoptimaliseerd', 'nvt': 'Niet van toepassing' };
+    // Unified label-set: combineert CMMI (procesmaturiteit) en boolean (binaire feiten) in één lezing.
+    // De klant kiest per vraag-type een van beide schalen; rapport-LLM mag passend taalgebruik kiezen.
+    const cmmiLabel: Record<string, string> = {
+      '0': 'Niet / Nee',
+      '1': 'Beperkt / Gepland',
+      '2': 'Deels / In ontwikkeling',
+      '3': 'Grotendeels / Geïmplementeerd',
+      '4': 'Volledig / Ja / Geoptimaliseerd',
+      'nvt': 'Niet van toepassing'
+    };
     const controlMap: Record<string, CtrlAnalysis> = {};
     const evNotesMap: Record<string, string> = {};
     for (const [key, raw] of Object.entries(rawAnswers)) {
@@ -194,8 +203,10 @@ Legenda status-tags:
 - \`[GEEN BASIS]\` — klant claimde niets boven niveau 1 (geen maatregel in praktijk)
 - \`[N.v.t.]\` — klant heeft control expliciet uitgezonderd
 
-Legenda CMMI-waarden per sub-vraag:
-\`0\`=Niet aanwezig · \`1\`=Gepland · \`2\`=In ontwikkeling · \`3\`=Geïmplementeerd · \`4\`=Geoptimaliseerd · \`nvt\`=Niet van toepassing
+Schaal per sub-vraag (klant kiest tussen ja/nee voor binaire feiten of CMMI voor procesmaturiteit):
+\`0\`=Niet / Nee · \`1\`=Beperkt / Gepland · \`2\`=Deels / In ontwikkeling · \`3\`=Grotendeels / Geïmplementeerd · \`4\`=Volledig / Ja / Geoptimaliseerd · \`nvt\`=Niet van toepassing
+
+Bij rapport-formulering: gebruik passend taalgebruik per vraag. Voor "is er een beleid" past "Ja, aanwezig" / "Nee, ontbreekt"; voor "wordt periodiek gemeten" past "geoptimaliseerd" / "in ontwikkeling".
 
 \`\`\`
 ${ctrlSummary}
@@ -289,7 +300,7 @@ Doel: het eindrapport moet voor de klant aantoonbaar maken dat zijn aangeleverde
       console.warn('RAG-corpus load failed (continuing without):', e);
     }
 
-    const systemStyle = `Je bent Raoul Haas, ervaren ISO 27001 Lead Auditor gecertificeerd via DNV. Je stijl: direct, bewijsgericht, geen consultancy-bullshit. Je schrijft in vloeiend Nederlands met concrete voorbeelden. Je benoemt gaps expliciet maar constructief. Je sluit aan bij de methodiek van DNV Training Auditor/Lead Auditor ISMS ISO 27001:2022 — steekproefneming, evidence-gebaseerde conclusies, scheiding tussen observatie en aanbeveling. Je rapport is bedoeld om de klant klaar te stomen voor een formele certificeringsaudit bij een geaccrediteerde instelling.
+    const systemStyle = `Je bent Raoul Haas, ervaren ISO 27001 Lead Auditor gecertificeerd via DNV. Je stijl: direct, bewijsgericht, geen consultancy-jargon. Je schrijft in vloeiend Nederlands met concrete voorbeelden. Je benoemt gaps expliciet maar constructief. Je sluit aan bij de methodiek van DNV Training Auditor/Lead Auditor ISMS ISO 27001:2022 — steekproefneming, evidence-gebaseerde conclusies, scheiding tussen observatie en aanbeveling. Je rapport is bedoeld om de klant klaar te stomen voor een formele certificeringsaudit bij een geaccrediteerde instelling.
 
 Belangrijk:
 - Nooit verzinnen wat er in evidence staat — alleen rapporteren wat je werkelijk ziet/leest.
