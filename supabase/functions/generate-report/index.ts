@@ -212,7 +212,7 @@ Bij rapport-formulering: gebruik passend taalgebruik per vraag. Voor "is er een 
 ${ctrlSummary}
 \`\`\`
 
-**Auditor-bevindingen — door Lead Auditor Raoul Haas al beoordeeld (${findings?.length || 0}):**
+**Auditor-bevindingen — door Lead Auditor al beoordeeld (${findings?.length || 0}):**
 > Deze bevindingen zijn HANDMATIG GEVALIDEERD. Neem ze 1-op-1 over in \`detailed_findings\` (zelfde control_id, status afgeleid van severity, finding-tekst en recommendation overnemen). Vul ze aan vanuit evidence-analyse, maar overschrijf ze niet. Als de severity 'critical' is → status='critical'; 'high' → 'gap'; 'medium'/'low' → 'gap' tenzij evidence laat zien dat de control inmiddels in orde is.
 
 ${findings && findings.length ? findings.map((f: any) => {
@@ -247,7 +247,7 @@ ${otherFiles.map(f => `- ${f.name} (${Math.round(f.size/1024)}KB)`).join('\n') |
       type: 'text',
       text: `
 **Opdracht:**
-Stel een gap-analyse rapport op in de persoonlijke toon van een ervaren ISO 27001 Lead Auditor (je bent Raoul Haas). Analyseer de bewijsvoering zorgvuldig, benoem gaps expliciet, geef concrete aanbevelingen.
+Stel een gap-analyse rapport op in de persoonlijke toon van een ervaren ISO 27001 Lead Auditor (je bent onze Lead Auditor). Analyseer de bewijsvoering zorgvuldig, benoem gaps expliciet, geef concrete aanbevelingen.
 
 Geef **ALLEEN JSON** terug (geen markdown-codeblock, geen uitleg buiten de JSON) in exact dit schema:
 \`\`\`
@@ -272,7 +272,7 @@ Geef **ALLEEN JSON** terug (geen markdown-codeblock, geen uitleg buiten de JSON)
       "klant_quote": "Letterlijk citaat uit klant-toelichting (max 200 tekens) als die de bevinding ondersteunt"
     }
   ],
-  "disclosure": "Dit rapport is opgesteld door Lead Auditor Raoul Haas, met AI-geassisteerde analyse van uw bewijsvoering."
+  "disclosure": "Dit rapport is opgesteld door Lead Auditor, met AI-geassisteerde analyse van uw bewijsvoering."
 }
 \`\`\`
 
@@ -300,7 +300,7 @@ Doel: het eindrapport moet voor de klant aantoonbaar maken dat zijn aangeleverde
       console.warn('RAG-corpus load failed (continuing without):', e);
     }
 
-    const systemStyle = `Je bent Raoul Haas, ervaren ISO 27001 Lead Auditor gecertificeerd via DNV. Je stijl: direct, bewijsgericht, geen consultancy-jargon. Je schrijft in vloeiend Nederlands met concrete voorbeelden. Je benoemt gaps expliciet maar constructief. Je sluit aan bij de methodiek van DNV Training Auditor/Lead Auditor ISMS ISO 27001:2022 — steekproefneming, evidence-gebaseerde conclusies, scheiding tussen observatie en aanbeveling. Je rapport is bedoeld om de klant klaar te stomen voor een formele certificeringsaudit bij een geaccrediteerde instelling.
+    const systemStyle = `Je bent onze Lead Auditor, ervaren ISO 27001 Lead Auditor gecertificeerd via DNV. Je stijl: direct, bewijsgericht, geen consultancy-jargon. Je schrijft in vloeiend Nederlands met concrete voorbeelden. Je benoemt gaps expliciet maar constructief. Je sluit aan bij de methodiek van DNV Training Auditor/Lead Auditor ISMS ISO 27001:2022 — steekproefneming, evidence-gebaseerde conclusies, scheiding tussen observatie en aanbeveling. Je rapport is bedoeld om de klant klaar te stomen voor een formele certificeringsaudit bij een geaccrediteerde instelling.
 
 Belangrijk:
 - Nooit verzinnen wat er in evidence staat — alleen rapporteren wat je werkelijk ziet/leest.

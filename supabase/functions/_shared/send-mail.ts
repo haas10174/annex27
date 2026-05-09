@@ -125,7 +125,7 @@ function buildPaymentEmail(args: PaymentConfirmationArgs): { subject: string; ht
           <ol style="margin:0;padding:0 0 0 20px;font-size:14px;line-height:1.7;color:#475569;">
             <li>U start in het dashboard met uw gap-analyse op basis van de 93 Annex A-controls.</li>
             <li>U uploadt evidence en vult toelichting in. Voortgang wordt continu opgeslagen.</li>
-            <li>Binnen 48 uur na afronding reviewt Lead Auditor Raoul Haas uw werk persoonlijk en ontvangt u uw signed-off rapport.</li>
+            <li>Binnen 48 uur na afronding reviewt Lead Auditor uw werk persoonlijk en ontvangt u uw signed-off rapport.</li>
           </ol>
         </td></tr>
         <tr><td style="padding:24px 32px 32px;">
@@ -158,7 +158,7 @@ ${args.invitedNewUser
 Wat er nu gebeurt
 1. U start in het dashboard met uw gap-analyse op basis van de 93 Annex A-controls.
 2. U uploadt evidence en vult toelichting in. Voortgang wordt continu opgeslagen.
-3. Binnen 48 uur na afronding reviewt Lead Auditor Raoul Haas uw werk en ontvangt u uw signed-off rapport.
+3. Binnen 48 uur na afronding reviewt Lead Auditor uw werk en ontvangt u uw signed-off rapport.
 
 Vragen? Beantwoord deze mail of stuur naar info@annex27.nl.
 
