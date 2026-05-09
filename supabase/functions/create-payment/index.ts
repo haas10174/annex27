@@ -29,6 +29,12 @@ const PRODUCTS: Record<string, { name: string; price: number; period: string }> 
   'preaudit':        { name: 'Pre-audit Review',       price: 1495, period: 'eenmalig' },
 };
 
+// Server-side kortingscodes. NOOIT vertrouwen op client-side input.
+// fixedPrice = absolute eindprijs (negeert subtotaal). Gebruik alleen voor interne live-tests.
+const DISCOUNT_CODES: Record<string, { fixedPrice?: number; label: string }> = {
+  'RH-LIVE-TEST': { fixedPrice: 1, label: 'Live-test (€1)' },
+};
+
 // Input validation
 const MAX_NAAM_LENGTH = 200;
 const MAX_BEDRIJF_LENGTH = 200;
@@ -157,6 +163,7 @@ serve(async (req) => {
     const countryInput = normalizeCountry(sanitize(body.country, 4));
     const customerTypeInput = sanitize(body.customer_type, 10).toLowerCase();
     const customerType: 'b2c' | 'b2b' = customerTypeInput === 'b2c' ? 'b2c' : 'b2b';
+    const discountCodeRaw = sanitize(body.discount_code, 50).toUpperCase();
 
     // Validation
     if (!plan || !PRODUCTS[plan]) {
@@ -172,7 +179,10 @@ serve(async (req) => {
       return new Response(JSON.stringify({ error: 'Ongeldig BTW-nummer' }), { status: 400, headers });
     }
 
-    const product = PRODUCTS[plan];
+    const productOriginal = PRODUCTS[plan];
+    const discount = discountCodeRaw ? DISCOUNT_CODES[discountCodeRaw] : null;
+    const effectivePrice = discount?.fixedPrice !== undefined ? discount.fixedPrice : productOriginal.price;
+    const product = { ...productOriginal, price: effectivePrice };
     const MOLLIE_API_KEY = Deno.env.get('MOLLIE_API_KEY');
     if (!MOLLIE_API_KEY) {
       return new Response(JSON.stringify({ error: 'Mollie niet geconfigureerd' }), { status: 500, headers });
@@ -201,7 +211,9 @@ serve(async (req) => {
         currency: 'EUR',
         value: vat.total.toFixed(2),
       },
-      description: `Annex27 - ${product.name}`,
+      description: discount
+        ? `Annex27 - ${productOriginal.name} (${discount.label})`
+        : `Annex27 - ${productOriginal.name}`,
       redirectUrl: `${siteUrl}/success?plan=${encodeURIComponent(plan)}&value=${vat.total}`,
       webhookUrl: `${Deno.env.get('SUPABASE_URL')}/functions/v1/mollie-webhook`,
       metadata: {
@@ -217,6 +229,8 @@ serve(async (req) => {
         vat_rate: vat.rate,
         subtotal: vat.subtotal,
         vat_amount: vat.vatAmount,
+        discount_code: discount ? discountCodeRaw : null,
+        original_price: discount ? productOriginal.price : null,
       },
     };
 
