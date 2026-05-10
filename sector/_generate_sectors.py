@@ -599,7 +599,7 @@ def render(s):
         <p class="lead">{s["lead"]}</p>
         <div class="hero-cta">
           <a href="/gap-analyse?sector={s["slug"]}" class="btn-primary">Start gratis quickscan →</a>
-          <a href="#vergelijk" class="btn-ghost">Wat is het verschil?</a>
+          
         </div>
       </div>
       <div class="hero-card">
@@ -610,29 +610,6 @@ def render(s):
         </ul>
         <a href="/gap-analyse?sector={s["slug"]}" class="cta">Eerst gratis quickscan →</a>
         <div class="hero-card-foot">{s["card_foot"]}</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="vergelijk">
-  <div class="container">
-    <div class="label">Het verschil</div>
-    <h2 class="section-title">Wat een generieke ISO 27001-audit mist in de {s["name"].lower()}</h2>
-    <p class="section-lead">ISO 27001 is universeel. Maar de {s["name"].lower()}-context heeft specifieke risico's en regelgeving die een generieke audit niet expliciet toetst — en dan koopt u eigenlijk een onvolledig oordeel.</p>
-
-    <div class="compare-grid">
-      <div class="compare-col miss">
-        <h3>{s["compare_miss_title"]}</h3>
-        <ul>
-{chr(10).join(f"          <li>{html.escape(item)}</li>" for item in s["compare_miss"])}
-        </ul>
-      </div>
-      <div class="compare-col cover">
-        <h3>{s["compare_cover_title"]}</h3>
-        <ul>
-{chr(10).join(f"          <li>{item}</li>" for item in s["compare_cover"])}
-        </ul>
       </div>
     </div>
   </div>
