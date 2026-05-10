@@ -11,6 +11,7 @@
   <meta name="theme-color" content="#14b8a6" />
   <script src="/analytics-admin.js"></script>
   <script src="/gap-questions-v2.js"></script>
+  <script src="/nis2-questions.js"></script>
   <script src="/mock-evidence.js"></script>
 
   <meta http-equiv="X-Content-Type-Options" content="nosniff" />
@@ -1450,10 +1451,16 @@
         <button class="tab active" data-tab="findings">
           Bevindingen <span class="tab-count" id="findingsCount">0</span>
         </button>
+        <button class="tab" data-tab="nis2admin">
+          NIS2 <span class="tab-count" id="nis2adminCount">0/39</span>
+        </button>
         <button class="tab" data-tab="messages">
           Berichten <span class="tab-count" id="msgCount">0</span>
         </button>
         <button class="tab" data-tab="rapport">Rapport</button>
+        <button class="tab" data-tab="policies">
+          Policy signoffs <span class="tab-count" id="policyCount">0</span>
+        </button>
         <button class="tab" data-tab="invoices">
           Facturen <span class="tab-count" id="invoiceCount">0</span>
         </button>
@@ -1496,6 +1503,16 @@
       <!-- Rapport tab: upload/release PDF for client -->
       <div class="panel" id="panelRapport">
         <div id="rapportContainer"></div>
+      </div>
+
+      <!-- NIS2 admin-review: read-only view van klant-antwoorden op de 39 NIS2-vragen -->
+      <div class="panel" id="panelNis2admin">
+        <div id="nis2AdminContainer" style="font-size:0.88rem;"></div>
+      </div>
+
+      <!-- Policy signoffs tab: Lead Auditor reviews beleidspakket-versies van klant -->
+      <div class="panel" id="panelPolicies">
+        <div id="policiesContainer" style="font-size:0.88rem;"></div>
       </div>
 
       <!-- Invoices tab: facturen voor deze klant -->
@@ -3331,9 +3348,219 @@ function bindTabs() {
       document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
       document.getElementById('panel' + target.charAt(0).toUpperCase() + target.slice(1)).classList.add('active');
       if (target === 'rapport')  loadRapportPanel();
+      if (target === 'nis2admin') loadNis2AdminPanel();
+      if (target === 'policies') loadPoliciesPanel();
       if (target === 'invoices') loadClientInvoices();
     });
   });
+}
+
+// ── POLICY SIGNOFFS (admin) — Lead Auditor reviewt beleidspakket-versies ──
+async function loadPoliciesPanel() {
+  const container = document.getElementById('policiesContainer');
+  if (!currentClient?.user_id) { container.innerHTML = '<div class="empty-state">Selecteer eerst een klant.</div>'; return; }
+  container.innerHTML = '<div class="empty-state">Laden...</div>';
+
+  const [versionsRes, signoffsRes] = await Promise.all([
+    sb.from('policy_versions').select('*').eq('user_id', currentClient.user_id).order('generated_at', { ascending: false }),
+    sb.from('policy_signoffs').select('*').order('signed_at', { ascending: false })
+  ]);
+
+  if (versionsRes.error) { container.innerHTML = '<div class="empty-state">Kon policy-versies niet laden: ' + versionsRes.error.message + '</div>'; return; }
+  const versions = versionsRes.data || [];
+  const signoffs = signoffsRes.data || [];
+  const signoffsByVersion = {};
+  signoffs.forEach(s => { signoffsByVersion[s.policy_version_id] = s; });
+
+  if (versions.length === 0) {
+    container.innerHTML = `
+      <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:24px;text-align:center;color:#64748b;">
+        <strong style="display:block;font-size:1rem;color:#0f172a;margin-bottom:6px;">Nog geen policy-versies</strong>
+        Deze klant heeft nog geen beleidsdocument gerenderd. Versies verschijnen hier zodra de klant op 'Render' klikt in zijn Beleidsdocumenten-tab.
+      </div>
+    `;
+    document.getElementById('policyCount').textContent = '0';
+    return;
+  }
+
+  // Group by doc_key, keep most recent version per doc
+  const latestByDoc = {};
+  versions.forEach(v => {
+    if (!latestByDoc[v.doc_key] || latestByDoc[v.doc_key].version_no < v.version_no) {
+      latestByDoc[v.doc_key] = v;
+    }
+  });
+
+  const totalDocs = Object.keys(latestByDoc).length;
+  const signedDocs = Object.values(latestByDoc).filter(v => signoffsByVersion[v.id]).length;
+  document.getElementById('policyCount').textContent = `${signedDocs}/${totalDocs}`;
+
+  const rows = Object.values(latestByDoc).sort((a, b) => a.doc_key.localeCompare(b.doc_key)).map(v => {
+    const signoff = signoffsByVersion[v.id];
+    const sigBadge = signoff
+      ? `<span style="display:inline-flex;align-items:center;gap:6px;background:#dcfce7;color:#15803d;border-radius:99px;padding:3px 10px;font-size:0.78rem;font-weight:700;">✓ Gesignoffd ${new Date(signoff.signed_at).toLocaleDateString('nl-NL')}</span>`
+      : `<span style="display:inline-flex;align-items:center;gap:6px;background:#fef3c7;color:#a16207;border-radius:99px;padding:3px 10px;font-size:0.78rem;font-weight:700;">Wacht op signoff</span>`;
+    const action = signoff
+      ? `<button class="action-btn" style="font-size:0.8rem;padding:6px 12px;" onclick="revokeSignoff('${signoff.id}')">Signoff intrekken</button>`
+      : `<button class="action-btn primary" style="font-size:0.8rem;padding:6px 12px;background:#0D9488;color:white;border:0;border-radius:6px;font-weight:700;cursor:pointer;" onclick="openSignoffModal('${v.id}','${v.doc_key}',${v.version_no})">Signoff geven</button>`;
+    const note = signoff?.signature_note ? `<div style="font-size:0.78rem;color:#64748b;margin-top:6px;font-style:italic;">"${(signoff.signature_note + '').replace(/[<>&"]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c]))}"</div>` : '';
+
+    return `
+      <tr>
+        <td style="padding:12px 14px;font-family:'Sora',sans-serif;font-weight:700;font-size:0.86rem;color:#0f172a;">${(v.doc_key + '').replace(/[<>&"]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c]))}</td>
+        <td style="padding:12px 14px;font-size:0.86rem;">v${v.version_no}</td>
+        <td style="padding:12px 14px;font-size:0.86rem;color:#64748b;">${new Date(v.generated_at).toLocaleString('nl-NL')}</td>
+        <td style="padding:12px 14px;">${sigBadge}${note}</td>
+        <td style="padding:12px 14px;text-align:right;">${action}</td>
+      </tr>
+    `;
+  }).join('');
+
+  container.innerHTML = `
+    <div style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:14px 18px;margin-bottom:14px;font-size:0.84rem;color:#475569;">
+      <strong style="color:#0f172a;">Beleidsdocument-signoffs</strong> · Hier reviewt u de laatste gerenderde versie van elk beleidsdocument van de klant. Een signoff is uw formele goedkeuring dat de inhoud audit-ready is en past bij de scope.
+    </div>
+    <table style="width:100%;border-collapse:collapse;background:#fff;border:1px solid #e2e8f0;border-radius:10px;overflow:hidden;font-size:0.88rem;">
+      <thead>
+        <tr style="background:#f8fafc;">
+          <th style="padding:12px 14px;text-align:left;font-family:'Sora',sans-serif;font-weight:700;font-size:0.78rem;color:#475569;text-transform:uppercase;letter-spacing:0.06em;">Document</th>
+          <th style="padding:12px 14px;text-align:left;font-family:'Sora',sans-serif;font-weight:700;font-size:0.78rem;color:#475569;text-transform:uppercase;letter-spacing:0.06em;">Versie</th>
+          <th style="padding:12px 14px;text-align:left;font-family:'Sora',sans-serif;font-weight:700;font-size:0.78rem;color:#475569;text-transform:uppercase;letter-spacing:0.06em;">Gegenereerd</th>
+          <th style="padding:12px 14px;text-align:left;font-family:'Sora',sans-serif;font-weight:700;font-size:0.78rem;color:#475569;text-transform:uppercase;letter-spacing:0.06em;">Status</th>
+          <th style="padding:12px 14px;text-align:right;font-family:'Sora',sans-serif;font-weight:700;font-size:0.78rem;color:#475569;text-transform:uppercase;letter-spacing:0.06em;">Actie</th>
+        </tr>
+      </thead>
+      <tbody>${rows}</tbody>
+    </table>
+  `;
+}
+
+// ── NIS2 ADMIN REVIEW (read-only view van klant-antwoorden) ──
+async function loadNis2AdminPanel() {
+  const container = document.getElementById('nis2AdminContainer');
+  if (!currentClient?.user_id) { container.innerHTML = '<div class="empty-state">Selecteer eerst een klant.</div>'; return; }
+  if (typeof window.nis2MaatregelList !== 'function') {
+    container.innerHTML = '<div class="empty-state">NIS2-vragen worden geladen…</div>';
+    setTimeout(loadNis2AdminPanel, 200);
+    return;
+  }
+
+  container.innerHTML = '<div class="empty-state">Laden...</div>';
+  const { data, error } = await sb.from('gap_analyse').select('answers').eq('user_id', currentClient.user_id).maybeSingle();
+  if (error) { container.innerHTML = '<div class="empty-state">Kon antwoorden niet laden: ' + error.message + '</div>'; return; }
+
+  // Extract NIS2-prefixed answers
+  const nis2 = {};
+  if (data?.answers) {
+    for (const [k, v] of Object.entries(data.answers)) {
+      if (typeof k === 'string' && k.startsWith('NIS2::')) nis2[k.slice(6)] = v;
+    }
+  }
+
+  const labelMap = { ja: 'Ja', grotendeels: 'Grotendeels', deels: 'Deels', nee: 'Nee', nvt: 'N.v.t.' };
+  const colorMap = { ja: '#15803d', grotendeels: '#65a30d', deels: '#a16207', nee: '#b91c1c', nvt: '#64748b' };
+  const bgMap = { ja: '#dcfce7', grotendeels: '#ecfccb', deels: '#fef3c7', nee: '#fee2e2', nvt: '#f1f5f9' };
+  const esc = (s) => String(s ?? '').replace(/[<>&"]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c]));
+
+  const maatregelen = window.nis2MaatregelList();
+  let totalAnswered = 0, total = 0;
+
+  const cards = maatregelen.map(m => {
+    const qs = window.getNis2QuestionsForMaatregel(m.id, m.name);
+    total += qs.length;
+    let mAnswered = 0;
+    const rows = qs.map((q, qi) => {
+      const key = m.id + '::' + qi;
+      const val = nis2[key];
+      if (val) mAnswered++;
+      const lab = val ? labelMap[val] || val : '—';
+      const col = val ? colorMap[val] || '#64748b' : '#94a3b8';
+      const bg = val ? bgMap[val] || '#f1f5f9' : '#f8fafc';
+      return `
+        <tr>
+          <td style="padding:8px 12px;font-size:0.86rem;color:#334155;vertical-align:top;width:70%;">${esc(q.q)}</td>
+          <td style="padding:8px 12px;text-align:right;vertical-align:top;">
+            <span style="display:inline-flex;align-items:center;background:${bg};color:${col};border-radius:6px;padding:3px 10px;font-size:0.8rem;font-weight:600;">${lab}</span>
+          </td>
+        </tr>
+      `;
+    }).join('');
+    totalAnswered += mAnswered;
+    const pct = qs.length ? Math.round((mAnswered / qs.length) * 100) : 0;
+    return `
+      <div style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;margin-bottom:12px;overflow:hidden;">
+        <div style="padding:12px 16px;background:#f8fafc;border-bottom:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;">
+          <div>
+            <div style="font-family:'Sora',sans-serif;font-size:0.72rem;font-weight:700;color:#0D9488;letter-spacing:0.06em;">${esc(m.id)}</div>
+            <div style="font-family:'Sora',sans-serif;font-size:0.96rem;font-weight:700;color:#0f172a;">${esc(m.name)}</div>
+          </div>
+          <div style="font-family:'Sora',sans-serif;font-size:0.84rem;font-weight:700;color:${pct === 100 ? '#15803d' : '#64748b'};">${mAnswered}/${qs.length} (${pct}%)</div>
+        </div>
+        <table style="width:100%;border-collapse:collapse;">${rows}</table>
+      </div>
+    `;
+  }).join('');
+
+  document.getElementById('nis2adminCount').textContent = `${totalAnswered}/${total}`;
+
+  container.innerHTML = `
+    <div style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:14px 18px;margin-bottom:14px;font-size:0.84rem;color:#475569;">
+      <strong style="color:#0f172a;">NIS2 Readiness — antwoorden van klant</strong> · Read-only view van wat de klant heeft ingevuld op /dashboard → NIS2 Readiness. Gebruik dit voor de pre-rapport-review en signoff. Bevindingen schrijven gaat (nog) via de gewone Bevindingen-tab, met control_id = NIS2 maatregel-id (bv. N.21.2.a).
+    </div>
+    ${total === 0 || totalAnswered === 0 ? '<div style="background:#fef3c7;border:1px solid #fbbf24;border-radius:10px;padding:14px 18px;margin-bottom:14px;font-size:0.86rem;color:#a16207;">Deze klant heeft nog geen NIS2-antwoorden ingevuld.</div>' : ''}
+    ${cards}
+  `;
+}
+
+function openSignoffModal(versionId, docKey, versionNo) {
+  const note = prompt(`Signoff geven voor ${docKey} v${versionNo}.\n\nOptionele opmerking (zichtbaar voor de klant + in audit-log):`, '');
+  if (note === null) return; // user cancelled
+  giveSignoff(versionId, note);
+}
+
+async function giveSignoff(versionId, note) {
+  try {
+    const { data: { user: u } } = await sb.auth.getUser();
+    if (!u) { alert('Niet ingelogd'); return; }
+    const { error } = await sb.from('policy_signoffs').insert({
+      policy_version_id: versionId,
+      signed_by: u.id,
+      signed_at: new Date().toISOString(),
+      signature_note: note || null
+    });
+    if (error) { alert('Signoff mislukt: ' + error.message); return; }
+    // Audit-log
+    try {
+      await sb.rpc('log_audit_event', {
+        p_action: 'policy_signoff',
+        p_target_type: 'policy_version',
+        p_target_id: versionId,
+        p_metadata: { klant_user_id: currentClient?.user_id || null, note: note || null }
+      });
+    } catch (e) { /* swallow */ }
+    loadPoliciesPanel();
+  } catch (e) {
+    alert('Signoff mislukt: ' + (e.message || e));
+  }
+}
+
+async function revokeSignoff(signoffId) {
+  if (!confirm('Signoff intrekken? Dit verwijdert de goedkeuring.')) return;
+  try {
+    const { error } = await sb.from('policy_signoffs').delete().eq('id', signoffId);
+    if (error) { alert('Intrekken mislukt: ' + error.message); return; }
+    try {
+      await sb.rpc('log_audit_event', {
+        p_action: 'policy_signoff_revoked',
+        p_target_type: 'policy_signoff',
+        p_target_id: signoffId,
+        p_metadata: { klant_user_id: currentClient?.user_id || null }
+      });
+    } catch (e) {}
+    loadPoliciesPanel();
+  } catch (e) {
+    alert('Intrekken mislukt: ' + (e.message || e));
+  }
 }
 
 // ── RAPPORT UPLOAD/RELEASE (admin) ──
