@@ -4471,7 +4471,7 @@ function nis2StorageKey() {
   return 'annex27_nis2_' + (typeof user !== 'undefined' && user?.id ? user.id : 'anon');
 }
 
-function loadNis2Answers() {
+function loadNis2AnswersFromCache() {
   try {
     const saved = localStorage.getItem(nis2StorageKey());
     nis2Answers = saved ? JSON.parse(saved) : {};
@@ -4480,9 +4480,50 @@ function loadNis2Answers() {
   }
 }
 
+async function loadNis2AnswersFromDb() {
+  if (typeof sb === 'undefined' || typeof user === 'undefined' || !user?.id) return false;
+  try {
+    const { data, error } = await sb.from('gap_analyse').select('answers').eq('user_id', user.id).maybeSingle();
+    if (error || !data?.answers) return false;
+    const parsed = {};
+    for (const [k, v] of Object.entries(data.answers)) {
+      if (typeof k === 'string' && k.startsWith('NIS2::')) parsed[k.slice(6)] = v;
+    }
+    nis2Answers = parsed;
+    try { localStorage.setItem(nis2StorageKey(), JSON.stringify(nis2Answers)); } catch (_) {}
+    return true;
+  } catch (e) {
+    console.warn('NIS2 load uit DB mislukt, gebruik cache', e);
+    return false;
+  }
+}
+
+let _nis2SaveTimer = null;
+async function persistNis2ToDb() {
+  clearTimeout(_nis2SaveTimer);
+  _nis2SaveTimer = setTimeout(async () => {
+    if (typeof sb === 'undefined' || typeof user === 'undefined' || !user?.id) return;
+    try {
+      const { data: row } = await sb.from('gap_analyse').select('answers').eq('user_id', user.id).maybeSingle();
+      const merged = Object.assign({}, row?.answers || {});
+      for (const k of Object.keys(merged)) {
+        if (typeof k === 'string' && k.startsWith('NIS2::')) delete merged[k];
+      }
+      for (const [k, v] of Object.entries(nis2Answers)) {
+        merged['NIS2::' + k] = v;
+      }
+      const payload = { user_id: user.id, answers: merged, updated_at: new Date().toISOString() };
+      await sb.from('gap_analyse').upsert(payload, { onConflict: 'user_id' });
+    } catch (e) {
+      console.error('NIS2 persist failed', e);
+    }
+  }, 800);
+}
+
 function saveNis2Answer(key, value) {
   nis2Answers[key] = value;
   try { localStorage.setItem(nis2StorageKey(), JSON.stringify(nis2Answers)); } catch (e) {}
+  persistNis2ToDb();
   renderNis2ProgressBar();
   renderNis2MaatregelHeader(key.split('::')[0]);
 }
@@ -4518,7 +4559,7 @@ function nis2OverallProgress() {
   return { answered, total, pct: total ? Math.round((answered / total) * 100) : 0 };
 }
 
-function renderNis2() {
+async function renderNis2() {
   const root = document.getElementById('nis2View');
   if (!root) return;
 
@@ -4528,7 +4569,8 @@ function renderNis2() {
     return;
   }
 
-  loadNis2Answers();
+  // Fase 1: directe render vanuit localStorage (snel)
+  loadNis2AnswersFromCache();
   const maatregelen = window.nis2MaatregelList();
 
   root.innerHTML = `
@@ -4543,6 +4585,15 @@ function renderNis2() {
   `;
 
   renderNis2ProgressBar();
+
+  // Fase 2: hydrate vanuit DB (autoritatief). Re-render alleen als state veranderd is.
+  const beforeKeys = JSON.stringify(nis2Answers);
+  const ok = await loadNis2AnswersFromDb();
+  if (ok && JSON.stringify(nis2Answers) !== beforeKeys) {
+    document.getElementById('nis2MaatregelList').innerHTML =
+      maatregelen.map(m => renderNis2MaatregelCard(m)).join('');
+    renderNis2ProgressBar();
+  }
 }
 
 function renderNis2ProgressBar() {
