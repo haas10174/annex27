@@ -89,14 +89,12 @@
     .card p{font-size:0.92rem;line-height:1.65;}
 
     .scope-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:24px 0;}
-    .scope{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:24px;}
-    .scope.essential{border-left:4px solid var(--danger);}
-    .scope.important{border-left:4px solid var(--warning);}
-    .scope-tag{display:inline-block;font-size:0.7rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;padding:3px 10px;border-radius:99px;margin-bottom:10px;}
-    .scope.essential .scope-tag{background:rgba(220,38,38,0.1);color:var(--danger);}
-    .scope.important .scope-tag{background:rgba(217,119,6,0.1);color:var(--warning);}
-    .scope h3{font-family:'Sora',sans-serif;font-size:1.08rem;color:var(--text-primary);margin-bottom:8px;}
-    .scope ul{margin:10px 0 0 18px;font-size:0.9rem;line-height:1.7;}
+    .scope{background:#FAF9F6;border:1px solid var(--border);border-radius:14px;padding:28px;position:relative;}
+    .scope::before{content:'';position:absolute;top:0;left:24px;right:24px;height:2px;background:var(--accent);border-radius:0 0 2px 2px;}
+    .scope-tag{display:inline-block;font-size:0.72rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent);margin-bottom:8px;}
+    .scope h3{font-family:'Sora',sans-serif;font-size:1.04rem;color:var(--text-primary);margin-bottom:10px;font-weight:700;letter-spacing:-0.01em;}
+    .scope p{font-size:0.92rem;color:var(--text-secondary);line-height:1.6;margin:0;}
+    .scope-sub{display:block;font-size:0.82rem;color:var(--text-muted);margin-top:10px;}
 
     .obligations{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;}
     .obligation{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:22px;display:flex;gap:14px;}
@@ -180,33 +178,17 @@
     <p class="section-lead">≥50 medewerkers of >€10M omzet in één van de 18 NIS2-sectoren.</p>
 
     <div class="scope-grid">
-      <div class="scope essential">
+      <div class="scope">
         <span class="scope-tag">Essentiële entiteit</span>
-        <h3>Hoogste verplichtingen + zwaarste sancties</h3>
-        <ul>
-          <li>Energie (elektriciteit, gas, olie, waterstof)</li>
-          <li>Vervoer (lucht, spoor, water, weg)</li>
-          <li>Banken &amp; financiële marktinfrastructuur</li>
-          <li>Gezondheidszorg (ziekenhuizen, EU-referentielaboratoria)</li>
-          <li>Drinkwater &amp; afvalwater</li>
-          <li>Digitale infrastructuur (DNS, TLD, cloudprovider, CDN, datacentra)</li>
-          <li>ICT-dienstenbeheer (B2B)</li>
-          <li>Overheidsdiensten</li>
-          <li>Ruimtevaart</li>
-        </ul>
+        <h3>Strengste verplichtingen, hoogste sancties</h3>
+        <p>Energie, vervoer, banken, gezondheidszorg, drinkwater, digitale infrastructuur, ICT-dienstenbeheer (B2B), overheid en ruimtevaart.</p>
+        <span class="scope-sub">Max. boete: &euro;10 mln of 2% wereldwijde jaaromzet.</span>
       </div>
-      <div class="scope important">
+      <div class="scope">
         <span class="scope-tag">Belangrijke entiteit</span>
-        <h3>Iets lichtere verplichtingen, lagere sancties</h3>
-        <ul>
-          <li>Post &amp; koeriersdiensten</li>
-          <li>Afvalbeheer</li>
-          <li>Productie &amp; distributie van chemicaliën</li>
-          <li>Voedselproductie, -verwerking en -distributie</li>
-          <li>Productie van industriële apparaten, voertuigen, medische hulpmiddelen</li>
-          <li>Aanbieders van digitale diensten (online marktplaatsen, zoekmachines, sociale netwerken)</li>
-          <li>Onderzoeksinstellingen</li>
-        </ul>
+        <h3>Iets lichtere eisen, lagere sancties</h3>
+        <p>Post &amp; koeriers, afvalbeheer, chemie, voedselproductie, productie van industriële apparaten en voertuigen, digitale diensten en onderzoek.</p>
+        <span class="scope-sub">Max. boete: &euro;7 mln of 1,4% wereldwijde jaaromzet.</span>
       </div>
     </div>
 
@@ -276,21 +258,24 @@
     <h2 class="section-title">Drie meldingen, drie deadlines</h2>
     <p class="section-lead">Klok start zodra u op de hoogte bent.</p>
 
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:8px;" class="meld-grid">
-      <div style="background:var(--surface);border:1px solid var(--border);border-left:4px solid #dc2626;border-radius:10px;padding:22px;">
-        <div style="font-size:0.72rem;font-weight:700;color:#dc2626;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px;">Binnen 24 uur</div>
-        <h3 style="font-family:'Sora',sans-serif;font-size:1.05rem;color:var(--text-primary);margin-bottom:8px;">Vroege waarschuwing</h3>
-        <p style="font-size:0.88rem;line-height:1.6;">Datum, type en initiële impact. Geen oorzaakanalyse nodig.</p>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:8px;" class="meld-grid">
+      <div style="background:#FAF9F6;border:1px solid var(--border);border-radius:14px;padding:28px;position:relative;">
+        <div style="position:absolute;top:0;left:24px;right:24px;height:2px;background:var(--accent);border-radius:0 0 2px 2px;"></div>
+        <div style="font-size:0.72rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:8px;">Binnen 24 uur</div>
+        <h3 style="font-family:'Sora',sans-serif;font-size:1.04rem;color:var(--text-primary);margin-bottom:10px;font-weight:700;">Vroege waarschuwing</h3>
+        <p style="font-size:0.92rem;line-height:1.6;color:var(--text-secondary);margin:0;">Datum, type en initiële impact. Geen oorzaakanalyse nodig.</p>
       </div>
-      <div style="background:var(--surface);border:1px solid var(--border);border-left:4px solid #D97706;border-radius:10px;padding:22px;">
-        <div style="font-size:0.72rem;font-weight:700;color:#D97706;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px;">Binnen 72 uur</div>
-        <h3 style="font-family:'Sora',sans-serif;font-size:1.05rem;color:var(--text-primary);margin-bottom:8px;">Meldingsrapport</h3>
-        <p style="font-size:0.88rem;line-height:1.6;">Beoordeling impact, ernst, IOCs en al genomen mitigaties.</p>
+      <div style="background:#FAF9F6;border:1px solid var(--border);border-radius:14px;padding:28px;position:relative;">
+        <div style="position:absolute;top:0;left:24px;right:24px;height:2px;background:var(--accent);border-radius:0 0 2px 2px;"></div>
+        <div style="font-size:0.72rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:8px;">Binnen 72 uur</div>
+        <h3 style="font-family:'Sora',sans-serif;font-size:1.04rem;color:var(--text-primary);margin-bottom:10px;font-weight:700;">Meldingsrapport</h3>
+        <p style="font-size:0.92rem;line-height:1.6;color:var(--text-secondary);margin:0;">Beoordeling impact, ernst, IOCs en al genomen mitigaties.</p>
       </div>
-      <div style="background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--accent);border-radius:10px;padding:22px;">
-        <div style="font-size:0.72rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px;">Binnen 1 maand</div>
-        <h3 style="font-family:'Sora',sans-serif;font-size:1.05rem;color:var(--text-primary);margin-bottom:8px;">Eindrapport</h3>
-        <p style="font-size:0.88rem;line-height:1.6;">Oorzaak, impact, lessons learned en structurele maatregelen.</p>
+      <div style="background:#FAF9F6;border:1px solid var(--border);border-radius:14px;padding:28px;position:relative;">
+        <div style="position:absolute;top:0;left:24px;right:24px;height:2px;background:var(--accent);border-radius:0 0 2px 2px;"></div>
+        <div style="font-size:0.72rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:8px;">Binnen 1 maand</div>
+        <h3 style="font-family:'Sora',sans-serif;font-size:1.04rem;color:var(--text-primary);margin-bottom:10px;font-weight:700;">Eindrapport</h3>
+        <p style="font-size:0.92rem;line-height:1.6;color:var(--text-secondary);margin:0;">Oorzaak, impact, lessons learned en structurele maatregelen.</p>
       </div>
     </div>
 

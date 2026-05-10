@@ -31,7 +31,7 @@ const gapQuestionsV2 = {
       { dim: 'beleid', q: 'Is er een vastgesteld informatiebeveiligingsbeleid (PDF/intranet) met scope, doelstellingen en commitment?' },
       { dim: 'eigenaarschap', q: 'Is het beleid formeel ondertekend door de directie of een statutair bestuurder met datum?' },
       { dim: 'proces', q: 'Is het beleid actief gecommuniceerd naar alle medewerkers (onboarding, intranet, jaarlijkse herinnering)?' },
-      { dim: 'effectiviteit', q: 'Wordt het beleid minimaal jaarlijks gereviewed en bij wijzigingen herzien (versiehistorie of review-log zichtbaar)?' },
+      { dim: 'proces', q: 'Wordt het beleid minimaal jaarlijks gereviewed en bij wijzigingen herzien (versiehistorie of review-log zichtbaar)?' },
       { dim: 'effectiviteit', q: 'Worden afwijkingen van het beleid gedetecteerd, gemeld en geregistreerd (compliance-monitoring)?' },
     ]
   },
@@ -41,7 +41,7 @@ const gapQuestionsV2 = {
       { dim: 'beleid', q: 'Is er een RACI-matrix of soortgelijk document waarin IB-rollen formeel zijn vastgelegd?' },
       { dim: 'eigenaarschap', q: 'Is een specifieke persoon (CISO, IB-coördinator) eindverantwoordelijk voor informatiebeveiliging?' },
       { dim: 'proces', q: 'Worden IB-rollen behandeld in onboarding en periodieke awareness-sessies?' },
-      { dim: 'effectiviteit', q: 'Worden conflicterende rollen (4-ogen-principe) actief vermeden in kritieke processen?' },
+      { dim: 'proces', q: 'Worden conflicterende rollen (4-ogen-principe) actief vermeden in kritieke processen?' },
     ]
   },
   'A.5.3': {
@@ -50,7 +50,7 @@ const gapQuestionsV2 = {
       { dim: 'beleid', q: 'Is er een overzicht van conflicterende functiecombinaties (segregation of duties matrix)?' },
       { dim: 'techniek', q: 'Worden conflicterende rechten technisch geblokkeerd in kritieke systemen (ERP, finance, IAM)?' },
       { dim: 'proces', q: 'Wordt het 4-ogen-principe toegepast bij financiële transacties of toegangstoekenning?' },
-      { dim: 'effectiviteit', q: 'Wordt minimaal halfjaarlijks gecontroleerd of geen medewerker overlappende rechten heeft?' },
+      { dim: 'proces', q: 'Wordt minimaal halfjaarlijks gecontroleerd of geen medewerker overlappende rechten heeft?' },
     ]
   },
   'A.5.7': {
@@ -70,6 +70,7 @@ const gapQuestionsV2 = {
       { dim: 'eigenaarschap', q: 'Heeft elk asset een aangewezen eigenaar (geen "IT in het algemeen")?' },
       { dim: 'proces', q: 'Wordt het register minimaal jaarlijks gereviewd (datum-stempel zichtbaar)?' },
       { dim: 'techniek', q: 'Wordt nieuw asset automatisch toegevoegd via MDM/CMDB-koppeling, of handmatig?' },
+      { dim: 'effectiviteit', q: 'Wordt het verschil tussen werkelijk aanwezige en geregistreerde assets gemeten (drift-rate)?' },
     ]
   },
   'A.5.15': {
@@ -88,8 +89,18 @@ const gapQuestionsV2 = {
     questions: [
       { dim: 'beleid', q: 'Is er een wachtwoordbeleid met minimum-eisen (lengte, complexiteit, hergebruik)?' },
       { dim: 'techniek', q: 'Wordt het wachtwoordbeleid technisch afgedwongen op alle bedrijfssystemen?' },
-      { dim: 'proces', q: 'Wordt MFA verplicht aangeboden voor alle accounts met toegang tot bedrijfsdata?' },
-      { dim: 'eigenaarschap', q: 'Is er een procedure voor reset van vergeten wachtwoorden met identiteitsverificatie?' },
+      { dim: 'techniek', q: 'Is MFA verplicht voor alle accounts met toegang tot bedrijfsdata (technisch afgedwongen)?' },
+      { dim: 'proces', q: 'Is er een procedure voor reset van vergeten wachtwoorden met identiteitsverificatie?' },
+    ]
+  },
+  'A.5.18': {
+    name: 'Toegangsrechten',
+    questions: [
+      { dim: 'beleid', q: 'Is vastgelegd hoe toegangsrechten worden aangevraagd, goedgekeurd, toegekend en ingetrokken (joiner-mover-leaver)?' },
+      { dim: 'proces', q: 'Worden rechten ingetrokken binnen 24 uur bij uitdiensttreding of functiewijziging?' },
+      { dim: 'proces', q: 'Worden toegangsrechten minimaal halfjaarlijks gereviewd door manager of asset-eigenaar?' },
+      { dim: 'techniek', q: 'Wordt de joiner-mover-leaver-flow ondersteund door IAM-tooling (geen ad-hoc spreadsheet)?' },
+      { dim: 'effectiviteit', q: 'Wordt het aantal accounts met overbodige rechten gemeten en omlaag gebracht?' },
     ]
   },
   'A.5.19': {
@@ -136,8 +147,27 @@ const gapQuestionsV2 = {
     questions: [
       { dim: 'beleid', q: 'Is er een register van toepasselijke wetgeving (AVG, NIS2, sectorspecifiek)?' },
       { dim: 'eigenaarschap', q: 'Is een persoon verantwoordelijk voor het bijhouden van wijzigingen in wetgeving?' },
-      { dim: 'effectiviteit', q: 'Wordt minimaal jaarlijks getoetst of de organisatie nog voldoet aan alle relevante eisen?' },
+      { dim: 'proces', q: 'Wordt minimaal jaarlijks getoetst of de organisatie nog voldoet aan alle relevante eisen?' },
       { dim: 'proces', q: 'Worden wetswijzigingen actief vertaald naar bijstelling van beleid en procedures?' },
+    ]
+  },
+  'A.5.34': {
+    name: 'Privacy en bescherming van persoonsgegevens (PII)',
+    questions: [
+      { dim: 'beleid', q: 'Is er een privacy-beleid dat verwerkingsdoeleinden, rechtsgronden en betrokken rechten beschrijft?' },
+      { dim: 'beleid', q: 'Is er een verwerkingsregister (RoPA, AVG Art. 30) dat actueel wordt gehouden?' },
+      { dim: 'proces', q: 'Is er een DPIA-procedure die wordt gevolgd voor hoge-risico verwerkingen (AVG Art. 35)?' },
+      { dim: 'proces', q: 'Is er een procedure voor verzoeken van betrokkenen (inzage, rectificatie, verwijdering)?' },
+      { dim: 'eigenaarschap', q: 'Is er een aanspreekpunt voor privacy (DPO of privacy-coördinator) bekend bij de organisatie en de toezichthouder?' },
+    ]
+  },
+  'A.5.35': {
+    name: 'Onafhankelijke beoordeling van informatiebeveiliging',
+    questions: [
+      { dim: 'proces', q: 'Wordt het ISMS minimaal jaarlijks onafhankelijk beoordeeld (interne audit of externe partij)?' },
+      { dim: 'beleid', q: 'Is een audit-jaarplan vastgesteld dat de scope per audit beschrijft?' },
+      { dim: 'eigenaarschap', q: 'Voert een auditor die onafhankelijk is van het audit-object de beoordeling uit?' },
+      { dim: 'effectiviteit', q: 'Worden audit-bevindingen geregistreerd, geprioriteerd en opgevolgd tot afsluiting?' },
     ]
   },
 
@@ -220,6 +250,16 @@ const gapQuestionsV2 = {
   // A.8 TECHNOLOGISCHE CONTROLS
   // ═════════════════════════════════════════════════════════════
 
+  'A.8.2': {
+    name: 'Geprivilegieerde toegangsrechten',
+    questions: [
+      { dim: 'beleid', q: 'Is een aparte procedure voor geprivilegieerde accounts (admin, root, owner) vastgelegd?' },
+      { dim: 'techniek', q: 'Worden admin-handelingen vanuit een aparte account uitgevoerd, niet vanuit de dagelijkse werkaccount?' },
+      { dim: 'techniek', q: 'Is MFA verplicht voor alle geprivilegieerde accounts zonder ontheffing?' },
+      { dim: 'proces', q: 'Worden alle geprivilegieerde sessies gelogd en periodiek gereviewd?' },
+      { dim: 'effectiviteit', q: 'Wordt het aantal geprivilegieerde accounts geminimaliseerd (just-enough-access)?' },
+    ]
+  },
   'A.8.5': {
     name: 'Veilige authenticatie',
     questions: [
@@ -260,6 +300,16 @@ const gapQuestionsV2 = {
       { dim: 'effectiviteit', q: 'Wordt RPO (Recovery Point Objective) per kritiek systeem gemeten en gehaald?' },
     ]
   },
+  'A.8.15': {
+    name: 'Logging',
+    questions: [
+      { dim: 'beleid', q: 'Is er een logging-beleid dat per systeemklasse beschrijft welke events worden gelogd?' },
+      { dim: 'techniek', q: 'Worden authenticatie, autorisatie-wijzigingen en privileged acties van alle kritieke systemen gelogd?' },
+      { dim: 'techniek', q: 'Zijn logs append-only of in een aparte storage zodat ze niet door aanvallers kunnen worden gewijzigd?' },
+      { dim: 'proces', q: 'Worden logs minimaal 6 maanden bewaard (of langer indien wettelijk vereist)?' },
+      { dim: 'effectiviteit', q: 'Wordt periodiek getoetst of de gelogde events compleet zijn (geen gaten)?' },
+    ]
+  },
   'A.8.16': {
     name: 'Monitoringactiviteiten',
     questions: [
@@ -287,6 +337,16 @@ const gapQuestionsV2 = {
       { dim: 'techniek', q: 'Worden code-reviews verplicht uitgevoerd vóór merge naar main/production?' },
       { dim: 'techniek', q: 'Wordt SAST (static application security testing) automatisch uitgevoerd in CI/CD?' },
       { dim: 'proces', q: 'Krijgen ontwikkelaars periodiek security-training (OWASP top 10, secure design)?' },
+    ]
+  },
+  'A.8.32': {
+    name: 'Wijzigingsbeheer',
+    questions: [
+      { dim: 'beleid', q: 'Is een change management-procedure vastgelegd met categorieën (standaard, normaal, emergency)?' },
+      { dim: 'proces', q: 'Wordt elke productie-wijziging vooraf goedgekeurd door een Change Advisory Board of equivalent?' },
+      { dim: 'techniek', q: 'Worden changes geregistreerd in een ticketsysteem dat audit-trail biedt?' },
+      { dim: 'proces', q: 'Is er een rollback-procedure voor elke risicovolle change?' },
+      { dim: 'effectiviteit', q: 'Wordt het percentage failed changes gemeten en gerapporteerd?' },
     ]
   },
 };

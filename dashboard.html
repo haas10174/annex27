@@ -12,6 +12,7 @@
   <script src="/analytics-admin.js"></script>
   <script src="/gap-questions-v2.js" defer></script>
   <script src="/nis2-questions.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js" crossorigin="anonymous"></script>
 
   <meta http-equiv="X-Content-Type-Options" content="nosniff" />
   <meta name="referrer" content="strict-origin-when-cross-origin" />
@@ -3144,22 +3145,27 @@
         </div>
       </div>
 
-      <!-- Volgende stap — upsell voor gap-klant -->
-      <div id="nextStepCard" style="display:none;margin-top:32px;padding:28px 32px;background:linear-gradient(135deg, #0c0f1a, #1e293b);border-radius:14px;color:#fff;position:relative;overflow:hidden;">
-        <div style="position:absolute;top:0;left:0;right:0;height:3px;background:#14b8a6;"></div>
-        <div style="font-size:0.72rem;letter-spacing:0.14em;text-transform:uppercase;color:#14b8a6;font-weight:700;margin-bottom:6px;">Volgende stap</div>
-        <h3 style="font-family:'Sora',sans-serif;font-size:1.4rem;font-weight:800;letter-spacing:-0.02em;margin-bottom:10px;">Klaar met uw gap-analyse? Dit zijn uw opties</h3>
-        <p style="color:rgba(255,255,255,0.68);font-size:0.95rem;line-height:1.6;max-width:640px;margin-bottom:22px;">Na uw rapport kunt u zelf aan de slag met de bevindingen, of doorzetten met &eacute;&eacute;n van onze vervolgtrajecten. Kies wat past bij uw tempo.</p>
-        <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));gap:14px;">
-          <a href="https://annex27.nl/#pricing" target="_blank" style="display:block;padding:18px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:10px;text-decoration:none;color:#fff;transition:border-color 0.2s;" onmouseover="this.style.borderColor='#14b8a6'" onmouseout="this.style.borderColor='rgba(255,255,255,0.1)'">
-            <div style="font-weight:700;margin-bottom:4px;">Beleidspakket &euro;699</div>
-            <div style="font-size:0.85rem;color:rgba(255,255,255,0.6);">22-34 beleidsdocumenten sector-specifiek + alle werkinstructies</div>
-            <div style="margin-top:10px;font-size:0.82rem;color:#14b8a6;font-weight:600;">Offerte aanvragen &rarr;</div>
+      <!-- Volgende stap — upsell voor gap-klant (print-ready light style) -->
+      <div id="nextStepCard" style="display:none;margin-top:32px;padding:28px 32px;background:#FAF9F6;border:1px solid var(--border);border-radius:14px;color:var(--text-primary);position:relative;overflow:hidden;">
+        <div style="position:absolute;top:0;left:0;right:0;height:3px;background:var(--accent);"></div>
+        <div style="font-size:0.72rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:6px;">Volgende stap</div>
+        <h3 style="font-family:'Sora',sans-serif;font-size:1.4rem;font-weight:800;letter-spacing:-0.02em;margin-bottom:10px;color:var(--text-primary);">Klaar met uw gap-analyse? Dit zijn uw opties</h3>
+        <p style="color:var(--text-secondary);font-size:0.95rem;line-height:1.6;max-width:640px;margin-bottom:22px;">Na uw rapport kunt u zelf aan de slag met de bevindingen, of doorzetten met &eacute;&eacute;n van onze vervolgtrajecten. Kies wat past bij uw tempo.</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(240px, 1fr));gap:14px;">
+          <a href="https://annex27.nl/bestellen.html?plan=beleid" target="_blank" style="display:block;padding:18px;background:#fff;border:1px solid var(--border);border-radius:10px;text-decoration:none;color:var(--text-primary);transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
+            <div style="font-weight:700;margin-bottom:4px;">Beleidspakket &euro;395</div>
+            <div style="font-size:0.85rem;color:var(--text-secondary);">44 beleidsdocumenten + werkinstructies, sector-specifiek aangepast</div>
+            <div style="margin-top:10px;font-size:0.82rem;color:var(--accent);font-weight:600;">Bestel &rarr;</div>
           </a>
-          <a href="https://annex27.nl/#pricing" target="_blank" style="display:block;padding:18px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:10px;text-decoration:none;color:#fff;transition:border-color 0.2s;" onmouseover="this.style.borderColor='#14b8a6'" onmouseout="this.style.borderColor='rgba(255,255,255,0.1)'">
-            <div style="font-weight:700;margin-bottom:4px;">Pre-audit Review &euro;1.850</div>
-            <div style="font-size:0.85rem;color:rgba(255,255,255,0.6);">1-op-1 review door Lead Auditor voor externe certificering</div>
-            <div style="margin-top:10px;font-size:0.82rem;color:#14b8a6;font-weight:600;">Meer info &rarr;</div>
+          <a href="https://annex27.nl/bestellen.html?plan=nis2" target="_blank" style="display:block;padding:18px;background:#fff;border:1px solid var(--border);border-radius:10px;text-decoration:none;color:var(--text-primary);transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
+            <div style="font-weight:700;margin-bottom:4px;">NIS2 Readiness &euro;595</div>
+            <div style="font-size:0.85rem;color:var(--text-secondary);">39 vragen op alle 10 NIS2-maatregelen + bestuursverklaring</div>
+            <div style="margin-top:10px;font-size:0.82rem;color:var(--accent);font-weight:600;">Start NIS2 &rarr;</div>
+          </a>
+          <a href="https://annex27.nl/#pakketten" target="_blank" style="display:block;padding:18px;background:#fff;border:1px solid var(--border);border-radius:10px;text-decoration:none;color:var(--text-primary);transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
+            <div style="font-weight:700;margin-bottom:4px;">Pre-audit Review</div>
+            <div style="font-size:0.85rem;color:var(--text-secondary);">1-op-1 review door Lead Auditor v&oacute;&oacute;r externe certificering. Op aanvraag, scope-afhankelijk.</div>
+            <div style="margin-top:10px;font-size:0.82rem;color:var(--accent);font-weight:600;">Plan een gesprek &rarr;</div>
           </a>
         </div>
       </div>
@@ -3247,8 +3253,16 @@
 
     <!-- Beleidsdocumenten View (alleen toegankelijk bij pakket=beleid) -->
     <div class="view" id="viewDocumenten">
-      <h1 class="page-title">Beleidsdocumenten</h1>
-      <p class="page-subtitle" id="docsSubtitle">Download ISO 27001-conforme beleidstemplates per categorie.</p>
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:16px;margin-bottom:8px;">
+        <div>
+          <h1 class="page-title" style="margin-bottom:6px;">Beleidsdocumenten</h1>
+          <p class="page-subtitle" id="docsSubtitle">Download ISO 27001-conforme beleidstemplates per categorie.</p>
+        </div>
+        <button id="zipExportBtn" type="button" onclick="downloadPolicyZip()" style="display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#fff;border:0;border-radius:10px;padding:11px 18px;font-family:'Sora',sans-serif;font-weight:700;font-size:0.86rem;cursor:pointer;white-space:nowrap;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          <span id="zipExportBtnLabel">Download alles als ZIP</span>
+        </button>
+      </div>
       <div id="policyHubSummary"></div>
       <div id="docsContainer"></div>
     </div>
@@ -4280,32 +4294,111 @@ async function loadProfile() {
   applyPakketRestrictions();
 }
 
-function applyPakketRestrictions() {
-  const isReadiness = userPakket === 'readiness' || userPakket === 'admin';
+// Pakket-access helper: één bron-of-waarheid voor wat een klant mag zien
+function userAccess() {
+  const p = userPakket || 'gap';
+  const isAdmin = p === 'admin';
+  const isBundle = p === 'iso_nis2_bundle' || p === 'readiness' || isAdmin;
+  return {
+    pakket: p,
+    isAdmin,
+    gap:           true, // iedereen krijgt gap (basis-toegang)
+    nis2:          isAdmin || isBundle || p === 'nis2',
+    beleid:        isAdmin || isBundle || p === 'beleid' || p === 'beleid_premium',
+    beleidPremium: isAdmin || p === 'beleid_premium',
+    werkinstr:     isAdmin || isBundle || p === 'beleid' || p === 'beleid_premium',
+    preaudit:      isAdmin || p === 'preaudit'
+  };
+}
 
-  // Sidebar links: show/hide based on pakket
+function applyPakketRestrictions() {
+  const acc = userAccess();
+
+  // Sidebar links: hide/gate per pakket
   document.querySelectorAll('.sidebar-link').forEach(link => {
     const view = link.dataset.view;
-    if (view === 'documents' || view === 'checklists') {
-      if (!isReadiness) {
-        link.style.opacity = '0.4';
-        link.onclick = function(e) {
-          e.preventDefault();
-          showUpgradePrompt();
-        };
-      }
+    let allowed = true;
+    if (view === 'nis2')        allowed = acc.nis2;
+    if (view === 'documenten')  allowed = acc.beleid;
+    if (view === 'documents' || view === 'checklists') allowed = acc.beleid || acc.werkinstr;
+    if (!allowed) {
+      link.style.opacity = '0.4';
+      link.setAttribute('title', 'Niet inbegrepen in uw huidige pakket — klik voor upgrade-info');
+      link.onclick = function (e) {
+        e.preventDefault();
+        if (typeof showUpgradePrompt === 'function') showUpgradePrompt(view);
+      };
+    } else {
+      link.style.opacity = '';
+      link.removeAttribute('title');
     }
   });
 
-  // Render quick actions based on pakket
+  // Render quick actions + upsells op basis van wat klant NIET heeft
   renderQuickActions();
+  renderUpsellNextStep();
+}
+
+// Toon op de dashboard-landing alleen de upsells voor producten die klant nog niet heeft
+function renderUpsellNextStep() {
+  const card = document.getElementById('nextStepCard');
+  if (!card) return;
+  const acc = userAccess();
+  const items = [];
+  if (!acc.beleid) {
+    items.push({
+      href: 'https://annex27.nl/bestellen.html?plan=beleid',
+      title: 'Beleidspakket &euro;395',
+      desc: '44 beleidsdocumenten + werkinstructies, sector-specifiek aangepast',
+      cta: 'Bestel'
+    });
+  }
+  if (!acc.nis2) {
+    items.push({
+      href: 'https://annex27.nl/bestellen.html?plan=nis2',
+      title: 'NIS2 Readiness &euro;595',
+      desc: '39 vragen op alle 10 NIS2-maatregelen + bestuursverklaring',
+      cta: 'Start NIS2'
+    });
+  }
+  if (!acc.beleid && !acc.nis2) {
+    items.push({
+      href: 'https://annex27.nl/bestellen.html?plan=iso_nis2_bundle',
+      title: 'Bundel ISO + NIS2 &euro;1.190',
+      desc: 'Gap-analyse + NIS2 Readiness samen, &euro;200 voordeel',
+      cta: 'Bundel'
+    });
+  }
+  if (!acc.preaudit) {
+    items.push({
+      href: 'https://annex27.nl/#pakketten',
+      title: 'Pre-audit Review',
+      desc: '1-op-1 review door Lead Auditor v&oacute;&oacute;r externe certificering. Op aanvraag, scope-afhankelijk.',
+      cta: 'Plan een gesprek'
+    });
+  }
+
+  // Vind de upsell-grid (de a-tags hierboven, met card-zelf als parent)
+  const grid = card.querySelector('div[style*="grid-template-columns"]');
+  if (!grid) return;
+  if (items.length === 0) {
+    card.style.display = 'none';
+    return;
+  }
+  card.style.display = 'block';
+  grid.innerHTML = items.map(it => `
+    <a href="${it.href}" target="_blank" style="display:block;padding:18px;background:#fff;border:1px solid var(--border);border-radius:10px;text-decoration:none;color:var(--text-primary);transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
+      <div style="font-weight:700;margin-bottom:4px;">${it.title}</div>
+      <div style="font-size:0.85rem;color:var(--text-secondary);">${it.desc}</div>
+      <div style="margin-top:10px;font-size:0.82rem;color:var(--accent);font-weight:600;">${it.cta} &rarr;</div>
+    </a>
+  `).join('');
 }
 
 function renderQuickActions() {
   const isReadiness = userPakket === 'readiness' || userPakket === 'admin';
   const el = document.getElementById('quickActions');
-  const nextStep = document.getElementById('nextStepCard');
-  if (nextStep) nextStep.style.display = (userPakket === 'gap') ? 'block' : 'none';
+  // nextStepCard show/hide wordt nu beheerd door renderUpsellNextStep()
 
   if (isReadiness) {
     el.innerHTML = `
@@ -8031,6 +8124,151 @@ function togglePolicyHubDetail() {
   const el = document.getElementById('policyHubDetail');
   if (!el) return;
   el.style.display = el.style.display === 'none' ? 'block' : 'none';
+}
+
+// ── 1-klik ZIP-export beleidsdocumenten (#33) ──
+// Bundelt server-side templates + klant-specifieke rendered versies + signoff-status in één ZIP.
+async function downloadPolicyZip() {
+  if (typeof JSZip === 'undefined') {
+    alert('ZIP-bibliotheek nog niet geladen. Probeer over een paar seconden opnieuw.');
+    return;
+  }
+  const access = userDocAccess();
+  if (!access.basis && !access.premium && !access.werkinstructies) {
+    alert('Geen toegang tot beleidsdocumenten. Activeer het Beleidspakket eerst.');
+    return;
+  }
+  const btn = document.getElementById('zipExportBtn');
+  const label = document.getElementById('zipExportBtnLabel');
+  const origLabel = label?.textContent || 'Download alles als ZIP';
+  if (btn) btn.disabled = true;
+  if (label) label.textContent = 'Bundelen…';
+
+  try {
+    const zip = new JSZip();
+
+    // 1. Metadata + README in de root
+    const meta = await fetch('/beleidspakket/docs-metadata.json').then(r => r.json()).catch(() => null);
+    if (meta) zip.file('docs-metadata.json', JSON.stringify(meta, null, 2));
+
+    const stamp = new Date().toISOString().slice(0, 10);
+    const readme = [
+      '# Annex27 Beleidspakket — export',
+      '',
+      `Gegenereerd op: ${stamp}`,
+      `Voor: ${user?.email || 'onbekend'}`,
+      '',
+      'Inhoud:',
+      '- `templates/` — alle Markdown-templates uit het beleidspakket (basispakket, premium, werkinstructies, nis2).',
+      '- `word/` — Word-versies (.docx) van dezelfde documenten waar beschikbaar.',
+      '- `rendered/` — uw eigen gerenderde versies uit het portaal (auto-fill met uw klantdata, indien aanwezig).',
+      '- `signoffs.txt` — overzicht van Lead Auditor signoff-status per document.',
+      '- `docs-metadata.json` — mapping per document naar ISO 27001-controls, NIS2-artikelen en AVG-artikelen.',
+      '',
+      'Gebruik:',
+      '- Open de templates in een editor naar keuze (VS Code, Obsidian, Word).',
+      '- Plaatsvervangertekst tussen vierkante haken `[Organisatienaam]` vervangt u handmatig met uw eigen waarden, of laat het portaal dat doen via de Beleidsdocumenten-viewer.',
+      '- Voor de officiële versie in uw ISMS: gebruik de gerenderde versie uit `rendered/` indien beschikbaar.',
+      '',
+      'Vragen? Mail info@annex27.nl.'
+    ].join('\n');
+    zip.file('README.md', readme);
+
+    // 2. Bestaande templates ophalen op basis van access
+    const tiers = [];
+    if (access.basis) tiers.push('basispakket');
+    if (access.premium) tiers.push('premium');
+    if (access.werkinstructies) tiers.push('werkinstructies');
+    tiers.push('nis2'); // altijd meenemen voor klanten die NIS2 hebben
+
+    const fetchFile = async (path) => {
+      try {
+        const r = await fetch(path);
+        if (!r.ok) return null;
+        return await r.text();
+      } catch { return null; }
+    };
+
+    if (meta?.documents) {
+      const docs = meta.documents.filter(d => tiers.includes(d.tier));
+      for (const d of docs) {
+        const mdPath = `/beleidspakket/${d.tier}/${d.id}.md`;
+        const md = await fetchFile(mdPath);
+        if (md) zip.file(`templates/${d.tier}/${d.id}.md`, md);
+      }
+      // Word-versies meebundelen waar beschikbaar
+      for (const d of docs) {
+        if (d.tier === 'nis2') continue; // geen Word voor NIS2-docs (alleen md)
+        const docxPath = `/beleidspakket/word/${d.tier}/${d.id}.docx`;
+        try {
+          const r = await fetch(docxPath);
+          if (r.ok) {
+            const buf = await r.arrayBuffer();
+            zip.file(`word/${d.tier}/${d.id}.docx`, buf);
+          }
+        } catch {}
+      }
+    }
+
+    // 3. Eigen rendered versies uit Postgres
+    let signoffsText = `Lead Auditor signoff-status — gegenereerd ${stamp}\n${'='.repeat(60)}\n\n`;
+    try {
+      const { data: versions } = await sb.from('policy_versions').select('*').eq('user_id', user.id).order('generated_at', { ascending: false });
+      const { data: signoffs } = await sb.from('policy_signoffs').select('*');
+      const sigByV = {};
+      (signoffs || []).forEach(s => { sigByV[s.policy_version_id] = s; });
+
+      const latestByDoc = {};
+      (versions || []).forEach(v => {
+        if (!latestByDoc[v.doc_key] || latestByDoc[v.doc_key].version_no < v.version_no) {
+          latestByDoc[v.doc_key] = v;
+        }
+      });
+
+      for (const v of Object.values(latestByDoc)) {
+        if (v.rendered_content) {
+          zip.file(`rendered/${v.doc_key}-v${v.version_no}.md`, v.rendered_content);
+        }
+        const sig = sigByV[v.id];
+        signoffsText += `${v.doc_key.padEnd(40)} v${v.version_no} — ${sig ? `GESIGNOFFD ${sig.signed_at}` : 'wacht op signoff'}\n`;
+        if (sig?.signature_note) signoffsText += `  Opmerking: ${sig.signature_note}\n`;
+      }
+      if (Object.keys(latestByDoc).length === 0) {
+        signoffsText += '(geen rendered versies gevonden voor deze klant)\n';
+      }
+    } catch (e) {
+      signoffsText += `(kon signoff-status niet ophalen: ${e.message || e})\n`;
+    }
+    zip.file('signoffs.txt', signoffsText);
+
+    // 4. Generate ZIP en triggeren download
+    if (label) label.textContent = 'Comprimeren…';
+    const blob = await zip.generateAsync({ type: 'blob', compression: 'DEFLATE', compressionOptions: { level: 6 } });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `annex27-beleidspakket-${stamp}.zip`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 5000);
+
+    // Audit-log (best-effort)
+    try {
+      await sb.rpc('log_audit_event', {
+        p_action: 'policy_zip_export',
+        p_target_type: 'klant',
+        p_target_id: user.id,
+        p_metadata: { tiers, generated_at: stamp }
+      });
+    } catch {}
+  } catch (e) {
+    console.error('ZIP-export mislukt', e);
+    alert('ZIP-export mislukt: ' + (e.message || e));
+  } finally {
+    if (btn) btn.disabled = false;
+    if (label) label.textContent = origLabel;
+  }
 }
 
 async function renderDocumenten() {
