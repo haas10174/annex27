@@ -23,10 +23,11 @@ function corsHeaders(origin: string | null): Record<string, string> {
 }
 
 const PRODUCTS: Record<string, { name: string; price: number; period: string }> = {
-  'gap':             { name: 'Gap-analyse',            price: 795,  period: 'eenmalig' },
-  'nis2':            { name: 'NIS2 Readiness',         price: 995,  period: 'eenmalig' },
-  'beleid':          { name: 'Beleidspakket',          price: 395,  period: 'eenmalig' },
-  'preaudit':        { name: 'Pre-audit Review',       price: 1495, period: 'eenmalig' },
+  'gap':              { name: 'Gap-analyse',                   price: 795,  period: 'eenmalig' },
+  'nis2':             { name: 'NIS2 Readiness',                price: 595,  period: 'eenmalig' },
+  'iso_nis2_bundle':  { name: 'Bundel ISO 27001 + NIS2',       price: 1190, period: 'eenmalig' },
+  'beleid':           { name: 'Beleidspakket',                 price: 395,  period: 'eenmalig' },
+  'preaudit':         { name: 'Pre-audit Review',              price: 1495, period: 'eenmalig' },
 };
 
 // Server-side kortingscodes. NOOIT vertrouwen op client-side input.
