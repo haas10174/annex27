@@ -1132,22 +1132,23 @@
     }
     .package:hover { background: #FCFCFC; transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,0.06); z-index: 2; }
     .package.featured {
-      background: var(--text-primary);
-      box-shadow: 0 24px 48px rgba(15,23,42,0.2);
+      background: var(--surface);
+      position: relative;
+    }
+    .package.featured::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--accent);
     }
     .package.featured:hover {
       transform: translateY(-6px);
-      box-shadow: 0 32px 64px rgba(15,23,42,0.25);
+      box-shadow: 0 24px 48px rgba(15,23,42,0.10);
     }
-    .package.featured .pkg-name,
-    .package.featured .pkg-amount,
-    .package.featured .pkg-period { color: white; }
-    .package.featured .pkg-desc { color: rgba(255,255,255,0.6); }
-    .package.featured .pkg-note { color: rgba(255,255,255,0.4); }
-    .package.featured .pkg-features li { color: rgba(255,255,255,0.8); }
-    .package.featured .pkg-features svg { stroke: var(--accent); }
     .package.featured .pkg-label {
       display: block;
+      font-family: 'Sora', sans-serif;
       font-size: 0.72rem;
       font-weight: 700;
       text-transform: uppercase;
@@ -1155,7 +1156,6 @@
       color: var(--accent);
       margin-bottom: 16px;
     }
-    .package.featured .pkg-divider { border-color: rgba(255,255,255,0.1); }
     .pkg-label { display: none; }
     .pkg-name {
       font-size: 1.1rem;
@@ -1778,10 +1778,7 @@
   <div class="container">
     <div class="section-label">Het probleem</div>
     <h2 class="section-title">ISO 27001 is essentieel.<br />Maar voor het MKB onbereikbaar.</h2>
-    <p class="section-desc">
-      Traditionele trajecten kosten tienduizenden euro's en duren maanden.
-      Grote platformen richten zich op enterprise. Het MKB valt tussen wal en schip.
-    </p>
+    <p class="section-desc">Traditionele trajecten zijn duur en duren lang. Het MKB valt tussen wal en schip.</p>
     <div class="stats-grid fade-up">
       <div class="stat-card">
         <div class="stat-number">&euro;15.000+</div>
@@ -1999,9 +1996,7 @@
     <div class="section-center">
       <div class="section-label">Vier trajecten</div>
       <h2 class="section-title">Investeer in compliance,<br />niet in abonnementen</h2>
-      <p class="section-desc">
-        Vier heldere trajecten, allemaal eenmalig en volledig digitaal. Geen maandelijkse verplichting, geen verborgen kosten. Wij leveren, u gaat verder.
-      </p>
+      <p class="section-desc">Eenmalig betalen, geen abonnement.</p>
     </div>
 
     <div class="packages fade-up">
@@ -2240,28 +2235,34 @@
 .why-stats-strip {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 24px;
-  background: var(--text-primary);
+  gap: 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  padding: 40px 32px;
+  padding: 32px 0;
   text-align: center;
 }
+.why-stat-block {
+  border-right: 1px solid var(--border-light);
+  padding: 0 16px;
+}
+.why-stat-block:last-child { border-right: 0; }
 .why-stat-block .why-stat-num {
   font-family: 'Sora', sans-serif;
   font-weight: 800;
-  font-size: 2.4rem;
-  color: #14b8a6;
+  font-size: 2.2rem;
+  color: var(--accent);
   line-height: 1;
   margin-bottom: 8px;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.03em;
 }
 .why-stat-block .why-stat-label {
-  font-size: 0.8rem;
-  color: rgba(255,255,255,0.75);
-  font-weight: 500;
-  letter-spacing: 0.02em;
+  font-family: 'Sora', sans-serif;
+  font-size: 0.74rem;
+  color: var(--text-muted);
+  font-weight: 600;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
 }
 /* Auditor split-section — foto + tekst */
 .auditor-split {
@@ -2400,8 +2401,8 @@
       <div>
         <div class="section-label">Trust &amp; Security</div>
         <h2 class="section-title">Uw data is gevoelig.<br/>Zo behandelen wij hem.</h2>
-        <p style="font-size:1rem;line-height:1.8;color:var(--text-secondary);margin-bottom:28px;">
-          Als u ons inzicht geeft in uw informatiebeveiliging, vertrouwt u ons de gevoeligste gegevens van uw organisatie toe. Wij leggen zonder marketing-taal uit hoe wij die gegevens beschermen: technisch, contractueel en procesmatig.
+        <p style="font-size:1rem;line-height:1.7;color:var(--text-secondary);margin-bottom:28px;">
+          Technisch, contractueel en procesmatig. Geen marketing-taal.
         </p>
         <a href="/trust" class="btn-secondary" style="display:inline-flex;align-items:center;gap:8px;padding:14px 28px;background:var(--surface);color:var(--text-primary);text-decoration:none;border-radius:var(--radius);border:1px solid var(--border);font-weight:600;font-size:0.95rem;transition:all 0.2s;">
           Lees hoe wij uw data beschermen
