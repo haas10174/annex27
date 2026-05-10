@@ -3242,7 +3242,7 @@
       <div id="docsContainer"></div>
     </div>
 
-    <!-- Rapport View — released AI-gap-analyse rapport (read-only voor klant) -->
+    <!-- Rapport View — released gap-analyse rapport (read-only voor klant) -->
     <div class="view" id="viewRapport">
       <h1 class="page-title">Gap-analyse rapport</h1>
       <p class="page-subtitle" id="rapportSubtitle">Uw volledige rapport door Lead Auditor — verschijnt hier zodra vrijgegeven.</p>
@@ -3911,8 +3911,8 @@ function showSubmitReviewModal(totalAnswers) {
           <li>
             <span class="a27-modal-step-num">3</span>
             <div>
-              <div class="a27-modal-step-title">AI-analyse genereert eerste draft</div>
-              <div class="a27-modal-step-sub">Claude Opus leest uw antwoorden + evidence en stelt bevindingen voor.</div>
+              <div class="a27-modal-step-title">analyse genereert eerste draft</div>
+              <div class="a27-modal-step-sub">Lead Auditor leest uw antwoorden + evidence en formuleert bevindingen.</div>
             </div>
           </li>
           <li>
@@ -5949,7 +5949,7 @@ function renderModuleOverview() {
           <div style="font-size:0.78rem;color:var(--text-muted);max-width:520px;line-height:1.55;text-align:center;margin-top:4px;">
             <strong style="color:var(--text-primary);">Hoe werkt dit?</strong> Het self-assessment is uw eigen overzicht met antwoorden + automatische bevindingen.
             Het <strong>echte eindrapport</strong> krijgt u nadat onze Lead Auditor (DNV/IRCA-gecertificeerd) uw antwoorden + bewijsvoering heeft gereviewed,
-            de AI-bevindingen heeft gevalideerd en zijn eindoordeel heeft toegevoegd.
+            alle bevindingen heeft geformuleerd en zijn eindoordeel heeft toegevoegd.
           </div>
         </div>
       </div>` : ''}
@@ -7887,7 +7887,7 @@ async function downloadDoc(pakketKey, file) {
   }
 }
 
-// ── RAPPORT (released AI-gap-analyse rapport, read-only) ──
+// ── RAPPORT (released gap-analyse rapport, read-only) ──
 async function renderRapport() {
   const container = document.getElementById('rapportContainer');
   const subtitle = document.getElementById('rapportSubtitle');
