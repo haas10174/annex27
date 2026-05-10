@@ -1807,11 +1807,11 @@ const sectorProfiles = {
     frameworks: ['ISO 27001', 'AVG/GDPR', 'NIS2', 'SOC 2'],
     soaDesc: 'Bij SaaS-organisaties zijn vrijwel alle 93 Annex A controls van toepassing. Slechts een handvol fysieke controls (bijv. equipment disposal, bekabeling) kan onderbouwd worden uitgesloten.',
     categoryTips: {
-      org:  { low: 'Governance en beleid ontbreken \u2014 bij SaaS-bedrijven is dit de basis voor klantvertrouwen en enterprise deals.', mid: 'Goede start. Formaliseer beleid en supplier management om certificeringsklaar te zijn.', high: 'Sterke organisatorische basis voor certificering.' },
-      hr:   { low: 'Zonder screening en awareness training vormen medewerkers uw grootste risico.', mid: 'Procedures bestaan maar zijn niet volledig \u2014 let op offboarding.', high: 'Goed ingericht qua personeel.' },
-      phys: { low: 'Ook bij cloud-first organisaties is fysieke beveiliging van kantoor en apparatuur vereist.', mid: 'Basisbescherming aanwezig. Vergeet clean desk policy niet.', high: 'Fysieke beveiliging is op orde.' },
-      tech: { low: 'Technische basismaatregelen ontbreken \u2014 MFA, encryptie en patching zijn minimale vereisten.', mid: 'Deels ingericht. Focus op logging, vulnerability management en netwerksegmentatie.', high: 'Sterke technische maatregelen.' },
-      ops: { low: 'Operationele controls (incident response, BCP, supplier mgmt) ontbreken. Kritiek voor certificering.', mid: 'Operationele basis aanwezig, maar incident-test en supplier-register ontbreken vaak.', high: 'Goed gedocumenteerd operationeel beheer.' },
+      org:  { low: 'Geen vastgesteld beleid, geen risicoregister. Eerste actie: directiebeleid + Statement of Applicability.', mid: 'Beleid staat. Volgende stap: supplier management formaliseren en SoA per release reviewen.', high: 'Governance op orde voor enterprise-deals.' },
+      hr:   { low: 'Geen screening, geen jaarlijkse awareness. Begin met VOG-procedure en phishing-simulaties.', mid: 'Onboarding goed. Sluit access-rechten op de laatste werkdag bij offboarding.', high: 'HR-controls dekken Annex A.6 volledig.' },
+      phys: { low: 'Cloud-first ontslaat u niet van laptop-encryptie en clean-desk in eigen kantoor.', mid: 'Basis staat. Voeg clean desk-controles toe aan compliance-monitoring.', high: 'Fysieke maatregelen op orde.' },
+      tech: { low: 'MFA, encryptie at-rest en patching ontbreken. De absolute basisvereisten van Annex A.8.', mid: 'MFA en encryptie staan. Voeg logging, vulnerability-SLA en netwerksegmentatie toe.', high: 'Technische maatregelen op A.8-niveau.' },
+      ops: { low: 'Geen incident response, BCP of supplier-register. Geen audit-pad zonder deze drie.', mid: 'IR gedocumenteerd. Test in tabletop, valideer DPA\'s met sub-processors.', high: 'Operationele controls audit-ready.' },
     }
   },
   it: {
@@ -1838,11 +1838,11 @@ const sectorProfiles = {
     frameworks: ['ISO 27001', 'AVG/GDPR', 'NIS2', 'SOC 2'],
     soaDesc: 'MSP\'s en IT-dienstverleners hebben vrijwel alle controls nodig, inclusief fysieke beveiliging van eigen en klantlocaties.',
     categoryTips: {
-      org:  { low: 'Beleid ontbreekt \u2014 voor IT-dienstverleners is dit cruciaal om aanbestedingen te winnen.', mid: 'Goede start. Formaliseer supplier management en incidentproces.', high: 'Sterke governance basis.' },
-      hr:   { low: 'Medewerkers met toegang tot klantinfrastructuur zonder screening is een groot risico.', mid: 'Procedures bestaan maar screening en offboarding moeten strakker.', high: 'Goed ingericht.' },
-      phys: { low: 'Fysieke toegang tot serverruimtes en kantoor moet geregeld zijn.', mid: 'Basisbescherming aanwezig.', high: 'Op orde.' },
-      tech: { low: 'Technische basismaatregelen ontbreken.', mid: 'Focus op klant-isolatie, logging en vulnerability management.', high: 'Sterk technisch fundament.' },
-      ops: { low: 'Operationele controls ontbreken. Incident response, leveranciersregister en BCP zijn kritiek voor cert.', mid: 'Operationele basis aanwezig, valideer incident-response en supplier-DPA\'s.', high: 'Goed gedocumenteerd operationeel beheer.' },
+      org:  { low: 'Geen formeel beleid. Voor MSP-aanbestedingen vereist: directiebeleid + supplier-onboarding.', mid: 'Beleid staat. Verfijn klantnotificatie-procedure en supplier-DPA\'s.', high: 'Governance dekt MSP-eisen.' },
+      hr:   { low: 'Klantinfrastructuur-toegang zonder screening is een audit-blocker.', mid: 'Screening op orde. Strakkere offboarding voor klant-toegang.', high: 'HR-controls op MSP-niveau.' },
+      phys: { low: 'Serverruimte en kantoor: badge, log, bezoekersregister.', mid: 'Basis staat. Voeg periodieke fysieke audit toe.', high: 'Fysieke toegang op orde.' },
+      tech: { low: 'Klant-isolatie, logging en VM ontbreken. Eerst MFA, dan tenant-boundary review.', mid: 'Basis staat. Verdiep klant-isolatie en SIEM-correlatie.', high: 'Technisch fundament voldoet.' },
+      ops: { low: 'Incident response naar klant + leveranciersregister + BCP ontbreken.', mid: 'IR documenteerd. Valideer supplier-DPA\'s met audit-recht.', high: 'Operationele controls audit-ready.' },
     }
   },
   zorg: {
@@ -1873,11 +1873,11 @@ const sectorProfiles = {
     frameworks: ['ISO 27001', 'NEN 7510-1:2024', 'NEN 7510-2:2024+A1:2026', 'AVG/GDPR', 'NIS2'],
     soaDesc: 'NEN 7510-2:2024+A1:2026 voegt op 51 van de 93 ISO 27002:2022-controls een expliciete zorgspecifieke richtlijn toe. Daarnaast is de gehele NEN 7510-1:2024 (managementsysteem clausules 4-10) zorg-georiënteerd geschreven. In de zorgsector zijn vrijwel alle controls van toepassing.',
     categoryTips: {
-      org:  { low: 'Beleid rondom patiëntgegevens ontbreekt \u2014 dit is een wettelijke verplichting.', mid: 'Basis aanwezig, maar verwerkersovereenkomsten en incidentproces moeten op orde.', high: 'Goede organisatorische basis.' },
-      hr:   { low: 'Medisch personeel zonder awareness training is het grootste risico in de zorg.', mid: 'Basis aanwezig, maar training moet structureel en periodiek.', high: 'Goed ingericht.' },
-      phys: { low: 'Fysieke toegang tot behandelruimtes en dossierkasten moet geregeld.', mid: 'Basisbescherming aanwezig.', high: 'Op orde.' },
-      tech: { low: 'Technische basismaatregelen ontbreken \u2014 logging op patiëntdossiers is prioriteit.', mid: 'Focus op logging, encryptie en mobile device management.', high: 'Sterk technisch.' },
-      ops: { low: 'Incident response en supplier-management ontbreken. Kritiek voor zorginstellingen.', mid: 'BCP en leveranciersbeoordelingen aanwezig maar niet getest of bijgewerkt.', high: 'Goed operationeel beheer met geteste incident-respons.' },
+      org:  { low: 'Geen beleid op patiëntgegevens. Wettelijk verplicht onder AVG art. 9 + Wkkgz.', mid: 'Beleid staat. Werk verwerkersovereenkomsten met EPD/PACS-leveranciers bij.', high: 'Governance op zorg-niveau.' },
+      hr:   { low: 'Medisch personeel zonder zorgspecifieke awareness is een datalek wachten op gebeuren.', mid: 'Training staat. Maak deze periodiek en zorgcontext-specifiek.', high: 'HR op NEN 7510-niveau.' },
+      phys: { low: 'Behandelruimtes en dossierkasten: toegangscontrole + log per opening.', mid: 'Basis staat. Voeg bezoekersregistratie toe.', high: 'Fysieke maatregelen op orde.' },
+      tech: { low: 'Patiëntdossier-logging is prioriteit. Daarna MFA en encryptie.', mid: 'Logging staat. Voeg MDM en break-glass-procedure toe.', high: 'Technisch op zorg-niveau.' },
+      ops: { low: 'Incident response richting AP + IGJ en supplier-management ontbreken.', mid: 'IR staat. Test in tabletop met EPD-uitval scenario.', high: 'Operationeel audit-ready.' },
     }
   },
   overheid: {
@@ -1904,11 +1904,11 @@ const sectorProfiles = {
     frameworks: ['ISO 27001', 'BIO', 'AVG/GDPR', 'NIS2'],
     soaDesc: 'Bij overheidsorganisaties zijn vrijwel alle controls van toepassing. De BIO (Baseline Informatiebeveiliging Overheid) is het verplichte normenkader en sluit direct aan op ISO 27001.',
     categoryTips: {
-      org:  { low: 'Governance ontbreekt \u2014 BIO-compliance vereist formeel beleid en classificatie.', mid: 'Basis aanwezig. Focus op classificatie en leveranciersmanagement.', high: 'Sterke organisatorische basis.' },
-      hr:   { low: 'Screening en bewustzijn zijn verplicht voor overheidsmedewerkers.', mid: 'Procedures bestaan maar moeten formeler.', high: 'Goed ingericht.' },
-      phys: { low: 'Fysieke beveiliging van overheidslocaties is kritiek.', mid: 'Basisbescherming aanwezig.', high: 'Op orde.' },
-      tech: { low: 'Technische basismaatregelen ontbreken.', mid: 'Focus op logging en netwerksegmentatie.', high: 'Sterk technisch.' },
-      ops: { low: 'BIO eist gedocumenteerde incident response en BCP, momenteel afwezig.', mid: 'Incident response gedocumenteerd, supplier-register en BCP nog uit te werken.', high: 'Operationele controls voldoen aan BIO-niveau.' },
+      org:  { low: 'BIO eist formeel beleid + classificatie. Begin met directiebesluit + BIO-classificatieschema.', mid: 'Beleid staat. Werk leveranciers-eisen in aanbestedingen uit.', high: 'BIO-governance op orde.' },
+      hr:   { low: 'Screening en awareness zijn verplicht voor overheidsmedewerkers.', mid: 'Procedures staan. Maak ze formeler met logbewijs.', high: 'HR op BIO-niveau.' },
+      phys: { low: 'Overheidslocaties: toegangscontrole + bezoekersregister + clean desk.', mid: 'Basis staat. Voeg periodieke audit toe.', high: 'Fysiek op orde.' },
+      tech: { low: 'BIO eist logging + segmentatie + MFA op gevoelige verwerkingen.', mid: 'Basis staat. Verfijn logging-retentie en SIEM-correlatie.', high: 'Technisch op BIO-niveau.' },
+      ops: { low: 'BIO eist gedocumenteerde IR + BCP. Test jaarlijks.', mid: 'IR staat. Test BCP via tabletop, valideer supplier-register.', high: 'Operationeel BIO-conform.' },
     }
   },
   bouw: {
@@ -1935,11 +1935,11 @@ const sectorProfiles = {
     frameworks: ['ISO 27001', 'AVG/GDPR'],
     soaDesc: 'In de bouwsector zijn circa 85 van de 93 controls relevant. Sommige geavanceerde technische controls (bijv. DLP, code review) kunnen onderbouwd worden uitgesloten.',
     categoryTips: {
-      org:  { low: 'Beleid ontbreekt \u2014 voor aanbestedingen bij overheden is dit steeds vaker vereist.', mid: 'Goede start. Focus op onderaannemersmanagement.', high: 'Sterke basis.' },
-      hr:   { low: 'Medewerkers en onderaannemers zonder bewustzijnstraining vormen een risico.', mid: 'Basistraining aanwezig, maar moet uitgebreid naar onderaannemers.', high: 'Goed ingericht.' },
-      phys: { low: 'Fysieke beveiliging op bouwplaatsen en kantoor is een aandachtspunt.', mid: 'Kantoor is beveiligd, projectlocaties vereisen aandacht.', high: 'Op orde.' },
-      tech: { low: 'Basismaatregelen zoals MFA en encryptie ontbreken.', mid: 'Focus op mobile device management en documentsbeveiliging.', high: 'Goed ingericht.' },
-      ops: { low: 'Operationele controls ontbreken. Start met basis incident-respons.', mid: 'Operationele basis aanwezig, supplier en BCP nog uit te werken.', high: 'Operationele controls op orde.' },
+      org:  { low: 'Geen beleid. Aanbestedingen bij overheden eisen dit steeds vaker.', mid: 'Beleid staat. Werk onderaannemers-eisen in contractsjablonen uit.', high: 'Governance dekt aanbestedings-eisen.' },
+      hr:   { low: 'Medewerkers + onderaannemers zonder awareness is een datalek-risico.', mid: 'Eigen training staat. Trek 'm door naar onderaannemers.', high: 'HR-controls dekken keten.' },
+      phys: { low: 'Bouwplaatsen + projectlocaties: laptop-encryptie en mobile device management eerst.', mid: 'Kantoor staat. Werk projectlocaties uit.', high: 'Fysiek op orde.' },
+      tech: { low: 'MFA en encryptie zijn de basisvereisten, ook in de bouw.', mid: 'Basis staat. MDM voor laptops + tablets op locatie.', high: 'Technisch op orde.' },
+      ops: { low: 'Geen IR, geen BCP. Begin met basis incident-melding-procedure.', mid: 'IR staat. Werk supplier-register en BCP uit.', high: 'Operationeel op orde.' },
     }
   },
   overig: {
@@ -2383,13 +2383,13 @@ function showResults() {
   const ttl = document.getElementById('resultsTitle');
   ttl.innerHTML = 'Uw <span>compliance</span> score';
   if (selectedSector === 'zorg') {
-    if (pct >= 70) sub.textContent = 'Goede basis. Met gerichte verbeteringen bent u klaar voor de volledige zorg-audit.';
-    else if (pct >= 40) sub.textContent = 'Basis aanwezig, maar meerdere zorgspecifieke gebieden vereisen aandacht voor certificering.';
-    else sub.textContent = 'Significante gaps in zorgspecifieke beheersmaatregelen. Tijd voor een verdiepende toets.';
+    if (pct >= 70) sub.textContent = 'Sterke positie. Met enkele verbeteringen klaar voor de NEN 7510 + ISO 27001 audit.';
+    else if (pct >= 40) sub.textContent = 'Basis staat. Zorgspecifieke maatregelen (behandelrelatie, EPD-logging, WGBO) vragen aandacht.';
+    else sub.textContent = 'Beperkte basis voor zorg-compliance. Begin bij behandelrelatie-toegang en dossier-logging.';
   } else {
-    if (pct >= 70) sub.textContent = 'Uw organisatie heeft een goede basis. Met gerichte verbeteringen bent u certificeringsklaar.';
-    else if (pct >= 40) sub.textContent = 'Er is een basis aanwezig, maar meerdere gebieden vereisen aandacht voor certificering.';
-    else sub.textContent = 'Uw organisatie staat aan het begin van het compliance-traject. Er is werk aan de winkel.';
+    if (pct >= 70) sub.textContent = 'Sterke positie. Met enkele verbeteringen audit-ready.';
+    else if (pct >= 40) sub.textContent = 'Basis staat. Meerdere domeinen vragen verdieping voor certificering.';
+    else sub.textContent = 'Beperkte basis. Begin bij governance, MFA en incident response.';
   }
 
   // Big ring animation
@@ -2414,9 +2414,9 @@ function showResults() {
 
   // Verdict badge
   const verdict = document.getElementById('bigVerdict');
-  if (pct >= 70) { verdict.textContent = 'Goede basis voor certificering'; verdict.className = 'big-ring-verdict high'; }
-  else if (pct >= 40) { verdict.textContent = 'Meerdere verbeterpunten'; verdict.className = 'big-ring-verdict mid'; }
-  else { verdict.textContent = 'Significante gaps aanwezig'; verdict.className = 'big-ring-verdict low'; }
+  if (pct >= 70) { verdict.textContent = 'Audit-ready met aanscherping'; verdict.className = 'big-ring-verdict high'; }
+  else if (pct >= 40) { verdict.textContent = 'Basis staat, gaps zichtbaar'; verdict.className = 'big-ring-verdict mid'; }
+  else { verdict.textContent = 'Begin bij de basis'; verdict.className = 'big-ring-verdict low'; }
 
   // Compare — sector-specific benchmark
   const profile = sectorProfiles[selectedSector] || sectorProfiles.overig;
