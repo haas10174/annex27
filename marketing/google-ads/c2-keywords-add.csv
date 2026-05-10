@@ -1,0 +1,37 @@
+Campaign,Ad group,Keyword,Match type,Status
+C2 — ISO 27001 hoofdkeywords,ISO 27001 hoofdkeywords,isms implementatie,Phrase,Enabled
+C2 — ISO 27001 hoofdkeywords,ISO 27001 hoofdkeywords,isms certificering,Phrase,Enabled
+C2 — ISO 27001 hoofdkeywords,ISO 27001 hoofdkeywords,informatiebeveiliging certificering,Phrase,Enabled
+C2 — ISO 27001 hoofdkeywords,ISO 27001 hoofdkeywords,informatiebeveiligingsbeleid,Phrase,Enabled
+C2 — ISO 27001 hoofdkeywords,ISO 27001 hoofdkeywords,iso 27001 statement of applicability,Phrase,Enabled
+C2 — ISO 27001 hoofdkeywords,ISO 27001 hoofdkeywords,iso 27001 soa,Phrase,Enabled
+C2 — ISO 27001 hoofdkeywords,ISO 27001 hoofdkeywords,iso 27001 quickscan,Phrase,Enabled
+C2 — ISO 27001 hoofdkeywords,ISO 27001 hoofdkeywords,iso 27001 self assessment,Phrase,Enabled
+C2 — ISO 27001 hoofdkeywords,ISO 27001 hoofdkeywords,iso 27001 voorbereiding,Phrase,Enabled
+C2 — ISO 27001 hoofdkeywords,ISO 27001 hoofdkeywords,iso 27001 documentatie,Phrase,Enabled
+C2 — ISO 27001 hoofdkeywords,ISO 27001 hoofdkeywords,iso 27001 saas,Phrase,Enabled
+C2 — ISO 27001 hoofdkeywords,ISO 27001 hoofdkeywords,iso 27001 software bedrijf,Phrase,Enabled
+C2 — ISO 27001 hoofdkeywords,ISO 27001 hoofdkeywords,iso 27001 it dienstverlener,Phrase,Enabled
+C2 — ISO 27001 hoofdkeywords,ISO 27001 hoofdkeywords,iso 27001 cloud,Phrase,Enabled
+C2 — ISO 27001 hoofdkeywords,ISO 27001 hoofdkeywords,iso 27001 bouw,Phrase,Enabled
+C2 — ISO 27001 hoofdkeywords,ISO 27001 hoofdkeywords,iso 27001 overheid,Phrase,Enabled
+C2 — ISO 27001 hoofdkeywords,ISO 27001 hoofdkeywords,iso 27001 financiële dienstverlening,Phrase,Enabled
+C2 — ISO 27001 hoofdkeywords,ISO 27001 hoofdkeywords,iso 27001 tool,Phrase,Enabled
+C2 — ISO 27001 hoofdkeywords,ISO 27001 hoofdkeywords,iso 27001 platform,Phrase,Enabled
+C2 — ISO 27001 hoofdkeywords,ISO 27001 hoofdkeywords,iso 27001 software,Phrase,Enabled
+C2 — ISO 27001 hoofdkeywords,ISO 27001 hoofdkeywords,compliance platform mkb,Phrase,Enabled
+C2 — ISO 27001 hoofdkeywords,ISO 27001 hoofdkeywords,nis2 audit,Phrase,Enabled
+C2 — ISO 27001 hoofdkeywords,ISO 27001 hoofdkeywords,nis2 compliance,Phrase,Enabled
+C2 — ISO 27001 hoofdkeywords,ISO 27001 hoofdkeywords,nis2 maatregelen,Phrase,Enabled
+C2 — ISO 27001 hoofdkeywords,ISO 27001 hoofdkeywords,nis2 art 21,Phrase,Enabled
+C2 — ISO 27001 hoofdkeywords,ISO 27001 hoofdkeywords,nis2 meldingsplicht,Phrase,Enabled
+C2 — ISO 27001 hoofdkeywords,ISO 27001 hoofdkeywords,nis2 bestuursaansprakelijkheid,Phrase,Enabled
+C2 — ISO 27001 hoofdkeywords,ISO 27001 hoofdkeywords,nis2 essentiële entiteit,Phrase,Enabled
+C2 — ISO 27001 hoofdkeywords,ISO 27001 hoofdkeywords,nis2 belangrijke entiteit,Phrase,Enabled
+C2 — ISO 27001 hoofdkeywords,ISO 27001 hoofdkeywords,iso 27001 nis2 mapping,Phrase,Enabled
+C2 — ISO 27001 hoofdkeywords,ISO 27001 hoofdkeywords,voldoen aan nis2,Phrase,Enabled
+C2 — ISO 27001 hoofdkeywords,ISO 27001 hoofdkeywords,iso 27001 prijs,Exact,Enabled
+C2 — ISO 27001 hoofdkeywords,ISO 27001 hoofdkeywords,iso 27001 kosten,Exact,Enabled
+C2 — ISO 27001 hoofdkeywords,ISO 27001 hoofdkeywords,iso 27001 quickscan,Exact,Enabled
+C2 — ISO 27001 hoofdkeywords,ISO 27001 hoofdkeywords,gap analyse iso 27001,Exact,Enabled
+C2 — ISO 27001 hoofdkeywords,ISO 27001 hoofdkeywords,nis2 readiness,Exact,Enabled
