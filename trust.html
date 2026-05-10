@@ -724,28 +724,28 @@
     <div class="lifecycle">
       <div class="lifecycle-step">
         <div class="lifecycle-dot">01</div>
-        <div class="lifecycle-title">Upload</div>
-        <div class="lifecycle-desc">Versleuteld via TLS naar private storage</div>
+        <div class="lifecycle-title">U uploadt</div>
+        <div class="lifecycle-desc">Uw documenten gaan versleuteld onze kant op, niemand onderweg leest mee.</div>
       </div>
       <div class="lifecycle-step">
         <div class="lifecycle-dot">02</div>
-        <div class="lifecycle-title">Opslag</div>
-        <div class="lifecycle-desc">EU-region (Frankfurt), private bucket, default-deny RLS</div>
+        <div class="lifecycle-title">Wij bewaren</div>
+        <div class="lifecycle-desc">In Frankfurt, op slot. Alleen wie expliciet rechten heeft komt erbij.</div>
       </div>
       <div class="lifecycle-step">
         <div class="lifecycle-dot">03</div>
-        <div class="lifecycle-title">Toegang</div>
-        <div class="lifecycle-desc">Signed URL 60 sec; elke open of download geregistreerd in <code>audit_events</code></div>
+        <div class="lifecycle-title">U houdt zicht</div>
+        <div class="lifecycle-desc">Elke keer dat iemand uw bestand opent of downloadt, leggen we vast wie en wanneer.</div>
       </div>
       <div class="lifecycle-step">
         <div class="lifecycle-dot">04</div>
-        <div class="lifecycle-title">Review</div>
-        <div class="lifecycle-desc">Lead Auditor reviewt, documenteert findings; toegang via e-mail-allowlist</div>
+        <div class="lifecycle-title">Eén Lead Auditor reviewt</div>
+        <div class="lifecycle-desc">Geen team, geen wisselende handen. Eén persoon die u kent.</div>
       </div>
       <div class="lifecycle-step">
         <div class="lifecycle-dot">05</div>
-        <div class="lifecycle-title">Verwijdering</div>
-        <div class="lifecycle-desc">Postgres-cron <code>cleanup_expired_assessments</code> 02:00 UTC; logregel in <code>data_retention_log</code></div>
+        <div class="lifecycle-title">Wij wissen</div>
+        <div class="lifecycle-desc">90 dagen na afloop verdwijnt uw data automatisch. We bewaren bewijs dat het gebeurd is.</div>
       </div>
     </div>
   </div>
