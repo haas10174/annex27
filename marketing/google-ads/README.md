@@ -32,6 +32,14 @@ Check de huidige ad-group-naam: in C2 → klik op campagne → in linkerkolom st
 - Gratis/free/zelf doen (geen koopintentie)
 - BIO-basisbeveiliging (overheid-norm, andere doelgroep — schrap deze regel als je toch overheid wilt serveren)
 
+## Bonus: NEN 7510 (zorg-norm)
+
+Annex27 bedient NEN 7510 via de zorg-gap-analyse. Daarvoor staat een **derde CSV** klaar:
+
+**c2-keywords-nen7510-add.csv (19 zorg-keywords)** — phrase + exact match. Upload deze in een **aparte ad-group genaamd "NEN 7510 zorg"** binnen C2. Reden voor aparte ad-group: zorg-zoekers verwachten zorg-specifieke ad copy en bestemming. Maak in C2 een nieuwe ad-group aan vóór de upload, anders maakt Google er automatisch een.
+
+Belangrijk: `nen 7510` mag **niet** als negatief in C2 staan. Verwijder eventueel die regel uit `c2-negatives-add.csv` als je die al hebt geüpload.
+
 ## Daarna
 
 Wacht 24-48u voor Google de nieuwe set heeft "geleerd". Daarna:
