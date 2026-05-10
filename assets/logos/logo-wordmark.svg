@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 120" width="480" height="120">
+  <text x="20" y="78" font-family="Sora, system-ui, sans-serif"
+        font-size="68" font-weight="800" letter-spacing="-3" fill="#0F172A">annex</text>
+  <text x="262" y="78" font-family="Sora, system-ui, sans-serif"
+        font-size="68" font-weight="800" letter-spacing="-3" fill="#0D9488">27
+    <animate attributeName="fill" values="#0D9488;#14B8A6;#0F766E;#0D9488"
+             dur="4s" repeatCount="indefinite"/>
+  </text>
+  <circle cx="408" cy="38" r="6" fill="#0D9488">
+    <animate attributeName="r" values="6;9;6" dur="2s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="1;0.5;1" dur="2s" repeatCount="indefinite"/>
+  </circle>
+</svg>

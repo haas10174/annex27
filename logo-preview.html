@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Logo concepten · Annex27</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: #FAF9F6;
+      color: #0F172A;
+      line-height: 1.65;
+      padding: 56px 32px 96px;
+    }
+    .container { max-width: 1080px; margin: 0 auto; }
+    h1 {
+      font-family: 'Sora', sans-serif;
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: -0.025em;
+      margin-bottom: 12px;
+    }
+    .subtitle {
+      color: #475569;
+      font-size: 1rem;
+      margin-bottom: 48px;
+      max-width: 640px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      margin-bottom: 48px;
+    }
+    .card {
+      background: #FFFFFF;
+      border: 1px solid #E8E4DC;
+      border-radius: 14px;
+      padding: 32px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .card-eyebrow {
+      font-family: 'Sora', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #0D9488;
+    }
+    .card-title {
+      font-family: 'Sora', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #0F172A;
+    }
+    .card-desc {
+      font-size: 0.88rem;
+      color: #475569;
+      line-height: 1.55;
+    }
+    .preview {
+      background: #FAF9F6;
+      border: 1px solid #F1ECE2;
+      border-radius: 10px;
+      padding: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 220px;
+    }
+    .preview img { max-width: 100%; height: auto; display: block; }
+    .preview.dark { background: #0F172A; border-color: #1E293B; }
+    .row-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-family: 'Sora', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-decoration: none;
+      transition: background 0.2s, border-color 0.2s;
+      cursor: pointer;
+      border: 1px solid #E8E4DC;
+      background: #FFFFFF;
+      color: #0F172A;
+    }
+    .btn:hover { border-color: #0D9488; }
+    .btn.primary {
+      background: #0D9488;
+      color: #FFFFFF;
+      border-color: #0D9488;
+    }
+    .btn.primary:hover { background: #0F766E; border-color: #0F766E; }
+    .conversion {
+      background: #FFFFFF;
+      border: 1px solid #E8E4DC;
+      border-left: 3px solid #0D9488;
+      border-radius: 0 12px 12px 0;
+      padding: 24px 28px;
+      margin-top: 32px;
+    }
+    .conversion h2 {
+      font-family: 'Sora', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .conversion ol {
+      padding-left: 22px;
+      font-size: 0.92rem;
+      color: #475569;
+    }
+    .conversion ol li { margin-bottom: 6px; }
+    .conversion code {
+      font-family: 'JetBrains Mono', Menlo, monospace;
+      font-size: 0.85rem;
+      background: #F1ECE2;
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: #0F172A;
+    }
+    .conversion a { color: #0D9488; text-decoration: underline; text-underline-offset: 2px; }
+    .footer {
+      margin-top: 48px;
+      font-size: 0.84rem;
+      color: #94A3B8;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Logo concepten Annex27</h1>
+    <p class="subtitle">Drie animerende logo's, gebouwd in SVG. Bekijk de animaties live in deze preview, kies wat je het sterkst vindt en download het bestand.</p>
+
+    <div class="grid">
+
+      <!-- Concept 1: Hexagon shield -->
+      <div class="card">
+        <div>
+          <div class="card-eyebrow">Concept 1</div>
+          <div class="card-title">Hexagon Shield</div>
+          <p class="card-desc">Compliance-feel. Hexagon = framework, donkere achtergrond met teal accent. Sterk voor profielfoto en favicon. Animatie: subtiele puls op de "27" en lijn-tekening tussen A en 27.</p>
+        </div>
+        <div class="preview dark">
+          <img src="/assets/logos/logo-hex.svg" alt="Hexagon shield logo" width="200" />
+        </div>
+        <div class="row-actions">
+          <a href="/assets/logos/logo-hex.svg" download class="btn primary">Download SVG</a>
+          <a href="https://cloudconvert.com/svg-to-png" target="_blank" rel="noopener" class="btn">Naar PNG converteren ↗</a>
+        </div>
+      </div>
+
+      <!-- Concept 2: Wordmark -->
+      <div class="card">
+        <div>
+          <div class="card-eyebrow">Concept 2</div>
+          <div class="card-title">Type-wordmark</div>
+          <p class="card-desc">Strakste type-only optie. "annex" donker, "27" teal met subtiele kleur-pulse. Punt-puls geeft beweging zonder afleiding. Sterk voor header, e-mailhandtekening en briefpapier.</p>
+        </div>
+        <div class="preview">
+          <img src="/assets/logos/logo-wordmark.svg" alt="Wordmark logo" width="360" />
+        </div>
+        <div class="row-actions">
+          <a href="/assets/logos/logo-wordmark.svg" download class="btn primary">Download SVG</a>
+          <a href="https://cloudconvert.com/svg-to-png" target="_blank" rel="noopener" class="btn">Naar PNG converteren ↗</a>
+        </div>
+      </div>
+
+      <!-- Concept 3: Circle progress -->
+      <div class="card">
+        <div>
+          <div class="card-eyebrow">Concept 3</div>
+          <div class="card-title">Cirkel met progress</div>
+          <p class="card-desc">Audit-progress symboliek. Cirkel met teal-segment dat zich vult bij paginalaadtijd. "annex" boven, "27" centraal in teal. Sterk voor profielfoto en social.</p>
+        </div>
+        <div class="preview">
+          <img src="/assets/logos/logo-circle.svg" alt="Circle progress logo" width="200" />
+        </div>
+        <div class="row-actions">
+          <a href="/assets/logos/logo-circle.svg" download class="btn primary">Download SVG</a>
+          <a href="https://cloudconvert.com/svg-to-png" target="_blank" rel="noopener" class="btn">Naar PNG converteren ↗</a>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="conversion">
+      <h2>SVG → PNG voor Google Business Profile</h2>
+      <p style="font-size:0.92rem;color:#475569;margin-bottom:12px;">Google Business accepteert geen SVG. Zo zet je 'm om naar PNG (animatie wordt dan static):</p>
+      <ol>
+        <li>Klik op "Download SVG" bij het concept van je keuze</li>
+        <li>Open <a href="https://cloudconvert.com/svg-to-png" target="_blank" rel="noopener">cloudconvert.com/svg-to-png</a></li>
+        <li>Upload het gedownloade bestand</li>
+        <li>Klik bij "Convert" op het tandwiel-icoon → zet width op <code>1024</code> en height op <code>1024</code></li>
+        <li>Convert → Download het PNG-bestand</li>
+        <li>Upload in Google Business Profile als profielfoto</li>
+      </ol>
+      <p style="font-size:0.92rem;color:#475569;margin-top:14px;">Voor de website zelf gebruik je gewoon de SVG — animatie blijft dan werken.</p>
+    </div>
+
+    <div class="footer">
+      annex27 logo concepten &middot; alleen zichtbaar via deze URL
+    </div>
+  </div>
+</body>
+</html>
