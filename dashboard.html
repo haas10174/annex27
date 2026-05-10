@@ -11,6 +11,7 @@
   <meta name="theme-color" content="#14b8a6" />
   <script src="/analytics-admin.js"></script>
   <script src="/gap-questions-v2.js" defer></script>
+  <script src="/nis2-questions.js" defer></script>
 
   <meta http-equiv="X-Content-Type-Options" content="nosniff" />
   <meta name="referrer" content="strict-origin-when-cross-origin" />
@@ -3007,6 +3008,10 @@
         <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
         Gap-analyse
       </button>
+      <button class="sidebar-link" onclick="showView('nis2')" data-view="nis2">
+        <svg viewBox="0 0 24 24"><path d="M12 2L20 6V12C20 17.5 16.5 22 12 24C7.5 22 4 17.5 4 12V6L12 2Z"/></svg>
+        NIS2 Readiness
+      </button>
       <button class="sidebar-link" onclick="showView('berichten')" data-view="berichten">
         <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
         Berichten
@@ -3164,6 +3169,11 @@
     <!-- Gap-analyse: module-based assessment -->
     <div class="view" id="viewGapanalyse">
       <div id="gapModuleView"></div>
+    </div>
+
+    <!-- NIS2 Readiness View -->
+    <div class="view" id="viewNis2">
+      <div id="nis2View"></div>
     </div>
 
     <!-- Documents View -->
@@ -4431,6 +4441,7 @@ function showView(name) {
 
   if (name === 'dashboard') { renderDashboard(); loadReports(); renderProgressTimer(); }
   if (name === 'gapanalyse') renderGapAnalyse();
+  if (name === 'nis2') renderNis2();
   if (name === 'berichten') renderBerichten();
   if (name === 'documenten') renderDocumenten();
   if (name === 'rapport') renderRapport();
@@ -4444,6 +4455,178 @@ function toggleSidebar() {
   document.getElementById('overlay').classList.toggle('open');
   document.querySelector('.hamburger').classList.toggle('active');
 }
+
+// ── NIS2 READINESS ──
+const NIS2_ANSWER_OPTIONS = [
+  { v: 'ja',          label: 'Ja',           score: 4 },
+  { v: 'grotendeels', label: 'Grotendeels',  score: 3 },
+  { v: 'deels',       label: 'Deels',        score: 2 },
+  { v: 'nee',         label: 'Nee',          score: 0 },
+  { v: 'nvt',         label: 'N.v.t.',       score: null }
+];
+
+let nis2Answers = {};
+
+function nis2StorageKey() {
+  return 'annex27_nis2_' + (typeof user !== 'undefined' && user?.id ? user.id : 'anon');
+}
+
+function loadNis2Answers() {
+  try {
+    const saved = localStorage.getItem(nis2StorageKey());
+    nis2Answers = saved ? JSON.parse(saved) : {};
+  } catch (e) {
+    nis2Answers = {};
+  }
+}
+
+function saveNis2Answer(key, value) {
+  nis2Answers[key] = value;
+  try { localStorage.setItem(nis2StorageKey(), JSON.stringify(nis2Answers)); } catch (e) {}
+  renderNis2ProgressBar();
+  renderNis2MaatregelHeader(key.split('::')[0]);
+}
+
+function nis2MaatregelProgress(maatregelId, qs) {
+  let answered = 0, scoreSum = 0, scoreCount = 0;
+  qs.forEach((_, qi) => {
+    const key = maatregelId + '::' + qi;
+    const val = nis2Answers[key];
+    if (val) {
+      answered++;
+      const opt = NIS2_ANSWER_OPTIONS.find(o => o.v === val);
+      if (opt && opt.score !== null) { scoreSum += opt.score; scoreCount++; }
+    }
+  });
+  return {
+    answered,
+    total: qs.length,
+    pct: qs.length ? Math.round((answered / qs.length) * 100) : 0,
+    maturity: scoreCount ? Math.round((scoreSum / (scoreCount * 4)) * 100) : 0
+  };
+}
+
+function nis2OverallProgress() {
+  if (typeof window.nis2MaatregelList !== 'function') return { answered: 0, total: 39, pct: 0 };
+  const maatregelen = window.nis2MaatregelList();
+  let answered = 0, total = 0;
+  maatregelen.forEach(m => {
+    const qs = window.getNis2QuestionsForMaatregel(m.id, m.name);
+    total += qs.length;
+    qs.forEach((_, qi) => { if (nis2Answers[m.id + '::' + qi]) answered++; });
+  });
+  return { answered, total, pct: total ? Math.round((answered / total) * 100) : 0 };
+}
+
+function renderNis2() {
+  const root = document.getElementById('nis2View');
+  if (!root) return;
+
+  if (typeof window.nis2MaatregelList !== 'function') {
+    root.innerHTML = '<p style="padding:24px;color:var(--text-muted);">NIS2-vragen worden geladen…</p>';
+    setTimeout(renderNis2, 200);
+    return;
+  }
+
+  loadNis2Answers();
+  const maatregelen = window.nis2MaatregelList();
+
+  root.innerHTML = `
+    <h1 class="page-title">NIS2 Readiness</h1>
+    <p class="page-subtitle">39 vragen op 12 maatregelen uit NIS2-richtlijn (EU) 2022/2555 — Art. 21.2, Art. 20 (bestuur) en Art. 23 (meldingsplicht).</p>
+
+    <div id="nis2ProgressBar" style="margin:20px 0 28px;"></div>
+
+    <div id="nis2MaatregelList" style="display:flex;flex-direction:column;gap:12px;">
+      ${maatregelen.map(m => renderNis2MaatregelCard(m)).join('')}
+    </div>
+  `;
+
+  renderNis2ProgressBar();
+}
+
+function renderNis2ProgressBar() {
+  const el = document.getElementById('nis2ProgressBar');
+  if (!el) return;
+  const p = nis2OverallProgress();
+  el.innerHTML = `
+    <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:18px 22px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+        <div style="font-family:'Sora',sans-serif;font-weight:700;color:#fff;">Voortgang</div>
+        <div style="font-family:'Sora',sans-serif;color:var(--accent);font-weight:700;">${p.answered}/${p.total} beantwoord (${p.pct}%)</div>
+      </div>
+      <div style="height:8px;background:rgba(255,255,255,0.08);border-radius:99px;overflow:hidden;">
+        <div style="height:100%;width:${p.pct}%;background:linear-gradient(90deg,#0D9488,#5EEAD4);transition:width 0.3s;"></div>
+      </div>
+    </div>
+  `;
+}
+
+function renderNis2MaatregelCard(m) {
+  const qs = window.getNis2QuestionsForMaatregel(m.id, m.name);
+  const prog = nis2MaatregelProgress(m.id, qs);
+  return `
+    <div class="nis2-card" data-mid="${m.id}" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:14px;overflow:hidden;">
+      <button type="button" onclick="toggleNis2Maatregel('${m.id}')" style="all:unset;cursor:pointer;display:flex;justify-content:space-between;align-items:center;width:100%;padding:18px 22px;box-sizing:border-box;">
+        <div>
+          <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:0.78rem;letter-spacing:0.08em;color:var(--accent);text-transform:uppercase;margin-bottom:4px;">${esc(m.id)}</div>
+          <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:1.02rem;color:#fff;">${esc(m.name)}</div>
+        </div>
+        <div id="nis2HeadProg-${esc(m.id)}" style="font-family:'Sora',sans-serif;font-weight:600;font-size:0.85rem;color:${prog.pct === 100 ? '#5EEAD4' : 'var(--text-muted)'};">${prog.answered}/${prog.total}</div>
+      </button>
+      <div id="nis2Questions-${esc(m.id)}" style="display:none;padding:0 22px 18px;">
+        ${qs.map((q, qi) => renderNis2Question(m.id, qi, q)).join('')}
+      </div>
+    </div>
+  `;
+}
+
+function renderNis2MaatregelHeader(maatregelId) {
+  if (typeof window.nis2MaatregelList !== 'function') return;
+  const m = window.nis2MaatregelList().find(x => x.id === maatregelId);
+  if (!m) return;
+  const qs = window.getNis2QuestionsForMaatregel(m.id, m.name);
+  const prog = nis2MaatregelProgress(m.id, qs);
+  const el = document.getElementById('nis2HeadProg-' + maatregelId);
+  if (el) {
+    el.textContent = prog.answered + '/' + prog.total;
+    el.style.color = prog.pct === 100 ? '#5EEAD4' : 'var(--text-muted)';
+  }
+}
+
+function renderNis2Question(maatregelId, qi, q) {
+  const key = maatregelId + '::' + qi;
+  const current = nis2Answers[key] || '';
+  return `
+    <div style="padding:14px 0;border-top:1px solid rgba(255,255,255,0.06);">
+      <div style="font-size:0.92rem;color:#E5E7EB;margin-bottom:10px;line-height:1.55;">${esc(q.q)}</div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;">
+        ${NIS2_ANSWER_OPTIONS.map(opt => `
+          <button type="button" onclick="saveNis2Answer('${key}','${opt.v}'); document.querySelectorAll('[data-nis2-key=&quot;${key}&quot;]').forEach(b => b.dataset.active = b.dataset.val === '${opt.v}' ? '1' : '0');" data-nis2-key="${key}" data-val="${opt.v}" data-active="${current === opt.v ? '1' : '0'}" style="all:unset;cursor:pointer;font-family:'Inter',sans-serif;font-size:0.82rem;padding:6px 12px;border-radius:99px;border:1px solid ${current === opt.v ? 'var(--accent)' : 'rgba(255,255,255,0.12)'};background:${current === opt.v ? 'rgba(13,148,136,0.2)' : 'transparent'};color:${current === opt.v ? '#5EEAD4' : 'var(--text-secondary)'};">${opt.label}</button>
+        `).join('')}
+      </div>
+    </div>
+  `;
+}
+
+function toggleNis2Maatregel(maatregelId) {
+  const el = document.getElementById('nis2Questions-' + maatregelId);
+  if (!el) return;
+  el.style.display = el.style.display === 'none' ? 'block' : 'none';
+}
+
+// Restyle data-active buttons via CSS-fallback (inline-style approach)
+document.addEventListener('click', (e) => {
+  if (e.target && e.target.dataset && e.target.dataset.nis2Key) {
+    const key = e.target.dataset.nis2Key;
+    document.querySelectorAll('[data-nis2-key="' + key + '"]').forEach(btn => {
+      const active = btn.dataset.active === '1';
+      btn.style.borderColor = active ? 'var(--accent)' : 'rgba(255,255,255,0.12)';
+      btn.style.background = active ? 'rgba(13,148,136,0.2)' : 'transparent';
+      btn.style.color = active ? '#5EEAD4' : 'var(--text-secondary)';
+    });
+  }
+}, true);
 
 // ── DASHBOARD ──
 function renderDashboard() {
