@@ -4007,6 +4007,15 @@ async function downloadReport(id) {
   if (!r) return;
   const { data, error } = await sb.storage.from('reports').createSignedUrl(r.file_path, 300);
   if (error) { alert('Kon signed URL niet maken: ' + error.message); return; }
+  // Audit-log: rapport-download door admin/auditor (best-effort, blokkeert download niet)
+  try {
+    await sb.rpc('log_audit_event', {
+      p_action: 'download_report',
+      p_target_type: 'report',
+      p_target_id: id,
+      p_metadata: { file_path: r.file_path, klant_user_id: currentClient?.user_id || null }
+    });
+  } catch (e) { /* swallow */ }
   window.open(data.signedUrl, '_blank');
 }
 
@@ -4097,6 +4106,18 @@ async function selectClient(userId) {
   document.querySelectorAll('.client-item').forEach(el => el.classList.toggle('active', el.dataset.id === userId));
   currentClient = clients.find(c => c.user_id === userId);
   if (!currentClient) return;
+
+  // Audit-log: admin/auditor opent klant-detail (best-effort, niet voor test-accounts)
+  if (!currentClient.is_test) {
+    try {
+      sb.rpc('log_audit_event', {
+        p_action: 'view_klant_detail',
+        p_target_type: 'klant',
+        p_target_id: userId,
+        p_metadata: { pakket: currentClient.pakket || null }
+      });
+    } catch (e) { /* swallow */ }
+  }
 
   document.getElementById('mainEmpty').style.display = 'none';
   document.getElementById('mainContent').style.display = 'block';

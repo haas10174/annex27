@@ -520,6 +520,62 @@
   </div>
 </div>
 
+<!-- LIVE TRUST METRICS — bewijs, geen marketingclaim -->
+<section class="section" style="background:#FAF9F6;">
+  <div class="container">
+    <div class="section-label">Bewijs, niet beloftes</div>
+    <h2 class="section-title">Onze claims, live uit de database.</h2>
+    <p class="section-lead">
+      Deze cijfers worden bij elke pagelaad direct uit onze database opgehaald via een publieke RPC die alleen geaggregeerde getallen vrijgeeft. Geen marketingdashboard met statische cijfers, geen handmatig bijgewerkte counter.
+    </p>
+
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:36px 0 18px;" class="trust-metrics-grid">
+      <div style="background:#fff;border:1px solid #E2E8F0;border-radius:14px;padding:28px 24px;text-align:left;">
+        <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:2.4rem;color:#0F172A;line-height:1;margin-bottom:8px;">90</div>
+        <div style="font-family:'Sora',sans-serif;font-weight:600;font-size:0.95rem;color:#0F172A;margin-bottom:10px;">dagen bewaartermijn</div>
+        <div style="font-size:0.82rem;color:#64748B;line-height:1.5;">Vastgelegd in onze DPA. Uitgevoerd door een nightly Postgres-cron <code style="background:#F1F5F9;padding:1px 5px;border-radius:4px;font-size:0.78rem;">cleanup_expired_assessments</code> die om 02:00 UTC draait.</div>
+      </div>
+      <div style="background:#fff;border:1px solid #E2E8F0;border-radius:14px;padding:28px 24px;text-align:left;">
+        <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:2.4rem;color:#0D9488;line-height:1;margin-bottom:8px;" id="metric-deleted">—</div>
+        <div style="font-family:'Sora',sans-serif;font-weight:600;font-size:0.95rem;color:#0F172A;margin-bottom:10px;">klantdossiers verwijderd<br/><span style="color:#64748B;font-weight:400;">(afgelopen 30 dagen)</span></div>
+        <div style="font-size:0.82rem;color:#64748B;line-height:1.5;">Live geteld uit <code style="background:#F1F5F9;padding:1px 5px;border-radius:4px;font-size:0.78rem;">data_retention_log</code>. Per verwijdering een append-only logregel met aantal verwijderde rijen per tabel.</div>
+      </div>
+      <div style="background:#fff;border:1px solid #E2E8F0;border-radius:14px;padding:28px 24px;text-align:left;">
+        <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:2.4rem;color:#0D9488;line-height:1;margin-bottom:8px;" id="metric-audit">—</div>
+        <div style="font-family:'Sora',sans-serif;font-weight:600;font-size:0.95rem;color:#0F172A;margin-bottom:10px;">admin-toegangen gelogd<br/><span style="color:#64748B;font-weight:400;">(afgelopen 30 dagen)</span></div>
+        <div style="font-size:0.82rem;color:#64748B;line-height:1.5;">Elke keer dat een Lead Auditor een klantdossier opent of een rapport downloadt: een append-only regel in <code style="background:#F1F5F9;padding:1px 5px;border-radius:4px;font-size:0.78rem;">audit_events</code>. RLS staat geen UPDATE of DELETE toe.</div>
+      </div>
+    </div>
+
+    <div style="font-size:0.86rem;color:#64748B;max-width:720px;margin:24px auto 0;text-align:center;line-height:1.6;">
+      Verifieerbaar zonder ons te vertrouwen: u kunt op deze pagina de devtools openen, naar Network kijken, en de respons van de aangeroepen <code style="background:#F1F5F9;padding:1px 5px;border-radius:4px;font-size:0.78rem;">trust_metrics</code>-RPC bekijken. Dezelfde getallen.
+    </div>
+  </div>
+</section>
+
+<style>
+@media (max-width: 760px) {
+  .trust-metrics-grid { grid-template-columns: 1fr !important; }
+}
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.min.js" integrity="sha384-2zrRDgDHSYB/GN3nFW3fsZXoxEhKIr3N2h63Tc6DEOB9JJdFIu8xMJT2Cph/gBil" crossorigin="anonymous"></script>
+<script>
+(async function loadTrustMetrics(){
+  try {
+    const TSB_URL = 'https://tvqhxhoohzdzekcfzjuv.supabase.co';
+    const TSB_KEY = 'sb_publishable_-a0bntwsGr8mR9xROgJTzQ_Gylt8ZSo';
+    const tsb = window.supabase.createClient(TSB_URL, TSB_KEY);
+    const { data, error } = await tsb.rpc('trust_metrics');
+    if (error || !data) return;
+    const elD = document.getElementById('metric-deleted');
+    const elA = document.getElementById('metric-audit');
+    if (elD) elD.textContent = (data.deleted_users_30d ?? 0).toString();
+    if (elA) elA.textContent = (data.audit_events_30d ?? 0).toString();
+  } catch (e) { /* swallow */ }
+})();
+</script>
+
 <!-- SECURITY CONTROLS -->
 <section class="section">
   <div class="container">

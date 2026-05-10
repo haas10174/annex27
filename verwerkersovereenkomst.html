@@ -75,7 +75,7 @@
     <div class="eyebrow">Juridisch &middot; Verwerking persoonsgegevens</div>
     <h1>Verwerkersovereenkomst</h1>
     <p>Deze overeenkomst regelt hoe Annex27 persoonsgegevens verwerkt namens de klant conform artikel 28 AVG. Zij is automatisch van toepassing zodra u persoonsgegevens verwerkt via het Annex27-platform.</p>
-    <div class="meta">Versie 1.0 &middot; Laatste update 22&#8209;04&#8209;2026</div>
+    <div class="meta">Versie 1.1 &middot; Laatste update 10&#8209;05&#8209;2026</div>
   </div>
 </section>
 
@@ -120,7 +120,8 @@
       <li><strong>Signed URLs</strong> met beperkte geldigheidsduur (max. 60 seconden) voor bewijsvoering-downloads;</li>
       <li><strong>Multi-factor authenticatie</strong> verplicht voor admin- en auditor-accounts;</li>
       <li><strong>EU-only hosting</strong>: Supabase datacenter Frankfurt (Duitsland), geen doorgifte buiten EER behoudens het gestelde in art. 7;</li>
-      <li><strong>Logging</strong>: toegang tot bewijsvoering wordt gelogd (wie, wat, wanneer) in <code>document_access_log</code>;</li>
+      <li><strong>Logging</strong>: toegang tot bewijsvoering wordt gelogd (wie, wat, wanneer) in <code>document_access_log</code>; admin- en auditor-toegang tot klantbestanden wordt append-only vastgelegd in <code>audit_events</code> (RLS staat geen UPDATE/DELETE toe behalve via service-role);</li>
+      <li><strong>Retention-log</strong>: elke geautomatiseerde verwijdering na bewaartermijn wordt vastgelegd in <code>data_retention_log</code> met aantal verwijderde rijen per tabel; geaggregeerde tellingen zijn publiek inzichtelijk op <a href="/trust">annex27.nl/trust</a>;</li>
       <li><strong>Backups</strong>: dagelijkse geautomatiseerde backups, minimaal 30 dagen retentie, hersteltest halfjaarlijks;</li>
       <li><strong>Beveiligingsupdates</strong>: patches voor kritieke kwetsbaarheden binnen 48 uur na beschikbaarstelling.</li>
     </ul>
@@ -131,6 +132,7 @@
       <li>De klant geeft algemene toestemming voor inschakeling van de volgende subverwerkers:
         <ul>
           <li><strong>Supabase Inc.</strong>: hosting + auth (EU-vestiging, datacenter Frankfurt DE);</li>
+          <li><strong>Resend B.V.</strong>: transactionele e-mail (EU-region, geen contentopslag langer dan 30 dagen);</li>
           <li><strong>Mollie B.V.</strong>: betalingsverwerking (Nederland);</li>
           <li><strong>Hostnet B.V.</strong>: website-hosting (Nederland);</li>
           <li><strong>Anthropic PBC</strong>: rapportage (EU-vestiging; data wordt niet gebruikt voor modeltraining, zero-retention API).</li>
@@ -158,7 +160,7 @@
     <h2><span class="article-num">Art. 10</span>Bewaartermijn, retour en verwijdering</h2>
     <ol>
       <li>Persoonsgegevens worden bewaard zolang nodig voor het uitvoeren van de dienst, vermeerderd met een retentietermijn van <strong>90 dagen</strong> na afronding van het traject (voor eventuele nazorg en geschilbeslechting).</li>
-      <li>Na de retentietermijn worden persoonsgegevens geautomatiseerd verwijderd, tenzij de klant schriftelijk om verlenging verzoekt of wetgeving een langere bewaartermijn voorschrijft (bv. fiscale bewaarplicht facturen: 7 jaar).</li>
+      <li>Na de retentietermijn worden persoonsgegevens geautomatiseerd verwijderd door een nightly Postgres-cron <code>cleanup_expired_assessments</code> (02:00 UTC), tenzij de klant schriftelijk om verlenging verzoekt of wetgeving een langere bewaartermijn voorschrijft (bv. fiscale bewaarplicht facturen: 7 jaar). Per verwijdering wordt een append-only logregel weggeschreven in <code>data_retention_log</code>; geaggregeerde tellingen zijn publiek inzichtelijk op <a href="/trust">annex27.nl/trust</a>.</li>
       <li>Op schriftelijk verzoek van de klant worden persoonsgegevens binnen 30 dagen in machine-leesbaar formaat geretourneerd, of vernietigd met bevestiging.</li>
     </ol>
 
