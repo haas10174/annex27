@@ -1,0 +1,27 @@
+Campaign,Ad group,Keyword,Match type,Status
+C5 — NEN 7510 zorg,NEN 7510 algemeen,nen 7510,Phrase,Enabled
+C5 — NEN 7510 zorg,NEN 7510 algemeen,nen 7510 audit,Phrase,Enabled
+C5 — NEN 7510 zorg,NEN 7510 algemeen,nen 7510 certificering,Phrase,Enabled
+C5 — NEN 7510 zorg,NEN 7510 algemeen,nen 7510 gap analyse,Phrase,Enabled
+C5 — NEN 7510 zorg,NEN 7510 algemeen,nen 7510 kosten,Phrase,Enabled
+C5 — NEN 7510 zorg,NEN 7510 algemeen,nen 7510 implementatie,Phrase,Enabled
+C5 — NEN 7510 zorg,NEN 7510 algemeen,nen 7510 templates,Phrase,Enabled
+C5 — NEN 7510 zorg,NEN 7510 algemeen,nen 7510 toolkit,Phrase,Enabled
+C5 — NEN 7510 zorg,NEN 7510 algemeen,nen 7510 vs iso 27001,Phrase,Enabled
+C5 — NEN 7510 zorg,NEN 7510 algemeen,ncs 7510,Phrase,Enabled
+C5 — NEN 7510 zorg,NEN 7510 algemeen,nen 7510,Exact,Enabled
+C5 — NEN 7510 zorg,NEN 7510 algemeen,nen 7510 audit,Exact,Enabled
+C5 — NEN 7510 zorg,NEN 7510 algemeen,nen 7510 gap analyse,Exact,Enabled
+C5 — NEN 7510 zorg,NEN 7510 sectoren,nen 7510 zorginstelling,Phrase,Enabled
+C5 — NEN 7510 zorg,NEN 7510 sectoren,nen 7510 huisarts,Phrase,Enabled
+C5 — NEN 7510 zorg,NEN 7510 sectoren,nen 7510 ggz,Phrase,Enabled
+C5 — NEN 7510 zorg,NEN 7510 sectoren,nen 7510 ziekenhuis,Phrase,Enabled
+C5 — NEN 7510 zorg,NEN 7510 sectoren,nen 7510 apotheek,Phrase,Enabled
+C5 — NEN 7510 zorg,NEN 7510 sectoren,nen 7510 thuiszorg,Phrase,Enabled
+C5 — NEN 7510 zorg,NEN 7510 sectoren,nen 7510 fysiotherapie,Phrase,Enabled
+C5 — NEN 7510 zorg,NEN 7510 sectoren,nen 7510 tandarts,Phrase,Enabled
+C5 — NEN 7510 zorg,NEN 7510 sectoren,nen 7510 medisch specialist,Phrase,Enabled
+C5 — NEN 7510 zorg,NEN 7510 breed,informatiebeveiliging zorg,Phrase,Enabled
+C5 — NEN 7510 zorg,NEN 7510 breed,informatieveiligheid zorg,Phrase,Enabled
+C5 — NEN 7510 zorg,NEN 7510 breed,avg zorg implementatie,Phrase,Enabled
+C5 — NEN 7510 zorg,NEN 7510 breed,bio zorg informatiebeveiliging,Phrase,Enabled

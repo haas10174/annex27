@@ -32,13 +32,39 @@ Check de huidige ad-group-naam: in C2 → klik op campagne → in linkerkolom st
 - Gratis/free/zelf doen (geen koopintentie)
 - BIO-basisbeveiliging (overheid-norm, andere doelgroep — schrap deze regel als je toch overheid wilt serveren)
 
-## Bonus: NEN 7510 (zorg-norm)
+## C5 — Aparte campagne voor NEN 7510 (zorg)
 
-Annex27 bedient NEN 7510 via de zorg-gap-analyse. Daarvoor staat een **derde CSV** klaar:
+Annex27 bedient NEN 7510 via de zorg-gap-analyse. Daarom een **aparte campagne** (niet alleen ad-group in C2): zorg-zoekers verwachten zorg-ad-copy en hebben andere bid-strategie en budget nodig.
 
-**c2-keywords-nen7510-add.csv (19 zorg-keywords)** — phrase + exact match. Upload deze in een **aparte ad-group genaamd "NEN 7510 zorg"** binnen C2. Reden voor aparte ad-group: zorg-zoekers verwachten zorg-specifieke ad copy en bestemming. Maak in C2 een nieuwe ad-group aan vóór de upload, anders maakt Google er automatisch een.
+**Bestanden:**
+- `c5-nen7510-keywords.csv` — 26 zorg-keywords verdeeld over 3 ad-groups (algemeen / sectoren / breed)
+- `c5-nen7510-negatives.csv` — 15 campagne-level negatieven (incl. nen-pdf-zoekers die de norm zelf zoeken)
 
-Belangrijk: `nen 7510` mag **niet** als negatief in C2 staan. Verwijder eventueel die regel uit `c2-negatives-add.csv` als je die al hebt geüpload.
+### Stappen om C5 aan te maken in Google Ads
+
+1. **Linker-menu Campagnes → blauwe "+" → Nieuwe campagne**
+2. Doel: **Websiteverkeer** (of "Verkoop" als je een conversie-doel hebt op /sector/zorg)
+3. Campagne-type: **Zoeknetwerk**
+4. Naam: `C5 — NEN 7510 zorg`
+5. **Locaties:** Nederland + België (de NEN-norm is NL-origin maar BE-zorg gebruikt 'm ook)
+6. **Taal:** Nederlands
+7. **Budget:** start met €10-15/dag (zorg-zoekvolume is lager dan ISO 27001 breed)
+8. **Bod-strategie:** Klikken maximaliseren, met max-CPC plafond €2,00 (zorg-CPC's lopen op)
+9. **Landingspagina (tijdelijk):** `https://annex27.nl/sector/zorg` totdat dedicated /nen-7510-pagina af is
+
+### Daarna keywords + negatieven uploaden
+
+10. Open de net aangemaakte C5 → maak 3 ad-groups aan: `NEN 7510 algemeen`, `NEN 7510 sectoren`, `NEN 7510 breed`
+11. Upload `c5-nen7510-keywords.csv` via **Tools → Bulkacties → Uploads**
+12. Upload `c5-nen7510-negatives.csv` als tweede upload
+
+### Vervolg: dedicated landingspagina
+
+`/sector/zorg` werkt als tijdelijke bestemming. Voor betere Quality Score later een dedicated `/nen-7510` pagina maken met:
+- H1 met "NEN 7510" letterlijk
+- Uitleg verschil NEN 7510-1 (norm) / NEN 7510-2 (praktijkrichtlijn) / NCS 7510 (certificeringsschema)
+- Mapping naar ISO 27001 (welke 27001-controls dekken al NEN 7510)
+- Quickscan-CTA met zorg-variant van de vragenset
 
 ## Daarna
 
