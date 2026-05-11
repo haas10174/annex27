@@ -4646,6 +4646,65 @@ function saveNis2Answer(key, value) {
   // Geen overview-rerender vanuit save — gebeurt automatisch wanneer user terug-klikt.
 }
 
+// ── NIS2 EVIDENCE-UPLOAD ──
+// Hergebruikt het bestaande evidence-storage-systeem (Supabase bucket 'evidence'),
+// met de NIS2 maatregel-id als controlId (N.21.2.a etc).
+function renderNis2EvidenceBlock(maatregelId) {
+  if (typeof evidenceData !== 'object' || !evidenceData) {
+    if (typeof loadEvidenceData === 'function') loadEvidenceData();
+  }
+  const safeId = String(maatregelId).replace(/\./g, '_');
+  const ev = (typeof getEvidence === 'function') ? getEvidence(maatregelId) : { files: [], note: '' };
+  const files = ev.files || [];
+
+  const fileRows = files.map((f, i) => `
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:#FAF9F6;border:1px solid var(--border);border-radius:8px;margin-bottom:6px;">
+      <div style="display:flex;align-items:center;gap:10px;min-width:0;flex:1;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        <div style="min-width:0;flex:1;">
+          <div style="font-size:0.86rem;font-weight:600;color:var(--text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${esc(f.name || '')}</div>
+          <div style="font-size:0.72rem;color:var(--text-muted);">${f.size ? Math.round(f.size / 1024) + ' KB' : ''} · ${f.date ? new Date(f.date).toLocaleDateString('nl-NL') : ''}</div>
+        </div>
+      </div>
+      <button type="button" onclick="removeNis2Evidence('${esc(maatregelId)}', ${i})" style="all:unset;cursor:pointer;color:var(--text-muted);font-size:0.78rem;padding:4px 10px;border:1px solid var(--border);border-radius:6px;background:#fff;">Verwijder</button>
+    </div>
+  `).join('');
+
+  return `
+    ${files.length ? `<div style="margin-bottom:14px;">${fileRows}</div>` : ''}
+    <label class="ga-evidence-upload" data-ctrl="${esc(maatregelId)}" style="display:flex;flex-direction:column;align-items:center;gap:8px;padding:24px;border:2px dashed var(--border);border-radius:12px;background:#fff;cursor:pointer;text-align:center;transition:border-color 0.2s, background 0.2s;">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+      <div class="ga-evidence-upload-main" style="font-size:0.9rem;font-weight:600;color:var(--text-primary);">Klik om bestand toe te voegen</div>
+      <div class="ga-evidence-upload-sub" style="font-size:0.78rem;color:var(--text-muted);">PDF, Word, Excel, afbeelding · max 10 MB</div>
+      <input type="file" accept=".pdf,.doc,.docx,.xls,.xlsx,.png,.jpg,.jpeg,.txt,.csv" onchange="uploadNis2Evidence('${esc(maatregelId)}', this)" style="display:none;" />
+    </label>
+  `;
+}
+
+async function uploadNis2Evidence(maatregelId, input) {
+  if (typeof uploadEvidence !== 'function') {
+    alert('Evidence-upload niet beschikbaar — herlaad de pagina.');
+    return;
+  }
+  await uploadEvidence(maatregelId, input);
+  // Refresh alleen het evidence-blok van deze maatregel
+  const block = document.getElementById('nis2EvidenceBlock-' + maatregelId);
+  if (block) block.innerHTML = renderNis2EvidenceBlock(maatregelId);
+}
+
+async function removeNis2Evidence(maatregelId, fileIndex) {
+  if (!confirm('Bestand verwijderen?')) return;
+  const ev = evidenceData[maatregelId];
+  if (!ev || !ev.files || !ev.files[fileIndex]) return;
+  const removed = ev.files.splice(fileIndex, 1)[0];
+  saveEvidenceData();
+  if (removed && removed.path) {
+    try { await sb.storage.from('evidence').remove([removed.path]); } catch (e) { console.warn('Storage remove failed', e); }
+  }
+  const block = document.getElementById('nis2EvidenceBlock-' + maatregelId);
+  if (block) block.innerHTML = renderNis2EvidenceBlock(maatregelId);
+}
+
 function nis2MaatregelProgress(maatregelId, qs) {
   let answered = 0, scoreSum = 0, scoreCount = 0;
   qs.forEach((q, qi) => {
@@ -4850,6 +4909,12 @@ function renderNis2Slide(maatregelId) {
           <div style="display:flex;flex-direction:column;gap:18px;">
             ${qs.map((q, qi) => renderNis2Question(m.id, qi, q)).join('')}
           </div>
+        </section>
+
+        <section style="border-top:1px solid var(--border);padding-top:28px;">
+          <h3 style="font-family:'Sora',sans-serif;font-size:1.08rem;font-weight:700;color:var(--text-primary);margin-bottom:6px;">Bewijsvoering uploaden</h3>
+          <p style="font-size:0.88rem;color:var(--text-muted);margin-bottom:16px;">Voeg documenten toe die deze maatregel onderbouwen (beleid, procedures, screenshots, rapporten). De Lead Auditor reviewt deze bij rapportage. Max 10 MB per bestand.</p>
+          <div id="nis2EvidenceBlock-${esc(m.id)}">${renderNis2EvidenceBlock(m.id)}</div>
         </section>
       </div>
 
