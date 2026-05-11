@@ -1521,16 +1521,25 @@
       section[style*="repeat(4,1fr)"] > .container > div { grid-template-columns: repeat(2, 1fr) !important; gap: 20px !important; }
     }
     @media (max-width: 768px) {
-      .hero h1 { font-size: 2.4rem; }
+      .hero h1 { font-size: clamp(1.8rem, 8vw, 2.4rem); line-height: 1.15; }
+      .hero-desc { font-size: 1rem; }
       .stats-grid { grid-template-columns: 1fr; }
       .steps { grid-template-columns: 1fr; gap: 32px; }
       .step-connector { display: none; }
       .step { padding-left: 20px; border-left: 2px solid var(--border); }
       .step:last-child { border-left-color: var(--accent); }
-      .packages { grid-template-columns: 1fr; }
+      .packages { grid-template-columns: 1fr; gap: 14px; }
       .why-grid { grid-template-columns: 1fr; gap: 48px; }
       .footer-grid { grid-template-columns: 1fr; gap: 32px; }
       .trust .container { gap: 24px; }
+      /* Voorkom dat secties met inline grid-template-columns overflowen */
+      section[style*="grid-template-columns"] > .container > div { grid-template-columns: 1fr !important; gap: 14px !important; }
+      .container { padding: 0 18px; }
+      /* Tabular elements scrollable */
+      table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; max-width: 100%; }
+      /* Foto's en figures binnen viewport */
+      img, figure, video { max-width: 100%; height: auto; }
+      .problem-visual { height: auto; aspect-ratio: 21/9; }
 
       .nav-links { display: none; }
       .nav-hamburger { display: flex; }
