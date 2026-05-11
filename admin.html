@@ -4178,7 +4178,7 @@ function renderRapportPrintView({ autoPrint = false } = {}) {
     </div>
   </div>
 
-  <div class="disclosure">${esc(s.disclosure || 'Dit rapport is opgesteld door Lead Auditor Raoul Haas, met AI-geassisteerde analyse van de aangeleverde bewijsvoering. De inhoud is bedoeld ter ondersteuning van een formele certificeringsaudit door een geaccrediteerde instelling, niet als vervanging daarvan.')}</div>
+  <div class="disclosure">${esc(s.disclosure || 'Dit rapport is opgesteld door een gecertificeerde ISO 27001 Lead Auditor op basis van de aangeleverde bewijsvoering. De inhoud is bedoeld ter ondersteuning van een formele certificeringsaudit door een geaccrediteerde instelling, niet als vervanging daarvan.')}</div>
 
   <div class="pdf-footer">
     <strong>Annex27</strong> &middot; ISO 27001 compliance voor het MKB in Nederland en Belgi&euml; &middot; <a href="https://annex27.nl" style="color:#0D9488;">annex27.nl</a> &middot; info@annex27.nl<br>
@@ -4880,7 +4880,7 @@ async function requestReviewFromAdmin() {
       user_id: currentClient.user_id,
       sender_role: 'auditor',
       subject: 'Verzoek: rond uw gap-analyse af',
-      body: 'Beste,\n\nIk ben klaar om uw self-assessment te reviewen. Kunt u de openstaande controls nog beoordelen en eventuele bewijsvoering uploaden?\n\nZodra u klikt op "Indienen voor Lead Auditor review" pak ik het op.\n\nMet vriendelijke groet,\nRaoul Haas\nLead Auditor — DNV/IRCA'
+      body: 'Beste,\n\nIk ben klaar om uw self-assessment te reviewen. Kunt u de openstaande controls nog beoordelen en eventuele bewijsvoering uploaden?\n\nZodra u klikt op "Indienen voor Lead Auditor review" pak ik het op.\n\nMet vriendelijke groet,\nAnnex27 Lead Auditor (DNV/IRCA gecertificeerd)'
     });
     adminToast('Verzoek verstuurd naar klant');
     refreshClient();
