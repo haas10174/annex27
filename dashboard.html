@@ -4551,13 +4551,33 @@ function toggleSidebar() {
 }
 
 // ── NIS2 READINESS ──
-const NIS2_ANSWER_OPTIONS = [
+// Twee antwoord-schalen, per vraag bepaald op basis van `dim`:
+// - effectiviteit-vragen → CMMI-maturity (Niet aanwezig → Geoptimaliseerd)
+// - andere dimensies (beleid/proces/techniek/eigenaarschap) → bool (Ja/Grotendeels/Deels/Nee/N.v.t.)
+const NIS2_BOOL_OPTIONS = [
   { v: 'ja',          label: 'Ja',           score: 4 },
   { v: 'grotendeels', label: 'Grotendeels',  score: 3 },
   { v: 'deels',       label: 'Deels',        score: 2 },
   { v: 'nee',         label: 'Nee',          score: 0 },
   { v: 'nvt',         label: 'N.v.t.',       score: null }
 ];
+const NIS2_CMMI_OPTIONS = [
+  { v: '4',   label: 'Geoptimaliseerd',  score: 4 },
+  { v: '3',   label: 'Gemeten',          score: 3 },
+  { v: '2',   label: 'Gedefinieerd',     score: 2 },
+  { v: '1',   label: 'Initieel',         score: 1 },
+  { v: '0',   label: 'Niet aanwezig',    score: 0 },
+  { v: 'nvt', label: 'N.v.t.',           score: null }
+];
+function nis2OptionsForQ(q) {
+  const isCmmi = q && (q.kind === 'cmmi' || q.type === 'effectiviteit' || q.dim === 'effectiviteit');
+  return isCmmi ? NIS2_CMMI_OPTIONS : NIS2_BOOL_OPTIONS;
+}
+function nis2AllOptions() {
+  // Bool en CMMI scores hebben overlap op v='nvt' en numerieke v='2' / 'deels'.
+  // Gebruik de SCORE direct ipv het lookup als de scoring backed door dim.
+  return [...NIS2_BOOL_OPTIONS, ...NIS2_CMMI_OPTIONS];
+}
 
 let nis2Answers = {};
 
@@ -4624,12 +4644,12 @@ function saveNis2Answer(key, value) {
 
 function nis2MaatregelProgress(maatregelId, qs) {
   let answered = 0, scoreSum = 0, scoreCount = 0;
-  qs.forEach((_, qi) => {
+  qs.forEach((q, qi) => {
     const key = maatregelId + '::' + qi;
     const val = nis2Answers[key];
     if (val) {
       answered++;
-      const opt = NIS2_ANSWER_OPTIONS.find(o => o.v === val);
+      const opt = nis2OptionsForQ(q).find(o => o.v === val);
       if (opt && opt.score !== null) { scoreSum += opt.score; scoreCount++; }
     }
   });
@@ -4742,11 +4762,12 @@ function renderNis2MaatregelHeader(maatregelId) {
 function renderNis2Question(maatregelId, qi, q) {
   const key = maatregelId + '::' + qi;
   const current = nis2Answers[key] || '';
+  const options = nis2OptionsForQ(q);
   return `
     <div style="padding:14px 0;border-top:1px solid var(--border-light);">
       <div style="font-size:0.92rem;color:var(--text-primary);margin-bottom:10px;line-height:1.55;">${esc(q.q)}</div>
       <div style="display:flex;flex-wrap:wrap;gap:6px;">
-        ${NIS2_ANSWER_OPTIONS.map(opt => `
+        ${options.map(opt => `
           <button type="button" onclick="saveNis2Answer('${key}','${opt.v}'); document.querySelectorAll('[data-nis2-key=&quot;${key}&quot;]').forEach(b => b.dataset.active = b.dataset.val === '${opt.v}' ? '1' : '0');" data-nis2-key="${key}" data-val="${opt.v}" data-active="${current === opt.v ? '1' : '0'}" style="all:unset;cursor:pointer;font-family:'Inter',sans-serif;font-size:0.84rem;font-weight:600;padding:7px 14px;border-radius:99px;border:1px solid ${current === opt.v ? 'var(--accent)' : 'var(--border)'};background:${current === opt.v ? 'var(--accent-light)' : '#FFFFFF'};color:${current === opt.v ? 'var(--accent)' : 'var(--text-primary)'};">${opt.label}</button>
         `).join('')}
       </div>

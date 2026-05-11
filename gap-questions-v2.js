@@ -31,7 +31,7 @@ const gapQuestionsV2 = {
       { dim: 'beleid', q: 'Is er een vastgesteld informatiebeveiligingsbeleid (PDF/intranet) met scope, doelstellingen en commitment?' },
       { dim: 'eigenaarschap', q: 'Is het beleid formeel ondertekend door de directie of een statutair bestuurder met datum?' },
       { dim: 'proces', q: 'Is het beleid actief gecommuniceerd naar alle medewerkers (onboarding, intranet, jaarlijkse herinnering)?' },
-      { dim: 'proces', q: 'Wordt het beleid minimaal jaarlijks gereviewed en bij wijzigingen herzien (versiehistorie of review-log zichtbaar)?' },
+      { dim: 'effectiviteit', q: 'Wordt het beleid minimaal jaarlijks gereviewed en bij wijzigingen herzien (versiehistorie of review-log zichtbaar)?' },
       { dim: 'effectiviteit', q: 'Worden afwijkingen van het beleid gedetecteerd, gemeld en geregistreerd (compliance-monitoring)?' },
     ]
   },
@@ -41,7 +41,7 @@ const gapQuestionsV2 = {
       { dim: 'beleid', q: 'Is er een RACI-matrix of soortgelijk document waarin IB-rollen formeel zijn vastgelegd?' },
       { dim: 'eigenaarschap', q: 'Is een specifieke persoon (CISO, IB-coördinator) eindverantwoordelijk voor informatiebeveiliging?' },
       { dim: 'proces', q: 'Worden IB-rollen behandeld in onboarding en periodieke awareness-sessies?' },
-      { dim: 'proces', q: 'Worden conflicterende rollen (4-ogen-principe) actief vermeden in kritieke processen?' },
+      { dim: 'effectiviteit', q: 'Worden conflicterende rollen (4-ogen-principe) actief vermeden in kritieke processen?' },
     ]
   },
   'A.5.3': {
@@ -50,7 +50,7 @@ const gapQuestionsV2 = {
       { dim: 'beleid', q: 'Is er een overzicht van conflicterende functiecombinaties (segregation of duties matrix)?' },
       { dim: 'techniek', q: 'Worden conflicterende rechten technisch geblokkeerd in kritieke systemen (ERP, finance, IAM)?' },
       { dim: 'proces', q: 'Wordt het 4-ogen-principe toegepast bij financiële transacties of toegangstoekenning?' },
-      { dim: 'proces', q: 'Wordt minimaal halfjaarlijks gecontroleerd of geen medewerker overlappende rechten heeft?' },
+      { dim: 'effectiviteit', q: 'Wordt minimaal halfjaarlijks gecontroleerd of geen medewerker overlappende rechten heeft?' },
     ]
   },
   'A.5.7': {
@@ -147,7 +147,7 @@ const gapQuestionsV2 = {
     questions: [
       { dim: 'beleid', q: 'Is er een register van toepasselijke wetgeving (AVG, NIS2, sectorspecifiek)?' },
       { dim: 'eigenaarschap', q: 'Is een persoon verantwoordelijk voor het bijhouden van wijzigingen in wetgeving?' },
-      { dim: 'proces', q: 'Wordt minimaal jaarlijks getoetst of de organisatie nog voldoet aan alle relevante eisen?' },
+      { dim: 'effectiviteit', q: 'Wordt minimaal jaarlijks getoetst of de organisatie nog voldoet aan alle relevante eisen?' },
       { dim: 'proces', q: 'Worden wetswijzigingen actief vertaald naar bijstelling van beleid en procedures?' },
     ]
   },
