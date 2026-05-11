@@ -132,10 +132,9 @@
       border-radius: 999px;
       line-height: 1;
     }
-    .plan-option.featured {
-      background: linear-gradient(135deg, #F0FDFA 0%, #FAFAFA 60%);
-      border-left-color: #0D9488;
-    }
+    /* Featured = enkel het "Meest gekozen"-label binnen de card; geen permanente kleurmarkering.
+       Alleen .plan-option.selected krijgt de teal-highlight. */
+    .plan-option.featured { /* no permanent color — selection state governs highlight */ }
 
     .order-summary {
       background: white;
