@@ -4695,13 +4695,13 @@ function renderNis2ProgressBar() {
   if (!el) return;
   const p = nis2OverallProgress();
   el.innerHTML = `
-    <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:18px 22px;">
+    <div style="background:#FAF9F6;border:1px solid var(--border);border-radius:12px;padding:18px 22px;">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-        <div style="font-family:'Sora',sans-serif;font-weight:700;color:#fff;">Voortgang</div>
+        <div style="font-family:'Sora',sans-serif;font-weight:700;color:var(--text-primary);">Voortgang</div>
         <div style="font-family:'Sora',sans-serif;color:var(--accent);font-weight:700;">${p.answered}/${p.total} beantwoord (${p.pct}%)</div>
       </div>
-      <div style="height:8px;background:rgba(255,255,255,0.08);border-radius:99px;overflow:hidden;">
-        <div style="height:100%;width:${p.pct}%;background:linear-gradient(90deg,#0D9488,#5EEAD4);transition:width 0.3s;"></div>
+      <div style="height:8px;background:#E5E7EB;border-radius:99px;overflow:hidden;">
+        <div style="height:100%;width:${p.pct}%;background:linear-gradient(90deg,#0D9488,#0F766E);transition:width 0.3s;"></div>
       </div>
     </div>
   `;
@@ -4711,15 +4711,15 @@ function renderNis2MaatregelCard(m) {
   const qs = window.getNis2QuestionsForMaatregel(m.id, m.name);
   const prog = nis2MaatregelProgress(m.id, qs);
   return `
-    <div class="nis2-card" data-mid="${m.id}" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:14px;overflow:hidden;">
+    <div class="nis2-card" data-mid="${m.id}" style="background:#FFFFFF;border:1px solid var(--border);border-radius:14px;overflow:hidden;">
       <button type="button" onclick="toggleNis2Maatregel('${m.id}')" style="all:unset;cursor:pointer;display:flex;justify-content:space-between;align-items:center;width:100%;padding:18px 22px;box-sizing:border-box;">
         <div>
           <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:0.78rem;letter-spacing:0.08em;color:var(--accent);text-transform:uppercase;margin-bottom:4px;">${esc(m.id)}</div>
-          <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:1.02rem;color:#fff;">${esc(m.name)}</div>
+          <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:1.02rem;color:var(--text-primary);">${esc(m.name)}</div>
         </div>
-        <div id="nis2HeadProg-${esc(m.id)}" style="font-family:'Sora',sans-serif;font-weight:600;font-size:0.85rem;color:${prog.pct === 100 ? '#5EEAD4' : 'var(--text-muted)'};">${prog.answered}/${prog.total}</div>
+        <div id="nis2HeadProg-${esc(m.id)}" style="font-family:'Sora',sans-serif;font-weight:600;font-size:0.85rem;color:${prog.pct === 100 ? 'var(--accent)' : 'var(--text-muted)'};">${prog.answered}/${prog.total}</div>
       </button>
-      <div id="nis2Questions-${esc(m.id)}" style="display:none;padding:0 22px 18px;">
+      <div id="nis2Questions-${esc(m.id)}" style="display:none;padding:0 22px 18px;border-top:1px solid var(--border-light);">
         ${qs.map((q, qi) => renderNis2Question(m.id, qi, q)).join('')}
       </div>
     </div>
@@ -4735,7 +4735,7 @@ function renderNis2MaatregelHeader(maatregelId) {
   const el = document.getElementById('nis2HeadProg-' + maatregelId);
   if (el) {
     el.textContent = prog.answered + '/' + prog.total;
-    el.style.color = prog.pct === 100 ? '#5EEAD4' : 'var(--text-muted)';
+    el.style.color = prog.pct === 100 ? 'var(--accent)' : 'var(--text-muted)';
   }
 }
 
@@ -4743,11 +4743,11 @@ function renderNis2Question(maatregelId, qi, q) {
   const key = maatregelId + '::' + qi;
   const current = nis2Answers[key] || '';
   return `
-    <div style="padding:14px 0;border-top:1px solid rgba(255,255,255,0.06);">
-      <div style="font-size:0.92rem;color:#E5E7EB;margin-bottom:10px;line-height:1.55;">${esc(q.q)}</div>
+    <div style="padding:14px 0;border-top:1px solid var(--border-light);">
+      <div style="font-size:0.92rem;color:var(--text-primary);margin-bottom:10px;line-height:1.55;">${esc(q.q)}</div>
       <div style="display:flex;flex-wrap:wrap;gap:6px;">
         ${NIS2_ANSWER_OPTIONS.map(opt => `
-          <button type="button" onclick="saveNis2Answer('${key}','${opt.v}'); document.querySelectorAll('[data-nis2-key=&quot;${key}&quot;]').forEach(b => b.dataset.active = b.dataset.val === '${opt.v}' ? '1' : '0');" data-nis2-key="${key}" data-val="${opt.v}" data-active="${current === opt.v ? '1' : '0'}" style="all:unset;cursor:pointer;font-family:'Inter',sans-serif;font-size:0.82rem;padding:6px 12px;border-radius:99px;border:1px solid ${current === opt.v ? 'var(--accent)' : 'rgba(255,255,255,0.12)'};background:${current === opt.v ? 'rgba(13,148,136,0.2)' : 'transparent'};color:${current === opt.v ? '#5EEAD4' : 'var(--text-secondary)'};">${opt.label}</button>
+          <button type="button" onclick="saveNis2Answer('${key}','${opt.v}'); document.querySelectorAll('[data-nis2-key=&quot;${key}&quot;]').forEach(b => b.dataset.active = b.dataset.val === '${opt.v}' ? '1' : '0');" data-nis2-key="${key}" data-val="${opt.v}" data-active="${current === opt.v ? '1' : '0'}" style="all:unset;cursor:pointer;font-family:'Inter',sans-serif;font-size:0.84rem;font-weight:600;padding:7px 14px;border-radius:99px;border:1px solid ${current === opt.v ? 'var(--accent)' : 'var(--border)'};background:${current === opt.v ? 'var(--accent-light)' : '#FFFFFF'};color:${current === opt.v ? 'var(--accent)' : 'var(--text-primary)'};">${opt.label}</button>
         `).join('')}
       </div>
     </div>
