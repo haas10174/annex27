@@ -8163,7 +8163,8 @@ const DOC_CATALOG = {
       { file: '32-netwerk-communicatie.docx', title: 'Netwerk & communicatie', cat: 'Tech' },
       { file: '33-avg-privacy.docx', title: 'AVG & Privacy', cat: 'Compliance' },
       { file: '34-communicatiebeleid.docx', title: 'Communicatiebeleid', cat: 'Governance' },
-      { file: '35-vendor-onboarding-checklist.pdf', title: 'Leverancier onboarding checklist (A.5.19-22)', cat: 'Supplier', pdf_only: true }
+      { file: '35-vendor-onboarding-checklist.pdf', title: 'Leverancier onboarding checklist (A.5.19-22)', cat: 'Supplier', pdf_only: true },
+      { file: '36-bio-iso27001-mapping.md', title: 'BIO 2.0 ↔ ISO 27001-mapping (overheid)', cat: 'Compliance', md_only: true }
     ]
   },
   werkinstructies: {
@@ -8281,6 +8282,11 @@ const DOC_GROUPS = [
       { src:'premium', file:'23-leveranciersbeleid.docx', title:'Leveranciersbeleid', refs:['A.5.19','A.5.20'] },
       { src:'premium', file:'24-leverancier-assessment.docx', title:'Leveranciersbeoordeling', refs:['A.5.21','A.5.22'] },
       { src:'premium', file:'35-vendor-onboarding-checklist.pdf', title:'Leverancier onboarding checklist', refs:['A.5.19','A.5.20','A.5.21','A.5.22'], pdfOnly:true }
+    ]
+  },
+  { id: 'sector-overheid', iconKey: 'klassificatie', label: 'Sector — overheid (BIO)', sub: 'BIO 2.0-mapping voor leveranciers aan gemeenten, provincies en rijksoverheid',
+    docs: [
+      { src:'premium', file:'36-bio-iso27001-mapping.md', title:'BIO 2.0 ↔ ISO 27001-mapping voor overheidsleveranciers', refs:['A.5.31','A.5.33','A.5.34','A.6.1','A.8.5','A.8.24'], mdOnly:true }
     ]
   },
   { id: 'communicatie', iconKey: 'communicatie', label: 'Communicatie', sub: 'Cl.7.4: interne en externe communicatie ISMS',
