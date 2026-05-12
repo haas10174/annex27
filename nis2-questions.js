@@ -1,5 +1,5 @@
 // ═════════════════════════════════════════════════════════════════
-// NIS2 READINESS QUESTIONS — 39 vragen op 10 maatregelen + bestuur + meldingsplicht
+// NIS2 READINESS QUESTIONS — 40 vragen op 10 maatregelen + bestuur + meldingsplicht
 // ═════════════════════════════════════════════════════════════════
 //
 // Structuur identiek aan gap-questions-v2.js zodat dashboard-renderer
@@ -12,7 +12,7 @@
 //   N.20                   → Art. 20 bestuursaansprakelijkheid + training
 //   N.23                   → Art. 23 meldingsplicht (24u / 72u / 1 mnd)
 //
-// Totaal: 39 vragen.
+// Totaal: 40 vragen.
 
 const nis2Questions = {
 
@@ -75,6 +75,7 @@ const nis2Questions = {
       { dim: 'beleid', q: 'Zijn er secure coding-richtlijnen voor de gebruikte talen en frameworks?' },
       { dim: 'techniek', q: 'Is code-review verplicht voor alle wijzigingen die in productie gaan?' },
       { dim: 'proces', q: 'Wordt vulnerability management actief toegepast op zowel eigen als externe componenten?' },
+      { dim: 'beleid', q: 'Is een Coordinated Vulnerability Disclosure (CVD) procedure gepubliceerd volgens NCSC-leidraad of NEN-EN-ISO/IEC 29147, met een vast contactpunt voor melders?' },
     ]
   },
 
@@ -109,7 +110,7 @@ const nis2Questions = {
     name: 'Cryptografie en encryptie',
     questions: [
       { dim: 'techniek', q: 'Is encryptie at-rest afgedwongen op alle systemen met persoonsgegevens of bedrijfskritieke data?' },
-      { dim: 'techniek', q: 'Is encryptie in-transit (TLS 1.2+) afgedwongen voor alle externe communicatie?' },
+      { dim: 'techniek', q: 'Is encryptie in-transit afgedwongen voor alle externe communicatie, met cryptografische sterkte conform actueel advies van het NCSC?' },
       { dim: 'proces', q: 'Is er een sleutelbeheer-procedure voor generatie, rotatie en intrekking van cryptografische sleutels?' },
     ]
   },
@@ -133,8 +134,8 @@ const nis2Questions = {
   'N.21.2.j': {
     name: 'MFA, beveiligde en noodcommunicatie',
     questions: [
-      { dim: 'techniek', q: 'Is multi-factor authenticatie verplicht voor alle accounts met toegang tot bedrijfsdata?' },
-      { dim: 'techniek', q: 'Is MFA óók verplicht voor privileged of admin-accounts, zonder ontheffingen?' },
+      { dim: 'techniek', q: 'Is multi-factor authenticatie afgedwongen voor primair aanloggen op de digitale werkomgeving, voor internet-bereikbare accounts en voor beheerrechten-accounts?' },
+      { dim: 'techniek', q: 'Zijn voor accounts waar MFA technisch niet mogelijk is, mitigerende maatregelen gedefinieerd en goedgekeurd door CISO of vergelijkbare functionaris?' },
       { dim: 'proces', q: 'Is een noodcommunicatie-kanaal beschikbaar bij uitval van primaire systemen (alternatieve mailbox, telefoonlijst, secure messaging)?' },
     ]
   },
