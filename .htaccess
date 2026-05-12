@@ -66,9 +66,12 @@ RewriteRule ^([^.]+)$ $1.html [L]
 Options -Indexes
 
 # ─── Block access to sensitive files ─────────────────────────
-<FilesMatch "^\.(env|git|htaccess|annex27_ftp)|\.(sql|md|sh|py|yml|yaml|json|log|bak)$">
+<FilesMatch "^\.(env|git|htaccess|annex27_ftp)|\.(sql|sh|py|yml|yaml|log|bak)$">
   Require all denied
 </FilesMatch>
+
+# .md en .json staan in beleidspakket/ als klant-deliverables → bewust openbaar.
+# .yml/.yaml/.sql blijven geblokkeerd (interne config / migrations).
 
 # ─── Block access to hidden folders (except .well-known for security.txt etc.) ──
 RedirectMatch 404 /\.(?!well-known)\..*$
