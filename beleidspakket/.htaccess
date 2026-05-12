@@ -1,0 +1,8 @@
+# Overschrijft de globale .md-block voor de beleidspakket-map.
+# .md-bestanden hier zijn bewust openbaar omdat ze klant-deliverables zijn.
+<FilesMatch "\.md$">
+  Require all granted
+</FilesMatch>
+
+# Correct MIME-type zodat browser ze opent ipv downloadt
+AddType "text/markdown; charset=UTF-8" .md

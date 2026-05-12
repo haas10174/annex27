@@ -66,6 +66,10 @@ fi
 # beleidspakket/ folder — .md voor live document-render-engine + docs-metadata.json.
 # PDF/DOCX versies worden apart geüpload (Word voor klant-download in ZIP-export).
 if [ -d "$SRC/beleidspakket" ]; then
+  if [ -f "$SRC/beleidspakket/.htaccess" ]; then
+    echo "  Uploading beleidspakket/.htaccess..."
+    curl -s --ftp-ssl --user "$FTP_USER" --ftp-create-dirs -T "$SRC/beleidspakket/.htaccess" "$FTP_HOST/beleidspakket/.htaccess"
+  fi
   if [ -f "$SRC/beleidspakket/docs-metadata.json" ]; then
     echo "  Uploading beleidspakket/docs-metadata.json..."
     curl -s --ftp-ssl --user "$FTP_USER" --ftp-create-dirs -T "$SRC/beleidspakket/docs-metadata.json" "$FTP_HOST/beleidspakket/docs-metadata.json"
