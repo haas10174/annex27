@@ -77,10 +77,11 @@ Options -Indexes
 RedirectMatch 404 /\.(?!well-known)\..*$
 RedirectMatch 404 /\.(env|git|htaccess|annex27_ftp|vscode)(/|$)
 
-# ─── Block access to beleidspakket folder (policy docs) ──────
-# Policy documents should ONLY be served via Supabase Storage with signed URLs
+# ─── Block binary policy docs (force Supabase signed URLs) ───
+# .md blijft toegestaan want die voedt de in-browser document-render-engine.
+# .docx/.pdf/.xlsx blijven dicht zodat ZIP-export en signed-URL-flow bron-of-truth blijven.
 <IfModule mod_rewrite.c>
-  RewriteRule ^beleidspakket/ - [F,L]
+  RewriteRule ^beleidspakket/.+\.(docx|pdf|xlsx)$ - [F,L]
   RewriteRule ^docs/.+\.(docx|pdf|xlsx)$ - [F,L]
 </IfModule>
 
