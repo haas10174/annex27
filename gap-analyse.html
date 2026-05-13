@@ -1999,6 +1999,57 @@ function confirmSector() {
   show('screenQuiz');
   renderQuestion();
   renderCatBars();
+  // Trechter-tracking: GA4 + Ads event + anonieme start-row in waitlist (best-effort)
+  fireQuickscanStarted();
+}
+
+// Vuur het quickscan_started event af zodra een bezoeker de eerste vraag bereikt.
+// Doel: leadtrechter inzichtelijk maken in GA4 + Google Ads, ook al maakt iemand de scan niet af.
+// Schrijft daarnaast een geanonimiseerde row naar waitlist zodat admin Aanvragen-tab "Anoniem gestart" toont.
+function fireQuickscanStarted() {
+  try {
+    if (sessionStorage.getItem('annex27_qs_started_fired')) return;
+    sessionStorage.setItem('annex27_qs_started_fired', '1');
+    // Session-id voor latere koppeling tussen start-row en voltooide lead
+    let sid = sessionStorage.getItem('annex27_qs_session_id');
+    if (!sid) {
+      sid = 'qs_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+      sessionStorage.setItem('annex27_qs_session_id', sid);
+    }
+    const profile = sectorProfiles[selectedSector] || {};
+    // GA4 + Ads conversion (conversion-label moet in analytics.js GADS_CONVERSIONS staan)
+    if (window.annex27TrackConversion) {
+      window.annex27TrackConversion('quickscan_started', {
+        sector: selectedSector || 'onbekend',
+        session_id: sid,
+        value: 0,
+        currency: 'EUR'
+      });
+    } else if (window.annex27Track) {
+      window.annex27Track('quickscan_started', { sector: selectedSector || 'onbekend', session_id: sid });
+    }
+    // Anonieme start-row in waitlist (fire-and-forget, geen UI-impact bij falen)
+    try {
+      const SB_URL = 'https://tvqhxhoohzdzekcfzjuv.supabase.co';
+      const SB_KEY = 'sb_publishable_-a0bntwsGr8mR9xROgJTzQ_Gylt8ZSo';
+      fetch(SB_URL + '/rest/v1/waitlist', {
+        method: 'POST',
+        headers: {
+          'apikey': SB_KEY,
+          'Authorization': 'Bearer ' + SB_KEY,
+          'Content-Type': 'application/json',
+          'Prefer': 'return=minimal'
+        },
+        body: JSON.stringify({
+          product: 'quickscan_started',
+          naam: '(anoniem)',
+          bedrijf: '',
+          email: sid + '@quickscan-session.local',
+          bericht: `Sector: ${profile.label || selectedSector || 'onbekend'} | Gestart: ${new Date().toISOString()} | Session: ${sid}`
+        })
+      }).catch(() => {});
+    } catch (e) { /* netwerkprobleem — silent */ }
+  } catch (e) { /* sessionStorage kan geblokkeerd zijn — silent */ }
 }
 
 // Fase-indeling voor wizard (6 standaard + 1 conditionele sector-fase per sector)
@@ -2538,6 +2589,25 @@ function submitLead(e) {
   };
   localStorage.setItem('annex27_lead', JSON.stringify(lead));
 
+  // Compileer per-vraag-antwoorden als compacte string voor admin-inzicht
+  let answersBlock = '';
+  try {
+    const lines = [];
+    (activeQuestions || []).forEach((q, i) => {
+      const ai = answers[i];
+      if (ai === null || ai === undefined) return;
+      const opts = (q && q.options) || [];
+      const opt = opts[ai];
+      const optLabel = opt ? (opt.label || opt.text || String(ai)) : String(ai);
+      const qLabel = (q && (q.q || q.text)) ? String(q.q || q.text).slice(0, 80) : `Vraag ${i + 1}`;
+      lines.push(`${(i + 1)}. ${qLabel} → ${optLabel}`);
+    });
+    if (lines.length) answersBlock = '\n\nAntwoorden:\n' + lines.join('\n');
+  } catch (e) { /* render-defensief: bericht mag niet falen */ }
+
+  let qsSession = '';
+  try { qsSession = sessionStorage.getItem('annex27_qs_session_id') || ''; } catch (e) {}
+
   // Persist lead in Supabase waitlist table en stuur bevestigingsmail.
   // Fire-and-forget — UI toont leadSuccess ongeacht netwerk-uitkomst.
   (async () => {
@@ -2545,6 +2615,8 @@ function submitLead(e) {
       const SB_URL = 'https://tvqhxhoohzdzekcfzjuv.supabase.co';
       const SB_KEY = 'sb_publishable_-a0bntwsGr8mR9xROgJTzQ_Gylt8ZSo';
       const cleanEmail = (lead.email || '').toLowerCase().trim();
+      const berichtHeader = `Sector: ${lead.sectorLabel} | Score: ${lead.score}% | Voltooid: ${lead.date}` +
+                             (qsSession ? ` | Session: ${qsSession}` : '');
       const insertResp = await fetch(SB_URL + '/rest/v1/waitlist', {
         method: 'POST',
         headers: {
@@ -2558,7 +2630,7 @@ function submitLead(e) {
           naam: lead.naam || '',
           bedrijf: lead.bedrijf || '',
           email: cleanEmail,
-          bericht: `Sector: ${lead.sectorLabel} | Score: ${lead.score}% | Quickscan voltooid op ${lead.date}`
+          bericht: berichtHeader + answersBlock
         })
       });
       if (insertResp.ok) {

@@ -169,6 +169,126 @@
     }
     .orders-table tr:last-child td { border-bottom: none; }
     .orders-table tr:hover td { background: rgba(16,24,40,0.02); }
+    /* Leads-tab: primaire type-tabs in Aanvragen-view */
+    .leads-tab {
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid transparent;
+      padding: 10px 14px 12px;
+      font-family: inherit;
+      font-size: 0.86rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      margin-bottom: -1px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .leads-tab:hover { color: var(--text); }
+    .leads-tab.active {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+    .leads-tab-count {
+      display: inline-block;
+      min-width: 22px;
+      padding: 2px 7px;
+      border-radius: 100px;
+      background: var(--bg-alt);
+      color: var(--text-muted);
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-align: center;
+      line-height: 1.3;
+    }
+    .leads-tab.active .leads-tab-count {
+      background: rgba(13,148,136,0.12);
+      color: var(--accent);
+    }
+    /* Leads tabel */
+    .leads-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      font-size: 0.85rem;
+    }
+    .leads-table th {
+      text-align: left;
+      padding: 12px 14px;
+      background: var(--bg-alt);
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+    .leads-table td {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+    .leads-table tr:last-child td { border-bottom: none; }
+    .leads-table tr.leads-row { cursor: pointer; transition: background 0.12s; }
+    .leads-table tr.leads-row:hover td { background: rgba(16,24,40,0.025); }
+    .leads-table tr.leads-row.expanded td { background: rgba(13,148,136,0.04); }
+    .leads-table tr.leads-detail-row td {
+      background: var(--bg-alt);
+      padding: 14px 20px;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      white-space: pre-wrap;
+      line-height: 1.55;
+    }
+    .leads-table .col-ts {
+      font-family: 'Sora', sans-serif;
+      font-weight: 700;
+      font-size: 0.82rem;
+      color: var(--text);
+      white-space: nowrap;
+    }
+    .leads-table .col-ts .ts-time {
+      display: block;
+      font-weight: 500;
+      font-size: 0.74rem;
+      color: var(--text-muted);
+      letter-spacing: 0.02em;
+    }
+    .leads-type-pill {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 100px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+    }
+    .leads-section-header {
+      font-family: 'Sora', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin: 22px 0 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .leads-section-header:first-child { margin-top: 0; }
+    .leads-section-header .sec-count {
+      background: var(--bg-alt);
+      color: var(--text-muted);
+      font-size: 0.7rem;
+      padding: 2px 8px;
+      border-radius: 100px;
+    }
     .status-pill {
       display: inline-block;
       padding: 3px 10px;
@@ -2670,83 +2790,233 @@ function bindViewSwitch() {
   if (initial !== 'overview') activateView(initial);
 }
 
-// ── LEADS (waitlist + offerte-aanvragen) ──
+// ── LEADS (waitlist + offerte-aanvragen + quickscan-leads + pre-audit) ──
 let leadsData = [];
-let currentLeadsFilter = 'open';
+let currentLeadsType = 'all';         // 'all' | 'quickscan' | 'beleid' | 'nis2' | 'preaudit'
+let currentLeadsStatus = 'open';      // 'open' | 'afgehandeld' | 'all'
+let expandedLeadId = null;            // rij die uitgeklapt is
+
+// Type-config: label + accent-kleur per product-key
+const LEADS_TYPE_META = {
+  quickscan:         { label: 'Quickscan',         color: '#0D9488' },
+  quickscan_started: { label: 'Quickscan-start',   color: '#94A3B8' },
+  beleid:            { label: 'Beleidspakket',     color: '#7C3AED' },
+  nis2:              { label: 'NIS2 waitlist',     color: '#B45309' },
+  preaudit:          { label: 'Pre-audit',         color: '#0F766E' },
+};
+
+function isQuickscanType(product) {
+  return product === 'quickscan' || product === 'quickscan_started';
+}
+function matchesType(lead, type) {
+  if (type === 'all') return true;
+  if (type === 'quickscan') return isQuickscanType(lead.product);
+  return lead.product === type;
+}
+function matchesStatus(lead, status) {
+  if (status === 'all') return true;
+  if (status === 'afgehandeld') return !!lead.processed_at;
+  // 'open': anonieme quickscan-starts horen niet bij de werkstapel
+  return !lead.processed_at && lead.product !== 'quickscan_started';
+}
 
 async function loadLeadsCount() {
+  // Badge in sidebar telt enkel actionable open-leads (geen anonieme quickscan-starts)
   try {
     const { count } = await sb.from('waitlist')
       .select('*', { count: 'exact', head: true })
-      .is('processed_at', null);
+      .is('processed_at', null)
+      .neq('product', 'quickscan_started');
     document.getElementById('leadsBadge').textContent = count || 0;
   } catch(e) {}
 }
 
-function setLeadsFilter(filter, btn) {
-  currentLeadsFilter = filter;
-  document.querySelectorAll('[data-leads]').forEach(b => b.classList.remove('active'));
+function setLeadsType(type, btn) {
+  currentLeadsType = type;
+  document.querySelectorAll('[data-type]').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
+  expandedLeadId = null;
   renderLeads();
+}
+
+function setLeadsStatus(status, btn) {
+  currentLeadsStatus = status;
+  document.querySelectorAll('[data-status]').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  expandedLeadId = null;
+  renderLeads();
+}
+
+// Backwards-compat: oude pad nog gebruikt door legacy-knoppen
+function setLeadsFilter(filter, btn) {
+  if (['quickscan', 'beleid', 'nis2', 'preaudit', 'all'].includes(filter)) {
+    setLeadsType(filter, btn);
+  } else {
+    setLeadsStatus(filter === 'open' ? 'open' : 'all', btn);
+  }
 }
 
 async function loadLeads() {
   const listEl = document.getElementById('leadsList');
-  listEl.innerHTML = '<div class="empty-state">Laden...</div>';
+  listEl.innerHTML = '<div class="empty-state" style="padding:40px;text-align:center;color:var(--text-muted);">Laden...</div>';
   const { data, error } = await sb.from('waitlist').select('*').order('created_at', { ascending: false });
-  if (error) { listEl.innerHTML = '<div class="empty-state">Kon aanvragen niet laden.</div>'; return; }
+  if (error) { listEl.innerHTML = '<div class="empty-state" style="padding:40px;text-align:center;color:var(--text-muted);">Kon aanvragen niet laden.</div>'; return; }
   leadsData = data || [];
   renderLeads();
   loadLeadsCount();
+  updateLeadsTabCounts();
 }
 
-function renderLeads() {
-  const listEl = document.getElementById('leadsList');
-  let filtered = leadsData;
-  if (currentLeadsFilter === 'open') filtered = filtered.filter(l => !l.processed_at);
-  else if (currentLeadsFilter === 'nis2') filtered = filtered.filter(l => l.product === 'nis2');
-  else if (currentLeadsFilter === 'beleid') filtered = filtered.filter(l => l.product === 'beleid');
+function updateLeadsTabCounts() {
+  // Counts per type — gebruikt huidige status-filter zodat de cijfers consistent zijn met wat je ziet
+  const baseFiltered = leadsData.filter(l => matchesStatus(l, currentLeadsStatus));
+  const counts = {
+    all:        baseFiltered.length,
+    quickscan:  baseFiltered.filter(l => isQuickscanType(l.product)).length,
+    beleid:     baseFiltered.filter(l => l.product === 'beleid').length,
+    nis2:       baseFiltered.filter(l => l.product === 'nis2').length,
+    preaudit:   baseFiltered.filter(l => l.product === 'preaudit').length,
+  };
+  const set = (id, n) => { const el = document.getElementById(id); if (el) el.textContent = n; };
+  set('leadsCntAll', counts.all);
+  set('leadsCntQuickscan', counts.quickscan);
+  set('leadsCntBeleid', counts.beleid);
+  set('leadsCntNis2', counts.nis2);
+  set('leadsCntPreaudit', counts.preaudit);
+}
 
-  if (!filtered.length) {
-    listEl.innerHTML = '<div class="empty-state" style="padding:40px;text-align:center;color:var(--text-muted);">Geen aanvragen in deze filter.</div>';
-    return;
-  }
-  const esc = (s) => String(s ?? '').replace(/[<>&"]/g, c => ({'<':'&lt;','>':'&gt;','&':'amp;','"':'&quot;'}[c]));
-  listEl.innerHTML = filtered.map(l => {
-    const d = new Date(l.created_at).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
-    const productLabel = l.product === 'nis2' ? 'NIS2 Readiness (waitlist)'
-      : l.product === 'beleid' ? 'Beleidspakket (offerte)'
-      : l.product === 'preaudit' ? 'Pre-audit (intake)'
-      : l.product === 'quickscan' ? 'Quickscan lead'
-      : l.product;
-    const productColor = l.product === 'nis2' ? '#B45309'
-      : l.product === 'beleid' ? '#0D9488'
-      : l.product === 'preaudit' ? '#7C3AED'
-      : l.product === 'quickscan' ? '#64748B'
-      : '#0D9488';
+function fmtLeadDate(iso) {
+  const d = new Date(iso);
+  const now = new Date();
+  const sameDay = d.toDateString() === now.toDateString();
+  const ymd = d.toLocaleDateString('nl-NL', { day: '2-digit', month: 'short' });
+  const hm  = d.toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' });
+  return { dateLabel: sameDay ? 'Vandaag' : ymd, time: hm };
+}
+
+const _esc = (s) => String(s == null ? '' : s).replace(/[<>&"]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c]));
+
+function leadScoreCell(l) {
+  // Probeer score uit bericht te halen ("Score: 67%")
+  if (!l.bericht) return '<span style="color:var(--text-dim);">—</span>';
+  const m = String(l.bericht).match(/Score:\s*(\d{1,3})/i);
+  if (!m) return '<span style="color:var(--text-dim);">—</span>';
+  const pct = parseInt(m[1], 10);
+  const color = pct >= 70 ? 'var(--success)' : pct >= 40 ? 'var(--warning)' : 'var(--danger)';
+  return `<span style="font-family:'Sora',sans-serif;font-weight:700;color:${color};">${pct}%</span>`;
+}
+
+function leadTableRows(leads) {
+  return leads.map(l => {
+    const ts = fmtLeadDate(l.created_at);
+    const meta = LEADS_TYPE_META[l.product] || { label: l.product || '—', color: '#64748B' };
+    const naam = _esc(l.naam || '(geen naam)');
+    const bedrijf = _esc(l.bedrijf || '—');
+    const emailRaw = _esc(l.email || '');
+    const emailDisplay = l.product === 'quickscan_started'
+      ? '<span style="color:var(--text-dim);font-style:italic;">anoniem</span>'
+      : `<a href="mailto:${emailRaw}" style="color:var(--accent);text-decoration:none;font-size:0.82rem;" onclick="event.stopPropagation();">${emailRaw}</a>`;
+    const score = leadScoreCell(l);
     const processed = !!l.processed_at;
+    const statusCell = processed
+      ? `<span class="status-pill" style="background:rgba(16,185,129,0.12);color:var(--success);">&#10003; Afgehandeld</span>`
+      : (l.product === 'quickscan_started'
+        ? `<span class="status-pill" style="background:rgba(148,163,184,0.15);color:var(--text-muted);">Anoniem</span>`
+        : `<span class="status-pill" style="background:rgba(245,158,11,0.12);color:var(--warning);">Nieuw</span>`);
+    const actionBtn = processed
+      ? `<button class="action-btn" style="font-size:0.74rem;padding:5px 9px;" onclick="event.stopPropagation();markLeadUnprocessed('${l.id}')">Heropenen</button>`
+      : (l.product === 'quickscan_started'
+        ? `<button class="action-btn" style="font-size:0.74rem;padding:5px 9px;" onclick="event.stopPropagation();markLeadProcessed('${l.id}')" title="Anonieme start opruimen">Verberg</button>`
+        : `<button class="action-btn" style="font-size:0.74rem;padding:5px 9px;" onclick="event.stopPropagation();markLeadProcessed('${l.id}')">Afhandelen</button>`);
+    const expanded = expandedLeadId === l.id;
+    const rowClass = 'leads-row' + (expanded ? ' expanded' : '');
+    const detailRow = expanded && l.bericht
+      ? `<tr class="leads-detail-row"><td colspan="7">${_esc(l.bericht)}</td></tr>`
+      : '';
     return `
-      <div style="background:${processed ? 'rgba(16,24,40,0.02)' : 'var(--surface)'};border:1px solid ${processed ? 'transparent' : 'var(--border)'};border-left:3px solid ${processed ? 'var(--border)' : productColor};border-radius:10px;padding:16px 20px;${processed ? 'opacity:0.65;' : ''}">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:6px;">
-          <div>
-            <div style="font-family:'Sora',sans-serif;font-size:0.95rem;font-weight:700;">${esc(l.naam)}${l.bedrijf ? ' &middot; <span style=\"color:var(--text-muted);font-weight:500;\">' + esc(l.bedrijf) + '</span>' : ''}</div>
-            <div style="font-size:0.82rem;color:var(--text-muted);margin-top:2px;"><a href="mailto:${esc(l.email)}" style="color:var(--accent);text-decoration:none;">${esc(l.email)}</a> &middot; ${d}</div>
-          </div>
-          <div style="display:flex;gap:8px;align-items:center;flex-shrink:0;">
-            <span style="font-size:0.7rem;font-weight:600;padding:4px 10px;border-radius:999px;background:${productColor}20;color:${productColor};border:1px solid ${productColor}40;">${productLabel}</span>
-            ${processed
-              ? '<span style="font-size:0.7rem;color:var(--text-muted);">&#10003; Afgehandeld</span>'
-              : '<button onclick="markLeadProcessed(\''+l.id+'\')" class="action-btn" style="font-size:0.75rem;padding:5px 10px;">Markeer afgehandeld</button>'}
-          </div>
-        </div>
-        ${l.bericht ? `<div style="margin-top:10px;padding:10px 14px;background:var(--bg-alt);border:1px solid var(--border);border-radius:6px;font-size:0.88rem;color:var(--text-muted);white-space:pre-wrap;">${esc(l.bericht)}</div>` : ''}
-      </div>
+      <tr class="${rowClass}" onclick="toggleLeadDetail('${l.id}')">
+        <td class="col-ts">${ts.dateLabel}<span class="ts-time">${ts.time}</span></td>
+        <td><span class="leads-type-pill" style="background:${meta.color}1A;color:${meta.color};">${_esc(meta.label)}</span></td>
+        <td>${naam}</td>
+        <td style="color:var(--text-muted);">${bedrijf}</td>
+        <td>${emailDisplay}</td>
+        <td>${score}</td>
+        <td>${statusCell}</td>
+        <td style="text-align:right;">${actionBtn}</td>
+      </tr>
+      ${detailRow}
     `;
   }).join('');
 }
 
+function leadsTableHtml(leads) {
+  return `
+    <table class="leads-table">
+      <thead>
+        <tr>
+          <th style="width:90px;">Datum/Tijd</th>
+          <th style="width:130px;">Type</th>
+          <th>Naam</th>
+          <th>Bedrijf</th>
+          <th>Email</th>
+          <th style="width:70px;">Score</th>
+          <th style="width:130px;">Status</th>
+          <th style="width:110px;"></th>
+        </tr>
+      </thead>
+      <tbody>${leadTableRows(leads)}</tbody>
+    </table>`;
+}
+
+function toggleLeadDetail(id) {
+  expandedLeadId = (expandedLeadId === id) ? null : id;
+  renderLeads();
+}
+
+function renderLeads() {
+  const listEl = document.getElementById('leadsList');
+  if (!listEl) return;
+  // Update tab-counts wanneer status-filter wijzigt
+  updateLeadsTabCounts();
+
+  // 1) Filter op type + status
+  const filtered = leadsData
+    .filter(l => matchesType(l, currentLeadsType))
+    .filter(l => matchesStatus(l, currentLeadsStatus));
+
+  if (!filtered.length) {
+    listEl.innerHTML = '<div class="empty-state" style="padding:40px;text-align:center;color:var(--text-muted);">Geen aanvragen in deze selectie.</div>';
+    return;
+  }
+
+  // 2) Speciaal geval: tab=Quickscan → twee sub-secties (Voltooid / Anoniem gestart)
+  if (currentLeadsType === 'quickscan') {
+    const voltooid = filtered.filter(l => l.product === 'quickscan');
+    const anoniem  = filtered.filter(l => l.product === 'quickscan_started');
+    let html = '';
+    if (voltooid.length) {
+      html += `<div class="leads-section-header">Voltooid <span class="sec-count">${voltooid.length}</span></div>`;
+      html += leadsTableHtml(voltooid);
+    }
+    if (anoniem.length) {
+      html += `<div class="leads-section-header">Anoniem gestart <span class="sec-count">${anoniem.length}</span></div>`;
+      html += leadsTableHtml(anoniem);
+    }
+    if (!html) html = '<div class="empty-state" style="padding:40px;text-align:center;color:var(--text-muted);">Geen quickscan-activiteit in deze status.</div>';
+    listEl.innerHTML = html;
+    return;
+  }
+
+  // 3) Default: één tabel
+  listEl.innerHTML = leadsTableHtml(filtered);
+}
+
 async function markLeadProcessed(id) {
   const { error } = await sb.from('waitlist').update({ processed_at: new Date().toISOString() }).eq('id', id);
+  if (!error) loadLeads();
+}
+async function markLeadUnprocessed(id) {
+  const { error } = await sb.from('waitlist').update({ processed_at: null }).eq('id', id);
   if (!error) loadLeads();
 }
 

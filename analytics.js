@@ -25,9 +25,10 @@
   // Vul de labels in zodra de conversion-actions in Google Ads zijn aangemaakt.
   // Formaat per label: 'AbCdEfGhIj' (10-tekens alfanumeriek).
   var GADS_CONVERSIONS = {
+    quickscan_started:   '',  // TODO: vul label in van quickscan_started conversion-action (Google Ads → Doelen → Conversies)
     quickscan_completed: '',  // TODO: vul label in van quickscan_completed conversion-action
-    lead_submitted: '',       // TODO: optioneel, alleen indien aangemaakt
-    purchase_completed: ''    // TODO: vul label in van purchase_completed conversion-action
+    lead_submitted:      '',  // TODO: optioneel, alleen indien aangemaakt
+    purchase_completed:  ''   // TODO: vul label in van purchase_completed conversion-action
   };
   var CONSENT_KEY = 'annex27_consent_v1';
 
