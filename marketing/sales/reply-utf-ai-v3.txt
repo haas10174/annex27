@@ -1,0 +1,105 @@
+Onderwerp: Re: Vraag over ISO 27001 traject + BIO/AVG voor AI SaaS-oplossing overheid
+
+Beste Juul,
+
+Dank voor de uitvoerige toelichting en voor het meesturen van jullie gewenste scope-omschrijving. Die formulering is precies wat een Lead Auditor wil zien bij start van een traject en wij nemen 'm letterlijk over in de Verklaring van Toepasselijkheid op het moment dat jullie kiezen om door te gaan.
+
+Hieronder per vraag een eerlijk antwoord.
+
+
+1. Begeleiding naar ISO 27001-certificering via geaccrediteerde auditor
+
+Ja. Annex27 begeleidt het hele traject van nulmeting tot certificeringsaudit. Wij zijn zelf geen certificerende instelling (CI) en kunnen geen certificaat afgeven, maar wij voeren wel de pre-audit uit. Onze Lead Auditor kent het toetsingskader dat een externe CI hanteert. Na onze pre-audit gaan jullie met aanzienlijk minder restwerk de officiële stage-1 in.
+
+
+2. Met welke certificerende instellingen werken jullie samen
+
+Wij hebben geen vaste CI. De keuze ligt bij de klant. De bekende namen in Nederland zijn DEKRA, KIWA, BSI, LRQA en EY CertifyPoint. Wij kennen het proces van alle vijf en kunnen helpen bij de selectie op basis van prijs, doorlooptijd en sector-pasvorm.
+
+
+3. Ervaring per categorie
+
+SaaS-platformen: ja, meerdere ISO 27001-implementaties op SaaS-architectuur, zowel cloud-native als hybride.
+
+AI-oplossingen: kennis van ISO 42001 (AI Management System) op framework-niveau, zie ook vraag 8. Wij hebben nog geen klant door een ISO 42001-certificering geleid, omdat de markt daarvoor net begint.
+
+Microsoft Word/365 add-ins: hier moet ik eerlijk zijn, daar hebben wij geen specifieke ervaring mee. Het Publisher Attestation-traject is een Microsoft-eigen pre-marketplace stap waar wij geen actieve klanten in hebben gehad.
+
+Nederlandse overheden als verwerker: wij beschikken over de bron-getoetste BIO2-mapping (zie vraag 4). Wij hebben nog geen actieve overheidsklanten als referentie, jullie zouden in dat opzicht een launching customer zijn.
+
+Verwerking van documenten en transcripties: ja, in andere SaaS-contexten begeleid, met DPIA en passende technische maatregelen rond opslag, retentie en sub-processors.
+
+
+4. BIO2/BIO-mapping voor overheden
+
+Ja. Wij werken met de officiële BIO2-publicatie van het Centrum Informatiebeveiliging en Privacybescherming (CIP), versie 1.3 definitief van 9 januari 2026. Dat is de versie die expliciet is aangepast op de Cyberbeveiligingswet (Cbw). Wij leveren per controlfamilie van ISO 27001 Annex A de bijbehorende BIO-overheidsmaatregelen aan, met de uniek BIO-nummering (5.01.01, 5.02.01, enzovoort), en wij markeren welke maatregelen wel of niet binnen de Cbw-reikwijdte vallen.
+
+Wat dit voor UTF.ai betekent: voor een gemeente die jullie Schrijfkader inkoopt heeft de inkoper drie documenten nodig om de aanbesteding rond te krijgen, namelijk een ISO 27001-certificaat, een Verklaring van Toepasselijkheid met expliciete BIO-overheidsmaatregelen, en een BIO-mapping per maatregel.
+
+
+5. DPIA, verwerkersovereenkomst, privacy, FG-dossier
+
+Ja, deze documenten zitten in het basisbeleidspakket plus de overheid-specifieke uitbreiding. Concreet leveren wij:
+
+a. DPIA-template (Artikel 35 AVG) met grondslag, doel, risico-classificatie en mitigerende maatregelen
+b. Verwerkersovereenkomst op basis van het VNG-modelconvenant of het Rijks-model
+c. Privacybeleid en TOMs-documentatie
+d. FG-dossier-bouwstenen, namelijk verwerkingsregister (Art. 30), datalek-procedure (Art. 33-34), procedure betrokkenenrechten (Art. 15-22) en intern privacy-beleid
+
+Bij overheidsklanten leveren wij dit als geïntegreerd onderdeel van het ISO 27001-traject, niet als losse SKU, omdat de samenhang het verschil maakt op aanbestedings-niveau.
+
+
+6. Wat ontbreekt typisch voor de stage-2 audit
+
+In onze ervaring zijn dit de klassieke struikelblokken die wij in de pre-audit signaleren:
+
+a. Bewijsvoering bij de Verklaring van Toepasselijkheid (klant heeft de doelen, mist de getuige-objecten zoals logs, screenshots, gespreksverslagen)
+b. Recent interne audit-verslag met aantoonbare follow-up
+c. Management review met juiste samenstelling en notulering
+d. Leveranciersregister bijgewerkt inclusief sub-processors
+e. Datalek-procedure aantoonbaar geoefend, niet alleen gedocumenteerd
+f. Bedrijfscontinuïteitsplan dat binnen het afgelopen jaar getest is
+
+Onze pre-audit is gericht op exact deze punten.
+
+
+7. Microsoft 365 Publisher Attestation
+
+Eerlijk antwoord: dit hebben wij niet eerder uitgevoerd. Het is een Microsoft-eigen traject met een aparte vragenlijst, veel overlap met ISO 27001-bewijslast, maar het verzamelen en indienen via het Microsoft Partner Center doet de klant zelf of via een Microsoft-partner. Wij kunnen meekijken op de ISO 27001-overlap, niet op het Partner Center-deel zelf.
+
+
+8. ISO 42001 AI governance
+
+Wij hebben de norm in huis als implementatiekader. ISO 42001 is sinds eind 2023 publiek en sluit aan op de EU AI Act. Wij kunnen het AIMS (AI Management System) opzetten en de risico-analyse van AI-systemen begeleiden. Een officieel ISO 42001-certificaat moet via een geaccrediteerde CI komen, en die accreditatie is in Nederland nog beperkt verspreid. Onze inschatting is dat 42001-certificering nu vooral relevant is als marketing-onderscheidend signaal en pas vanaf 2027 als aanbestedings-eis veld krijgt.
+
+
+9. Realistische snelste route voor UTF.ai
+
+Onze inschatting op basis van wat jullie beschrijven, een klein technisch team met een focus op overheid:
+
+Maand 1: gap-rapport. Concreet beeld van wat er staat, wat ontbreekt, en welke documenten of procedures nieuw moeten.
+
+Maand 2-4: beleidspakket, werkinstructies en BIO-mapping geïmplementeerd. Eerste interne audit.
+
+Maand 5-6: pre-audit door Annex27. Lead Auditor-signoff per controlfamilie.
+
+Maand 7: stage-1 audit door gekozen CI.
+
+Maand 8-9: correcties + stage-2 audit.
+
+Totaal van nul naar certificaat: 8 tot 10 maanden bij een soepel traject. Voor een team dat al strak in security is ingericht: 6 maanden mogelijk. De BIO2-validatie loopt parallel mee in dezelfde implementatie-fase, mits de scope vooraf is vastgesteld.
+
+
+Concrete vervolgstap
+
+Mijn voorstel is om te starten met onze gap-analyse (€795). Het rapport geeft een concreet beeld waar UTF.ai vandaag staat ten opzichte van ISO 27001, BIO2 en AVG. Op basis van dat rapport stuur ik een offerte op maat voor het vervolg, met daarin beleidspakket, BIO-mapping, FG-dossier en pre-audit. Geen one-size-fits-all.
+
+Bestellen kan via annex27.nl/bestellen?plan=gap. Liever eerst kort kennismaken in een gesprek van een half uur? Laat het weten, dan plan ik een moment in.
+
+Met vriendelijke groet,
+
+Raoul Haas
+Owner | Annex27 & Haas Audits
+ISO 27001 Lead Auditor
+info@annex27.nl
+annex27.nl
