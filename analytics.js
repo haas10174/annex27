@@ -24,12 +24,9 @@
   // Conversion-action labels per event-type (uit Google Ads → Doelen → Conversies).
   // Vul de labels in zodra de conversion-actions in Google Ads zijn aangemaakt.
   // Formaat per label: 'AbCdEfGhIj' (10-tekens alfanumeriek).
-  var GADS_CONVERSIONS = {
-    quickscan_started:   '',  // TODO: vul label in van quickscan_started conversion-action (Google Ads → Doelen → Conversies)
-    quickscan_completed: '',  // TODO: vul label in van quickscan_completed conversion-action
-    lead_submitted:      '',  // TODO: optioneel, alleen indien aangemaakt
-    purchase_completed:  ''   // TODO: vul label in van purchase_completed conversion-action
-  };
+  // Conversies worden geïmporteerd via GA4 → Ads-link (geen aparte Ads-labels nodig).
+  // Deze map blijft voor toekomstige direct-Ads-calls (bv. server-side conversion API).
+  var GADS_CONVERSIONS = {};
   var CONSENT_KEY = 'annex27_consent_v1';
 
   // 1. dataLayer + gtag stub (MUST run before any gtag event)
