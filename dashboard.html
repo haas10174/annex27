@@ -7802,46 +7802,7 @@ async function generateReport() {
   </table>
 </div>
 
-<!-- AUDITOR-READY BEWIJSVOERING -->
-${auditorReady.length > 0 ? `
-<div class="page page-break">
-  <div class="label">Bewijsvoering</div>
-  <h2>Auditor-ready controls</h2>
-  <p style="font-size:0.92rem;line-height:1.75;margin-bottom:20px;">
-    Onderstaande <strong>${auditorReady.length}</strong> controls zijn niet alleen als compliant beoordeeld, maar ook onderbouwd met bewijsvoering. Deze claims zijn direct verifieerbaar door een auditor.
-  </p>
-  <table class="cat-table">
-    <thead><tr><th>Control</th><th>Naam</th><th>Bewijs</th></tr></thead>
-    <tbody>
-    ${auditorReady.map(c => {
-      const evSum = c.evidenceFiles.length > 0
-        ? `${c.evidenceFiles.length} bestand(en)${c.evidenceNote ? ' + notitie' : ''}`
-        : 'Notitie';
-      return `<tr><td style="font-weight:600;color:#0D9488;">${esc(c.id)}</td><td>${esc(c.name)}</td><td>${esc(evSum)}</td></tr>`;
-    }).join('')}
-    </tbody>
-  </table>
-</div>` : ''}
-
-<!-- CLAIMS ZONDER BEWIJS -->
-${unevidencedClaims.length > 0 ? `
-<div class="page page-break">
-  <div class="label">Bewijsvoering ontbreekt</div>
-  <h2>Claims die nog onderbouwing vereisen</h2>
-  <p style="font-size:0.92rem;line-height:1.75;margin-bottom:20px;">
-    Voor <strong>${unevidencedClaims.length}</strong> controls claimt uw organisatie (gedeeltelijke) compliance zonder ondersteunend bewijs.
-    Voor een auditor-ready rapport raden wij aan om voor deze controls documentatie, screenshots of procedurenotities toe te voegen.
-  </p>
-  <table class="cat-table">
-    <thead><tr><th>Control</th><th>Naam</th><th>Status</th></tr></thead>
-    <tbody>
-    ${unevidencedClaims.slice(0, 30).map(c => {
-      const statusCls = c.status === 'Compliant' ? 'compliant' : c.status === 'Gedeeltelijk' ? 'partial' : 'non-compliant';
-      return `<tr><td style="font-weight:600;color:#0D9488;">${esc(c.id)}</td><td>${esc(c.name)}</td><td><span class="status-badge status-${statusCls}">${esc(c.status)}</span></td></tr>`;
-    }).join('')}
-    </tbody>
-  </table>
-</div>` : ''}
+<!-- (Auditor-ready + Claims zonder bewijs zijn nu geïntegreerd in 'Per categorie' verderop) -->
 
 <!-- SECTOR INSIGHTS -->
 <div class="page page-break">
@@ -7862,38 +7823,42 @@ ${unevidencedClaims.length > 0 ? `
   </div>
 </div>
 
-<!-- DETAILED FINDINGS — alleen significante (non-OK) controls, met auditor-notes-blok per finding -->
+<!-- CONTROLES, BEWIJS & BEVINDINGEN — gegroepeerd per categorie, bewijsvoering + observaties geïntegreerd -->
 <div class="page page-break">
-  <div class="label">Bevindingen</div>
-  <h2>Significante observaties</h2>
+  <div class="label">Controles &amp; bevindingen</div>
+  <h2>Per categorie</h2>
   <p class="lead-paragraph">
-    Hieronder de controls waar afwijkingen of aandachtspunten zijn vastgesteld.
-    Per bevinding ziet u: de observatie op basis van uw antwoorden, het aangeleverde bewijs en
-    een voorlopig auditor-oordeel. Het gele veld is gereserveerd voor de aanvulling van uw Lead Auditor.
+    Per categorie tonen we eerst de controls waar bevindingen of aandachtspunten zijn vastgesteld (volledige kaart met bewijs en voorlopig oordeel),
+    daarna de conforme controls in compacte rij-vorm. Het gele veld in elke bevinding is gereserveerd voor de aanvulling van uw Lead Auditor.
   </p>
-  <p style="font-size:0.84rem;color:#64748B;margin-bottom:24px;">
-    Volledig conforme controls (status OK met onderbouwing) zijn opgenomen in de bijlage en niet in deze samenvatting.
-  </p>
-  <div style="display:flex;gap:18px;font-size:0.74rem;color:#475569;margin-bottom:20px;flex-wrap:wrap;">
-    <span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#DC2626;vertical-align:middle;margin-right:6px;"></span><strong>Critical</strong> — blokkerend voor certificering</span>
-    <span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#D97706;vertical-align:middle;margin-right:6px;"></span><strong>Major</strong> — significante afwijking</span>
-    <span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#0D9488;vertical-align:middle;margin-right:6px;"></span><strong>Minor</strong> — kleine tekortkoming</span>
-    <span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#94A3B8;vertical-align:middle;margin-right:6px;"></span><strong>Info / OK</strong></span>
+  <div style="display:flex;gap:14px;font-size:0.72rem;color:#475569;margin-bottom:20px;flex-wrap:wrap;padding:10px 14px;background:#F8FAFC;border-radius:6px;">
+    <span><span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:#DC2626;vertical-align:middle;margin-right:6px;"></span><strong>Critical</strong> · blokkerend</span>
+    <span><span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:#D97706;vertical-align:middle;margin-right:6px;"></span><strong>Major</strong> · significante afwijking</span>
+    <span><span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:#0D9488;vertical-align:middle;margin-right:6px;"></span><strong>Minor</strong> · tekortkoming</span>
+    <span><span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:#059669;vertical-align:middle;margin-right:6px;"></span><strong>OK</strong> · conform + onderbouwd</span>
+    <span><span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:#94A3B8;vertical-align:middle;margin-right:6px;"></span><strong>Niet beoordeeld</strong></span>
   </div>
   ${categories.map(cat => {
     const ctrls = catScores[cat].controls;
-    // Filter: alleen non-OK + claims-zonder-bewijs (= significant) — rust voor de lezer
-    const significantCtrls = ctrls.filter(c => {
+    // Split per categorie: significant (bevinding) vs conform (auditor-ready)
+    const partition = { significant: [], conform: [], unassessed: [] };
+    ctrls.forEach(c => {
       const ev = (typeof evidenceData !== 'undefined' && evidenceData[c.id]) ? evidenceData[c.id] : { files: [], note: '', note_fields: {} };
       const hasFiles = ev.files && ev.files.length > 0;
       const hasNote = !!(ev.note_fields?.procedure || ev.note_fields?.location || (ev.note && ev.note.trim()));
       const claimsCompliance = c.status === 'Compliant' || c.status === 'Gedeeltelijk';
-      return c.status === 'Non-compliant' || c.status === 'Gedeeltelijk' || (claimsCompliance && !hasFiles && !hasNote);
+      if (c.status === 'Niet beoordeeld') partition.unassessed.push(c);
+      else if (c.status === 'Non-compliant' || c.status === 'Gedeeltelijk' || (claimsCompliance && !hasFiles && !hasNote)) partition.significant.push(c);
+      else partition.conform.push(c);
     });
-    if (significantCtrls.length === 0) return '';
-    return `<div class="findings-section" style="margin-bottom:48px;">
-      <h3 style="border-bottom:1px solid #E2E8F0;padding-bottom:10px;margin-bottom:20px;">${esc(cat)} <span style="font-size:0.74rem;font-weight:500;color:#94A3B8;letter-spacing:0.04em;">— ${significantCtrls.length} bevinding${significantCtrls.length === 1 ? '' : 'en'}</span></h3>
-      ${significantCtrls.map(c => {
+    if (!partition.significant.length && !partition.conform.length && !partition.unassessed.length) return '';
+    const catBevHead = `<h3 style="border-bottom:1px solid #E2E8F0;padding-bottom:10px;margin:36px 0 18px;display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+      <span>${esc(cat)}</span>
+      <span style="font-size:0.72rem;font-weight:500;color:#94A3B8;letter-spacing:0.04em;">${partition.significant.length} bevinding${partition.significant.length === 1 ? '' : 'en'} · ${partition.conform.length} conform${partition.unassessed.length ? ' · ' + partition.unassessed.length + ' niet beoordeeld' : ''}</span>
+    </h3>`;
+    return `<div class="cat-block" style="margin-bottom:32px;">
+      ${catBevHead}
+      ${partition.significant.length ? partition.significant.map(c => {
         const ev = (typeof evidenceData !== 'undefined' && evidenceData[c.id]) ? evidenceData[c.id] : { files: [], note: '', note_fields: {} };
         const nf = ev.note_fields || {};
         const hasFiles = ev.files && ev.files.length > 0;
