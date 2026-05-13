@@ -8586,9 +8586,16 @@ async function renderDocumenten() {
         d.src === 'premium' ? access.premium :
         d.src === 'werkinstructies' ? access.werkinstructies : false;
       const refsHtml = (d.refs || []).map(r => `<span class="doc-ref">${escapeHtml(r)}</span>`).join('');
-      const pdfFile = d.pdfOnly ? d.file : d.file.replace(/\.docx$/, '.pdf');
-      const wordBtn = d.pdfOnly ? '' : `<button class="doc-btn-word" onclick="downloadDoc('${escapeAttr(d.src)}','${escapeAttr(d.file)}')" title="Bewerkbare versie (Word)">Word</button>`;
-      const pdfBtn = `<button class="doc-btn-pdf" onclick="downloadDoc('${escapeAttr(d.src)}','${escapeAttr(pdfFile)}')" title="PDF (alleen lezen)">PDF</button>`;
+      let actions;
+      if (d.mdOnly) {
+        const previewUrl = `/document-preview.html?cat=${encodeURIComponent(d.src)}&doc=${encodeURIComponent(d.file)}`;
+        actions = `<a href="${previewUrl}" target="_blank" rel="noopener" class="doc-btn-pdf" style="display:inline-flex;align-items:center;text-decoration:none;" title="Open document in nieuwe tab">Lees</a>`;
+      } else {
+        const pdfFile = d.pdfOnly ? d.file : d.file.replace(/\.docx$/, '.pdf');
+        const wordBtn = d.pdfOnly ? '' : `<button class="doc-btn-word" onclick="downloadDoc('${escapeAttr(d.src)}','${escapeAttr(d.file)}')" title="Bewerkbare versie (Word)">Word</button>`;
+        const pdfBtn = `<button class="doc-btn-pdf" onclick="downloadDoc('${escapeAttr(d.src)}','${escapeAttr(pdfFile)}')" title="PDF (alleen lezen)">PDF</button>`;
+        actions = pdfBtn + wordBtn;
+      }
       const lock = !allowed ? `<span class="doc-lock" title="Geen toegang met uw huidige pakket">\uD83D\uDD12</span>` : '';
 
       html += `
@@ -8597,7 +8604,7 @@ async function renderDocumenten() {
             <div class="doc-row-title">${lock}${escapeHtml(d.title)}</div>
             <div class="doc-row-refs">${refsHtml}</div>
           </div>
-          <div class="doc-row-actions">${allowed ? pdfBtn + wordBtn : '<span class="doc-locked-msg">Upgrade nodig</span>'}</div>
+          <div class="doc-row-actions">${allowed ? actions : '<span class="doc-locked-msg">Upgrade nodig</span>'}</div>
         </div>`;
     });
 
