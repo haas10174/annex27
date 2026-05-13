@@ -12,6 +12,7 @@
   <script src="/analytics-admin.js"></script>
   <script src="/gap-questions-v2.js" defer></script>
   <script src="/nis2-questions.js" defer></script>
+  <script src="/scoring-v2.js" defer></script>
   <script src="/nis2-content.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js" crossorigin="anonymous"></script>
 
@@ -3100,6 +3101,7 @@
             </div>
           </div>
           <div class="score-card-sub" id="dashScoreSub">Begin met het afvinken van controls</div>
+          <div id="dashReadinessRow" style="display:none;margin-top:8px;padding-top:8px;border-top:1px dashed var(--border);"></div>
         </div>
         <div class="cats-card">
           <h3>Voortgang per categorie</h3>
@@ -5094,6 +5096,31 @@ function renderDashboard() {
       subEl.innerHTML = `<strong>${totalAssessed}/${totalAll}</strong> beoordeeld &middot; <span style="opacity:0.7">voorlopige score &mdash; volwassenheid bij beoordeelde controls: ${maturityPct}%</span>`;
     } else {
       subEl.innerHTML = `Alle ${totalAll} controls beoordeeld &middot; volwassenheid: ${maturityPct}%`;
+    }
+  }
+
+  // ── DUAL SCORING v1: audit-readiness naast zelfevaluatie ──
+  // Toont een tweede getal dat het bewijs meeweegt. Beschikbaar zodra scoring-v2.js is geladen.
+  if (window.A27Scoring && typeof window.A27Scoring.calculateDashboardTotals === 'function' && totalAssessed > 0) {
+    try {
+      const ctrlIds = controls.map(c => c.id);
+      const ev = (typeof evidenceData !== 'undefined') ? evidenceData : {};
+      const dual = window.A27Scoring.calculateDashboardTotals(ctrlIds, gapQuestions, gapAnswers, ev);
+      const readinessEl = document.getElementById('dashReadinessRow');
+      if (readinessEl) {
+        const diff = dual.selfPct - dual.readinessPct;
+        const colorStop = diff > 30 ? '#dc2626' : diff > 10 ? '#d97706' : '#059669';
+        readinessEl.innerHTML = `
+          <span style="display:inline-flex;align-items:center;gap:6px;font-size:0.85rem;color:var(--text-muted);">
+            <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${colorStop};"></span>
+            <span><strong style="color:var(--text-primary);">Audit-readiness: ${dual.readinessPct}%</strong></span>
+            <span style="opacity:0.7;">&middot; wat een Lead Auditor zou geven op basis van uw bewijs</span>
+            <span class="tooltip-trigger" title="Audit-readiness = uw zelfevaluatie maal de mate waarin u bewijs heeft aangeleverd. Telt mee: bestand-upload (40%), toelichting van minstens 50 woorden (30%), meta-velden compleet (30%). Per control kunt u dit verbeteren in de gap-analyse." style="cursor:help;opacity:0.6;">&#9432;</span>
+          </span>`;
+        readinessEl.style.display = 'block';
+      }
+    } catch (err) {
+      console.warn('Dual scoring berekening faalde:', err);
     }
   }
 

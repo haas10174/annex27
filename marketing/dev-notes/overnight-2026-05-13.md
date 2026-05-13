@@ -81,10 +81,37 @@ Geen breaking changes: bestaande scoring blijft werken zolang de integratie-stap
 
 ---
 
-## ⏳ Open punten waar ik niet aan ben toegekomen
+## ✅ Toegevoegd ochtend 2026-05-13
 
-### Database migratie evidence-tabel
-SQL-statement staat klaar (zie hierboven). Niet uitgevoerd want dat hoort jij te accorderen. Geen migratie-file aangemaakt, alleen tekst in dit document. Reden: in productie SQL-wijzigingen doe ik liever ná jouw expliciete OK.
+### Dual scoring v1 GEÏNTEGREERD en LIVE
+
+- `scoring-v2.js` is **live op annex27.nl/scoring-v2.js** met `window.A27Scoring`-API
+- `dashboard.html` is **uitgebreid** met script-tag + `dashReadinessRow` UI-element
+- `renderDashboard()` berekent nu audit-readiness via `A27Scoring.calculateDashboardTotals()` en toont een tweede regel onder de hoofdscore met:
+  - Kleur-bolletje (groen <10% verschil, oranje 10-30%, rood >30%)
+  - "Audit-readiness: X%" als secundair getal
+  - Info-icoon met tooltip die de formule uitlegt
+- Geen breaking changes: bestaande primaire score blijft het grote getal in de ring
+- Element wordt enkel getoond als er beoordeelde controls zijn (anders verborgen)
+
+**Open volgende stap voor dual scoring:** per-control display in de gap-analyse view zelf (niet alleen dashboard-totaal), zodat klant bij elke control real-time ziet hoe bewijs de score beïnvloedt. Niet kritisch voor v1.
+
+### SQL-migratie evidence-tabel KLAAR als bestand
+
+**`supabase/migrations/20260513_evidence_relevance.sql`** — volledig idempotent migratie-script met:
+
+- 5 nieuwe kolommen op `evidence`: `relevance_score`, `relevance_reasoning`, `relevance_concerns`, `relevance_model`, `relevance_evaluated_at`
+- Check-constraint dat score tussen 0 en 1 ligt
+- Index op `relevance_score` voor admin-queries
+- Kolom-comments voor documentatie
+- View `vw_klant_audit_readiness` voor admin Lead Auditor-overzicht per klant/control
+- Rollback-snippet in comment onderaan
+
+**Uitvoering:** open Supabase Studio → SQL Editor → plak file-content → Run. Of via Supabase CLI met `supabase db push`.
+
+## ⏳ Niet meer open
+
+(SQL-migratie was hier eerder als "open punt" benoemd, is nu klaar als bestand)
 
 ### admin.html diagnostic deploy-status
 Deploy van admin.html (met diagnostic-fix die non-2xx-codes als alive herkent) is in background gestart. Check zodra je wakker bent in admin → Edge functions diagnostic of de vier rode bolletjes nu groen zijn.
