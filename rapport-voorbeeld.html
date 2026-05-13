@@ -312,13 +312,18 @@
           <span><strong>Annex27</strong> &middot; NEN-EN-ISO/IEC 27001:2023 Gap-Analyse</span>
           <span>Rapport-ID: A27-V-2026-0001 &middot; Uitgifte: 22-04-2026</span>
         </div>
-        <div class="doc-title">Voorbeeld B.V. &middot; Gap-analyse Rapport</div>
-        <div class="doc-subtitle">Sector: SaaS &amp; Cloud &middot; 23 fte &middot; Hoofdvestiging: Nederland &middot; Opdrachtgever: J. de Vries (CTO)</div>
+        <div class="doc-title" id="rvDocTitle">Voorbeeld B.V. &middot; Gap-analyse Rapport</div>
+        <div class="doc-subtitle" id="rvDocSubtitle">Sector: SaaS &amp; Cloud &middot; 23 fte &middot; Hoofdvestiging: Nederland &middot; Opdrachtgever: J. de Vries (CTO)</div>
         <div class="doc-chips">
           <span class="doc-chip accent"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg> Lead Auditor reviewed</span>
           <span class="doc-chip">NEN-EN-ISO/IEC 27001:2023</span>
-          <span class="doc-chip">DNV auditmethodiek</span>
-          
+          <span class="doc-chip">IRCA-methodiek</span>
+        </div>
+        <div id="rvUserBanner" style="display:none;margin-top:14px;padding:10px 14px;background:#F0FDFA;border-left:3px solid #0D9488;border-radius:0 6px 6px 0;font-size:0.86rem;line-height:1.55;color:#0F172A;">
+          <strong style="color:#0F766E;">Uw quickscan-uitslag is verwerkt</strong> &middot;
+          uw score: <strong id="rvUserScore">—</strong> &middot;
+          sector: <strong id="rvUserSector">—</strong>.
+          De inhoud hieronder blijft een illustratieve case (SaaS-MKB) — uw eigen volledige rapport bouwt op uw bewijsvoering.
         </div>
       </div>
 
@@ -328,8 +333,8 @@
       <div class="score-grid">
         <div class="score-big">
           <div class="score-big-label">Algehele score</div>
-          <div class="score-big-value">52%</div>
-          <div class="score-big-sub">van 93 Annex A-controls + 7 clausules aantoonbaar &middot; volwassenheid "Repeatable"</div>
+          <div class="score-big-value" id="rvScoreValue">52%</div>
+          <div class="score-big-sub" id="rvScoreSub">van 93 Annex A-controls + 7 clausules aantoonbaar &middot; volwassenheid "Repeatable"</div>
         </div>
         <div class="score-bar">
           <div class="score-bar-label"><span>Sector-benchmark (MKB-SaaS)</span><span class="score-bar-pct">38%</span></div>
@@ -789,6 +794,44 @@
     document.getElementById('reportSection').classList.add('visible');
   }
   document.addEventListener('submit', () => localStorage.setItem('a27-rapport-seen', '1'));
+
+  // ── PERSONALISATIE: vul quickscan-uitslag in op cover van voorbeeldrapport ──
+  // Als de bezoeker de quickscan heeft voltooid, leest dit script annex27_lead uit
+  // localStorage en injecteert score / bedrijf / sector in de hardcoded cover-elementen.
+  // De rest van het rapport blijft de illustratieve SaaS-case.
+  (function personaliseRapport() {
+    try {
+      const raw = localStorage.getItem('annex27_lead');
+      if (!raw) return;
+      const lead = JSON.parse(raw);
+      if (!lead || (!lead.score && !lead.bedrijf && !lead.sectorLabel)) return;
+
+      const scoreNum = parseInt(String(lead.score).replace('%', ''), 10);
+      const scoreStr = isFinite(scoreNum) ? scoreNum + '%' : (lead.score || '—');
+      const bedrijf  = (lead.bedrijf || '').trim();
+      const sectorLb = (lead.sectorLabel || lead.sector || '').trim();
+
+      // 1. Top-banner toon "Uw uitslag is verwerkt"
+      const banner = document.getElementById('rvUserBanner');
+      const userScoreEl  = document.getElementById('rvUserScore');
+      const userSectorEl = document.getElementById('rvUserSector');
+      if (banner) banner.style.display = '';
+      if (userScoreEl)  userScoreEl.textContent  = scoreStr;
+      if (userSectorEl) userSectorEl.textContent = sectorLb || 'onbekend';
+
+      // 2. Doc-title + subtitle
+      const titleEl = document.getElementById('rvDocTitle');
+      if (titleEl && bedrijf) titleEl.innerHTML = bedrijf + ' &middot; Gap-analyse Rapport';
+      const subEl = document.getElementById('rvDocSubtitle');
+      if (subEl && sectorLb) subEl.innerHTML = 'Sector: ' + sectorLb + ' &middot; Quickscan-uitslag: ' + scoreStr + ' &middot; Opgesteld op basis van uw eigen antwoorden';
+
+      // 3. KPI-blok algehele score
+      const scoreValEl = document.getElementById('rvScoreValue');
+      if (scoreValEl) scoreValEl.textContent = scoreStr;
+      const scoreSubEl = document.getElementById('rvScoreSub');
+      if (scoreSubEl) scoreSubEl.textContent = 'Uw quickscan-uitslag · indicatief op basis van 10 vragen · volledige analyse dekt 93 Annex A-controls + 7 ISMS-clausules';
+    } catch (e) { /* corrupted localStorage — silent, defaults blijven */ }
+  })();
 </script>
 
 </body>
