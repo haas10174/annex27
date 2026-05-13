@@ -1687,27 +1687,36 @@
       </div>
     </div>
 
-    <!-- View: Aanvragen (waitlist / offerte) -->
+    <!-- View: Aanvragen (waitlist / offerte / quickscan-leads / pre-audit) -->
     <div class="view" id="viewLeads">
       <div class="container-card" style="padding:24px;">
         <div class="section-title-row" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
           <div>
             <h1 style="font-family:'Sora',sans-serif;font-size:1.3rem;font-weight:800;margin:0 0 4px;">Aanvragen</h1>
-            <p style="color:var(--text-muted);font-size:0.88rem;margin:0;">Waitlist NIS2 + offerte-aanvragen Beleidspakket</p>
+            <p style="color:var(--text-muted);font-size:0.88rem;margin:0;">Quickscan-leads, beleidspakket-offertes, NIS2-waitlist, pre-audit-intakes</p>
           </div>
           <button class="action-btn" onclick="loadLeads()">
             <svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-6.2-8.55"/><polyline points="21 3 21 9 15 9"/></svg>
             Vernieuwen
           </button>
         </div>
-        <div style="display:flex;gap:8px;margin-bottom:16px;">
-          <button class="filter-btn active" data-leads="open" onclick="setLeadsFilter('open', this)">Open</button>
-          <button class="filter-btn" data-leads="all" onclick="setLeadsFilter('all', this)">Alle</button>
-          <button class="filter-btn" data-leads="nis2" onclick="setLeadsFilter('nis2', this)">NIS2</button>
-          <button class="filter-btn" data-leads="beleid" onclick="setLeadsFilter('beleid', this)">Beleidspakket</button>
+        <!-- Type-tabs (primaire navigatie) -->
+        <div id="leadsTypeTabs" style="display:flex;gap:4px;margin-bottom:14px;flex-wrap:wrap;border-bottom:1px solid var(--border);">
+          <button class="leads-tab active" data-type="all"       onclick="setLeadsType('all', this)">Alle <span class="leads-tab-count" id="leadsCntAll">0</span></button>
+          <button class="leads-tab"        data-type="quickscan" onclick="setLeadsType('quickscan', this)">Quickscan <span class="leads-tab-count" id="leadsCntQuickscan">0</span></button>
+          <button class="leads-tab"        data-type="beleid"    onclick="setLeadsType('beleid', this)">Beleidspakket <span class="leads-tab-count" id="leadsCntBeleid">0</span></button>
+          <button class="leads-tab"        data-type="nis2"      onclick="setLeadsType('nis2', this)">NIS2 <span class="leads-tab-count" id="leadsCntNis2">0</span></button>
+          <button class="leads-tab"        data-type="preaudit"  onclick="setLeadsType('preaudit', this)">Pre-audit <span class="leads-tab-count" id="leadsCntPreaudit">0</span></button>
         </div>
-        <div id="leadsList" style="display:flex;flex-direction:column;gap:10px;">
-          <div class="empty-state">Laden...</div>
+        <!-- Status-filter (secundaire schakelaar) -->
+        <div style="display:flex;gap:8px;margin-bottom:14px;align-items:center;">
+          <span style="font-size:0.78rem;color:var(--text-muted);font-weight:600;">Status:</span>
+          <button class="filter-btn active" data-status="open"        onclick="setLeadsStatus('open', this)">Open</button>
+          <button class="filter-btn"        data-status="afgehandeld" onclick="setLeadsStatus('afgehandeld', this)">Afgehandeld</button>
+          <button class="filter-btn"        data-status="all"         onclick="setLeadsStatus('all', this)">Alle</button>
+        </div>
+        <div id="leadsList">
+          <div class="empty-state" style="padding:40px;text-align:center;color:var(--text-muted);">Laden...</div>
         </div>
       </div>
     </div>
