@@ -7380,10 +7380,38 @@ async function generateReport() {
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: 'Inter', sans-serif; color: #334155; line-height: 1.7; padding: 0; }
   @media print {
-    body { padding: 0; }
-    .page-break { page-break-before: always; }
+    /* A4 portrait, marges 14mm — auditor-rapport standaard */
+    @page { size: A4 portrait; margin: 14mm 14mm 18mm; }
+    body { padding: 0; background: #FFF; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .page-break { page-break-before: always; break-before: page; }
     .no-print { display: none !important; }
     .watermark-footer { display: block !important; }
+    /* Behoud kleur op alle componenten zodat PDF er gelijk uitziet als scherm */
+    .cover, .page, .summary-card, .exec-insights, .maturity-radar-wrap,
+    .auditor-opinion, .control-card, .cat-block, .auditor-notes,
+    .nc-major, .nc-minor, .nc-obs, .nc-ofi, .status-pill, .leads-type-pill,
+    .summary-bar-fill, .cover-meta-item, .ga-control-readiness {
+      -webkit-print-color-adjust: exact; print-color-adjust: exact;
+    }
+    /* Forceer page-break-rules voor secties */
+    .page { page-break-inside: avoid; break-inside: avoid; }
+    .cat-block, .control-card, .summary-card, .exec-insights, .maturity-radar-wrap, .auditor-opinion { page-break-inside: avoid; break-inside: avoid; }
+    /* Verberg dashboard-UI zonder rapport-content */
+    .sidebar, nav, .tab-bar, .a27-modal, .ga-evidence-upload, .doc-toolbar { display: none !important; }
+    /* Zorg dat headings niet alleen op laatste regel van een page staan */
+    h2, h3, h4 { page-break-after: avoid; break-after: avoid; }
+    /* Cover-page: vol-A4, geen extra padding */
+    .cover { min-height: auto; padding: 0 0 24mm; }
+    .cover-top { margin-bottom: 32mm; }
+    .cover-meta-grid { gap: 8px; }
+    /* Print-cover-meta cards: dwing wit ipv default */
+    .cover-meta-item { background: #FFFFFF !important; border-color: #E5E5E5 !important; }
+    /* Schaduw weg in print */
+    *, *::before, *::after { box-shadow: none !important; }
+    /* Page-padding kleiner zodat content past op A4 */
+    .page { padding: 18px 4px; max-width: 100%; }
+    /* Verberg interactieve elementen in observatie-cards */
+    .ga-control-readiness { background: #F8FAFC !important; }
   }
 
   /* Watermark footer — appears on every printed page */
@@ -7618,10 +7646,130 @@ async function generateReport() {
   }
   .auditor-notes:empty::after { content: '— wacht op Lead Auditor —'; color: #CA8A04; opacity: 0.55; }
 
-  .summary-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 32px; }
-  .summary-card { background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 10px; padding: 24px; text-align: center; }
-  .summary-num { font-family: 'Sora', sans-serif; font-size: 2rem; font-weight: 800; color: #0F172A; }
+  /* Score-grid (voorbeeldrapport-stijl, beter): 1 grote primary score + meerdere bars */
+  .summary-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 18px; margin-bottom: 26px; }
+  .summary-card {
+    background: #FFFFFF;
+    border: 1px solid #E5E5E5;
+    border-left: 3px solid #0D9488;
+    border-radius: 0 10px 10px 0;
+    padding: 22px 24px;
+  }
+  .summary-card.primary { grid-row: span 2; padding: 28px 26px; }
+  .summary-card-label {
+    font-family: 'Sora', sans-serif;
+    font-size: 0.66rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #0D9488;
+    margin-bottom: 8px;
+  }
+  .summary-card .summary-num {
+    font-family: 'Sora', sans-serif;
+    font-size: 2.4rem;
+    font-weight: 800;
+    color: #0F172A;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .summary-card.primary .summary-num { font-size: 3rem; }
+  .summary-card .summary-sub { font-size: 0.82rem; color: #64748B; line-height: 1.5; }
+  .summary-card.bar-card { display: flex; flex-direction: column; justify-content: center; }
+  .summary-bar {
+    height: 8px;
+    background: #F1F5F9;
+    border-radius: 99px;
+    overflow: hidden;
+    margin: 8px 0 6px;
+  }
+  .summary-bar-fill { height: 100%; background: #0D9488; border-radius: 99px; }
+  .summary-bar-fill.warn { background: #D97706; }
+  .summary-bar-fill.muted { background: #94A3B8; }
+  .summary-bar-pct {
+    font-family: 'Sora', sans-serif;
+    font-weight: 800;
+    color: #0F172A;
+    font-size: 1.2rem;
+    letter-spacing: -0.02em;
+  }
+  /* Legacy fallback */
   .summary-label { font-size: 0.82rem; color: #94A3B8; margin-top: 4px; }
+
+  /* Executive insights box — auto-gegenereerd uit klantdata */
+  .exec-insights {
+    background: #FAFAF7;
+    border: 1px solid #E5E5E5;
+    border-left: 3px solid #0F766E;
+    border-radius: 0 10px 10px 0;
+    padding: 20px 24px;
+    margin: 20px 0 28px;
+  }
+  .exec-insights-head {
+    font-family: 'Sora', sans-serif;
+    font-size: 0.66rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #0F766E;
+    margin-bottom: 12px;
+  }
+  .exec-insights ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 10px;
+  }
+  .exec-insights li {
+    display: flex;
+    gap: 12px;
+    font-size: 0.92rem;
+    line-height: 1.55;
+    color: #1F2937;
+  }
+  .exec-insights li strong { color: #0F172A; }
+  .exec-insights li::before {
+    content: '';
+    width: 6px; height: 6px;
+    background: #0D9488;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 9px;
+  }
+
+  /* Maturity-radar SVG container */
+  .maturity-radar-wrap {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    align-items: center;
+    background: #FFFFFF;
+    border: 1px solid #E5E5E5;
+    border-radius: 10px;
+    padding: 24px 28px;
+    margin: 12px 0 28px;
+  }
+  .maturity-radar-wrap svg { width: 100%; height: auto; max-width: 320px; margin: 0 auto; display: block; }
+  .maturity-radar-legend { font-size: 0.86rem; line-height: 1.65; color: #334155; }
+  .maturity-radar-legend h4 {
+    font-family: 'Sora', sans-serif;
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: #0F172A;
+    margin-bottom: 8px;
+  }
+  .maturity-radar-legend ul { list-style: none; padding: 0; margin: 0; }
+  .maturity-radar-legend li {
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 0;
+    border-bottom: 1px dotted #E5E5E5;
+    font-size: 0.84rem;
+  }
+  .maturity-radar-legend li:last-child { border-bottom: 0; }
+  .maturity-radar-legend .axis-pct { font-family: 'Sora', sans-serif; font-weight: 700; color: #0D9488; }
 
   .cat-table { width: 100%; border-collapse: collapse; margin-bottom: 24px; }
   .cat-table th { text-align: left; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #94A3B8; padding: 8px 12px; border-bottom: 2px solid #E2E8F0; }
@@ -7803,24 +7951,99 @@ async function generateReport() {
 <div class="page page-break">
   <div class="label">Executive Summary</div>
   <h2>Compliance overzicht</h2>
+
+  <!-- Score-grid (voorbeeldrapport-stijl): 1 grote primary + 2 bars -->
   <div class="summary-grid">
-    <div class="summary-card">
+    <div class="summary-card primary">
+      <div class="summary-card-label">Compliance-score</div>
       <div class="summary-num">${overallPct}%</div>
-      <div class="summary-label">Compliance score</div>
+      <div class="summary-sub">Zelfevaluatie over ${categories.length} categorieën · ${claimedCount} claims gemaakt</div>
     </div>
-    <div class="summary-card">
-      <div class="summary-num">${profile.benchmark}%</div>
-      <div class="summary-label">Sector benchmark (${esc(sectorLabel)})</div>
+    <div class="summary-card bar-card">
+      <div class="summary-card-label">Sector-benchmark</div>
+      <div style="display:flex;justify-content:space-between;align-items:baseline;"><span style="color:#64748B;font-size:0.86rem;">${esc(sectorLabel)} (mediaan)</span><span class="summary-bar-pct">${profile.benchmark}%</span></div>
+      <div class="summary-bar"><div class="summary-bar-fill muted" style="width:${profile.benchmark}%;"></div></div>
+      <div style="font-size:0.78rem;color:#94A3B8;">${overallPct >= profile.benchmark ? `+${overallPct - profile.benchmark} pp boven sector` : `${profile.benchmark - overallPct} pp onder sector`}</div>
     </div>
-    <div class="summary-card">
-      <div class="summary-num">${evidenceQuality}%</div>
-      <div class="summary-label">Claims onderbouwd met bewijs</div>
+    <div class="summary-card bar-card">
+      <div class="summary-card-label">Audit-readiness</div>
+      <div style="display:flex;justify-content:space-between;align-items:baseline;"><span style="color:#64748B;font-size:0.86rem;">Claims met bewijs</span><span class="summary-bar-pct">${evidenceQuality}%</span></div>
+      <div class="summary-bar"><div class="summary-bar-fill${evidenceQuality < 50 ? ' warn' : ''}" style="width:${evidenceQuality}%;"></div></div>
+      <div style="font-size:0.78rem;color:#94A3B8;">${evidencedCount} van ${claimedCount} onderbouwd</div>
     </div>
   </div>
 
-  <div style="background:#F0FDFA;border:1px solid #99F6E4;border-radius:8px;padding:16px 20px;margin-bottom:24px;font-size:0.88rem;line-height:1.75;">
-    <strong style="color:#0F766E;">Evidence kwaliteit:</strong> van ${claimedCount} controls waar compliance wordt geclaimd, zijn er <strong style="color:#059669;">${evidencedCount}</strong> onderbouwd met bewijs (upload of notitie). ${unevidencedClaimsCount} claims hebben nog geen bewijsvoering. Voor een auditor-ready rapport raden wij aan om alle claims te onderbouwen.
+  <!-- Auto-gegenereerde Executive Insights (extra feature, niet in voorbeeldrapport) -->
+  <div class="exec-insights">
+    <div class="exec-insights-head">Kernconclusies — auto-gegenereerd</div>
+    <ul>
+      ${(() => {
+        const insights = [];
+        // 1. Algeheel beeld
+        if (overallPct >= 70) insights.push(`<strong>Sterk vertrekpunt</strong>: ${overallPct}% van de norm is al ingericht. Focus verschuift naar bewijsvoering en interne audit.`);
+        else if (overallPct >= 40) insights.push(`<strong>Basis aanwezig</strong>: ${overallPct}% van de norm is deels ingericht. Belangrijkste hiaten in ${(nonCompliant[0] && nonCompliant[0].name) ? esc(nonCompliant[0].name.toLowerCase()) : 'governance en formele documentatie'}.`);
+        else insights.push(`<strong>Vroege fase</strong>: ${overallPct}% van de norm aantoonbaar — typerend voor organisaties zonder formeel ISMS. Prioriteit ligt bij governance-laag (clausules 4–7) voordat technische controls audit-ready zijn.`);
+        // 2. Sector-positionering
+        if (overallPct >= profile.benchmark + 10) insights.push(`U scoort <strong>${overallPct - profile.benchmark} pp boven de sector-mediaan</strong> (${esc(sectorLabel)}, n=47). Stage-1-readiness is realistisch binnen 3 maanden bij gerichte invulling van de openstaande controls.`);
+        else if (overallPct >= profile.benchmark) insights.push(`U scoort <strong>licht boven de sector-mediaan</strong> (${esc(sectorLabel)}). De grootste hefboom: bewijsvoering aanvullen op claims die nu al gemaakt zijn.`);
+        else insights.push(`U scoort <strong>${profile.benchmark - overallPct} pp onder de sector-mediaan</strong> (${esc(sectorLabel)}). Inhalen is mogelijk maar vereist dat eerst governance-elementen (ISMS-scope, beleid, risicomethodiek) worden vastgelegd.`);
+        // 3. Evidence kwaliteit
+        if (claimedCount > 0 && evidenceQuality < 50) insights.push(`<strong>Bewijsvoering is uw bottleneck</strong>: ${unevidencedClaimsCount} van ${claimedCount} compliance-claims zijn niet onderbouwd. Een auditor zal die claims niet accepteren zonder document. Eerste actie: per niet-onderbouwde control 1 bewijsstuk uploaden.`);
+        else if (claimedCount > 0 && evidenceQuality >= 80) insights.push(`<strong>Bewijsvoering is solide</strong>: ${evidencedCount} van ${claimedCount} claims hebben artefacten. Lead Auditor kan deze nu inhoudelijk verifiëren in plaats van vragen om onderbouwing.`);
+        // 4. Top-bevinding
+        if (nonCompliant.length > 0) {
+          const worst = nonCompliant[0];
+          insights.push(`<strong>Belangrijkste aandachtspunt</strong>: ${esc(worst.id)} (${esc(worst.name)}) scoort ${worst.score >= 0 ? worst.score + '%' : '—'}. ${worst.status === 'Non-compliant' ? 'Geen invulling gemeld' : 'Gedeeltelijk ingericht, niet aantoonbaar geformaliseerd'} — gevolgd in het bevindingen-overzicht hieronder.`);
+        }
+        return insights.map(i => `<li>${i}</li>`).join('');
+      })()}
+    </ul>
   </div>
+
+  <!-- Maturity-radar (extra feature): 4-as A.5 / A.6 / A.7 / A.8 + ISMS -->
+  ${(() => {
+    // Verzamel scores per categorie voor radar
+    const radarData = categories.map(cat => {
+      const c = catScores[cat];
+      const pct = c.max > 0 ? Math.round((c.score / c.max) * 100) : 0;
+      return { label: cat, pct };
+    }).filter(d => d.pct >= 0);
+    if (radarData.length < 3) return '';
+    // SVG radar: 320x320 viewbox, centrale punt 160,160, max-radius 130
+    const cx = 160, cy = 160, maxR = 130;
+    const n = radarData.length;
+    const angleStep = (2 * Math.PI) / n;
+    const points = radarData.map((d, i) => {
+      const ang = -Math.PI / 2 + i * angleStep;
+      const r = (d.pct / 100) * maxR;
+      return { x: cx + r * Math.cos(ang), y: cy + r * Math.sin(ang), labelX: cx + (maxR + 22) * Math.cos(ang), labelY: cy + (maxR + 22) * Math.sin(ang), label: d.label, pct: d.pct };
+    });
+    const polygonPoints = points.map(p => `${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ');
+    const grid = [0.25, 0.5, 0.75, 1.0].map(f => {
+      const pts = Array.from({length: n}, (_, i) => {
+        const ang = -Math.PI / 2 + i * angleStep;
+        const r = f * maxR;
+        return `${(cx + r * Math.cos(ang)).toFixed(1)},${(cy + r * Math.sin(ang)).toFixed(1)}`;
+      }).join(' ');
+      return `<polygon points="${pts}" fill="none" stroke="#E5E5E5" stroke-width="1" />`;
+    }).join('');
+    const axes = points.map(p => `<line x1="${cx}" y1="${cy}" x2="${(cx + maxR * Math.cos(-Math.PI/2 + points.indexOf(p) * angleStep)).toFixed(1)}" y2="${(cy + maxR * Math.sin(-Math.PI/2 + points.indexOf(p) * angleStep)).toFixed(1)}" stroke="#E5E5E5" stroke-width="1" />`).join('');
+    const labels = points.map(p => `<text x="${p.labelX.toFixed(1)}" y="${p.labelY.toFixed(1)}" text-anchor="middle" font-family="Sora,sans-serif" font-size="11" font-weight="700" fill="#475569">${esc(p.label.split(' ')[0])}</text>`).join('');
+    const dots = points.map(p => `<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="3.5" fill="#0D9488" />`).join('');
+    const legendItems = radarData.map(d => `<li><span>${esc(d.label)}</span><span class="axis-pct">${d.pct}%</span></li>`).join('');
+    return `<div class="maturity-radar-wrap">
+      <svg viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg">
+        ${grid}${axes}
+        <polygon points="${polygonPoints}" fill="rgba(13,148,136,0.18)" stroke="#0D9488" stroke-width="2" stroke-linejoin="round" />
+        ${dots}${labels}
+      </svg>
+      <div class="maturity-radar-legend">
+        <h4>Volwassenheid per categorie</h4>
+        <ul>${legendItems}</ul>
+        <p style="font-size:0.78rem;color:#94A3B8;margin-top:10px;line-height:1.5;">Een gelijkmatig radar-patroon duidt op een gebalanceerd ISMS. Sterke uitschieters wijzen op een specifieke focus.</p>
+      </div>
+    </div>`;
+  })()}
 
   <p style="font-size:0.92rem;line-height:1.8;margin-bottom:24px;">
     ${overallPct >= 70 ? 'Uw organisatie heeft een goede basis voor ISO 27001 certificering. Met gerichte verbeteringen op de onderstaande aandachtspunten en het aanvullen van ontbrekende bewijsvoering bent u certificeringsklaar.' :
@@ -8105,7 +8328,13 @@ async function generateReport() {
       <div style="font-family:'Sora',sans-serif;font-size:1.3rem;font-weight:700;color:#0F172A;letter-spacing:-0.02em;margin-bottom:6px;">Verklaring Lead Auditor</div>
       <div style="font-size:0.9rem;color:#64748B;line-height:1.7;margin-bottom:32px;">Dit self-assessment is opgesteld door <strong style="color:#0F172A;">${esc(bedrijf)}</strong> als input voor de formele Lead Auditor review.<br>De auditor verifieert elke claim tegen aangeleverd bewijs en formuleert het definitieve oordeel.</div>
 
-      <div style="border-top:1px solid #CBD5E1;padding-top:8px;margin-top:48px;">
+      <div style="border-top:1px solid #CBD5E1;padding-top:8px;margin-top:48px;min-height:62px;display:flex;align-items:flex-end;">
+        <!-- Handtekening: laadt /assets/signature-leadauditor.png. Bij 404 (nog niet ondertekend) blijft de tekst-placeholder zichtbaar -->
+        <img src="/assets/signature-leadauditor.png"
+             alt="Handtekening Lead Auditor"
+             onload="this.nextElementSibling.style.display='none';"
+             onerror="this.remove();"
+             style="height:54px;width:auto;max-width:220px;">
         <div style="font-family:'Caveat',cursive;font-size:1.5rem;color:#CBD5E1;line-height:1;height:36px;display:flex;align-items:center;">— niet ondertekend —</div>
       </div>
       <div style="font-family:'Sora',sans-serif;font-size:1rem;font-weight:700;color:#0F172A;margin-top:12px;letter-spacing:-0.01em;">Lead Auditor Annex27</div>
