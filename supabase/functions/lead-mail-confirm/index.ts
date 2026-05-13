@@ -109,11 +109,14 @@ Bestel direct: https://annex27.nl/bestellen.html?plan=gap
 Vragen? Antwoord op deze mail of stuur naar info@annex27.nl.
 
 Met vriendelijke groet,
-Lead Auditor Annex27 — DNV / IRCA gecertificeerd
+Lead Auditor Annex27 — IRCA-gecertificeerd
 Annex27`;
 
     const html =
 `<div style="font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;max-width:560px;margin:0 auto;color:#0F172A;line-height:1.55;">
+  <div style="padding:20px 0 24px;border-bottom:1px solid #E5E7EB;margin-bottom:24px;">
+    <img src="https://annex27.nl/email-logo.png" alt="Annex27" width="160" style="height:auto;display:block;border:0;outline:0;text-decoration:none;-ms-interpolation-mode:bicubic;" />
+  </div>
   <p style="margin:0 0 16px;">${escapeHtml(greeting)}</p>
   <p style="margin:0 0 16px;">Bedankt voor het invullen van de Annex27 quickscan. Uw resultaat is bewaard.</p>
   ${sectorLabel || score ? `<p style="margin:0 0 20px;font-size:0.92rem;color:#334155;">${sectorLabel ? `<strong>Sector:</strong> ${escapeHtml(sectorLabel)}<br/>` : ''}${score ? `<strong>Score:</strong> ${escapeHtml(score)}%` : ''}</p>` : ''}
@@ -123,7 +126,7 @@ Annex27`;
   </div>
   <p style="margin:0 0 24px;"><a href="https://annex27.nl/bestellen.html?plan=gap" style="display:inline-block;background:#0D9488;color:#fff;padding:12px 22px;border-radius:8px;text-decoration:none;font-weight:600;">Bestel volledige gap-analyse →</a></p>
   <p style="margin:0 0 8px;font-size:0.92rem;">Vragen? Antwoord op deze mail of stuur naar <a href="mailto:info@annex27.nl" style="color:#0D9488;">info@annex27.nl</a>.</p>
-  <p style="margin:24px 0 0;font-size:0.88rem;color:#475569;">Met vriendelijke groet,<br/>Lead Auditor Annex27 — DNV / IRCA gecertificeerd<br/>Annex27</p>
+  <p style="margin:24px 0 0;font-size:0.88rem;color:#475569;">Met vriendelijke groet,<br/>Lead Auditor Annex27 — IRCA-gecertificeerd<br/>Annex27</p>
 </div>`;
 
     const client = new SMTPClient({
