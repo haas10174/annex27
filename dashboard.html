@@ -9074,44 +9074,92 @@ async function renderRapport() {
     const statusColor = { gap: '#D97706', critical: '#DC2626', ok: '#10B981' };
     const statusLabel = { gap: 'Gap', critical: 'Kritiek', ok: 'Op orde' };
 
+    // Tellingen voor KPI-grid
+    const findings = (s.detailed_findings && Array.isArray(s.detailed_findings)) ? s.detailed_findings : [];
+    const numCritical = findings.filter(f => f.status === 'critical').length;
+    const numGap      = findings.filter(f => f.status === 'gap').length;
+    const numOk       = findings.filter(f => f.status === 'ok').length;
+    const numTotal    = findings.length;
+    const pctOk       = numTotal > 0 ? Math.round((numOk / numTotal) * 100) : null;
+
     let html = `
-      <div class="rapport-actions" style="display:flex;gap:10px;justify-content:flex-end;margin-bottom:18px;flex-wrap:wrap;">
+      <div class="rapport-actions no-print" style="display:flex;gap:10px;justify-content:flex-end;margin-bottom:18px;flex-wrap:wrap;">
         <button onclick="window.print()" class="rapport-download-btn" style="display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#fff;border:0;border-radius:10px;padding:11px 20px;font-family:inherit;font-size:0.92rem;font-weight:700;cursor:pointer;letter-spacing:-0.01em;box-shadow:0 4px 12px rgba(13,148,136,0.18);transition:transform 0.15s, box-shadow 0.15s;">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
           Download rapport (PDF)
         </button>
       </div>
-      <div id="rapportPrintArea">
-      <div style="background:linear-gradient(135deg,#0c0f1a,#1e293b);color:white;border-radius:16px;padding:32px 36px;margin-bottom:24px;">
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
-          <span style="background:rgba(20,184,166,0.2);color:#5eead4;font-size:0.72rem;font-weight:700;padding:4px 10px;border-radius:999px;text-transform:uppercase;letter-spacing:0.08em;">Gap-analyse rapport</span>
-          <span style="font-size:0.82rem;color:rgba(255,255,255,0.5);">${releasedOn}</span>
-        </div>
-        <h2 style="font-family:'Sora',sans-serif;font-size:1.4rem;font-weight:800;margin:0 0 14px;line-height:1.3;">Samenvatting</h2>
-        <p style="font-size:0.98rem;line-height:1.7;color:rgba(255,255,255,0.85);margin:0;">${escapeHtml(s.executive_summary || '')}</p>
-      </div>`;
+      <div id="rapportPrintArea" style="background:#FFFFFF;border:1px solid #E5E5E5;border-radius:14px;padding:48px 56px;max-width:920px;margin:0 auto;">
 
-    if (s.score_summary) {
+        <!-- Doc-header in voorbeeldrapport-stijl: meta + titel + accent-line -->
+        <div style="border-bottom:2px solid #0D9488;padding-bottom:22px;margin-bottom:32px;">
+          <div style="display:flex;justify-content:space-between;font-family:'Sora',sans-serif;font-size:0.78rem;color:#64748B;margin-bottom:14px;flex-wrap:wrap;gap:8px;letter-spacing:0.02em;">
+            <span><strong style="color:#0F172A;">Annex27</strong> · NEN-EN-ISO/IEC 27001:2023 Gap-Analyse</span>
+            <span>Vrijgegeven: ${releasedOn}</span>
+          </div>
+          <div style="font-family:'Sora',sans-serif;font-size:1.7rem;font-weight:800;color:#0F172A;letter-spacing:-0.025em;margin-bottom:6px;">Gap-analyse Rapport</div>
+          <div style="font-size:0.95rem;color:#475569;">Beoordeling door Lead Auditor — IRCA-gecertificeerd · Annex27</div>
+        </div>
+
+        <!-- Samenvatting -->
+        <div style="margin-bottom:32px;">
+          <div style="font-family:'Sora',sans-serif;font-size:0.66rem;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:#0D9488;margin-bottom:8px;display:inline-flex;align-items:center;gap:10px;">
+            <span style="display:inline-block;width:22px;height:1px;background:#0D9488;"></span> Samenvatting
+          </div>
+          <h2 style="font-family:'Sora',sans-serif;font-size:1.45rem;font-weight:800;color:#0F172A;letter-spacing:-0.025em;margin:6px 0 18px;padding-bottom:10px;position:relative;">
+            Management summary
+            <span style="position:absolute;left:0;bottom:0;width:44px;height:3px;background:#0D9488;border-radius:2px;"></span>
+          </h2>
+          <p style="font-size:1.02rem;line-height:1.7;color:#1F2937;margin:0;">${escapeHtml(s.executive_summary || '')}</p>
+        </div>`;
+
+    // Score-grid: 1 grote primary + 2 progress-bars (sector-pos + bevindingen-status)
+    if (s.score_summary || numTotal > 0) {
       html += `
-        <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:24px 28px;margin-bottom:20px;">
-          <h3 style="font-family:'Sora',sans-serif;font-size:1.05rem;font-weight:700;margin:0 0 10px;color:var(--text-primary);">Compliance-score</h3>
-          <p style="margin:0;line-height:1.7;color:var(--text-secondary);font-size:0.95rem;">${escapeHtml(s.score_summary)}</p>
+        <div style="display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:18px;margin-bottom:24px;">
+          <div style="background:#FFFFFF;border:1px solid #E5E5E5;border-left:3px solid #0D9488;border-radius:0 10px 10px 0;padding:24px 26px;">
+            <div style="font-family:'Sora',sans-serif;font-size:0.66rem;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;color:#0D9488;margin-bottom:8px;">Compliance-score</div>
+            <div style="font-family:'Sora',sans-serif;font-size:${pctOk !== null ? '3rem' : '1.4rem'};font-weight:800;color:#0F172A;letter-spacing:-0.025em;line-height:1;margin-bottom:6px;">${pctOk !== null ? pctOk + '%' : '—'}</div>
+            <div style="font-size:0.84rem;color:#475569;line-height:1.5;">${numTotal > 0 ? `${numOk} van ${numTotal} controls op orde` : (escapeHtml(s.score_summary || '').slice(0, 120))}</div>
+          </div>
+          <div style="background:#FFFFFF;border:1px solid #E5E5E5;border-left:3px solid #DC2626;border-radius:0 10px 10px 0;padding:22px 24px;">
+            <div style="font-family:'Sora',sans-serif;font-size:0.66rem;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;color:#DC2626;margin-bottom:8px;">Kritiek</div>
+            <div style="font-family:'Sora',sans-serif;font-size:2.2rem;font-weight:800;color:#0F172A;letter-spacing:-0.025em;line-height:1;margin-bottom:6px;">${numCritical}</div>
+            <div style="font-size:0.82rem;color:#64748B;">${numCritical === 1 ? 'blokkerende bevinding' : 'blokkerende bevindingen'}</div>
+          </div>
+          <div style="background:#FFFFFF;border:1px solid #E5E5E5;border-left:3px solid #D97706;border-radius:0 10px 10px 0;padding:22px 24px;">
+            <div style="font-family:'Sora',sans-serif;font-size:0.66rem;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;color:#D97706;margin-bottom:8px;">Gaps</div>
+            <div style="font-family:'Sora',sans-serif;font-size:2.2rem;font-weight:800;color:#0F172A;letter-spacing:-0.025em;line-height:1;margin-bottom:6px;">${numGap}</div>
+            <div style="font-size:0.82rem;color:#64748B;">${numGap === 1 ? 'aandachtspunt' : 'aandachtspunten'}</div>
+          </div>
         </div>`;
     }
 
+    if (s.score_summary) {
+      html += `
+        <p style="font-size:0.95rem;line-height:1.7;color:#334155;margin-bottom:28px;">${escapeHtml(s.score_summary)}</p>`;
+    }
+
     if (s.findings_by_category && typeof s.findings_by_category === 'object') {
-      html += `<h3 style="font-family:'Sora',sans-serif;font-size:1.05rem;font-weight:700;margin:24px 0 12px;color:var(--text-primary);">Bevindingen per categorie</h3>`;
-      html += `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;margin-bottom:24px;">`;
+      html += `
+        <div style="font-family:'Sora',sans-serif;font-size:0.66rem;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:#0D9488;margin:36px 0 8px;display:inline-flex;align-items:center;gap:10px;">
+          <span style="display:inline-block;width:22px;height:1px;background:#0D9488;"></span> Bevindingen per categorie
+        </div>
+        <h2 style="font-family:'Sora',sans-serif;font-size:1.45rem;font-weight:800;color:#0F172A;letter-spacing:-0.025em;margin:6px 0 18px;padding-bottom:10px;position:relative;">
+          Per ISO-domein
+          <span style="position:absolute;left:0;bottom:0;width:44px;height:3px;background:#0D9488;border-radius:2px;"></span>
+        </h2>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;margin-bottom:28px;">`;
       for (const [cat, txt] of Object.entries(s.findings_by_category)) {
         if (!txt) continue;
         const iconPath = categoryIcons[cat] || 'M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z';
         html += `
-          <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;">
+          <div style="background:#FFFFFF;border:1px solid #E5E5E5;border-left:3px solid #0D9488;border-radius:0 10px 10px 0;padding:18px 22px;">
             <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
-              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="${iconPath}"/></svg>
-              <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:0.92rem;color:var(--text-primary);">${escapeHtml(cat)}</div>
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#0D9488" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="${iconPath}"/></svg>
+              <div style="font-family:'Sora',sans-serif;font-weight:700;font-size:0.92rem;color:#0F172A;">${escapeHtml(cat)}</div>
             </div>
-            <p style="margin:0;font-size:0.88rem;line-height:1.65;color:var(--text-secondary);">${escapeHtml(txt)}</p>
+            <p style="margin:0;font-size:0.88rem;line-height:1.65;color:#475569;">${escapeHtml(txt)}</p>
           </div>`;
       }
       html += `</div>`;
@@ -9119,29 +9167,45 @@ async function renderRapport() {
 
     if (Array.isArray(s.top_priorities) && s.top_priorities.length) {
       html += `
-        <div style="background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--accent);border-radius:12px;padding:22px 26px;margin-bottom:24px;">
-          <h3 style="font-family:'Sora',sans-serif;font-size:1.05rem;font-weight:700;margin:0 0 14px;color:var(--text-primary);">Top prioriteiten</h3>
-          <ol style="margin:0;padding-left:22px;">`;
-      s.top_priorities.forEach(p => {
-        html += `<li style="margin-bottom:8px;line-height:1.6;color:var(--text-secondary);font-size:0.92rem;">${escapeHtml(p)}</li>`;
+        <div style="font-family:'Sora',sans-serif;font-size:0.66rem;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:#0D9488;margin:36px 0 8px;display:inline-flex;align-items:center;gap:10px;">
+          <span style="display:inline-block;width:22px;height:1px;background:#0D9488;"></span> Aanbevelingen
+        </div>
+        <h2 style="font-family:'Sora',sans-serif;font-size:1.45rem;font-weight:800;color:#0F172A;letter-spacing:-0.025em;margin:6px 0 18px;padding-bottom:10px;position:relative;">
+          Top prioriteiten
+          <span style="position:absolute;left:0;bottom:0;width:44px;height:3px;background:#0D9488;border-radius:2px;"></span>
+        </h2>
+        <ol style="list-style:none;margin:0 0 32px;padding:0;">`;
+      s.top_priorities.forEach((p, i) => {
+        html += `<li style="padding:14px 0;border-bottom:1px solid #F1F5F9;display:flex;gap:14px;font-size:0.94rem;line-height:1.65;color:#1F2937;align-items:flex-start;">
+          <span style="flex-shrink:0;width:28px;height:28px;background:#0D9488;color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Sora',sans-serif;font-weight:800;font-size:0.82rem;">${i + 1}</span>
+          <span style="flex:1;">${escapeHtml(p)}</span>
+        </li>`;
       });
-      html += `</ol></div>`;
+      html += `</ol>`;
     }
 
-    if (Array.isArray(s.detailed_findings) && s.detailed_findings.length) {
-      html += `<h3 style="font-family:'Sora',sans-serif;font-size:1.05rem;font-weight:700;margin:24px 0 12px;color:var(--text-primary);">Gedetailleerde bevindingen</h3>`;
-      html += `<div style="display:flex;flex-direction:column;gap:12px;margin-bottom:24px;">`;
-      s.detailed_findings.forEach(f => {
-        const color = statusColor[f.status] || 'var(--text-muted)';
+    if (findings.length) {
+      html += `
+        <div style="font-family:'Sora',sans-serif;font-size:0.66rem;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:#0D9488;margin:36px 0 8px;display:inline-flex;align-items:center;gap:10px;">
+          <span style="display:inline-block;width:22px;height:1px;background:#0D9488;"></span> Detail
+        </div>
+        <h2 style="font-family:'Sora',sans-serif;font-size:1.45rem;font-weight:800;color:#0F172A;letter-spacing:-0.025em;margin:6px 0 18px;padding-bottom:10px;position:relative;">
+          Gedetailleerde bevindingen
+          <span style="position:absolute;left:0;bottom:0;width:44px;height:3px;background:#0D9488;border-radius:2px;"></span>
+        </h2>
+        <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:28px;">`;
+      findings.forEach(f => {
+        const color = statusColor[f.status] || '#94A3B8';
         const label = statusLabel[f.status] || f.status || '';
+        const bgTint = (f.status === 'critical') ? 'rgba(220,38,38,0.04)' : (f.status === 'gap') ? 'rgba(217,119,6,0.04)' : (f.status === 'ok') ? 'rgba(16,185,129,0.04)' : 'transparent';
         html += `
-          <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px 22px;">
+          <div style="background:${bgTint};border:1px solid #E5E5E5;border-left:3px solid ${color};border-radius:0 10px 10px 0;padding:18px 22px;">
             <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap;">
-              <span style="font-family:'Sora',sans-serif;font-weight:700;font-size:0.9rem;color:var(--text-primary);">${escapeHtml(f.control_id || '')}</span>
-              ${label ? `<span style="font-size:0.7rem;font-weight:700;padding:3px 9px;border-radius:999px;background:${color}15;color:${color};text-transform:uppercase;letter-spacing:0.06em;">${escapeHtml(label)}</span>` : ''}
+              <span style="font-family:'JetBrains Mono',ui-monospace,monospace;font-weight:700;font-size:0.86rem;color:#0D9488;">${escapeHtml(f.control_id || '')}</span>
+              ${label ? `<span style="font-size:0.68rem;font-weight:800;padding:3px 9px;background:${color}1A;color:${color};text-transform:uppercase;letter-spacing:0.08em;">${escapeHtml(label)}</span>` : ''}
             </div>
-            ${f.finding ? `<div style="font-size:0.88rem;line-height:1.6;color:var(--text-secondary);margin-bottom:8px;"><strong style="color:var(--text-primary);font-weight:600;">Bevinding:</strong> ${escapeHtml(f.finding)}</div>` : ''}
-            ${f.recommendation ? `<div style="font-size:0.88rem;line-height:1.6;color:var(--text-secondary);"><strong style="color:var(--accent);font-weight:600;">Aanbeveling:</strong> ${escapeHtml(f.recommendation)}</div>` : ''}
+            ${f.finding ? `<div style="font-size:0.88rem;line-height:1.65;color:#334155;margin-bottom:8px;"><strong style="color:#0F172A;font-weight:700;font-size:0.74rem;letter-spacing:0.06em;text-transform:uppercase;">Bevinding</strong><br>${escapeHtml(f.finding)}</div>` : ''}
+            ${f.recommendation ? `<div style="font-size:0.88rem;line-height:1.65;color:#334155;padding:10px 14px;background:#F0FDFA;border-radius:6px;margin-top:8px;"><strong style="color:#0F766E;font-weight:700;font-size:0.74rem;letter-spacing:0.06em;text-transform:uppercase;">Aanbeveling</strong><br>${escapeHtml(f.recommendation)}</div>` : ''}
           </div>`;
       });
       html += `</div>`;
@@ -9149,7 +9213,7 @@ async function renderRapport() {
 
     if (s.disclosure) {
       html += `
-        <div style="background:var(--bg-warm);border-radius:10px;padding:16px 20px;font-size:0.82rem;color:var(--text-muted);line-height:1.6;font-style:italic;">
+        <div style="background:#FAFAF7;border:1px solid #E5E5E5;border-left:3px solid #94A3B8;border-radius:0 10px 10px 0;padding:16px 20px;font-size:0.82rem;color:#64748B;line-height:1.65;font-style:italic;margin-top:28px;">
           ${escapeHtml(s.disclosure)}
         </div>`;
     }
