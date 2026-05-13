@@ -6826,7 +6826,8 @@ function renderControlCard(ctrl, idx, total) {
   });
   const evidenceMissing = highClaim && !hasEvidence;
 
-  const noteOpen = hasStructuredNote || !!(evidence.note && evidence.note.trim().length > 0);
+  // Toelichting-panel is altijd uitgeklapt — geen click-to-expand meer
+  const noteOpen = true;
   const hintFormatted = esc(evHint).replace(/^Upload:\s*/i, '');
   const hintId = 'hint_' + ctrl.id.replace(/\./g, '_');
 
@@ -6872,11 +6873,11 @@ function renderControlCard(ctrl, idx, total) {
         <span class="ga-evidence-upload-sub">PDF &middot; DOCX &middot; PNG &middot; XLSX &middot; max 10MB</span>
         <input type="file" onchange="uploadEvidence('${esc(ctrl.id)}', this)" accept=".pdf,.png,.jpg,.jpeg,.docx,.xlsx,.txt" />
       </div>
-      <button type="button" class="ga-evidence-note-toggle ${noteOpen ? 'open' : ''}" onclick="const w=document.getElementById('${noteId}'); w.classList.toggle('open'); this.classList.toggle('open'); if(w.classList.contains('open')) { const firstInput = w.querySelector('input,textarea'); if(firstInput) firstInput.focus(); }">
-        <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
-        ${noteOpen ? 'Toelichting' : 'Toelichting toevoegen'}
-      </button>
-      <div class="ga-evidence-note-wrap ${noteOpen ? 'open' : ''}" id="${noteId}">
+      <div class="ga-evidence-note-toggle open" style="cursor:default;pointer-events:none;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M8 9h8M8 13h8M8 17h5"/></svg>
+        Toelichting bij dit bewijs
+      </div>
+      <div class="ga-evidence-note-wrap open" id="${noteId}">
         <div class="ga-ef">
           <div class="ga-ef-row">
             <label class="ga-ef-label">Welke procedure, beleidsdocument of bewijs is dit?</label>
@@ -7992,7 +7993,33 @@ async function generateReport() {
           <!-- Auditor's notes — gereserveerd voor handgeschreven aanvulling van Lead Auditor -->
           <div class="auditor-notes" data-auditor-note="${esc(c.id)}"></div>
         </div>`;
-      }).join('')}
+      }).join('') : ''}
+
+      ${partition.conform.length ? `
+      <div style="margin-top:18px;padding:14px 16px;background:#F8FAFC;border:1px solid #E2E8F0;border-radius:8px;">
+        <div style="font-size:0.72rem;font-weight:800;color:#059669;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:10px;">Conforme controls (auditor-ready) · ${partition.conform.length}</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill, minmax(280px, 1fr));gap:6px 18px;">
+          ${partition.conform.map(c => {
+            const ev = (typeof evidenceData !== 'undefined' && evidenceData[c.id]) ? evidenceData[c.id] : { files: [], note: '', note_fields: {} };
+            const hasFiles = ev.files && ev.files.length > 0;
+            const evLabel = hasFiles ? `${ev.files.length} bestand` : 'notitie';
+            return `<div style="display:flex;align-items:baseline;gap:8px;padding:4px 0;border-bottom:1px solid #EEF2F6;font-size:0.82rem;line-height:1.4;">
+              <span style="font-family:'JetBrains Mono',monospace;color:#0D9488;font-weight:700;flex-shrink:0;">${esc(c.id)}</span>
+              <span style="color:#0F172A;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${esc(c.name)}</span>
+              <span style="font-size:0.7rem;color:#94A3B8;flex-shrink:0;">${esc(evLabel)}</span>
+              <span style="color:#059669;font-size:0.86rem;flex-shrink:0;">&#10003;</span>
+            </div>`;
+          }).join('')}
+        </div>
+      </div>` : ''}
+
+      ${partition.unassessed.length ? `
+      <div style="margin-top:14px;padding:12px 16px;background:#FAFAFA;border:1px dashed #CBD5E1;border-radius:8px;">
+        <div style="font-size:0.72rem;font-weight:700;color:#64748B;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px;">Niet beoordeeld · ${partition.unassessed.length}</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill, minmax(260px, 1fr));gap:4px 16px;font-size:0.8rem;">
+          ${partition.unassessed.map(c => `<div style="color:#64748B;"><span style="font-family:'JetBrains Mono',monospace;color:#94A3B8;font-weight:600;">${esc(c.id)}</span> · ${esc(c.name)}</div>`).join('')}
+        </div>
+      </div>` : ''}
     </div>`;
   }).join('')}
 </div>
