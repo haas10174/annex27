@@ -1871,7 +1871,7 @@ async function diagnoseEdgeFn(fn) {
   const r = await invokeEdgeFn(fn.name, fn.body, { timeoutMs: fn.timeoutMs });
   // Een "ok response" of een specifieke "validation/auth error" betekent dat de functie LEEFT.
   // Een 5xx, timeout of NetworkError betekent BROKEN.
-  const aliveSignals = ['unauthorized', 'invalid', 'not found', 'missing', 'forbidden', '__diag_dry_run__', 'order_id', 'user_id', 'plan'];
+  const aliveSignals = ['unauthorized', 'invalid', 'not found', 'missing', 'forbidden', '__diag_dry_run__', 'order_id', 'user_id', 'plan', 'non-2xx', 'non 2xx', 'functionshttperror', 'ongeldig'];
   const isLikelyAlive = r.ok || (r.error && aliveSignals.some(s => r.error.toLowerCase().includes(s)));
   return {
     ...r,
