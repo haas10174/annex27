@@ -4403,7 +4403,7 @@ function renderRapportPrintView({ autoPrint = false } = {}) {
   </div>
 
   <h1>${esc(klantBedrijf)}${klantNaam ? ' &mdash; ' + esc(klantNaam) : ''}</h1>
-  <p class="lead">Onafhankelijke beoordeling tegen ISO 27001:2022 Annex A controls, gebaseerd op klant-zelfassessment en aangeleverde bewijsvoering. Beoordeeld door een DNV-gecertificeerd Lead Auditor.</p>
+  <p class="lead">Onafhankelijke beoordeling tegen ISO 27001:2022 Annex A controls, gebaseerd op klant-zelfassessment en aangeleverde bewijsvoering. Beoordeeld door een gecertificeerd ISO 27001 Lead Auditor.</p>
 
   <h2>Samenvatting</h2>
   <p>${esc(s.executive_summary || '')}</p>
@@ -4439,14 +4439,14 @@ function renderRapportPrintView({ autoPrint = false } = {}) {
   <div class="signoff">
     <h3>Verklaring Lead Auditor</h3>
     <p style="font-size:0.86rem;color:#475569;line-height:1.65;">
-      Ondergetekende verklaart dat dit rapport is opgesteld op basis van de door de klant aangeleverde bewijsvoering en zelfassessment, en is gevalideerd volgens de methodiek van DNV Training Auditor / Lead Auditor ISMS ISO 27001:2022. Bevindingen die op evidence zijn gegrond worden expliciet gerefereerd; bevindingen zonder evidence zijn als zodanig benoemd.
+      Ondergetekende verklaart dat dit rapport is opgesteld op basis van de door de klant aangeleverde bewijsvoering en zelfassessment, en is gevalideerd volgens de IRCA-methodiek voor Lead Auditor ISMS ISO 27001:2022. Bevindingen die op evidence zijn gegrond worden expliciet gerefereerd; bevindingen zonder evidence zijn als zodanig benoemd.
     </p>
     <div class="signoff-grid">
       <div>
         <div class="sig-line">Raoul Haas</div>
         <div class="sig-meta">
           <strong>Raoul Haas</strong><br>
-          Lead Auditor ISO 27001 (DNV-gecertificeerd)<br>
+          Lead Auditor ISO 27001 (IRCA-gecertificeerd)<br>
           Annex27 &middot; KBO 1006.203.170
         </div>
       </div>
@@ -5159,7 +5159,7 @@ async function requestReviewFromAdmin() {
       user_id: currentClient.user_id,
       sender_role: 'auditor',
       subject: 'Verzoek: rond uw gap-analyse af',
-      body: 'Beste,\n\nIk ben klaar om uw self-assessment te reviewen. Kunt u de openstaande controls nog beoordelen en eventuele bewijsvoering uploaden?\n\nZodra u klikt op "Indienen voor Lead Auditor review" pak ik het op.\n\nMet vriendelijke groet,\nAnnex27 Lead Auditor (DNV/IRCA gecertificeerd)'
+      body: 'Beste,\n\nIk ben klaar om uw self-assessment te reviewen. Kunt u de openstaande controls nog beoordelen en eventuele bewijsvoering uploaden?\n\nZodra u klikt op "Indienen voor Lead Auditor review" pak ik het op.\n\nMet vriendelijke groet,\nAnnex27 Lead Auditor (IRCA-gecertificeerd)'
     });
     adminToast('Verzoek verstuurd naar klant');
     refreshClient();
