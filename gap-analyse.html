@@ -1250,18 +1250,22 @@
     .results-sector-badge {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      background: #FFFFFF;
-      border: 1px solid #5EEAD4;
-      border-radius: 100px;
-      padding: 5px 14px;
+      gap: 8px;
+      padding: 0 0 4px;
       font-family: 'Sora', sans-serif;
       font-size: 0.72rem;
-      font-weight: 700;
+      font-weight: 800;
       color: #0F766E;
-      letter-spacing: 0.06em;
+      letter-spacing: 0.14em;
       text-transform: uppercase;
-      margin-bottom: 12px;
+      margin-bottom: 14px;
+      border-bottom: 1px solid rgba(13,148,136,0.25);
+    }
+    .results-sector-badge::before {
+      content: '';
+      width: 22px;
+      height: 1px;
+      background: #0D9488;
     }
     .sector-insights {
       display: grid;
