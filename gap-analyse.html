@@ -8,7 +8,7 @@
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
   <link rel="manifest" href="/site.webmanifest" />
-  <meta name="theme-color" content="#14b8a6" />
+  <meta name="theme-color" content="#0D9488" />
   <script src="/analytics.js"></script>
 
   <meta http-equiv="X-Content-Type-Options" content="nosniff" />
@@ -19,7 +19,6 @@
   <meta name="keywords" content="ISO 27001 quickscan, gratis gap-analyse, ISO 27001 self-assessment, NIS2 check, compliance score, MKB informatiebeveiliging" />
   <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large" />
   <meta name="theme-color" content="#0D9488" />
-  <script src="/analytics.js"></script>
   <link rel="canonical" href="https://annex27.nl/gap-analyse" />
 
   <!-- Open Graph -->
@@ -121,7 +120,7 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --bg: #FAFAFA;
+      --bg: #FAF9F6;
       --bg-alt: #FFFFFF;
       --surface: #FFFFFF;
       --border: #E5E5E5;
@@ -187,7 +186,7 @@
       display: inline-block;
     }
     .intro-logo span {
-      background: linear-gradient(135deg, var(--accent), #0891B2);
+      background: linear-gradient(135deg, var(--accent), #0F766E);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
@@ -284,7 +283,7 @@
     }
     .progress-fill {
       height: 100%;
-      background: linear-gradient(90deg, var(--accent), #0891B2);
+      background: linear-gradient(90deg, var(--accent), #0F766E);
       transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       border-radius: 0 2px 2px 0;
     }
@@ -310,7 +309,7 @@
       text-decoration: none;
     }
     .quiz-topbar-logo span {
-      background: linear-gradient(135deg, var(--accent), #0891B2);
+      background: linear-gradient(135deg, var(--accent), #0F766E);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
@@ -1692,7 +1691,7 @@
             <defs>
               <linearGradient id="scoreGradient" x1="0%" y1="0%" x2="100%" y2="0%">
                 <stop offset="0%" stop-color="#0D9488" />
-                <stop offset="100%" stop-color="#0891B2" />
+                <stop offset="100%" stop-color="#0F766E" />
               </linearGradient>
             </defs>
             <circle class="big-ring-bg" cx="100" cy="100" r="88" />
@@ -2339,7 +2338,7 @@ function updateLiveDash() {
 // Sector-aware accent palette voor screenResults — geen blauw, per sector eigen vibe.
 const sectorAccent = {
   saas:     { cta:'#14b8a6', ctaFg:'#0F172A', accent:'#5EEAD4', glow:'rgba(20,184,166,0.20)',  ringFrom:'#0D9488', ringTo:'#14B8A6' },
-  it:       { cta:'#06B6D4', ctaFg:'#0F172A', accent:'#67E8F9', glow:'rgba(6,182,212,0.22)',   ringFrom:'#0891B2', ringTo:'#06B6D4' },
+  it:       { cta:'#0D9488', ctaFg:'#FFFFFF', accent:'#5EEAD4', glow:'rgba(13,148,136,0.22)', ringFrom:'#0F766E', ringTo:'#0D9488' },
   zorg:     { cta:'#F97316', ctaFg:'#0F1F1A', accent:'#6EE7B7', glow:'rgba(4,120,87,0.28)',    ringFrom:'#047857', ringTo:'#F97316' },
   overheid: { cta:'#F59E0B', ctaFg:'#1A1206', accent:'#FBBF24', glow:'rgba(245,158,11,0.22)',  ringFrom:'#B45309', ringTo:'#F59E0B' },
   bouw:     { cta:'#CA8A04', ctaFg:'#1A1206', accent:'#FCD34D', glow:'rgba(202,138,4,0.22)',   ringFrom:'#854D0E', ringTo:'#EAB308' },
