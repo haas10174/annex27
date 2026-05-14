@@ -9029,6 +9029,27 @@ async function downloadDoc(pakketKey, file) {
 }
 
 // ── RAPPORT (released gap-analyse rapport, read-only) ──
+// Cache voor docs-metadata zodat we maar 1x fetchen per sessie
+let _docsMetaCache = null;
+async function getDocsMetadata() {
+  if (_docsMetaCache) return _docsMetaCache;
+  try {
+    const r = await fetch('/beleidspakket/docs-metadata.json', { cache: 'force-cache' });
+    if (!r.ok) return { documents: [] };
+    _docsMetaCache = await r.json();
+    return _docsMetaCache;
+  } catch (e) { return { documents: [] }; }
+}
+// Beleidsdocs die een specifieke control (bv. "A.5.1" of "5.1") afdekken
+function findDocsForControl(controlId, meta) {
+  if (!controlId || !meta || !meta.documents) return [];
+  const norm = String(controlId).trim();
+  return meta.documents.filter(d =>
+    Array.isArray(d.iso27001) &&
+    d.iso27001.some(c => c === norm || c === norm.replace(/^A\./, '') || ('A.' + c) === norm)
+  );
+}
+
 async function renderRapport() {
   const container = document.getElementById('rapportContainer');
   const subtitle = document.getElementById('rapportSubtitle');
@@ -9076,6 +9097,8 @@ async function renderRapport() {
 
     // Tellingen voor KPI-grid
     const findings = (s.detailed_findings && Array.isArray(s.detailed_findings)) ? s.detailed_findings : [];
+    // Wacht op docs-metadata zodat we per finding beleidsdocs kunnen tonen
+    const docsMeta = await getDocsMetadata();
     const numCritical = findings.filter(f => f.status === 'critical').length;
     const numGap      = findings.filter(f => f.status === 'gap').length;
     const numOk       = findings.filter(f => f.status === 'ok').length;
@@ -9206,6 +9229,23 @@ async function renderRapport() {
             </div>
             ${f.finding ? `<div style="font-size:0.88rem;line-height:1.65;color:#334155;margin-bottom:8px;"><strong style="color:#0F172A;font-weight:700;font-size:0.74rem;letter-spacing:0.06em;text-transform:uppercase;">Bevinding</strong><br>${escapeHtml(f.finding)}</div>` : ''}
             ${f.recommendation ? `<div style="font-size:0.88rem;line-height:1.65;color:#334155;padding:10px 14px;background:#F0FDFA;border-radius:6px;margin-top:8px;"><strong style="color:#0F766E;font-weight:700;font-size:0.74rem;letter-spacing:0.06em;text-transform:uppercase;">Aanbeveling</strong><br>${escapeHtml(f.recommendation)}</div>` : ''}
+            ${(() => {
+              // Koppel beleidsdocumenten die deze specifieke control afdekken
+              const linkedDocs = findDocsForControl(f.control_id, docsMeta);
+              if (!linkedDocs.length) return '';
+              const items = linkedDocs.slice(0, 5).map(d => {
+                const previewUrl = `/document-preview.html?cat=${encodeURIComponent(d.tier || 'premium')}&doc=${encodeURIComponent(d.id)}.md`;
+                return `<a href="${previewUrl}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:4px 10px;background:#FFFFFF;border:1px solid #99F6E4;color:#0F766E;font-size:0.8rem;font-weight:600;text-decoration:none;border-radius:4px;margin:2px 4px 2px 0;">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                  ${escapeHtml(d.title || d.id)}
+                </a>`;
+              }).join('');
+              const extra = linkedDocs.length > 5 ? ` <span style="font-size:0.78rem;color:#94A3B8;">+${linkedDocs.length - 5} meer</span>` : '';
+              return `<div style="margin-top:10px;padding:10px 14px;background:#FAFAF7;border-left:3px solid #0D9488;border-radius:0 6px 6px 0;">
+                <div style="font-family:'Sora',sans-serif;font-size:0.7rem;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:#0F766E;margin-bottom:6px;">Template-policies die deze control afdekken</div>
+                <div style="display:flex;flex-wrap:wrap;align-items:center;">${items}${extra}</div>
+              </div>`;
+            })()}
           </div>`;
       });
       html += `</div>`;
