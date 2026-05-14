@@ -9233,17 +9233,38 @@ async function renderRapport() {
               // Koppel beleidsdocumenten die deze specifieke control afdekken
               const linkedDocs = findDocsForControl(f.control_id, docsMeta);
               if (!linkedDocs.length) return '';
+              // Toegangsgating: alleen klanten met beleidspakket kunnen de templates openen
+              const access = (typeof userDocAccess === 'function') ? userDocAccess() : { basis: false, premium: false, werkinstructies: false };
+              const docAccessFor = (tier) =>
+                tier === 'basispakket' ? access.basis :
+                tier === 'premium' ? access.premium :
+                tier === 'werkinstructies' ? access.werkinstructies : false;
               const items = linkedDocs.slice(0, 5).map(d => {
+                const allowed = docAccessFor(d.tier);
                 const previewUrl = `/document-preview.html?cat=${encodeURIComponent(d.tier || 'premium')}&doc=${encodeURIComponent(d.id)}.md`;
-                return `<a href="${previewUrl}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:4px 10px;background:#FFFFFF;border:1px solid #99F6E4;color:#0F766E;font-size:0.8rem;font-weight:600;text-decoration:none;border-radius:4px;margin:2px 4px 2px 0;">
-                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                if (allowed) {
+                  return `<a href="${previewUrl}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:4px 10px;background:#FFFFFF;border:1px solid #99F6E4;color:#0F766E;font-size:0.8rem;font-weight:600;text-decoration:none;border-radius:4px;margin:2px 4px 2px 0;">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                    ${escapeHtml(d.title || d.id)}
+                  </a>`;
+                }
+                // Vergrendeld voor gap-only klanten: zelfde chip-stijl maar grijs, niet klikbaar, met slot
+                return `<span title="Beschikbaar met het Beleidspakket" style="display:inline-flex;align-items:center;gap:6px;padding:4px 10px;background:#F1F5F9;border:1px solid #CBD5E1;color:#94A3B8;font-size:0.8rem;font-weight:600;border-radius:4px;margin:2px 4px 2px 0;cursor:not-allowed;">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
                   ${escapeHtml(d.title || d.id)}
-                </a>`;
+                </span>`;
               }).join('');
               const extra = linkedDocs.length > 5 ? ` <span style="font-size:0.78rem;color:#94A3B8;">+${linkedDocs.length - 5} meer</span>` : '';
+              // Footer per kader: bij gap-only, een korte upsell-link
+              const anyLocked = linkedDocs.slice(0, 5).some(d => !docAccessFor(d.tier));
+              const hasAnyAccess = access.basis || access.premium || access.werkinstructies;
+              const footer = (!hasAnyAccess || anyLocked)
+                ? `<div style="margin-top:8px;font-size:0.78rem;color:#64748B;line-height:1.5;">Deze templates zitten in het <a href="https://annex27.nl/bestellen?plan=beleid" target="_blank" rel="noopener" style="color:#0D9488;font-weight:700;text-decoration:none;">Annex27 Beleidspakket</a> &middot; per geïdentificeerde gap een kant-en-klare policy om in te vullen.</div>`
+                : '';
               return `<div style="margin-top:10px;padding:10px 14px;background:#FAFAF7;border-left:3px solid #0D9488;border-radius:0 6px 6px 0;">
                 <div style="font-family:'Sora',sans-serif;font-size:0.7rem;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:#0F766E;margin-bottom:6px;">Template-policies die deze control afdekken</div>
                 <div style="display:flex;flex-wrap:wrap;align-items:center;">${items}${extra}</div>
+                ${footer}
               </div>`;
             })()}
           </div>`;
