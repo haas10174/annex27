@@ -186,10 +186,13 @@
       padding: 12px 14px; cursor: pointer;
       display: flex; align-items: center; gap: 10px;
       transition: all 0.15s; font-size: 0.9rem; color: #0F172A;
+      min-height: 44px; /* WCAG touch-target */
     }
     .radio-card:hover { border-color: #0D9488; }
+    .radio-card:focus-within { outline: 2px solid #0D9488; outline-offset: 2px; }
     .radio-card.selected { border-color: #0D9488; background: #F0FDFA; }
-    .radio-card input { position: absolute; opacity: 0; pointer-events: none; }
+    /* Input blijft visueel verborgen maar wel toetsenbord-bereikbaar + ARIA-gelabeld via wrapper */
+    .radio-card input { position: absolute; opacity: 0; width: 1px; height: 1px; pointer-events: none; }
     .radio-dot {
       width: 16px; height: 16px; border: 2px solid #CBD5E1; border-radius: 50%;
       flex-shrink: 0; display: flex; align-items: center; justify-content: center;
@@ -224,8 +227,8 @@
     .field-group { display: flex; flex-direction: column; gap: 6px; }
 
     .terms-accept {
-      display: flex; align-items: flex-start; gap: 10px;
-      padding: 12px 14px;
+      display: flex; align-items: flex-start; gap: 12px;
+      padding: 14px 16px;
       background: #F8FAFC;
       border: 1px solid #E2E8F0;
       border-radius: 10px;
@@ -234,11 +237,13 @@
       line-height: 1.5;
       cursor: pointer;
       transition: border-color 0.15s, background 0.15s;
+      min-height: 48px; /* WCAG touch-target */
     }
     .terms-accept:hover { border-color: #0D9488; }
+    .terms-accept:focus-within { outline: 2px solid #0D9488; outline-offset: 2px; }
     .terms-accept input[type="checkbox"] {
-      margin-top: 3px; flex-shrink: 0;
-      width: 16px; height: 16px;
+      margin-top: 1px; flex-shrink: 0;
+      width: 22px; height: 22px; /* groter dan 16px voor mobile touch */
       accent-color: #0D9488;
       cursor: pointer;
     }
