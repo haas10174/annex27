@@ -7555,6 +7555,70 @@ async function generateReport() {
     margin-top: 6px;
     line-height: 1.45;
   }
+  /* Document control — IRCA-conforme cover-block */
+  .cover-doc-control {
+    margin-top: 32px;
+    background: #FFFFFF;
+    border: 1px solid #E5E5E5;
+    border-radius: 10px;
+    padding: 22px 26px;
+    page-break-inside: avoid;
+  }
+  .doc-control-eyebrow {
+    font-family: 'Sora', sans-serif;
+    font-size: 0.66rem;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #0D9488;
+    margin-bottom: 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .doc-control-eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 22px; height: 1px;
+    background: #0D9488;
+  }
+  .doc-control-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px 36px;
+  }
+  .dc-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    border-bottom: 1px dotted #E5E5E5;
+    padding-bottom: 8px;
+  }
+  .dc-cell:last-child, .dc-cell:nth-last-child(2):nth-child(odd) { border-bottom: 0; padding-bottom: 0; }
+  .dc-key {
+    font-family: 'Sora', sans-serif;
+    font-size: 0.66rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #94A3B8;
+  }
+  .dc-val {
+    font-size: 0.92rem;
+    color: #0F172A;
+    font-weight: 600;
+    line-height: 1.4;
+  }
+  .doc-control-disclaimer {
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px solid #E5E5E5;
+    font-size: 0.78rem;
+    color: #64748B;
+    line-height: 1.6;
+    font-style: italic;
+  }
+
   /* Status-bar: amber-toned alert in auditor-stijl, geen gradient */
   .cover-status-bar {
     margin-top: 36px;
@@ -7772,6 +7836,49 @@ async function generateReport() {
   .maturity-radar-legend li:last-child { border-bottom: 0; }
   .maturity-radar-legend .axis-pct { font-family: 'Sora', sans-serif; font-weight: 700; color: #0D9488; }
 
+  /* Maturity heatmap — IRCA stoplight Fully/Largely/Partially/Not/NA */
+  .maturity-heatmap { margin: 4px 0 28px; }
+  .heatmap-eyebrow {
+    font-family: 'Sora', sans-serif;
+    font-size: 0.66rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #0F766E;
+    margin-bottom: 10px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .heatmap-eyebrow::before { content: ''; display: inline-block; width: 22px; height: 1px; background: #0F766E; }
+  .heatmap-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 8px;
+  }
+  .heatmap-cell {
+    background: #FFFFFF;
+    border: 1px solid #E5E5E5;
+    border-radius: 6px;
+    padding: 12px 14px;
+    text-align: center;
+    page-break-inside: avoid;
+  }
+  .heatmap-cat { font-family: 'Sora', sans-serif; font-size: 0.74rem; font-weight: 700; color: #0F172A; margin-bottom: 4px; letter-spacing: -0.01em; }
+  .heatmap-status { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 2px; }
+  .heatmap-pct { font-family: 'Sora', sans-serif; font-size: 1.3rem; font-weight: 800; color: #0F172A; letter-spacing: -0.02em; line-height: 1.1; }
+  .heatmap-meta { font-size: 0.66rem; color: #94A3B8; margin-top: 4px; }
+  .heatmap-full   { border-left: 3px solid #10B981; }
+  .heatmap-full   .heatmap-status { color: #059669; }
+  .heatmap-major  { border-left: 3px solid #0D9488; }
+  .heatmap-major  .heatmap-status { color: #0F766E; }
+  .heatmap-part   { border-left: 3px solid #D97706; }
+  .heatmap-part   .heatmap-status { color: #C2410C; }
+  .heatmap-low    { border-left: 3px solid #DC2626; }
+  .heatmap-low    .heatmap-status { color: #B91C1C; }
+  .heatmap-na     { border-left: 3px solid #94A3B8; background: #F8FAFC; }
+  .heatmap-na     .heatmap-status { color: #94A3B8; }
+
   .cat-table { width: 100%; border-collapse: collapse; margin-bottom: 24px; }
   .cat-table th { text-align: left; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #94A3B8; padding: 8px 12px; border-bottom: 2px solid #E2E8F0; }
   .cat-table td { padding: 10px 12px; font-size: 0.88rem; border-bottom: 1px solid #F1F5F9; }
@@ -7909,27 +8016,27 @@ async function generateReport() {
   <p class="cover-subtitle">Een gestructureerde audit van uw informatiebeveiliging — opgesteld voor Lead Auditor review.</p>
 
   <div class="cover-bedrijf">${esc(bedrijf)}</div>
-  <div style="font-size:0.92rem;color:rgba(255,255,255,0.55);margin-bottom:8px;">${esc(naam)} · ${esc(sectorLabel)}</div>
+  <div style="font-size:0.92rem;color:#64748B;margin-bottom:8px;">${esc(naam)} · ${esc(sectorLabel)}</div>
 
   <div class="cover-meta-grid">
     <div class="cover-meta-item">
       <div class="cover-meta-label">Score</div>
-      <div class="cover-meta-value">${overallPct}<span style="font-size:0.7em;color:rgba(255,255,255,0.4);">%</span></div>
+      <div class="cover-meta-value">${overallPct}<span style="font-size:0.7em;color:#94A3B8;">%</span></div>
       <div class="cover-meta-sub">Compliance</div>
     </div>
     <div class="cover-meta-item">
       <div class="cover-meta-label">Benchmark</div>
-      <div class="cover-meta-value">${profile.benchmark}<span style="font-size:0.7em;color:rgba(255,255,255,0.4);">%</span></div>
+      <div class="cover-meta-value">${profile.benchmark}<span style="font-size:0.7em;color:#94A3B8;">%</span></div>
       <div class="cover-meta-sub">Sector ${esc(sectorLabel)}</div>
     </div>
     <div class="cover-meta-item">
       <div class="cover-meta-label">Onderbouwd</div>
-      <div class="cover-meta-value">${evidencedCount}<span style="font-size:0.7em;color:rgba(255,255,255,0.4);">/${claimedCount}</span></div>
+      <div class="cover-meta-value">${evidencedCount}<span style="font-size:0.7em;color:#94A3B8;">/${claimedCount}</span></div>
       <div class="cover-meta-sub">Claims met bewijs</div>
     </div>
     <div class="cover-meta-item">
       <div class="cover-meta-label">Status</div>
-      <div class="cover-meta-value" style="color:#FBBF24;">Pending</div>
+      <div class="cover-meta-value" style="color:#D97706;font-size:1.45rem;">Pending</div>
       <div class="cover-meta-sub">Wacht op Lead Auditor</div>
     </div>
   </div>
@@ -7939,6 +8046,24 @@ async function generateReport() {
     <div class="cover-status-text">
       <strong>Self-assessment</strong> — dit document toont uw eigen antwoorden + automatische bevindingen.
       Voor een formeel eindrapport met audit-grade onderbouwing dient u dit in voor <strong>Lead Auditor review</strong> via uw dashboard. Doorlooptijd: meestal binnen 48 uur.
+    </div>
+  </div>
+
+  <!-- Document control — IRCA-conforme cover-block met versie/datum/auteur/distributie -->
+  <div class="cover-doc-control">
+    <div class="doc-control-eyebrow">Document control</div>
+    <div class="doc-control-grid">
+      <div class="dc-cell"><span class="dc-key">Versie</span><span class="dc-val">1.0 · Draft</span></div>
+      <div class="dc-cell"><span class="dc-key">Datum opgesteld</span><span class="dc-val">${date}</span></div>
+      <div class="dc-cell"><span class="dc-key">Classificatie</span><span class="dc-val">Vertrouwelijk</span></div>
+      <div class="dc-cell"><span class="dc-key">Norm</span><span class="dc-val">NEN-EN-ISO/IEC 27001:2023</span></div>
+      <div class="dc-cell"><span class="dc-key">Opsteller</span><span class="dc-val">Lead Auditor · IRCA-gecertificeerd</span></div>
+      <div class="dc-cell"><span class="dc-key">Beoordeling</span><span class="dc-val">Annex27 ${reportId ? `· ID ${esc(String(reportId).slice(0, 8))}` : ''}</span></div>
+      <div class="dc-cell"><span class="dc-key">Klant</span><span class="dc-val">${esc(bedrijf || naam)}</span></div>
+      <div class="dc-cell"><span class="dc-key">Distributielijst</span><span class="dc-val">Directie · CISO · ${esc(bedrijf || 'klant')}</span></div>
+    </div>
+    <div class="doc-control-disclaimer">
+      Dit rapport is een <strong>point-in-time</strong> beoordeling op basis van sample-based onderzoek van de aangeleverde bewijsvoering. Het is geen geaccrediteerde certificering. Bevindingen zijn IRCA-conform geclassificeerd als Major NC, Minor NC of Observation (OFI).
     </div>
   </div>
 
@@ -8038,17 +8163,52 @@ async function generateReport() {
       return `<text x="${p.labelX.toFixed(1)}" y="${p.labelY.toFixed(1)}" text-anchor="${anchor}" dominant-baseline="middle" font-family="Sora,sans-serif" font-size="11" font-weight="700" fill="#475569">${esc(short)}</text>`;
     }).join('');
     const dots = points.map(p => `<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="3.5" fill="#0D9488" />`).join('');
-    const legendItems = radarData.map(d => `<li><span>${esc(d.label)}</span><span class="axis-pct">${d.pct}%</span></li>`).join('');
+    // Target-overlay: 80% per categorie als ambitie-niveau (marktstandaard voor Stage 1 readiness)
+    const targetPct = 80;
+    const targetPoints = radarData.map((_, i) => {
+      const ang = -Math.PI / 2 + i * angleStep;
+      const r = (targetPct / 100) * maxR;
+      return `${(cx + r * Math.cos(ang)).toFixed(1)},${(cy + r * Math.sin(ang)).toFixed(1)}`;
+    }).join(' ');
+    const targetPolygon = `<polygon points="${targetPoints}" fill="none" stroke="#D97706" stroke-width="1.5" stroke-dasharray="5,4" opacity="0.7" />`;
+    const legendItems = radarData.map(d => {
+      const delta = targetPct - d.pct;
+      const deltaTxt = delta > 0 ? `<span style="color:#D97706;font-size:0.72rem;font-weight:600;margin-left:6px;">-${delta}pp</span>` : `<span style="color:#10B981;font-size:0.72rem;font-weight:600;margin-left:6px;">✓</span>`;
+      return `<li><span>${esc(d.label)}${deltaTxt}</span><span class="axis-pct">${d.pct}%</span></li>`;
+    }).join('');
     return `<div class="maturity-radar-wrap">
       <svg viewBox="-40 -10 400 340" xmlns="http://www.w3.org/2000/svg">
         ${grid}${axes}
+        ${targetPolygon}
         <polygon points="${polygonPoints}" fill="rgba(13,148,136,0.18)" stroke="#0D9488" stroke-width="2" stroke-linejoin="round" />
         ${dots}${labels}
       </svg>
       <div class="maturity-radar-legend">
-        <h4>Volwassenheid per categorie</h4>
+        <h4>Huidig vs Target-maturity</h4>
         <ul>${legendItems}</ul>
-        <p style="font-size:0.78rem;color:#94A3B8;margin-top:10px;line-height:1.5;">Een gelijkmatig radar-patroon duidt op een gebalanceerd ISMS. Sterke uitschieters wijzen op een specifieke focus.</p>
+        <div style="font-size:0.72rem;color:#475569;margin-top:10px;display:flex;gap:14px;align-items:center;flex-wrap:wrap;">
+          <span style="display:inline-flex;align-items:center;gap:5px;"><span style="display:inline-block;width:14px;height:9px;background:rgba(13,148,136,0.18);border:1.5px solid #0D9488;border-radius:1px;"></span> Huidig</span>
+          <span style="display:inline-flex;align-items:center;gap:5px;"><span style="display:inline-block;width:14px;height:0;border-top:2px dashed #D97706;"></span> Target ${targetPct}%</span>
+        </div>
+        <p style="font-size:0.74rem;color:#94A3B8;margin-top:10px;line-height:1.5;">De stippellijn toont het marktgangbare Stage-1 readiness niveau (80%). Verschil per categorie staat als ±pp naast het label.</p>
+      </div>
+    </div>
+    <!-- Stoplight maturity-heatmap onder de radar — IRCA-style Fully/Largely/Partially/Not -->
+    <div class="maturity-heatmap">
+      <div class="heatmap-eyebrow">Maturity heatmap · per categorie</div>
+      <div class="heatmap-grid">
+        ${categories.map(cat => {
+          const c = catScores[cat];
+          const pct = c.max > 0 ? Math.round((c.score / c.max) * 100) : 0;
+          const level = c.max === 0 ? 'na' : pct >= 75 ? 'full' : pct >= 50 ? 'major' : pct >= 25 ? 'part' : 'low';
+          const lbl = { full: 'Fully', major: 'Largely', part: 'Partially', low: 'Not', na: 'N/A' }[level];
+          return `<div class="heatmap-cell heatmap-${level}">
+            <div class="heatmap-cat">${esc(cat)}</div>
+            <div class="heatmap-status">${lbl}</div>
+            <div class="heatmap-pct">${c.max === 0 ? '—' : pct + '%'}</div>
+            <div class="heatmap-meta">${c.answered}/${c.total} controls</div>
+          </div>`;
+        }).join('')}
       </div>
     </div>`;
   })()}
@@ -9100,8 +9260,13 @@ async function renderRapport() {
       'Operationeel': 'M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4'
     };
 
-    const statusColor = { gap: '#D97706', critical: '#DC2626', ok: '#10B981' };
-    const statusLabel = { gap: 'Gap', critical: 'Kritiek', ok: 'Op orde' };
+    // IRCA-conforme categorisering naast bestaande status-tags (backwards compatible).
+    // Status uit AI-output kan zijn: critical | gap | ok. Severity uit AI-draft pipeline: critical | major | minor | observation.
+    // Beide worden gemapped naar een IRCA-label.
+    const statusColor = { critical: '#DC2626', major: '#DC2626', gap: '#D97706', minor: '#D97706', observation: '#0D9488', ok: '#10B981' };
+    const statusLabel = { critical: 'Major NC — Critical', major: 'Major NC', gap: 'Minor NC', minor: 'Minor NC', observation: 'Observation (OFI)', ok: 'Op orde' };
+    // Severity-rang voor sortering (laag = bovenaan in register)
+    const severityRank = { critical: 1, major: 2, gap: 3, minor: 3, observation: 4, ok: 5 };
 
     // Tellingen voor KPI-grid
     const findings = (s.detailed_findings && Array.isArray(s.detailed_findings)) ? s.detailed_findings : [];
@@ -9216,16 +9381,36 @@ async function renderRapport() {
     }
 
     if (findings.length) {
+      // IRCA-conform: sorteer op severity (Critical > Major > Minor > Observation > OK), dan op control_id
+      const sortedFindings = [...findings].sort((a, b) => {
+        const rA = severityRank[a.status] ?? 99;
+        const rB = severityRank[b.status] ?? 99;
+        if (rA !== rB) return rA - rB;
+        return (a.control_id || '').localeCompare(b.control_id || '', undefined, { numeric: true });
+      });
+      // Telling per IRCA-categorie voor sectie-header
+      const cntCritical = sortedFindings.filter(f => f.status === 'critical').length;
+      const cntMajor    = sortedFindings.filter(f => f.status === 'major').length;
+      const cntMinor    = sortedFindings.filter(f => f.status === 'minor' || f.status === 'gap').length;
+      const cntObs      = sortedFindings.filter(f => f.status === 'observation').length;
       html += `
         <div style="font-family:'Sora',sans-serif;font-size:0.66rem;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:#0D9488;margin:36px 0 8px;display:inline-flex;align-items:center;gap:10px;">
-          <span style="display:inline-block;width:22px;height:1px;background:#0D9488;"></span> Detail
+          <span style="display:inline-block;width:22px;height:1px;background:#0D9488;"></span> Findings register · IRCA-conform
         </div>
-        <h2 style="font-family:'Sora',sans-serif;font-size:1.45rem;font-weight:800;color:#0F172A;letter-spacing:-0.025em;margin:6px 0 18px;padding-bottom:10px;position:relative;">
+        <h2 style="font-family:'Sora',sans-serif;font-size:1.45rem;font-weight:800;color:#0F172A;letter-spacing:-0.025em;margin:6px 0 6px;padding-bottom:10px;position:relative;">
           Gedetailleerde bevindingen
           <span style="position:absolute;left:0;bottom:0;width:44px;height:3px;background:#0D9488;border-radius:2px;"></span>
         </h2>
+        <div style="font-size:0.84rem;color:#475569;margin-bottom:14px;display:flex;gap:14px;flex-wrap:wrap;align-items:center;">
+          <span><strong style="color:#DC2626;">${cntCritical}</strong> Critical/Major NC</span>
+          <span style="color:#CBD5E1;">·</span>
+          <span><strong style="color:#D97706;">${cntMajor + cntMinor}</strong> Minor NC</span>
+          <span style="color:#CBD5E1;">·</span>
+          <span><strong style="color:#0D9488;">${cntObs}</strong> Observation (OFI)</span>
+          <span style="margin-left:auto;font-style:italic;color:#94A3B8;font-size:0.78rem;">Gesorteerd op severity, dan control-ID</span>
+        </div>
         <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:28px;">`;
-      findings.forEach(f => {
+      sortedFindings.forEach(f => {
         const color = statusColor[f.status] || '#94A3B8';
         const label = statusLabel[f.status] || f.status || '';
         const bgTint = (f.status === 'critical') ? 'rgba(220,38,38,0.04)' : (f.status === 'gap') ? 'rgba(217,119,6,0.04)' : (f.status === 'ok') ? 'rgba(16,185,129,0.04)' : 'transparent';
@@ -9234,8 +9419,11 @@ async function renderRapport() {
             <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap;">
               <span style="font-family:'JetBrains Mono',ui-monospace,monospace;font-weight:700;font-size:0.86rem;color:#0D9488;">${escapeHtml(f.control_id || '')}</span>
               ${label ? `<span style="font-size:0.68rem;font-weight:800;padding:3px 9px;background:${color}1A;color:${color};text-transform:uppercase;letter-spacing:0.08em;">${escapeHtml(label)}</span>` : ''}
+              ${f.owner ? `<span style="font-size:0.7rem;color:#64748B;"><strong style="color:#0F172A;">Owner:</strong> ${escapeHtml(f.owner)}</span>` : ''}
             </div>
-            ${f.finding ? `<div style="font-size:0.88rem;line-height:1.65;color:#334155;margin-bottom:8px;"><strong style="color:#0F172A;font-weight:700;font-size:0.74rem;letter-spacing:0.06em;text-transform:uppercase;">Bevinding</strong><br>${escapeHtml(f.finding)}</div>` : ''}
+            ${f.finding ? `<div style="font-size:0.88rem;line-height:1.65;color:#334155;margin-bottom:8px;"><strong style="color:#0F172A;font-weight:700;font-size:0.74rem;letter-spacing:0.06em;text-transform:uppercase;">Statement (feit)</strong><br>${escapeHtml(f.finding)}</div>` : ''}
+            ${Array.isArray(f.evidence_referenced) && f.evidence_referenced.length ? `<div style="font-size:0.78rem;color:#475569;margin:8px 0;line-height:1.6;"><strong style="color:#0F172A;font-weight:700;font-size:0.74rem;letter-spacing:0.06em;text-transform:uppercase;">Objective evidence${f.sample_size ? ` · sample ${escapeHtml(String(f.sample_size))}` : ''}</strong><br><span style="display:inline-flex;flex-wrap:wrap;gap:6px;margin-top:6px;">${f.evidence_referenced.map(fn => `<span style="background:rgba(15,23,42,0.05);padding:2px 9px;border-radius:99px;font-family:'JetBrains Mono',ui-monospace,monospace;font-size:0.74rem;color:#0F172A;">${escapeHtml(fn)}</span>`).join('')}</span></div>` : ''}
+            ${f.klant_quote ? `<div style="font-size:0.82rem;color:#475569;margin:8px 0;padding:8px 12px;background:rgba(15,23,42,0.03);border-left:2px solid #94A3B8;border-radius:0 4px 4px 0;line-height:1.55;font-style:italic;"><strong style="color:#0F172A;font-style:normal;font-size:0.74rem;letter-spacing:0.06em;text-transform:uppercase;">Klant-toelichting</strong><br>"${escapeHtml(f.klant_quote)}"</div>` : ''}
             ${f.recommendation ? `<div style="font-size:0.88rem;line-height:1.65;color:#334155;padding:10px 14px;background:#F0FDFA;border-radius:6px;margin-top:8px;"><strong style="color:#0F766E;font-weight:700;font-size:0.74rem;letter-spacing:0.06em;text-transform:uppercase;">Aanbeveling</strong><br>${escapeHtml(f.recommendation)}</div>` : ''}
             ${(() => {
               // Koppel beleidsdocumenten die deze specifieke control afdekken

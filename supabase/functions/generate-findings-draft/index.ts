@@ -16,8 +16,9 @@
 
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.49.4';
-import mammoth from 'https://esm.sh/mammoth@1.7.2?bundle';
-import * as XLSX from 'https://esm.sh/xlsx@0.18.5';
+// NB: docx/xlsx ondersteuning verwijderd uit fase 1 — esm.sh bundle van mammoth/xlsx
+// faalt op Deno Deploy. Wordt teruggebracht in fase 1b via aparte util-function.
+// Fase 1 ondersteunt: images (native multimodal), PDF (native document), txt/md/csv (raw text).
 
 const ALLOWED_ORIGINS = ['https://annex27.nl', 'https://www.annex27.nl'];
 function cors(origin: string | null) {
@@ -267,7 +268,8 @@ async function generateDraftForControl(
   // Selecteer evidence
   const images = ctrl.evidence.filter(f => /\.(jpe?g|png|webp)$/i.test(f.name) && f.size < MAX_IMAGE_BYTES).slice(0, MAX_IMAGES_PER_CTRL);
   const pdfs = ctrl.evidence.filter(f => /\.pdf$/i.test(f.name) && f.size < MAX_PDF_BYTES).slice(0, MAX_PDFS_PER_CTRL);
-  const docs = ctrl.evidence.filter(f => /\.(docx|xlsx|txt|md|csv)$/i.test(f.name)).slice(0, MAX_TEXT_FILES_PER_CTRL);
+  const docs = ctrl.evidence.filter(f => /\.(txt|md|csv|json)$/i.test(f.name)).slice(0, MAX_TEXT_FILES_PER_CTRL);
+  const skippedDocs = ctrl.evidence.filter(f => /\.(docx|xlsx|pptx|doc|xls)$/i.test(f.name));
 
   // Bouw klant-context tekst
   const subAns = ctrl.sub_answers.map(s => `  Q${s.q_index + 1}: ${s.value} (${s.label})`).join('\n');
@@ -321,25 +323,20 @@ Hieronder volgt de inhoud van de bewijsstukken (afbeeldingen, PDFs als documente
     } catch (e) { console.warn('pdf fail', pdf.path, e); }
   }
 
-  // Docx/Xlsx/Txt → extract tekst, max 500KB
+  // Plain-text bestanden (txt/md/csv/json) — raw inlezen, max 500KB
   for (const doc of docs) {
     try {
       const { data: blob } = await sb.storage.from('evidence').download(doc.path);
       if (!blob) continue;
-      const buf = await blob.arrayBuffer();
-      let text = '';
-      if (/\.docx$/i.test(doc.name)) {
-        const { value } = await mammoth.extractRawText({ arrayBuffer: buf });
-        text = value;
-      } else if (/\.xlsx$/i.test(doc.name)) {
-        const wb = XLSX.read(buf, { type: 'array' });
-        text = wb.SheetNames.map(n => `[Sheet: ${n}]\n${XLSX.utils.sheet_to_csv(wb.Sheets[n])}`).join('\n\n');
-      } else {
-        text = await blob.text();
-      }
+      let text = await blob.text();
       if (text.length > MAX_TEXT_BYTES) text = text.slice(0, MAX_TEXT_BYTES) + '\n…(afgekapt)';
       contentParts.push({ type: 'text', text: `\n— Document: ${doc.name} —\n\`\`\`\n${text}\n\`\`\`` });
     } catch (e) { console.warn('doc fail', doc.path, e); }
+  }
+
+  // Onverwerkte formaten (docx/xlsx/etc) — alleen filenames noemen
+  if (skippedDocs.length) {
+    contentParts.push({ type: 'text', text: `\n*Niet-ingelezen bestanden (formaat nog niet ondersteund): ${skippedDocs.map(f => f.name).join(', ')}*` });
   }
 
   // Output-schema
