@@ -83,7 +83,7 @@ function cors(origin: string | null) {
 }
 
 const MODEL = 'claude-opus-4-5';
-const CONCURRENCY = 10;             // max parallel Claude calls
+const CONCURRENCY = 18;             // max parallel Claude calls (Opus tier-1 = 50 RPM, blijf onder)
 const MAX_PDF_BYTES = 25_000_000;   // 25MB per PDF
 const MAX_IMAGE_BYTES = 4_500_000;  // 4.5MB per image
 const MAX_TEXT_BYTES = 500_000;     // 500KB per text-extract (raw of uit docx/xlsx)
@@ -484,7 +484,12 @@ Geef ALLEEN JSON terug.`,
     systemPrompt += `\n\n**Stijlreferentie van Lead Auditor** (volg deze schrijfstijl en severity-kalibratie):${examples}`;
   }
 
-  // Claude call
+  // Claude call. System-prompt als blocks met cache_control op het grote stuk (severity-rubric +
+  // few-shot voorbeelden) zodat hetzelfde stuk niet 114x betaald wordt — 90% cost-besparing op
+  // herhaling-tokens. Cache TTL = 5 min, dus zinvol bij batch-runs.
+  const systemBlocks = [
+    { type: 'text', text: systemPrompt, cache_control: { type: 'ephemeral' } },
+  ];
   const resp = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
     headers: {
@@ -495,7 +500,7 @@ Geef ALLEEN JSON terug.`,
     body: JSON.stringify({
       model: MODEL,
       max_tokens: 1024,
-      system: systemPrompt,
+      system: systemBlocks,
       messages: [{ role: 'user', content: contentParts }],
     }),
   });

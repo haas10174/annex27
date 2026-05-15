@@ -379,7 +379,18 @@ Belangrijk:
     if (!anthropicResp.ok) {
       const errText = await anthropicResp.text();
       console.error('Anthropic error:', anthropicResp.status, errText);
-      return new Response(JSON.stringify({ error: `Anthropic API ${anthropicResp.status}`, detail: errText.slice(0, 500) }), { status: 502, headers });
+      // Herken specifieke errors en geef helder bericht zodat UI-toast info heeft
+      let userMessage = `Anthropic API ${anthropicResp.status}`;
+      if (/credit balance is too low/i.test(errText)) {
+        userMessage = 'Anthropic-tegoed op — laad bij op https://console.anthropic.com/settings/billing';
+      } else if (/prompt is too long|context.*too.*long|maximum context length/i.test(errText)) {
+        userMessage = 'Prompt te lang — te veel bevindingen + evidence in 1 call. Reduceer evidence (PDFs) of split het rapport.';
+      } else if (anthropicResp.status === 429) {
+        userMessage = 'Anthropic rate-limit — wacht 60s en probeer opnieuw.';
+      } else if (anthropicResp.status === 401 || anthropicResp.status === 403) {
+        userMessage = 'Anthropic API-key ongeldig — check secret ANTHROPIC_API_KEY in Supabase.';
+      }
+      return new Response(JSON.stringify({ error: userMessage, detail: errText.slice(0, 500), anthropic_status: anthropicResp.status }), { status: 502, headers });
     }
 
     const anthropicData = await anthropicResp.json();
