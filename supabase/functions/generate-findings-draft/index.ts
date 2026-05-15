@@ -16,9 +16,60 @@
 
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.49.4';
-// NB: docx/xlsx ondersteuning verwijderd uit fase 1 — esm.sh bundle van mammoth/xlsx
-// faalt op Deno Deploy. Wordt teruggebracht in fase 1b via aparte util-function.
-// Fase 1 ondersteunt: images (native multimodal), PDF (native document), txt/md/csv (raw text).
+// DOCX en XLSX via JSZip + handmatige XML-regex extractie. Mammoth/sheetjs bundles
+// faalden op Deno Deploy (node-specifieke deps); JSZip is Deno-vriendelijk.
+import JSZip from 'https://esm.sh/jszip@3.10.1';
+
+// Extract text uit DOCX (Open Office XML). Pakt alle <w:t>-elementen uit word/document.xml.
+async function extractDocxText(buf: ArrayBuffer): Promise<string> {
+  const zip = await JSZip.loadAsync(buf);
+  const docFile = zip.file('word/document.xml');
+  if (!docFile) return '';
+  const xml = await docFile.async('text');
+  const out: string[] = [];
+  const re = /<w:t[^>]*>([\s\S]*?)<\/w:t>/g;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(xml)) !== null) {
+    if (m[1]) out.push(m[1].replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, "'"));
+  }
+  return out.join(' ');
+}
+
+// Extract text uit XLSX. Joinpt sharedStrings + alle sheets als CSV per sheet.
+async function extractXlsxText(buf: ArrayBuffer): Promise<string> {
+  const zip = await JSZip.loadAsync(buf);
+  const sharedFile = zip.file('xl/sharedStrings.xml');
+  const shared: string[] = [];
+  if (sharedFile) {
+    const sxml = await sharedFile.async('text');
+    const re = /<t[^>]*>([\s\S]*?)<\/t>/g;
+    let m: RegExpExecArray | null;
+    while ((m = re.exec(sxml)) !== null) shared.push(m[1] || '');
+  }
+  const sheetNames = Object.keys(zip.files).filter(n => /^xl\/worksheets\/sheet\d+\.xml$/i.test(n)).sort();
+  const blocks: string[] = [];
+  for (const sn of sheetNames) {
+    const sheetXml = await zip.file(sn)!.async('text');
+    const rows = sheetXml.split(/<\/row>/);
+    const sheetCsv: string[] = [];
+    for (const row of rows) {
+      const cells = row.match(/<c[^>]*>[\s\S]*?<\/c>/g) || [];
+      const vals = cells.map(c => {
+        const isShared = /\bt="s"/.test(c);
+        const vMatch = c.match(/<v[^>]*>([\s\S]*?)<\/v>/);
+        if (!vMatch) return '';
+        if (isShared) {
+          const idx = parseInt(vMatch[1], 10);
+          return shared[idx] || '';
+        }
+        return vMatch[1];
+      });
+      if (vals.some(v => v)) sheetCsv.push(vals.join(','));
+    }
+    if (sheetCsv.length) blocks.push(`[Sheet ${sn.replace(/^xl\/worksheets\//, '').replace(/\.xml$/, '')}]\n${sheetCsv.join('\n')}`);
+  }
+  return blocks.join('\n\n');
+}
 
 const ALLOWED_ORIGINS = ['https://annex27.nl', 'https://www.annex27.nl'];
 function cors(origin: string | null) {
@@ -284,8 +335,8 @@ async function generateDraftForControl(
   // Selecteer evidence
   const images = ctrl.evidence.filter(f => /\.(jpe?g|png|webp)$/i.test(f.name) && f.size < MAX_IMAGE_BYTES).slice(0, MAX_IMAGES_PER_CTRL);
   const pdfs = ctrl.evidence.filter(f => /\.pdf$/i.test(f.name) && f.size < MAX_PDF_BYTES).slice(0, MAX_PDFS_PER_CTRL);
-  const docs = ctrl.evidence.filter(f => /\.(txt|md|csv|json)$/i.test(f.name)).slice(0, MAX_TEXT_FILES_PER_CTRL);
-  const skippedDocs = ctrl.evidence.filter(f => /\.(docx|xlsx|pptx|doc|xls)$/i.test(f.name));
+  const docs = ctrl.evidence.filter(f => /\.(txt|md|csv|json|docx|xlsx)$/i.test(f.name)).slice(0, MAX_TEXT_FILES_PER_CTRL);
+  const skippedDocs = ctrl.evidence.filter(f => /\.(pptx|doc|xls)$/i.test(f.name));
 
   // Bouw klant-context tekst
   const subAns = ctrl.sub_answers.map(s => `  Q${s.q_index + 1}: ${s.value} (${s.label})`).join('\n');
@@ -339,12 +390,20 @@ Hieronder volgt de inhoud van de bewijsstukken (afbeeldingen, PDFs als documente
     } catch (e) { console.warn('pdf fail', pdf.path, e); }
   }
 
-  // Plain-text bestanden (txt/md/csv/json) — raw inlezen, max 500KB
+  // Tekstuele bestanden inlezen — plain-text direct, docx/xlsx via JSZip-extractie
   for (const doc of docs) {
     try {
       const { data: blob } = await sb.storage.from('evidence').download(doc.path);
       if (!blob) continue;
-      let text = await blob.text();
+      let text = '';
+      if (/\.docx$/i.test(doc.name)) {
+        text = await extractDocxText(await blob.arrayBuffer());
+      } else if (/\.xlsx$/i.test(doc.name)) {
+        text = await extractXlsxText(await blob.arrayBuffer());
+      } else {
+        text = await blob.text();
+      }
+      if (!text) continue;
       if (text.length > MAX_TEXT_BYTES) text = text.slice(0, MAX_TEXT_BYTES) + '\n…(afgekapt)';
       contentParts.push({ type: 'text', text: `\n— Document: ${doc.name} —\n\`\`\`\n${text}\n\`\`\`` });
     } catch (e) { console.warn('doc fail', doc.path, e); }
