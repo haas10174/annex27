@@ -30,7 +30,20 @@ function cors(origin: string | null) {
 
 const MODEL = 'claude-opus-4-5';
 const MAX_EVIDENCE_IMAGES = 12; // limit om token-cost in toom te houden
+const MAX_EVIDENCE_PDFS = 6;    // limit PDF-documenten (Claude leest tot 100p/32MB per doc)
 const MAX_EVIDENCE_BYTES = 4_500_000; // 4.5MB per image (Anthropic limit = 5MB base64)
+const MAX_PDF_BYTES = 25_000_000; // 25MB per PDF (ruim onder Anthropic 32MB)
+
+// Chunked base64 encoder voor grote buffers (spread-trick faalt > ~120KB).
+function bufToB64(buf: ArrayBuffer): string {
+  const bytes = new Uint8Array(buf);
+  const chunk = 0x8000;
+  let bin = '';
+  for (let i = 0; i < bytes.length; i += chunk) {
+    bin += String.fromCharCode(...bytes.subarray(i, i + chunk));
+  }
+  return btoa(bin);
+}
 
 interface ReportSections {
   executive_summary: string;
@@ -161,7 +174,10 @@ serve(async (req) => {
 
     // Select images (jpg/png) up to MAX_EVIDENCE_IMAGES for visual analysis
     const imageFiles = evidenceFiles.filter(f => /\.(jpe?g|png|webp)$/i.test(f.name) && f.size < MAX_EVIDENCE_BYTES).slice(0, MAX_EVIDENCE_IMAGES);
-    const otherFiles = evidenceFiles.filter(f => !/\.(jpe?g|png|webp)$/i.test(f.name));
+    // PDFs via Claude document-input (native, leest layout/tabellen/handtekening-zones)
+    const pdfFiles = evidenceFiles.filter(f => /\.pdf$/i.test(f.name) && f.size < MAX_PDF_BYTES).slice(0, MAX_EVIDENCE_PDFS);
+    // Overig (docx/xlsx/txt/etc) — alleen filename in prompt, geen content (later toe te voegen in #94 fase 1)
+    const otherFiles = evidenceFiles.filter(f => !/\.(jpe?g|png|webp|pdf)$/i.test(f.name));
 
     // Build multimodal content for Claude
     const contentParts: any[] = [];
@@ -221,10 +237,11 @@ ${findings && findings.length ? findings.map((f: any) => {
   return `- ${f.control_id} [severity=${f.severity}]: ${f.finding}${recNote}${evNote}`;
 }).join('\n') : '(geen — baseer detailed_findings volledig op gap-antwoorden + evidence-analyse)'}
 
-**Overige bewijsvoering-bestanden (niet-image, filenames alleen):**
+**Overige bewijsvoering-bestanden (geen image/PDF — filename-only, inhoud niet ingelezen):**
 ${otherFiles.map(f => `- ${f.name} (${Math.round(f.size/1024)}KB)`).join('\n') || '(geen)'}
 
 **Image-bewijsvoering** (${imageFiles.length} afbeeldingen meegestuurd voor visuele analyse, zie hieronder):
+**PDF-bewijsvoering** (${pdfFiles.length} PDF-documenten meegestuurd — Claude leest layout, tabellen, datums, handtekening-zones; zie hieronder):
 `
     });
 
@@ -240,6 +257,20 @@ ${otherFiles.map(f => `- ${f.name} (${Math.round(f.size/1024)}KB)`).join('\n') |
         contentParts.push({ type: 'image', source: { type: 'base64', media_type: mediaType, data: b64 } });
       } catch (e) {
         console.warn('Failed to attach image:', img.path, e);
+      }
+    }
+
+    // Download + include each PDF as document (Claude native PDF-input)
+    for (const pdf of pdfFiles) {
+      try {
+        const { data: blob } = await sb.storage.from('evidence').download(pdf.path);
+        if (!blob) continue;
+        const buf = await blob.arrayBuffer();
+        const b64 = bufToB64(buf);
+        contentParts.push({ type: 'text', text: `\n*PDF-bestand: ${pdf.name} (pad: ${pdf.path}, ${Math.round(pdf.size/1024)}KB)*` });
+        contentParts.push({ type: 'document', source: { type: 'base64', media_type: 'application/pdf', data: b64 } });
+      } catch (e) {
+        console.warn('Failed to attach PDF:', pdf.path, e);
       }
     }
 
@@ -278,10 +309,11 @@ Geef **ALLEEN JSON** terug (geen markdown-codeblock, geen uitleg buiten de JSON)
 
 **Hard-vereisten voor detailed_findings:**
 1. **Refereer concreet aan evidence**. Wanneer een evidence-bestand de bevinding ondersteunt of weerspreekt, vermeld de bestandsnaam in \`evidence_referenced\` EN noem het in de \`finding\`-tekst (bv. "Het document _informatiebeveiligingsbeleid_v2.pdf_ toont een policy uit 2023, niet recent herzien"). Niet generiek "evidence aangeleverd".
-2. **Quote de klant-toelichting** wanneer de klant zelf iets relevants schrijft. Letterlijk citaat in \`klant_quote\`, max 200 tekens. Refereer ernaar in de \`finding\` (bv. "Klant geeft zelf aan: '...'. Dit bevestigt de gap").
-3. **Bij ontbrekende evidence**: zeg expliciet "Geen evidence aangeleverd voor [aspect]" — niet stilzwijgend overslaan. Laat \`evidence_referenced\` leeg.
-4. **Bij ontbrekende toelichting**: laat \`klant_quote\` leeg.
-5. **Liever 10-15 gefundeerde bevindingen dan 93 oppervlakkige**. Baseer je alleen op controls waar je evidence voor zag of waar de klant een toelichting/antwoord gaf.
+2. **PDF-controle expliciet**. Voor elk meegestuurd PDF-document: noem in de finding minimaal één van [versiedatum, ondertekening aanwezig/afwezig, scope-paragraaf, geldigheidsperiode] dat je daadwerkelijk in de inhoud zag. Verzin niets — alleen wat zichtbaar is. Bij ontbreken van ondertekening of recente review-datum: noteer dat expliciet als gap.
+3. **Quote de klant-toelichting** wanneer de klant zelf iets relevants schrijft. Letterlijk citaat in \`klant_quote\`, max 200 tekens. Refereer ernaar in de \`finding\` (bv. "Klant geeft zelf aan: '...'. Dit bevestigt de gap").
+4. **Bij ontbrekende evidence**: zeg expliciet "Geen evidence aangeleverd voor [aspect]" — niet stilzwijgend overslaan. Laat \`evidence_referenced\` leeg.
+5. **Bij ontbrekende toelichting**: laat \`klant_quote\` leeg.
+6. **Liever 10-15 gefundeerde bevindingen dan 93 oppervlakkige**. Baseer je alleen op controls waar je evidence voor zag of waar de klant een toelichting/antwoord gaf.
 
 Doel: het eindrapport moet voor de klant aantoonbaar maken dat zijn aangeleverde materiaal daadwerkelijk gelezen en gewogen is, niet generiek omgezet.`
     });
@@ -399,6 +431,7 @@ Belangrijk:
         output_tokens: outputTokens,
         cost_usd: costUsd,
         evidence_images_used: imageFiles.length,
+        evidence_pdfs_used: pdfFiles.length,
         evidence_files_total: evidenceFiles.length
       }
     }), { headers });
