@@ -5729,12 +5729,15 @@ function rejectAiFinding(ctrlId) {
 // ─── AI-draft pipeline (generate-findings-draft edge function) ───
 async function generateAiDrafts() {
   if (!currentClient) { adminToast('Geen klant geselecteerd'); return; }
-  const onlyPending = confirm(`AI-draft genereren voor ${currentClient.email}?\n\nOK = alleen nog niet gegenereerd · Annuleer = alle controls opnieuw`);
+  // Default: regenerate ALLE actieve controls (overschrijft bestaande pending drafts).
+  // Reden: bij testen / nieuwe seed-data wil je altijd verse drafts zien.
+  if (!confirm(`AI-draft genereren voor ALLE ${currentClient.email}?\n\nDit overschrijft alle bestaande pending drafts.\nKost ~$1-3 in Claude credits voor 114 controls.\n\nDoorgaan?`)) return;
   const btn = document.getElementById('genAiDraftBtn');
   const label = document.getElementById('genAiDraftLabel');
   const origLabel = label.textContent;
   btn.disabled = true;
-  label.textContent = 'AI denkt... (kan 1-2 min duren)';
+  btn.style.opacity = '0.65';
+  label.textContent = 'AI denkt... (30-90s)';
   try {
     const { data: session } = await sb.auth.getSession();
     const token = session.session?.access_token;
@@ -5742,17 +5745,18 @@ async function generateAiDrafts() {
     const res = await fetch(`${SUPABASE_URL}/functions/v1/generate-findings-draft`, {
       method: 'POST',
       headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ user_id: currentClient.user_id, only_pending: onlyPending })
+      body: JSON.stringify({ user_id: currentClient.user_id, only_pending: false })
     });
     const json = await res.json();
     if (!res.ok) throw new Error(json.error || `HTTP ${res.status}`);
-    adminToast(`${json.generated || 0} drafts gegenereerd · ${json.failed || 0} mislukt van ${json.total || 0} actieve controls`);
+    adminToast(`✓ ${json.generated || 0} drafts gegenereerd · ${json.failed || 0} mislukt van ${json.total || 0} actieve controls`, { duration: 6000 });
     await loadClientFindings(currentClient.user_id);
   } catch (e) {
-    adminToast('Fout: ' + e.message);
+    adminToast('Fout: ' + e.message, { error: true, duration: 8000 });
     console.error('generateAiDrafts', e);
   } finally {
     btn.disabled = false;
+    btn.style.opacity = '';
     label.textContent = origLabel;
   }
 }

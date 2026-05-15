@@ -383,26 +383,37 @@
     'C.10.2': ['22-management-review-correctieve-maatregelen.md'],
   };
 
-  // Fetch + upload één beleidsdoc als evidence. Voegt simulatie-header toe
-  // afhankelijk van level (strong = goedgekeurd + ondertekend, medium = draft).
-  async function uploadBeleidsdocAsEvidence(sb, klantUserId, controlId, mdFilename, level) {
+  // Bouw evidence-filename uit klant-toelichting procedure_naam. Behoudt spaces en
+  // case zodat admin.html's substring-match (procLower.includes(fn-stripped)) klopt.
+  // Verwijdert .pdf/.docx/.xlsx etc en plakt .md erop (we serveren markdown-content).
+  function deriveEvidenceFilename(procedureName, fallback) {
+    if (procedureName && procedureName.trim()) {
+      return procedureName.replace(/\.(pdf|docx?|xlsx?|pptx?|txt|md|csv)$/i, '').trim() + '.md';
+    }
+    return fallback;
+  }
+
+  // Fetch + upload één beleidsdoc als evidence onder de bestandsnaam die de klant
+  // in zijn toelichting noemt. Voegt versie-header toe (strong = goedgekeurd,
+  // medium = draft) zodat AI ook de status uit content kan halen.
+  async function uploadBeleidsdocAsEvidence(sb, klantUserId, controlId, mdSourceFile, level, procedureName) {
     try {
-      const baseUrl = '/beleidspakket/basispakket/' + mdFilename;
+      const baseUrl = '/beleidspakket/basispakket/' + mdSourceFile;
       const resp = await fetch(baseUrl);
       if (!resp.ok) return false;
       let text = await resp.text();
-      // Realisme: medium = concept-versie zonder ondertekening; strong = goedgekeurd
+      const targetFilename = deriveEvidenceFilename(procedureName, mdSourceFile);
       const header = level === 'strong'
-        ? `---\nVersie: 2.3\nStatus: Goedgekeurd door directie\nOndertekend: 2025-09-15 door M. de Vries (CTO)\nVolgende review: 2026-09-15\nClassificatie: Intern — Vertrouwelijk\n---\n\n`
-        : `---\nVersie: 0.6 (DRAFT)\nStatus: Concept — nog niet formeel goedgekeurd\nOndertekend: nee\nEigenaar: nog te bepalen\nClassificatie: Werk in uitvoering\n---\n\n`;
+        ? `---\nDocument: ${procedureName || mdSourceFile}\nVersie: 2.3\nStatus: Goedgekeurd door directie\nOndertekend: 2025-09-15 door M. de Vries (CTO)\nVolgende review: 2026-09-15\nClassificatie: Intern — Vertrouwelijk\n---\n\n`
+        : `---\nDocument: ${procedureName || mdSourceFile}\nVersie: 0.6 (DRAFT)\nStatus: Concept — nog niet formeel goedgekeurd\nOndertekend: nee\nEigenaar: nog te bepalen\nClassificatie: Werk in uitvoering\n---\n\n`;
       const fullText = header + text;
       const blob = new Blob([fullText], { type: 'text/markdown' });
-      const targetPath = `${klantUserId}/${controlId}/${mdFilename}`;
+      const targetPath = `${klantUserId}/${controlId}/${targetFilename}`;
       const { error } = await sb.storage.from('evidence').upload(targetPath, blob, { upsert: true, contentType: 'text/markdown', cacheControl: '3600' });
-      if (error) { console.warn('upload fail', controlId, mdFilename, error); return false; }
+      if (error) { console.warn('upload fail', controlId, targetFilename, error); return false; }
       return true;
     } catch (e) {
-      console.warn('uploadBeleidsdocAsEvidence failed', controlId, mdFilename, e);
+      console.warn('uploadBeleidsdocAsEvidence failed', controlId, mdSourceFile, e);
       return false;
     }
   }
@@ -423,11 +434,15 @@
       const { level, procedure, location, owner, last_verified, remark } = getMockEvidence(ctrl.id, ctrl.name);
 
       // Upload ECHTE beleidsdocs voor strong/medium controls — geeft AI iets om
-      // inhoudelijk te analyseren. Voor 'weak' geen upload (klant heeft echt niks).
+      // inhoudelijk te analyseren. Eerste doc krijgt de bestandsnaam uit
+      // klant-toelichting (procedure) zodat admin-UI 'matching upload' herkent.
       if (level === 'strong' || level === 'medium') {
         const docs = CONTROL_TO_BELEIDSDOCS[ctrl.id] || [];
-        for (const md of docs.slice(0, 2)) {
-          const ok = await uploadBeleidsdocAsEvidence(sb, klantUserId, ctrl.id, md, level);
+        for (let dIdx = 0; dIdx < Math.min(docs.length, 2); dIdx++) {
+          const md = docs[dIdx];
+          // 1e doc: gebruik procedure-naam uit note · 2e doc: gebruik md-source naam
+          const procName = dIdx === 0 ? procedure : null;
+          const ok = await uploadBeleidsdocAsEvidence(sb, klantUserId, ctrl.id, md, level, procName);
           if (ok) countUploads++;
         }
       }
