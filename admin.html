@@ -1596,7 +1596,8 @@
         <div class="findings-toolbar" style="display:flex;justify-content:space-between;align-items:center;gap:14px;padding:10px 14px;background:var(--bg-warm,#f8fafc);border:1px solid var(--border);border-radius:10px;margin-bottom:14px;flex-wrap:wrap;">
           <div style="font-size:0.84rem;color:var(--text-muted);">
             <strong style="color:var(--text);">Bewijsvoering & bevindingen</strong> &middot;
-            <span id="evidenceFileCount">…</span> files in storage
+            <span id="evidenceFileCount">…</span> files in storage &middot;
+            <span id="aiDraftCount" style="color:#0F172A;font-weight:600;">…</span> AI-drafts
           </div>
           <div style="display:flex;gap:8px;flex-wrap:wrap;">
             <button onclick="generateAiDrafts()" id="genAiDraftBtn" title="Laat AI per ingevulde control een concept-bevinding genereren op basis van klant-antwoorden + alle uploads (PDFs, images, docx, xlsx). Jij reviewt en signt af." style="background:#0F172A;color:#fff;border:0;border-radius:8px;padding:8px 16px;font-size:0.84rem;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:8px;">
@@ -4688,10 +4689,22 @@ async function loadClientFindings(userId) {
   const findings = findRes.data || [];
   findings.forEach(f => { findingCache[f.control_id] = f; });
 
-  // AI-drafts gecached per control_id
+  // AI-drafts gecached per control_id. Reset bij elke load om stale entries te vermijden.
   const drafts = draftRes.data || [];
-  window.draftCache = window.draftCache || {};
+  window.draftCache = {};
   drafts.forEach(d => { window.draftCache[d.control_id] = d; });
+  // Diagnostic counter in toolbar — toont direct of fetch werkt
+  const draftCountEl = document.getElementById('aiDraftCount');
+  if (draftCountEl) {
+    if (draftRes.error) {
+      draftCountEl.textContent = 'fout: ' + draftRes.error.message;
+      draftCountEl.style.color = '#DC2626';
+    } else {
+      draftCountEl.textContent = drafts.length;
+      draftCountEl.style.color = drafts.length > 0 ? '#0F766E' : '#94A3B8';
+    }
+  }
+  console.log('[admin] AI-drafts fetched:', drafts.length, 'error:', draftRes.error);
 
   // Set van control_ids waarvoor de klant evidence heeft aangeleverd (folder-aanwezigheid).
   const evidenceCtrlIds = new Set((evRes.data || []).filter(f => f && f.name && f.id === null).map(f => f.name));
