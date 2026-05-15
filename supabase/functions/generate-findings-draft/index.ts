@@ -157,6 +157,9 @@ serve(async (req) => {
     const targetUserId = String(body.user_id || '').trim();
     const onlyPending = body.only_pending !== false; // default: skip controls die al een draft hebben
     const dryRun = body.dry_run === true;
+    // Chunking om gateway-timeout te vermijden (60s limit). UI loopt door tot more=false.
+    const offset = Math.max(0, parseInt(String(body.offset || 0), 10) || 0);
+    const limit = Math.min(40, Math.max(1, parseInt(String(body.limit || 20), 10) || 20));
     if (!targetUserId) return new Response(JSON.stringify({ error: 'user_id verplicht' }), { status: 400, headers });
 
     const ANTHROPIC_KEY = Deno.env.get('ANTHROPIC_API_KEY');
@@ -247,20 +250,28 @@ serve(async (req) => {
     }
 
     // ── Filter actieve controls ──
-    const activeControls = Object.values(controlMap).filter(c => {
+    const allActive = Object.values(controlMap).filter(c => {
       if (c.all_nvt) return false;
       const hasAnswer = c.sub_answers.length > 0 && !c.all_nvt;
       const hasEvidence = c.evidence.length > 0;
       const hasNote = !!(c.note && (c.note.procedure_naam || c.note.toelichting || c.note.locatie));
       return hasAnswer || hasEvidence || hasNote;
-    }).filter(c => onlyPending ? !existingSet.has(c.control_id) : true);
+    }).filter(c => onlyPending ? !existingSet.has(c.control_id) : true)
+      .sort((a, b) => a.control_id.localeCompare(b.control_id, undefined, { numeric: true }));
+    // Chunking: process slechts `limit` controls per request om gateway-timeout (60s) te vermijden.
+    // UI roept in lus opnieuw aan met opgehoogde `offset` tot more=false.
+    const activeControls = allActive.slice(offset, offset + limit);
+    const totalActive = allActive.length;
+    const more = offset + limit < totalActive;
 
     if (dryRun) {
       return new Response(JSON.stringify({
         dry_run: true,
         total_klant_controls: Object.keys(controlMap).length,
-        active_controls: activeControls.length,
-        skipped_existing: Object.keys(controlMap).length - activeControls.length,
+        active_controls: totalActive,
+        chunk_size: activeControls.length,
+        offset,
+        more,
         controls_preview: activeControls.slice(0, 20).map(c => ({
           control_id: c.control_id,
           sub_answers: c.sub_answers.length,
@@ -310,10 +321,14 @@ serve(async (req) => {
 
     return new Response(JSON.stringify({
       ok: true,
-      total: activeControls.length,
+      total: totalActive,
+      processed: activeControls.length,
       generated: results.length,
       failed: failures.length,
       failures: failures.slice(0, 20),
+      offset,
+      next_offset: offset + activeControls.length,
+      more,
     }), { headers });
   } catch (e) {
     console.error('generate-findings-draft error', e);
