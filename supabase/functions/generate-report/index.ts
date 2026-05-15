@@ -28,7 +28,10 @@ function cors(origin: string | null) {
   };
 }
 
-const MODEL = 'claude-opus-4-5';
+// Sonnet 4.5 ipv Opus voor rapport-narratief: 3x sneller, ~5x goedkoper, vergelijkbare schrijfkwaliteit
+// voor narrative-secties (exec summary, score-narrative). De diepe analyse zit al in auditor_findings
+// die 1-op-1 worden overgenomen — daar is geen Opus voor nodig in deze stap.
+const MODEL = 'claude-sonnet-4-5';
 const MAX_EVIDENCE_IMAGES = 12; // limit om token-cost in toom te houden
 const MAX_EVIDENCE_PDFS = 6;    // limit PDF-documenten (Claude leest tot 100p/32MB per doc)
 const MAX_EVIDENCE_BYTES = 4_500_000; // 4.5MB per image (Anthropic limit = 5MB base64)
