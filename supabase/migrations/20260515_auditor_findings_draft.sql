@@ -33,25 +33,18 @@ create index if not exists idx_auditor_findings_draft_confidence on public.audit
 
 alter table public.auditor_findings_draft enable row level security;
 
+-- NB: gebruik auth.jwt() direct ipv EXISTS-subquery op auth.users — authenticated
+-- rol heeft geen SELECT-recht op auth.users (permission denied bij subquery).
 drop policy if exists "admin all on auditor_findings_draft" on public.auditor_findings_draft;
 create policy "admin all on auditor_findings_draft"
-  on public.auditor_findings_draft
-  for all
+  on public.auditor_findings_draft for all to authenticated
   using (
-    exists (
-      select 1 from auth.users u
-      where u.id = auth.uid()
-        and (u.raw_app_meta_data->>'role' in ('admin','auditor')
-             or u.raw_app_meta_data->>'pakket' = 'admin')
-    )
+    (auth.jwt() -> 'app_metadata' ->> 'pakket') = 'admin'
+    or (auth.jwt() -> 'app_metadata' ->> 'role') in ('admin','auditor')
   )
   with check (
-    exists (
-      select 1 from auth.users u
-      where u.id = auth.uid()
-        and (u.raw_app_meta_data->>'role' in ('admin','auditor')
-             or u.raw_app_meta_data->>'pakket' = 'admin')
-    )
+    (auth.jwt() -> 'app_metadata' ->> 'pakket') = 'admin'
+    or (auth.jwt() -> 'app_metadata' ->> 'role') in ('admin','auditor')
   );
 
 -- Klant mag NIET zien wat de AI-draft was voordat Lead Auditor signoff geeft.

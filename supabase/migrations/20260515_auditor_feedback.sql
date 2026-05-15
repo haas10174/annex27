@@ -28,25 +28,17 @@ create index if not exists idx_auditor_feedback_auditor on public.auditor_feedba
 
 alter table public.auditor_feedback enable row level security;
 
+-- NB: gebruik auth.jwt() direct ipv EXISTS-subquery op auth.users (permission denied).
 drop policy if exists "admin all on auditor_feedback" on public.auditor_feedback;
 create policy "admin all on auditor_feedback"
-  on public.auditor_feedback
-  for all
+  on public.auditor_feedback for all to authenticated
   using (
-    exists (
-      select 1 from auth.users u
-      where u.id = auth.uid()
-        and (u.raw_app_meta_data->>'role' in ('admin','auditor')
-             or u.raw_app_meta_data->>'pakket' = 'admin')
-    )
+    (auth.jwt() -> 'app_metadata' ->> 'pakket') = 'admin'
+    or (auth.jwt() -> 'app_metadata' ->> 'role') in ('admin','auditor')
   )
   with check (
-    exists (
-      select 1 from auth.users u
-      where u.id = auth.uid()
-        and (u.raw_app_meta_data->>'role' in ('admin','auditor')
-             or u.raw_app_meta_data->>'pakket' = 'admin')
-    )
+    (auth.jwt() -> 'app_metadata' ->> 'pakket') = 'admin'
+    or (auth.jwt() -> 'app_metadata' ->> 'role') in ('admin','auditor')
   );
 
 comment on table public.auditor_feedback is
