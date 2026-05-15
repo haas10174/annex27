@@ -383,33 +383,153 @@
     'C.10.2': ['22-management-review-correctieve-maatregelen.md'],
   };
 
-  // Bouw evidence-filename uit klant-toelichting procedure_naam. Behoudt spaces en
-  // case zodat admin.html's substring-match (procLower.includes(fn-stripped)) klopt.
-  // Verwijdert .pdf/.docx/.xlsx etc en plakt .md erop (we serveren markdown-content).
+  // Bouw evidence-filename uit klant-toelichting. Behoudt extensie zodat:
+  // - admin.html substring-match werkt (procLower vs fn)
+  // - AI document-input op .pdf werkt
+  // - klant ziet realistische bestandsnaam met spaces en originele extensie
   function deriveEvidenceFilename(procedureName, fallback) {
     if (procedureName && procedureName.trim()) {
-      return procedureName.replace(/\.(pdf|docx?|xlsx?|pptx?|txt|md|csv)$/i, '').trim() + '.md';
+      const trimmed = procedureName.trim();
+      // Als er al een extensie is, behouden. Anders .pdf default (mock-policies zijn PDFs).
+      return /\.(pdf|docx?|xlsx?|pptx?|txt|md|csv)$/i.test(trimmed) ? trimmed : trimmed + '.pdf';
     }
     return fallback;
   }
 
-  // Fetch + upload één beleidsdoc als evidence onder de bestandsnaam die de klant
-  // in zijn toelichting noemt. Voegt versie-header toe (strong = goedgekeurd,
-  // medium = draft) zodat AI ook de status uit content kan halen.
+  // Render basispakket-markdown als ECHTE PDF via jsPDF. AI kan dan via document-input
+  // de PDF inhoudelijk lezen (datums, ondertekening, scope) — exact zoals bij echte klant-upload.
+  function generatePolicyPdf(title, mdContent, level) {
+    if (typeof jspdf === 'undefined' && typeof window.jspdf === 'undefined') {
+      console.warn('jsPDF niet geladen — fallback naar markdown blob');
+      return null;
+    }
+    const lib = (typeof jspdf !== 'undefined' ? jspdf : window.jspdf);
+    const doc = new lib.jsPDF({ unit: 'mm', format: 'a4' });
+    const pageW = doc.internal.pageSize.getWidth();
+    const margin = 18;
+    const usable = pageW - 2 * margin;
+
+    // ── Coverpagina met document control (zoals echte klant-policy) ──
+    doc.setFillColor(13, 148, 136);  // teal accent
+    doc.rect(0, 0, pageW, 8, 'F');
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(18);
+    doc.setTextColor(15, 23, 42);
+    doc.text(title, margin, 30, { maxWidth: usable });
+
+    // Document control block
+    const dcY = 50;
+    doc.setFillColor(248, 250, 252);
+    doc.rect(margin, dcY, usable, 56, 'F');
+    doc.setDrawColor(13, 148, 136);
+    doc.setLineWidth(0.6);
+    doc.line(margin, dcY, margin, dcY + 56);
+
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(9);
+    doc.setTextColor(13, 148, 136);
+    doc.text('DOCUMENT CONTROL', margin + 4, dcY + 6);
+
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(10);
+    doc.setTextColor(15, 23, 42);
+    const isStrong = level === 'strong';
+    const rows = isStrong ? [
+      ['Versie',          '2.3'],
+      ['Status',          'Goedgekeurd door directie'],
+      ['Ondertekend',     '2025-09-15 — M. de Vries, CTO'],
+      ['Volgende review', '2026-09-15'],
+      ['Classificatie',   'Intern — Vertrouwelijk'],
+      ['Eigenaar',        'M. de Vries (CTO)'],
+    ] : [
+      ['Versie',          '0.6 (DRAFT)'],
+      ['Status',          'Concept — nog niet formeel goedgekeurd'],
+      ['Ondertekend',     'NEE — geen handtekening aanwezig'],
+      ['Volgende review', 'nog te plannen'],
+      ['Classificatie',   'Werk in uitvoering'],
+      ['Eigenaar',        'nog te bepalen'],
+    ];
+    rows.forEach((r, i) => {
+      const y = dcY + 14 + i * 7;
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(71, 85, 105);
+      doc.text(r[0] + ':', margin + 4, y);
+      doc.setFont('helvetica', 'normal');
+      doc.setTextColor(15, 23, 42);
+      doc.text(r[1], margin + 38, y);
+    });
+
+    // ── Body content (basispakket-markdown, simpel gerenderd) ──
+    let y = dcY + 70;
+    doc.setFontSize(11);
+    doc.setTextColor(15, 23, 42);
+
+    const lines = mdContent.split('\n');
+    for (const line of lines) {
+      if (y > 275) { doc.addPage(); y = 22; }
+      const trimmed = line.trim();
+      if (!trimmed) { y += 3; continue; }
+      // Markdown headings → grote bold
+      if (/^#{1,3}\s/.test(trimmed)) {
+        const level = (trimmed.match(/^#+/) || [''])[0].length;
+        const headText = trimmed.replace(/^#+\s/, '');
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(level === 1 ? 14 : level === 2 ? 12 : 11);
+        doc.setTextColor(15, 23, 42);
+        const split = doc.splitTextToSize(headText, usable);
+        split.forEach(l => { doc.text(l, margin, y); y += 6; });
+        y += 2;
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(10);
+        continue;
+      }
+      // Bullet
+      if (/^[-*]\s/.test(trimmed)) {
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(10);
+        doc.setTextColor(51, 65, 85);
+        const bulletText = '• ' + trimmed.replace(/^[-*]\s/, '');
+        const split = doc.splitTextToSize(bulletText, usable - 4);
+        split.forEach(l => { doc.text(l, margin + 4, y); y += 5; });
+        continue;
+      }
+      // Paragraph
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(10);
+      doc.setTextColor(51, 65, 85);
+      const split = doc.splitTextToSize(trimmed, usable);
+      split.forEach(l => { doc.text(l, margin, y); y += 5; });
+      y += 1;
+    }
+
+    // Voettekst op laatste pagina
+    if (y > 270) { doc.addPage(); y = 22; }
+    doc.setFontSize(8);
+    doc.setTextColor(148, 163, 184);
+    doc.setFont('helvetica', 'italic');
+    doc.text('— Einde document —', margin, y + 10);
+
+    return doc.output('blob');
+  }
+
+  // Fetch basispakket-MD, render als ECHTE PDF, upload naar evidence storage.
+  // AI leest via document-input (PDF) en kan visueel layout, datums, ondertekening checken.
   async function uploadBeleidsdocAsEvidence(sb, klantUserId, controlId, mdSourceFile, level, procedureName) {
     try {
       const baseUrl = '/beleidspakket/basispakket/' + mdSourceFile;
       const resp = await fetch(baseUrl);
       if (!resp.ok) return false;
-      let text = await resp.text();
-      const targetFilename = deriveEvidenceFilename(procedureName, mdSourceFile);
-      const header = level === 'strong'
-        ? `---\nDocument: ${procedureName || mdSourceFile}\nVersie: 2.3\nStatus: Goedgekeurd door directie\nOndertekend: 2025-09-15 door M. de Vries (CTO)\nVolgende review: 2026-09-15\nClassificatie: Intern — Vertrouwelijk\n---\n\n`
-        : `---\nDocument: ${procedureName || mdSourceFile}\nVersie: 0.6 (DRAFT)\nStatus: Concept — nog niet formeel goedgekeurd\nOndertekend: nee\nEigenaar: nog te bepalen\nClassificatie: Werk in uitvoering\n---\n\n`;
-      const fullText = header + text;
-      const blob = new Blob([fullText], { type: 'text/markdown' });
+      const mdContent = await resp.text();
+      const title = procedureName
+        ? procedureName.replace(/\.(pdf|docx?|xlsx?|pptx?|txt|md|csv)$/i, '')
+        : mdSourceFile.replace(/^\d+-/, '').replace(/-/g, ' ').replace(/\.md$/, '');
+
+      const pdfBlob = generatePolicyPdf(title, mdContent, level);
+      if (!pdfBlob) return false;
+
+      const targetFilename = deriveEvidenceFilename(procedureName, mdSourceFile.replace(/\.md$/, '.pdf'));
       const targetPath = `${klantUserId}/${controlId}/${targetFilename}`;
-      const { error } = await sb.storage.from('evidence').upload(targetPath, blob, { upsert: true, contentType: 'text/markdown', cacheControl: '3600' });
+      const { error } = await sb.storage.from('evidence').upload(targetPath, pdfBlob, { upsert: true, contentType: 'application/pdf', cacheControl: '3600' });
       if (error) { console.warn('upload fail', controlId, targetFilename, error); return false; }
       return true;
     } catch (e) {

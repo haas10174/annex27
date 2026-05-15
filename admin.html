@@ -35,6 +35,8 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.min.js" integrity="sha384-2zrRDgDHSYB/GN3nFW3fsZXoxEhKIr3N2h63Tc6DEOB9JJdFIu8xMJT2Cph/gBil" crossorigin="anonymous"></script>
   <!-- JSZip voor evidence ZIP-export (ca. 30KB gzip). Geen integrity-hash zodat patches automatisch komen. -->
   <script defer src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+  <!-- jsPDF voor mock-evidence PDF-generatie (~600KB, alleen op admin-side). -->
+  <script defer src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -5762,7 +5764,14 @@ async function generateAiDrafts() {
     });
     const json = await res.json();
     if (!res.ok) throw new Error(json.error || `HTTP ${res.status}`);
-    adminToast(`✓ ${json.generated || 0} drafts gegenereerd · ${json.failed || 0} mislukt van ${json.total || 0} actieve controls`, { duration: 6000 });
+    // Bij mislukkingen: console-log alle failures + toon eerste error in toast
+    if (json.failures && json.failures.length) {
+      console.error('[generate-findings-draft] failures:', json.failures);
+      const firstErr = json.failures[0]?.error || 'onbekend';
+      adminToast(`⚠ ${json.failed} mislukt — eerste fout: ${firstErr.slice(0, 200)}`, { error: true, duration: 15000 });
+    } else {
+      adminToast(`✓ ${json.generated || 0} drafts gegenereerd van ${json.total || 0} actieve controls`, { duration: 6000 });
+    }
     await loadClientFindings(currentClient.user_id);
   } catch (e) {
     adminToast('Fout: ' + e.message, { error: true, duration: 8000 });
