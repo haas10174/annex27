@@ -172,12 +172,14 @@ serve(async (req) => {
       }
     }
 
-    // Select images (jpg/png) up to MAX_EVIDENCE_IMAGES for visual analysis
-    const imageFiles = evidenceFiles.filter(f => /\.(jpe?g|png|webp)$/i.test(f.name) && f.size < MAX_EVIDENCE_BYTES).slice(0, MAX_EVIDENCE_IMAGES);
-    // PDFs via Claude document-input (native, leest layout/tabellen/handtekening-zones)
-    const pdfFiles = evidenceFiles.filter(f => /\.pdf$/i.test(f.name) && f.size < MAX_PDF_BYTES).slice(0, MAX_EVIDENCE_PDFS);
-    // Overig (docx/xlsx/txt/etc) — alleen filename in prompt, geen content (later toe te voegen in #94 fase 1)
-    const otherFiles = evidenceFiles.filter(f => !/\.(jpe?g|png|webp|pdf)$/i.test(f.name));
+    // OPTIM: generate-report skipt de visuele/document-input van evidence omdat die al
+    // is gelezen door generate-findings-draft tijdens de bevindingen-fase. De auditor heeft
+    // die analyse gevalideerd en de uitkomsten staan in auditor_findings (input hier).
+    // Het rapport heeft daarmee genoeg aan: klant-profiel + bevindingen + evidence-filenames + corpus.
+    // Reduceert prompt van ~150K tokens naar ~30K → geen gateway timeout meer.
+    const imageFiles: typeof evidenceFiles = [];
+    const pdfFiles: typeof evidenceFiles = [];
+    const otherFiles = evidenceFiles;
 
     // Build multimodal content for Claude
     const contentParts: any[] = [];
