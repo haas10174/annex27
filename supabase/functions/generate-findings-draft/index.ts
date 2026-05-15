@@ -434,34 +434,44 @@ Hieronder volgt de inhoud van de bewijsstukken (afbeeldingen, PDFs als documente
     type: 'text',
     text: `
 
-**Opdracht:** Beoordeel deze ene control. Geef terug **alleen JSON** (geen markdown-fence) in dit schema:
+**Opdracht:** Beoordeel deze ene control op basis van DRIE GELIJKWAARDIGE bronnen:
+1. **Klant-antwoorden** op de sub-vragen (CMMI 0-4 schaal) — wat zegt de klant zelf?
+2. **Klant-toelichting** (proces in eigen woorden) — beschrijft de klant een geldig werkend proces?
+3. **Geuploade evidence** (PDFs, images, documenten) — formele onderbouwing van het proces.
+
+Geef terug **alleen JSON** (geen markdown-fence) in dit schema:
 \`\`\`json
 {
   "severity": "observation|minor|major|critical",
-  "finding": "Concrete observatie. Refereer letterlijk naar wat je in de evidence zag (bestandsnaam, paginanummer, datum, ontbrekende ondertekening, etc). Geen marketingtaal.",
-  "recommendation": "Concrete actie die de klant moet nemen om de gap te dichten. Geen uren-schatting.",
-  "evidence_cited": ["filename.pdf", "screenshot.jpg"],
+  "finding": "Concrete observatie. Weeg alle drie bronnen — niet alleen formele evidence. Citeer letterlijk waar mogelijk.",
+  "recommendation": "Concrete actie. Geen uren-schatting.",
+  "evidence_cited": ["filename.pdf"],
   "evidence_assessment": "Korte beoordeling van wat de evidence wel/niet aantoont (max 200 tekens).",
   "confidence": 0.85,
-  "reasoning": "1-2 zinnen waarom deze severity gekozen is."
+  "reasoning": "1-2 zinnen waarom deze severity. Vermeld expliciet hoe je de drie bronnen tegen elkaar afgewogen hebt."
 }
 \`\`\`
 
-**Severity-classificatie (IRCA-conform):**
-- \`critical\` — fundamentele afwezigheid van de control (klant claimt 0 en/of geen evidence en aanwijsbaar risico)
-- \`major\` — control is niet aantoonbaar/niet ondertekend/significant onvolledig
-- \`minor\` — control aanwezig maar single lapse (verouderde versie, gedeeltelijke scope, missende review-cycle)
-- \`observation\` — control werkt, lichte verbetersuggestie (Opportunity for Improvement)
+**Severity-rubric (IRCA-conform, weegt ALLE drie bronnen):**
+
+| Beeld over alle 3 bronnen | Severity |
+|---|---|
+| Klant antwoordt Geïmplementeerd/Volledig én toelichting beschrijft werkend proces én evidence ondersteunt | **observation** (OFI — lichte verbetersuggestie) |
+| 2 van 3 bronnen sterk, 1 zwak (bv. evidence verouderd of toelichting kort) | **observation** of **minor** afhankelijk van risicobetekenis |
+| Aanwezig maar single lapse: verouderde versie / missende review-cycle / scope deels ontbrekend | **minor** |
+| 2 of meer bronnen zwak: lage CMMI én concept-status én geen formele ondertekening | **major** |
+| Fundamenteel afwezig: CMMI=0, geen toelichting, geen evidence | **critical** |
 
 **Hard-vereisten:**
-1. Refereer **letterlijk** aan evidence-inhoud als die er is (bv. "Het document _IB-beleid-v2.3.pdf_ toont versiedatum 2023-08, geen directiehandtekening op pagina 1"). Niet generiek "evidence aangeleverd".
-2. Bij PDF-evidence: noem minimaal één van [versiedatum, ondertekening aanwezig/afwezig, scope-paragraaf, geldigheidsperiode] dat je daadwerkelijk zag.
-3. Bij ontbrekende evidence: zeg expliciet "Geen evidence aangeleverd". \`evidence_cited\` leeg.
-4. Quote klant-toelichting waar relevant (in finding-tekst).
-5. \`confidence\` reflecteert hoe zeker je bent: hoog (≥0.85) bij heldere evidence + concreet antwoord; laag (≤0.5) bij vage of conflicting input.
-6. \`evidence_cited\` bevat **exact** de bestandsnamen die je raadpleegde voor deze finding (case-sensitive zoals aangeleverd).
+1. **Weeg de drie bronnen evenwichtig.** Een klant die alle sub-vragen Geïmplementeerd antwoordt + toelichting geeft + relevant document uploadt verdient \`observation\`, niet \`major\` — ook al ontbreekt een specifieke ondertekening-handtekening op pagina 1. De versie-/ondertekening-meta in de PDF-header (bv. "Goedgekeurd door directie, ondertekend 2025-09-15") is **geldige evidence** van ondertekening, niet vereist als image-handtekening.
+2. **Antwoorden tellen.** Hoge CMMI-scores (3-4) op alle sub-vragen + onderbouwende toelichting wegen zwaar — ook als evidence ontbreekt, kan severity blijven op \`minor\` (lapse op evidence-vereiste, niet op control zelf).
+3. **PDF-inhoud lezen.** Refereer letterlijk aan wat je in de PDF zag: documentnummer, versie, ondertekening-status uit document-control, scope-paragraaf, review-datum.
+4. **Klant-quote.** Quote klant-toelichting waar relevant in \`finding\`.
+5. **Geen evidence ≠ automatisch major.** Bij ontbrekende evidence maar sterke CMMI + toelichting: minor (bewijsvoering verbeterpunt) ipv major.
+6. \`confidence\` hoog (≥0.85) bij coherente 3 bronnen; laag (≤0.5) bij conflicterende signalen tussen bronnen.
+7. \`evidence_cited\` bevat exact de bestandsnamen die je raadpleegde (case-sensitive).
 
-Geef ALLEEN JSON terug, niets daarvoor of daarna.`,
+Geef ALLEEN JSON terug.`,
   });
 
   // Few-shot: eerder door Lead Auditor goedgekeurde/aangepaste bevindingen voor dezelfde control

@@ -4766,9 +4766,15 @@ function renderControlRow(ctrl, gapAnswers, existingFinding, hasEvidence, aiDraf
     else { statusCls = 'non-compliant'; statusLabel = 'Non-compliant'; }
   }
 
-  const sev = existingFinding?.severity || 'info';
-  const findingText = existingFinding?.finding || '';
-  const recommendationText = existingFinding?.recommendation || '';
+  // Auto-fill: als auditor zelf nog geen bevinding heeft ingevuld, gebruik AI-draft als start.
+  // AI-severity-mapping: observation → info (UI-categorie), rest blijft 1-op-1.
+  const aiSevMap = { observation: 'info', minor: 'minor', major: 'major', critical: 'critical' };
+  const aiSev = aiDraft ? aiSevMap[aiDraft.severity] || 'info' : null;
+  const sev = existingFinding?.severity || aiSev || 'info';
+  const findingText = existingFinding?.finding || (aiDraft?.finding || '');
+  const recommendationText = existingFinding?.recommendation || (aiDraft?.recommendation || '');
+  // Markeer of de waarde uit AI-draft komt zodat we visuele hint kunnen tonen
+  const fromAi = !existingFinding?.finding && !!aiDraft;
 
   // Filter-state attributes voor de toolbar-filters
   const stateAttr = [
@@ -4875,8 +4881,8 @@ function renderControlRow(ctrl, gapAnswers, existingFinding, hasEvidence, aiDraf
         </div>
 
         <div class="finding-row">
-          <div class="finding-label">Bevinding</div>
-          <textarea class="finding-textarea" id="finding_${safeId}" placeholder="Wat heeft u geconstateerd? (komt zichtbaar in het eindrapport van de klant)" onblur="saveFinding('${esc(ctrl.id)}')">${esc(findingText)}</textarea>
+          <div class="finding-label">Bevinding ${fromAi ? '<span style="font-size:0.66rem;color:#0F766E;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;margin-left:6px;padding:2px 7px;background:rgba(13,148,136,0.10);border-radius:4px;">AI-voorstel — bewerk vrij</span>' : ''}</div>
+          <textarea class="finding-textarea${fromAi ? ' from-ai' : ''}" id="finding_${safeId}" placeholder="Wat heeft u geconstateerd? (komt zichtbaar in het eindrapport van de klant)" onblur="saveFinding('${esc(ctrl.id)}')">${esc(findingText)}</textarea>
         </div>
 
         <div class="finding-row">
