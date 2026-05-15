@@ -1598,6 +1598,10 @@
             <span id="evidenceFileCount">…</span> files in storage
           </div>
           <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <button onclick="generateAiDrafts()" id="genAiDraftBtn" title="Laat AI per ingevulde control een concept-bevinding genereren op basis van klant-antwoorden + alle uploads (PDFs, images, docx, xlsx). Jij reviewt en signt af." style="background:#0F172A;color:#fff;border:0;border-radius:8px;padding:8px 16px;font-size:0.84rem;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:8px;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+              <span id="genAiDraftLabel">Genereer AI-draft</span>
+            </button>
             <button onclick="downloadAllEvidence()" id="dlAllEvBtn" style="background:var(--accent);color:#fff;border:0;border-radius:8px;padding:8px 16px;font-size:0.84rem;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:8px;">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
               <span id="dlAllEvLabel">Download alles als ZIP</span>
@@ -4671,16 +4675,22 @@ async function loadClientFindings(userId) {
   const list = document.getElementById('controlList');
   list.innerHTML = '<div class="empty-state">Laden...</div>';
 
-  // Fetch gap-analyse answers + evidence + existing findings in parallel
-  const [gaRes, evRes, findRes] = await Promise.all([
+  // Fetch gap-analyse answers + evidence + findings + AI-drafts in parallel
+  const [gaRes, evRes, findRes, draftRes] = await Promise.all([
     sb.from('gap_analyse').select('*').eq('user_id', userId).maybeSingle(),
     sb.storage.from('evidence').list(userId, { limit: 500 }).catch(() => ({ data: [] })),
-    sb.from('auditor_findings').select('*').eq('user_id', userId)
+    sb.from('auditor_findings').select('*').eq('user_id', userId),
+    sb.from('auditor_findings_draft').select('*').eq('user_id', userId).catch(() => ({ data: [] }))
   ]);
 
   const gapAnswers = gaRes.data?.answers || {};
   const findings = findRes.data || [];
   findings.forEach(f => { findingCache[f.control_id] = f; });
+
+  // AI-drafts gecached per control_id
+  const drafts = draftRes.data || [];
+  window.draftCache = window.draftCache || {};
+  drafts.forEach(d => { window.draftCache[d.control_id] = d; });
 
   // Set van control_ids waarvoor de klant evidence heeft aangeleverd (folder-aanwezigheid).
   const evidenceCtrlIds = new Set((evRes.data || []).filter(f => f && f.name && f.id === null).map(f => f.name));
@@ -4700,7 +4710,7 @@ async function loadClientFindings(userId) {
       </span>
     </div>`;
     catControls.forEach(ctrl => {
-      html += renderControlRow(ctrl, gapAnswers, findings.find(f => f.control_id === ctrl.id), evidenceCtrlIds.has(ctrl.id));
+      html += renderControlRow(ctrl, gapAnswers, findings.find(f => f.control_id === ctrl.id), evidenceCtrlIds.has(ctrl.id), window.draftCache?.[ctrl.id]);
     });
   });
 
@@ -4722,7 +4732,7 @@ async function loadClientFindings(userId) {
   });
 }
 
-function renderControlRow(ctrl, gapAnswers, existingFinding, hasEvidence) {
+function renderControlRow(ctrl, gapAnswers, existingFinding, hasEvidence, aiDraft) {
   const safeId = ctrl.id.replace(/\./g, '_');
   // Determine status based on gapAnswers
   const scoreMap = {'4': 3, '3': 2, '2': 1, '1': 0};
@@ -4794,6 +4804,35 @@ function renderControlRow(ctrl, gapAnswers, existingFinding, hasEvidence) {
         <div class="section-label">Bewijsvoering</div>
         <div id="ev_${safeId}"><em style="color:var(--text-dim);font-size:0.82rem;">Laden...</em></div>
       </div>
+
+      ${aiDraft ? `<div class="control-section ai-draft-section" data-draft-status="${esc(aiDraft.status)}" id="aiDraft_${safeId}">
+        <div class="section-label" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+          <span style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="color:#0F172A;"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+            <span>AI-DRAFT</span>
+            <span style="font-size:0.66rem;font-weight:800;padding:2px 9px;border-radius:99px;letter-spacing:0.04em;text-transform:uppercase;${aiDraft.severity==='critical'?'background:#FEE2E2;color:#991B1B;':aiDraft.severity==='major'?'background:#FED7AA;color:#9A3412;':aiDraft.severity==='minor'?'background:#FEF3C7;color:#854D0E;':'background:#DBEAFE;color:#1E40AF;'}">${esc(aiDraft.severity)}</span>
+            <span style="font-size:0.7rem;color:${aiDraft.confidence >= 0.85 ? '#059669' : aiDraft.confidence >= 0.6 ? '#D97706' : '#DC2626'};font-weight:700;">Confidence ${Math.round((aiDraft.confidence || 0) * 100)}%</span>
+          </span>
+          <span style="font-size:0.66rem;color:var(--text-dim);">${esc(aiDraft.model_version || '')} · ${aiDraft.created_at ? new Date(aiDraft.created_at).toLocaleDateString('nl-NL') : ''}</span>
+        </div>
+        <div style="background:rgba(15,23,42,0.02);border:1px solid rgba(15,23,42,0.08);border-left:3px solid #0F172A;padding:14px 16px;border-radius:0 6px 6px 0;margin-top:6px;">
+          <div style="font-size:0.84rem;color:#0F172A;line-height:1.65;margin-bottom:10px;white-space:pre-wrap;">${esc(aiDraft.finding || '')}</div>
+          ${aiDraft.recommendation ? `<div style="font-size:0.78rem;color:#475569;line-height:1.6;margin-bottom:10px;white-space:pre-wrap;"><strong style="color:#0F172A;">Aanbeveling:</strong> ${esc(aiDraft.recommendation)}</div>` : ''}
+          ${aiDraft.evidence_assessment ? `<div style="font-size:0.76rem;color:#475569;line-height:1.55;margin-bottom:8px;padding:8px 12px;background:rgba(13,148,136,0.06);border-radius:4px;"><strong style="color:#0F172A;">Bewijs-evaluatie:</strong> ${esc(aiDraft.evidence_assessment)}</div>` : ''}
+          ${Array.isArray(aiDraft.evidence_cited) && aiDraft.evidence_cited.length ? `<div style="font-size:0.72rem;color:#475569;margin-bottom:8px;display:flex;gap:6px;flex-wrap:wrap;align-items:center;"><strong style="color:#0F172A;">Evidence gebruikt:</strong>${aiDraft.evidence_cited.map(fn => `<span style="background:rgba(15,23,42,0.06);padding:2px 8px;border-radius:99px;font-family:monospace;font-size:0.7rem;">${esc(fn)}</span>`).join('')}</div>` : ''}
+          ${aiDraft.reasoning ? `<div style="font-size:0.72rem;color:#94A3B8;line-height:1.55;font-style:italic;margin-top:10px;border-top:1px dashed rgba(15,23,42,0.08);padding-top:8px;"><strong style="color:#475569;font-style:normal;">Reasoning:</strong> ${esc(aiDraft.reasoning)}</div>` : ''}
+          <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;align-items:center;" id="aiActions_${safeId}">
+            ${aiDraft.status === 'pending' ? `
+              <button type="button" onclick="acceptAiDraft('${esc(ctrl.id)}')" style="background:#0D9488;color:#fff;border:0;border-radius:6px;padding:8px 14px;font-size:0.78rem;font-weight:700;cursor:pointer;">✓ Accept &amp; kopieer naar bevinding</button>
+              <button type="button" onclick="editAiDraft('${esc(ctrl.id)}')" style="background:#fff;color:#0F172A;border:1px solid #CBD5E1;border-radius:6px;padding:8px 14px;font-size:0.78rem;font-weight:600;cursor:pointer;">✏ Bewerk &amp; accept</button>
+              <button type="button" onclick="rejectAiDraft('${esc(ctrl.id)}')" style="background:#fff;color:#DC2626;border:1px solid #FCA5A5;border-radius:6px;padding:8px 14px;font-size:0.78rem;font-weight:600;cursor:pointer;">✗ Reject</button>
+            ` : `
+              <span style="font-size:0.76rem;color:${aiDraft.status === 'accepted' ? '#059669' : aiDraft.status === 'rejected' ? '#DC2626' : aiDraft.status === 'edited' ? '#0F766E' : '#94A3B8'};font-weight:700;">${aiDraft.status === 'accepted' ? '✓ Geaccepteerd' : aiDraft.status === 'rejected' ? '✗ Verworpen' : aiDraft.status === 'edited' ? '✏ Aangepast bij accept' : '— Verouderd'}${aiDraft.reviewed_at ? ' · ' + new Date(aiDraft.reviewed_at).toLocaleDateString('nl-NL') : ''}</span>
+              <button type="button" onclick="acceptAiDraft('${esc(ctrl.id)}',true)" title="Opnieuw kopiëren naar bevinding-velden (overschrijft)" style="background:#fff;color:#0F172A;border:1px solid #CBD5E1;border-radius:6px;padding:6px 12px;font-size:0.74rem;font-weight:600;cursor:pointer;">Opnieuw kopiëren</button>
+            `}
+          </div>
+        </div>
+      </div>` : ''}
 
       <div class="control-section finding-editor">
         <div class="section-label">Uw bevinding (komt in rapport)</div>
@@ -5684,6 +5723,88 @@ function rejectAiFinding(ctrlId) {
   }
   saveFinding(ctrlId);
   adminToast('Tekst gewist — typ uw eigen bevinding');
+}
+
+// ─── AI-draft pipeline (generate-findings-draft edge function) ───
+async function generateAiDrafts() {
+  if (!currentClient) { adminToast('Geen klant geselecteerd'); return; }
+  const onlyPending = confirm(`AI-draft genereren voor ${currentClient.email}?\n\nOK = alleen nog niet gegenereerd · Annuleer = alle controls opnieuw`);
+  const btn = document.getElementById('genAiDraftBtn');
+  const label = document.getElementById('genAiDraftLabel');
+  const origLabel = label.textContent;
+  btn.disabled = true;
+  label.textContent = 'AI denkt... (kan 1-2 min duren)';
+  try {
+    const { data: session } = await sb.auth.getSession();
+    const token = session.session?.access_token;
+    if (!token) throw new Error('Niet ingelogd');
+    const res = await fetch(`${SUPABASE_URL}/functions/v1/generate-findings-draft`, {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ user_id: currentClient.user_id, only_pending: onlyPending })
+    });
+    const json = await res.json();
+    if (!res.ok) throw new Error(json.error || `HTTP ${res.status}`);
+    adminToast(`${json.generated || 0} drafts gegenereerd · ${json.failed || 0} mislukt van ${json.total || 0} actieve controls`);
+    await loadClientFindings(currentClient.user_id);
+  } catch (e) {
+    adminToast('Fout: ' + e.message);
+    console.error('generateAiDrafts', e);
+  } finally {
+    btn.disabled = false;
+    label.textContent = origLabel;
+  }
+}
+
+async function acceptAiDraft(ctrlId) {
+  if (!currentClient) return;
+  const draft = window.draftCache?.[ctrlId];
+  if (!draft) { adminToast('Draft niet gevonden'); return; }
+  const safeId = ctrlId.replace(/\./g, '_');
+  const sevMap = { observation: 'info', minor: 'minor', major: 'major', critical: 'critical' };
+  const sev = sevMap[draft.severity] || 'info';
+  const findingEl = document.getElementById('finding_' + safeId);
+  const recEl = document.getElementById('rec_' + safeId);
+  if (findingEl) findingEl.value = draft.finding || '';
+  if (recEl) recEl.value = draft.recommendation || '';
+  const sevPills = document.querySelector(`.severity-pills[data-ctrl="${ctrlId}"]`);
+  if (sevPills) sevPills.querySelectorAll('.severity-pill').forEach(p => p.classList.toggle('active', p.dataset.sev === sev));
+  await saveFinding(ctrlId);
+  await sb.from('auditor_findings_draft').update({ status: 'accepted', reviewed_by: currentUser.id, reviewed_at: new Date().toISOString() }).eq('user_id', currentClient.user_id).eq('control_id', ctrlId);
+  if (window.draftCache?.[ctrlId]) { window.draftCache[ctrlId].status = 'accepted'; window.draftCache[ctrlId].reviewed_at = new Date().toISOString(); }
+  const actionsEl = document.getElementById('aiActions_' + safeId);
+  if (actionsEl) actionsEl.innerHTML = `<span style="font-size:0.76rem;color:#059669;font-weight:700;">✓ Geaccepteerd · ${new Date().toLocaleDateString('nl-NL')}</span>`;
+  adminToast('AI-draft geaccepteerd → bevinding opgeslagen');
+}
+
+function editAiDraft(ctrlId) {
+  const draft = window.draftCache?.[ctrlId];
+  if (!draft) return;
+  const safeId = ctrlId.replace(/\./g, '_');
+  const sevMap = { observation: 'info', minor: 'minor', major: 'major', critical: 'critical' };
+  const sev = sevMap[draft.severity] || 'info';
+  const findingEl = document.getElementById('finding_' + safeId);
+  const recEl = document.getElementById('rec_' + safeId);
+  if (findingEl) { findingEl.value = draft.finding || ''; }
+  if (recEl) recEl.value = draft.recommendation || '';
+  const sevPills = document.querySelector(`.severity-pills[data-ctrl="${ctrlId}"]`);
+  if (sevPills) sevPills.querySelectorAll('.severity-pill').forEach(p => p.classList.toggle('active', p.dataset.sev === sev));
+  if (findingEl) {
+    findingEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    setTimeout(() => findingEl.focus(), 300);
+  }
+  adminToast('Tekst gekopieerd · pas aan en klik buiten veld voor save');
+}
+
+async function rejectAiDraft(ctrlId) {
+  if (!currentClient) return;
+  if (!confirm('AI-draft verwerpen voor ' + ctrlId + '?')) return;
+  await sb.from('auditor_findings_draft').update({ status: 'rejected', reviewed_by: currentUser.id, reviewed_at: new Date().toISOString() }).eq('user_id', currentClient.user_id).eq('control_id', ctrlId);
+  if (window.draftCache?.[ctrlId]) { window.draftCache[ctrlId].status = 'rejected'; window.draftCache[ctrlId].reviewed_at = new Date().toISOString(); }
+  const safeId = ctrlId.replace(/\./g, '_');
+  const actionsEl = document.getElementById('aiActions_' + safeId);
+  if (actionsEl) actionsEl.innerHTML = `<span style="font-size:0.76rem;color:#DC2626;font-weight:700;">✗ Verworpen · ${new Date().toLocaleDateString('nl-NL')}</span>`;
+  adminToast('AI-draft verworpen');
 }
 
 async function saveFinding(ctrlId) {
