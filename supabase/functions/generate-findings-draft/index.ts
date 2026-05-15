@@ -135,6 +135,20 @@ serve(async (req) => {
       .select('control_id, status').eq('user_id', targetUserId);
     const existingSet = new Set<string>((existingDrafts || []).filter(d => d.status === 'pending' || d.status === 'accepted').map(d => d.control_id));
 
+    // ── Learning few-shot: pak recent geaccepteerde/aangepaste feedback voor deze controls ──
+    // Per control max 2 voorbeelden, gesorteerd op recency. We groeperen op control_id zodat
+    // generateDraftForControl ze direct kan opzoeken.
+    const { data: feedbackRows } = await sb.from('auditor_feedback')
+      .select('control_id, final_severity, final_finding, final_recommendation, action, klant_sector, created_at')
+      .in('action', ['accepted', 'edited'])
+      .order('created_at', { ascending: false })
+      .limit(200);
+    const fewShotByControl: Record<string, any[]> = {};
+    for (const f of (feedbackRows || [])) {
+      if (!fewShotByControl[f.control_id]) fewShotByControl[f.control_id] = [];
+      if (fewShotByControl[f.control_id].length < 2) fewShotByControl[f.control_id].push(f);
+    }
+
     // ── Bouw controlMap uit answers ──
     const controlMap: Record<string, ControlContext> = {};
     for (const [key, raw] of Object.entries(rawAnswers)) {
@@ -211,7 +225,8 @@ serve(async (req) => {
 
     async function processOne(ctrl: ControlContext): Promise<void> {
       try {
-        const draft = await generateDraftForControl(ctrl, klantSector, klantBedrijf, sb, ANTHROPIC_KEY);
+        const fewShot = fewShotByControl[ctrl.control_id] || [];
+        const draft = await generateDraftForControl(ctrl, klantSector, klantBedrijf, sb, ANTHROPIC_KEY, fewShot);
         results.push(draft);
       } catch (e) {
         failures.push({ control_id: ctrl.control_id, error: String(e?.message || e) });
@@ -264,6 +279,7 @@ async function generateDraftForControl(
   bedrijf: string,
   sb: ReturnType<typeof createClient>,
   apiKey: string,
+  fewShot: any[] = [],
 ): Promise<DraftFinding> {
   // Selecteer evidence
   const images = ctrl.evidence.filter(f => /\.(jpe?g|png|webp)$/i.test(f.name) && f.size < MAX_IMAGE_BYTES).slice(0, MAX_IMAGES_PER_CTRL);
@@ -374,6 +390,16 @@ Hieronder volgt de inhoud van de bewijsstukken (afbeeldingen, PDFs als documente
 Geef ALLEEN JSON terug, niets daarvoor of daarna.`,
   });
 
+  // Few-shot: eerder door Lead Auditor goedgekeurde/aangepaste bevindingen voor dezelfde control
+  // wordt aan het systeem-prompt toegevoegd zodat Claude leert van zijn vorige output-correcties.
+  let systemPrompt = 'Je bent een ervaren ISO 27001 Lead Auditor (IRCA-gecertificeerd). Je beoordeelt per control de bewijsvoering van een MKB-klant en produceert een concept-bevinding die door een menselijke Lead Auditor wordt nagelezen voordat het rapport vrijgegeven wordt. Wees feitelijk, concreet, en verzin niets dat niet in evidence of klant-input staat.';
+  if (fewShot.length > 0) {
+    const examples = fewShot.slice(0, 2).map((f: any, i: number) => {
+      return `\nVoorbeeld ${i + 1} (eerder door Lead Auditor ${f.action === 'edited' ? 'aangepast' : 'goedgekeurd'} voor ${ctrl.control_id}${f.klant_sector ? ` in sector "${f.klant_sector}"` : ''}):\n- Severity: ${f.final_severity}\n- Finding: ${String(f.final_finding || '').slice(0, 400)}\n- Aanbeveling: ${String(f.final_recommendation || '').slice(0, 300)}`;
+    }).join('\n');
+    systemPrompt += `\n\n**Stijlreferentie van Lead Auditor** (volg deze schrijfstijl en severity-kalibratie):${examples}`;
+  }
+
   // Claude call
   const resp = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
@@ -385,7 +411,7 @@ Geef ALLEEN JSON terug, niets daarvoor of daarna.`,
     body: JSON.stringify({
       model: MODEL,
       max_tokens: 1024,
-      system: 'Je bent een ervaren ISO 27001 Lead Auditor (IRCA-gecertificeerd). Je beoordeelt per control de bewijsvoering van een MKB-klant en produceert een concept-bevinding die door een menselijke Lead Auditor wordt nagelezen voordat het rapport vrijgegeven wordt. Wees feitelijk, concreet, en verzin niets dat niet in evidence of klant-input staat.',
+      system: systemPrompt,
       messages: [{ role: 'user', content: contentParts }],
     }),
   });

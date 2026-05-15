@@ -8221,16 +8221,29 @@ async function generateReport() {
 
   <h3>Score per categorie</h3>
   <table class="cat-table">
-    <thead><tr><th>Categorie</th><th>Score</th><th></th></tr></thead>
+    <thead><tr><th>Categorie</th><th>Score</th><th>Voortgang</th><th style="font-size:0.7rem;color:#94A3B8;">Mapping</th></tr></thead>
     <tbody>
-    ${categories.map(cat => {
-      const c = catScores[cat];
-      const pct = c.max > 0 ? Math.round((c.score / c.max) * 100) : 0;
-      const level = pct >= 67 ? 'high' : pct >= 34 ? 'mid' : 'low';
-      return `<tr><td class="cat-name">${esc(cat)}</td><td><span class="bar-wrap"><span class="bar-fill bar-${level}" style="width:${pct}%"></span></span>${pct}%</td><td>${c.answered}/${c.total} vragen</td></tr>`;
-    }).join('')}
+    ${(() => {
+      // Cross-norm mapping per Annex A-categorie (NEN 7510 + NIS2). Differentieert ons rapport
+      // van Drata/Sprinto/Vanta die enkel 27001/SOC2 doen.
+      const crossMap = {
+        'ISMS Clausules':   { nen: '4–10', nis2: 'art. 21 governance' },
+        'Organisatorisch':  { nen: 'H5',   nis2: 'art. 21 a/b/g' },
+        'Personeel':        { nen: 'H6',   nis2: 'art. 21 g' },
+        'Fysiek':           { nen: 'H7',   nis2: 'art. 21 d' },
+        'Technologie':      { nen: 'H8',   nis2: 'art. 21 c/e/f' },
+      };
+      return categories.map(cat => {
+        const c = catScores[cat];
+        const pct = c.max > 0 ? Math.round((c.score / c.max) * 100) : 0;
+        const level = pct >= 67 ? 'high' : pct >= 34 ? 'mid' : 'low';
+        const m = crossMap[cat] || { nen: '—', nis2: '—' };
+        return `<tr><td class="cat-name">${esc(cat)}</td><td><span class="bar-wrap"><span class="bar-fill bar-${level}" style="width:${pct}%"></span></span>${pct}%</td><td>${c.answered}/${c.total} vragen</td><td style="font-size:0.74rem;color:#475569;line-height:1.4;"><span style="color:#0F766E;font-weight:700;">NEN 7510</span> ${esc(m.nen)} <span style="color:#CBD5E1;">·</span> <span style="color:#9333EA;font-weight:700;">NIS2</span> ${esc(m.nis2)}</td></tr>`;
+      }).join('');
+    })()}
     </tbody>
   </table>
+  <p style="font-size:0.74rem;color:#94A3B8;margin-top:8px;line-height:1.5;">Mapping-kolom toont de overeenkomstige hoofdstukken in NEN-7510 (zorg) en artikelen in NIS2-richtlijn. Annex27-rapport dekt alle drie kaders in één assessment.</p>
 </div>
 
 <!-- (Auditor-ready + Claims zonder bewijs zijn nu geïntegreerd in 'Per categorie' verderop) -->

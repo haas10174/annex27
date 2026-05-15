@@ -964,6 +964,7 @@
     }
     .control-row.open .control-body { display: block; }
     .control-row.open .control-header { background: rgba(13,148,136,0.05); }
+    .control-row.keyboard-focused { box-shadow: 0 0 0 2px #0D9488, 0 4px 12px rgba(13,148,136,0.18); border-radius: 8px; }
 
     .control-section {
       margin-top: 14px;
@@ -5765,16 +5766,39 @@ async function acceptAiDraft(ctrlId) {
   const sev = sevMap[draft.severity] || 'info';
   const findingEl = document.getElementById('finding_' + safeId);
   const recEl = document.getElementById('rec_' + safeId);
-  if (findingEl) findingEl.value = draft.finding || '';
-  if (recEl) recEl.value = draft.recommendation || '';
+  // Snapshot eventuele bestaande user-edits in de textarea (bewerk-flow heeft die mogelijk al gewijzigd)
+  const finalFinding = (findingEl && findingEl.value && findingEl.value !== draft.finding) ? findingEl.value : draft.finding || '';
+  const finalRec = (recEl && recEl.value && recEl.value !== draft.recommendation) ? recEl.value : draft.recommendation || '';
+  const finalSev = document.querySelector(`.severity-pills[data-ctrl="${ctrlId}"] .severity-pill.active`)?.dataset.sev || sev;
+  const wasEdited = (finalFinding !== (draft.finding || '')) || (finalRec !== (draft.recommendation || '')) || (finalSev !== sev);
+  if (findingEl) findingEl.value = finalFinding;
+  if (recEl) recEl.value = finalRec;
   const sevPills = document.querySelector(`.severity-pills[data-ctrl="${ctrlId}"]`);
-  if (sevPills) sevPills.querySelectorAll('.severity-pill').forEach(p => p.classList.toggle('active', p.dataset.sev === sev));
+  if (sevPills) sevPills.querySelectorAll('.severity-pill').forEach(p => p.classList.toggle('active', p.dataset.sev === finalSev));
   await saveFinding(ctrlId);
-  await sb.from('auditor_findings_draft').update({ status: 'accepted', reviewed_by: currentUser.id, reviewed_at: new Date().toISOString() }).eq('user_id', currentClient.user_id).eq('control_id', ctrlId);
-  if (window.draftCache?.[ctrlId]) { window.draftCache[ctrlId].status = 'accepted'; window.draftCache[ctrlId].reviewed_at = new Date().toISOString(); }
+  const newStatus = wasEdited ? 'edited' : 'accepted';
+  await sb.from('auditor_findings_draft').update({ status: newStatus, reviewed_by: currentUser.id, reviewed_at: new Date().toISOString() }).eq('user_id', currentClient.user_id).eq('control_id', ctrlId);
+  // Learning store: snapshot draft + final voor few-shot in volgende runs
+  try {
+    await sb.from('auditor_feedback').insert({
+      auditor_id: currentUser.id,
+      klant_user_id: currentClient.user_id,
+      control_id: ctrlId,
+      klant_sector: currentClient?.sector || currentClient?.sectorLabel || null,
+      draft_severity: draft.severity,
+      draft_finding: draft.finding,
+      draft_recommendation: draft.recommendation,
+      draft_confidence: draft.confidence,
+      final_severity: finalSev,
+      final_finding: finalFinding,
+      final_recommendation: finalRec,
+      action: newStatus,
+    });
+  } catch (e) { console.warn('feedback insert failed', e); }
+  if (window.draftCache?.[ctrlId]) { window.draftCache[ctrlId].status = newStatus; window.draftCache[ctrlId].reviewed_at = new Date().toISOString(); }
   const actionsEl = document.getElementById('aiActions_' + safeId);
-  if (actionsEl) actionsEl.innerHTML = `<span style="font-size:0.76rem;color:#059669;font-weight:700;">✓ Geaccepteerd · ${new Date().toLocaleDateString('nl-NL')}</span>`;
-  adminToast('AI-draft geaccepteerd → bevinding opgeslagen');
+  if (actionsEl) actionsEl.innerHTML = `<span style="font-size:0.76rem;color:${wasEdited ? '#0F766E' : '#059669'};font-weight:700;">${wasEdited ? '✏ Aangepast bij accept' : '✓ Geaccepteerd'} · ${new Date().toLocaleDateString('nl-NL')}</span>`;
+  adminToast(wasEdited ? 'AI-draft aangepast → bevinding opgeslagen + learning' : 'AI-draft geaccepteerd → bevinding opgeslagen');
 }
 
 function editAiDraft(ctrlId) {
@@ -5799,13 +5823,113 @@ function editAiDraft(ctrlId) {
 async function rejectAiDraft(ctrlId) {
   if (!currentClient) return;
   if (!confirm('AI-draft verwerpen voor ' + ctrlId + '?')) return;
+  const draft = window.draftCache?.[ctrlId];
   await sb.from('auditor_findings_draft').update({ status: 'rejected', reviewed_by: currentUser.id, reviewed_at: new Date().toISOString() }).eq('user_id', currentClient.user_id).eq('control_id', ctrlId);
+  // Learning store: ook reject is signaal (AI lag mijlenver naast werkelijkheid)
+  if (draft) {
+    try {
+      await sb.from('auditor_feedback').insert({
+        auditor_id: currentUser.id,
+        klant_user_id: currentClient.user_id,
+        control_id: ctrlId,
+        klant_sector: currentClient?.sector || currentClient?.sectorLabel || null,
+        draft_severity: draft.severity,
+        draft_finding: draft.finding,
+        draft_recommendation: draft.recommendation,
+        draft_confidence: draft.confidence,
+        action: 'rejected',
+      });
+    } catch (e) { console.warn('feedback insert failed', e); }
+  }
   if (window.draftCache?.[ctrlId]) { window.draftCache[ctrlId].status = 'rejected'; window.draftCache[ctrlId].reviewed_at = new Date().toISOString(); }
   const safeId = ctrlId.replace(/\./g, '_');
   const actionsEl = document.getElementById('aiActions_' + safeId);
   if (actionsEl) actionsEl.innerHTML = `<span style="font-size:0.76rem;color:#DC2626;font-weight:700;">✗ Verworpen · ${new Date().toLocaleDateString('nl-NL')}</span>`;
-  adminToast('AI-draft verworpen');
+  adminToast('AI-draft verworpen + learning gelogd');
 }
+
+// ─── Keyboard shortcuts voor bevindingen-review (#93) ───
+function getFocusedControlId() {
+  const row = document.querySelector('.control-row.keyboard-focused')
+           || document.querySelector('.control-row.open');
+  if (!row) return null;
+  return row.id.replace('row_', '').replace(/_/g, '.');
+}
+
+function navigateControlRow(direction) {
+  const rows = Array.from(document.querySelectorAll('.control-row'))
+    .filter(r => getComputedStyle(r).display !== 'none');
+  if (!rows.length) return;
+  let idx = rows.findIndex(r => r.classList.contains('keyboard-focused'));
+  if (idx === -1) {
+    // Vind dichtstbij viewport-midden
+    const mid = window.innerHeight / 2;
+    let best = 0, bestDist = Infinity;
+    rows.forEach((r, i) => {
+      const rect = r.getBoundingClientRect();
+      const d = Math.abs((rect.top + rect.bottom) / 2 - mid);
+      if (d < bestDist) { bestDist = d; best = i; }
+    });
+    idx = best;
+  }
+  const newIdx = Math.max(0, Math.min(rows.length - 1, idx + direction));
+  rows.forEach(r => r.classList.remove('keyboard-focused'));
+  const target = rows[newIdx];
+  target.classList.add('keyboard-focused');
+  // Expand + lazy-load evidence
+  if (!target.classList.contains('open')) {
+    target.classList.add('open');
+    if (!target.dataset.evLoaded && currentClient && typeof loadControlEvidence === 'function') {
+      const ctrlId = target.id.replace('row_', '').replace(/_/g, '.');
+      loadControlEvidence(ctrlId, currentClient.user_id);
+      target.dataset.evLoaded = '1';
+    }
+  }
+  target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function setupBevindingenKeyboard() {
+  if (window._bevindingenKbInit) return;
+  window._bevindingenKbInit = true;
+  document.addEventListener('keydown', (e) => {
+    const tag = (e.target?.tagName || '').toLowerCase();
+    if (tag === 'textarea' || tag === 'input' || tag === 'select' || (e.target?.isContentEditable)) return;
+    const panel = document.getElementById('panelFindings');
+    if (!panel || !panel.classList.contains('active')) return;
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    const key = e.key.toLowerCase();
+    if (key === 'j' || key === 'arrowdown') { e.preventDefault(); navigateControlRow(1); return; }
+    if (key === 'k' || key === 'arrowup')   { e.preventDefault(); navigateControlRow(-1); return; }
+    if (key === '?' || (e.shiftKey && key === '/')) {
+      e.preventDefault();
+      adminToast('Shortcuts: J/K = volgende/vorige · 1-4 = OK/Minor/Major/Critical · A = accept AI · R = reject AI · E = klap in/uit');
+      return;
+    }
+    if (e.shiftKey) return;
+    const ctrlId = getFocusedControlId();
+    if (!ctrlId) return;
+    const kindMap = { '1': 'ok', '2': 'minor', '3': 'major', '4': 'critical' };
+    if (kindMap[key] && typeof applyFindingTemplate === 'function') {
+      e.preventDefault(); applyFindingTemplate(ctrlId, kindMap[key]); return;
+    }
+    if (key === 'e') {
+      e.preventDefault();
+      const safeId = ctrlId.replace(/\./g, '_');
+      const row = document.getElementById('row_' + safeId);
+      if (row) row.classList.toggle('open');
+      return;
+    }
+    if (key === 'a' && window.draftCache?.[ctrlId]?.status === 'pending') {
+      e.preventDefault(); acceptAiDraft(ctrlId); return;
+    }
+    if (key === 'r' && window.draftCache?.[ctrlId]?.status === 'pending') {
+      e.preventDefault(); rejectAiDraft(ctrlId); return;
+    }
+  });
+}
+// Init zodra script geladen is
+if (typeof document !== 'undefined' && document.readyState !== 'loading') setupBevindingenKeyboard();
+else document.addEventListener('DOMContentLoaded', setupBevindingenKeyboard);
 
 async function saveFinding(ctrlId) {
   if (!currentClient) return;
