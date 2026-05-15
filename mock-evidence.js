@@ -301,12 +301,118 @@
     return variation === 0 ? '1' : '0';
   }
 
-  // ── Seed-functie: vult voor klant_user_id alle answers + notes ──
+  // Mapping van control_id naar bestand(en) in /beleidspakket/basispakket/.
+  // Bij strong/medium controls wordt het MD-bestand ECHT geüpload naar
+  // evidence/{user_id}/{control_id}/, zodat de AI inhoudelijk kan analyseren
+  // ipv enkel filename te lezen.
+  const CONTROL_TO_BELEIDSDOCS = {
+    'A.5.1':  ['02-informatiebeveiligingsbeleid.md'],
+    'A.5.2':  ['04-rollen-verantwoordelijkheden.md'],
+    'A.5.4':  ['03-doelstellingen.md'],
+    'A.5.9':  ['08-asset-register.md'],
+    'A.5.10': ['11-acceptable-use.md'],
+    'A.5.11': ['11-acceptable-use.md'],
+    'A.5.12': ['14-classificatiebeleid.md'],
+    'A.5.13': ['14-classificatiebeleid.md'],
+    'A.5.14': ['14-classificatiebeleid.md'],
+    'A.5.15': ['12-toegangsbeleid.md'],
+    'A.5.16': ['12-toegangsbeleid.md'],
+    'A.5.17': ['13-wachtwoordbeleid.md'],
+    'A.5.18': ['12-toegangsbeleid.md'],
+    'A.5.24': ['19-incident-response.md'],
+    'A.5.25': ['19-incident-response.md'],
+    'A.5.26': ['19-incident-response.md'],
+    'A.5.27': ['19-incident-response.md'],
+    'A.5.29': ['20-bcp.md'],
+    'A.5.30': ['20-bcp.md'],
+    'A.5.31': ['26-register-wettelijke-vereisten.md'],
+    'A.5.34': ['30-ropa-verwerkingsregister.md', '29-dpia-template.md'],
+    'A.5.36': ['06-soa.md'],
+    'A.5.37': ['07-documentbeheer.md'],
+    'A.6.1':  ['09-hr-beleid.md'],
+    'A.6.2':  ['09-hr-beleid.md'],
+    'A.6.3':  ['10-awareness-trainingsplan.md'],
+    'A.6.4':  ['09-hr-beleid.md'],
+    'A.6.5':  ['09-hr-beleid.md'],
+    'A.6.6':  ['09-hr-beleid.md'],
+    'A.6.7':  ['09-hr-beleid.md'],
+    'A.7.1':  ['15-fysiek-beveiligingsbeleid.md'],
+    'A.7.2':  ['15-fysiek-beveiligingsbeleid.md'],
+    'A.7.3':  ['15-fysiek-beveiligingsbeleid.md'],
+    'A.7.4':  ['15-fysiek-beveiligingsbeleid.md'],
+    'A.7.5':  ['15-fysiek-beveiligingsbeleid.md'],
+    'A.7.6':  ['15-fysiek-beveiligingsbeleid.md'],
+    'A.7.7':  ['15-fysiek-beveiligingsbeleid.md'],
+    'A.7.8':  ['15-fysiek-beveiligingsbeleid.md'],
+    'A.7.9':  ['15-fysiek-beveiligingsbeleid.md'],
+    'A.7.10': ['15-fysiek-beveiligingsbeleid.md'],
+    'A.7.11': ['15-fysiek-beveiligingsbeleid.md'],
+    'A.7.12': ['15-fysiek-beveiligingsbeleid.md'],
+    'A.7.13': ['15-fysiek-beveiligingsbeleid.md'],
+    'A.7.14': ['15-fysiek-beveiligingsbeleid.md'],
+    'A.8.2':  ['12-toegangsbeleid.md'],
+    'A.8.3':  ['12-toegangsbeleid.md'],
+    'A.8.5':  ['13-wachtwoordbeleid.md'],
+    'A.8.7':  ['17-patch-kwetsbaarheidsbeheer.md'],
+    'A.8.8':  ['17-patch-kwetsbaarheidsbeheer.md'],
+    'A.8.13': ['20-bcp.md'],
+    'A.8.15': ['18-logging-monitoring.md'],
+    'A.8.16': ['18-logging-monitoring.md'],
+    'A.8.24': ['16-cryptografiebeleid.md'],
+    'A.8.25': ['27-secure-development.md'],
+    'A.8.26': ['27-secure-development.md'],
+    'A.8.27': ['27-secure-development.md'],
+    'A.8.28': ['27-secure-development.md'],
+    'A.8.29': ['27-secure-development.md'],
+    'A.8.32': ['27-secure-development.md'],
+    'C.4.1':  ['01-isms-scope.md', '23-context-belanghebbenden.md'],
+    'C.4.3':  ['01-isms-scope.md'],
+    'C.5.1':  ['02-informatiebeveiligingsbeleid.md'],
+    'C.5.2':  ['02-informatiebeveiligingsbeleid.md'],
+    'C.5.3':  ['04-rollen-verantwoordelijkheden.md'],
+    'C.6.1':  ['05-risicobeoordeling.md', '06-soa.md'],
+    'C.6.2':  ['03-doelstellingen.md'],
+    'C.7.2':  ['24-competentiematrix.md'],
+    'C.7.3':  ['10-awareness-trainingsplan.md'],
+    'C.7.4':  ['10-awareness-trainingsplan.md'],
+    'C.7.5':  ['07-documentbeheer.md'],
+    'C.9.1':  ['25-kpi-meetrapportage.md'],
+    'C.9.2':  ['21-interne-audit.md'],
+    'C.9.3':  ['22-management-review-correctieve-maatregelen.md'],
+    'C.10.1': ['22-management-review-correctieve-maatregelen.md'],
+    'C.10.2': ['22-management-review-correctieve-maatregelen.md'],
+  };
+
+  // Fetch + upload één beleidsdoc als evidence. Voegt simulatie-header toe
+  // afhankelijk van level (strong = goedgekeurd + ondertekend, medium = draft).
+  async function uploadBeleidsdocAsEvidence(sb, klantUserId, controlId, mdFilename, level) {
+    try {
+      const baseUrl = '/beleidspakket/basispakket/' + mdFilename;
+      const resp = await fetch(baseUrl);
+      if (!resp.ok) return false;
+      let text = await resp.text();
+      // Realisme: medium = concept-versie zonder ondertekening; strong = goedgekeurd
+      const header = level === 'strong'
+        ? `---\nVersie: 2.3\nStatus: Goedgekeurd door directie\nOndertekend: 2025-09-15 door M. de Vries (CTO)\nVolgende review: 2026-09-15\nClassificatie: Intern — Vertrouwelijk\n---\n\n`
+        : `---\nVersie: 0.6 (DRAFT)\nStatus: Concept — nog niet formeel goedgekeurd\nOndertekend: nee\nEigenaar: nog te bepalen\nClassificatie: Werk in uitvoering\n---\n\n`;
+      const fullText = header + text;
+      const blob = new Blob([fullText], { type: 'text/markdown' });
+      const targetPath = `${klantUserId}/${controlId}/${mdFilename}`;
+      const { error } = await sb.storage.from('evidence').upload(targetPath, blob, { upsert: true, contentType: 'text/markdown', cacheControl: '3600' });
+      if (error) { console.warn('upload fail', controlId, mdFilename, error); return false; }
+      return true;
+    } catch (e) {
+      console.warn('uploadBeleidsdocAsEvidence failed', controlId, mdFilename, e);
+      return false;
+    }
+  }
+
+  // ── Seed-functie: vult voor klant_user_id alle answers + notes + echte uploads ──
   async function seedMockEvidence(sb, klantUserId, controlsList, gapQuestionsMap, options = {}) {
     if (!sb || !klantUserId) throw new Error('seedMockEvidence: sb + klantUserId vereist');
     const onProgress = options.onProgress || (() => {});
 
-    let countNotes = 0, countAnswers = 0;
+    let countNotes = 0, countAnswers = 0, countUploads = 0;
     const allAnswers = {};
     const today = new Date().toISOString();
 
@@ -315,6 +421,16 @@
     for (let i = 0; i < controlsList.length; i++) {
       const ctrl = controlsList[i];
       const { level, procedure, location, owner, last_verified, remark } = getMockEvidence(ctrl.id, ctrl.name);
+
+      // Upload ECHTE beleidsdocs voor strong/medium controls — geeft AI iets om
+      // inhoudelijk te analyseren. Voor 'weak' geen upload (klant heeft echt niks).
+      if (level === 'strong' || level === 'medium') {
+        const docs = CONTROL_TO_BELEIDSDOCS[ctrl.id] || [];
+        for (const md of docs.slice(0, 2)) {
+          const ok = await uploadBeleidsdocAsEvidence(sb, klantUserId, ctrl.id, md, level);
+          if (ok) countUploads++;
+        }
+      }
 
       // Alleen evidence-records aanmaken bij meaningful content
       if (procedure || location || owner || last_verified || remark) {
@@ -359,16 +475,30 @@
       console.warn('seedMockEvidence: failed to upsert gap_analyse', e);
     }
 
-    onProgress({ phase: 'done', notes: countNotes, answers: countAnswers });
+    onProgress({ phase: 'done', notes: countNotes, answers: countAnswers, uploads: countUploads });
 
-    return { notes: countNotes, answers: countAnswers, levels: COMPLIANCE_LEVELS };
+    return { notes: countNotes, answers: countAnswers, uploads: countUploads, levels: COMPLIANCE_LEVELS };
   }
 
-  // Reset: verwijder alle mock data voor klant_user_id
+  // Reset: verwijder alle mock data voor klant_user_id (incl. evidence-uploads + drafts)
   async function clearMockEvidence(sb, klantUserId) {
     if (!sb || !klantUserId) throw new Error('clearMockEvidence: sb + klantUserId vereist');
     await sb.from('gap_control_notes').delete().eq('klant_user_id', klantUserId);
     await sb.from('gap_analyse').delete().eq('user_id', klantUserId);
+    // AI-draft + feedback opruimen zodat volgende run vers begint
+    try { await sb.from('auditor_findings_draft').delete().eq('user_id', klantUserId); } catch (e) { console.warn('cleanup drafts fail', e); }
+    // Evidence-storage opruimen (per control-folder)
+    try {
+      const { data: folders } = await sb.storage.from('evidence').list(klantUserId, { limit: 500 });
+      for (const folder of (folders || [])) {
+        if (!folder.name) continue;
+        const { data: files } = await sb.storage.from('evidence').list(`${klantUserId}/${folder.name}`, { limit: 100 });
+        if (files && files.length) {
+          const paths = files.filter(f => f.name).map(f => `${klantUserId}/${folder.name}/${f.name}`);
+          if (paths.length) await sb.storage.from('evidence').remove(paths);
+        }
+      }
+    } catch (e) { console.warn('cleanup storage fail', e); }
     return { ok: true };
   }
 

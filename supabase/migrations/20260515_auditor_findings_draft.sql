@@ -41,14 +41,16 @@ create policy "admin all on auditor_findings_draft"
     exists (
       select 1 from auth.users u
       where u.id = auth.uid()
-        and u.raw_app_meta_data->>'role' = 'admin'
+        and (u.raw_app_meta_data->>'role' in ('admin','auditor')
+             or u.raw_app_meta_data->>'pakket' = 'admin')
     )
   )
   with check (
     exists (
       select 1 from auth.users u
       where u.id = auth.uid()
-        and u.raw_app_meta_data->>'role' = 'admin'
+        and (u.raw_app_meta_data->>'role' in ('admin','auditor')
+             or u.raw_app_meta_data->>'pakket' = 'admin')
     )
   );
 
