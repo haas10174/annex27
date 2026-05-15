@@ -4680,7 +4680,7 @@ async function loadClientFindings(userId) {
     sb.from('gap_analyse').select('*').eq('user_id', userId).maybeSingle(),
     sb.storage.from('evidence').list(userId, { limit: 500 }).catch(() => ({ data: [] })),
     sb.from('auditor_findings').select('*').eq('user_id', userId),
-    sb.from('auditor_findings_draft').select('*').eq('user_id', userId).catch(() => ({ data: [] }))
+    sb.from('auditor_findings_draft').select('*').eq('user_id', userId)
   ]);
 
   const gapAnswers = gaRes.data?.answers || {};
