@@ -229,7 +229,7 @@ ${ctrlSummary}
 \`\`\`
 
 **Auditor-bevindingen — door Lead Auditor al beoordeeld (${findings?.length || 0}):**
-> Deze bevindingen zijn HANDMATIG GEVALIDEERD. Neem ze 1-op-1 over in \`detailed_findings\` (zelfde control_id, status afgeleid van severity, finding-tekst en recommendation overnemen). Vul ze aan vanuit evidence-analyse, maar overschrijf ze niet. Als de severity 'critical' is → status='critical'; 'high' → 'gap'; 'medium'/'low' → 'gap' tenzij evidence laat zien dat de control inmiddels in orde is.
+> Deze bevindingen zijn HANDMATIG GEVALIDEERD door Lead Auditor. Neem ZE ALLEMAAL 1-op-1 over in \`detailed_findings\` (zelfde control_id, status afgeleid van severity, finding-tekst en recommendation LETTERLIJK overnemen). NIET filteren, NIET inkorten, NIET herformuleren — Lead Auditor heeft hierop gesignoffd, jij respecteert die beslissing. Severity-mapping: 'critical' → status='critical'; 'major' → status='gap'; 'minor' of 'info' → status='ok'.
 
 ${findings && findings.length ? findings.map((f: any) => {
   const evNote = f.reviewed_evidence ? ` [evidence beoordeeld: ${String(f.reviewed_evidence).slice(0, 200)}]` : '';
@@ -338,7 +338,9 @@ Belangrijk:
 - Nooit verzinnen wat er in evidence staat — alleen rapporteren wat je werkelijk ziet/leest.
 - Bij ontbrekende evidence: markeer expliciet als "geen evidence aangeleverd".
 - Houd toon persoonlijk: gebruik "u" (niet "je") naar klant toe, en schrijf alsof je naast ze zit.
-- Lengte: executive summary 3-5 zinnen, findings per categorie 2-4 zinnen, detailed_findings beperkt tot 10-15 meest relevante.
+- Lengte: executive summary 3-5 zinnen, findings per categorie 2-4 zinnen.
+- **detailed_findings**: neem ELKE auditor-bevinding 1-op-1 over (severity + finding-tekst + recommendation). Filter ze NIET, beperk NIET tot 10-15. Alle door Lead Auditor gevalideerde bevindingen horen in het rapport.
+- Severity-mapping naar status veld: \`critical\` → \`critical\` · \`major\` → \`gap\` · \`minor\`/\`info\` → \`ok\` (lichte observation/OFI) — maar de finding-tekst en recommendation 1-op-1 van auditor.
 - Gebruik terminologie + methodologie zoals beschreven in de DNV-cursus die je hieronder als referentiemateriaal krijgt.`;
 
     // Structured system-messages met prompt caching voor RAG-corpus (dag-cache)
