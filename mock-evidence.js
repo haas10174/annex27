@@ -383,14 +383,27 @@
     'C.10.2': ['22-management-review-correctieve-maatregelen.md'],
   };
 
+  // Supabase storage keys accepteren geen em-dash, smart quotes of andere unicode.
+  // Vervang ze door ASCII-equivalenten zodat upload niet faalt met InvalidKey.
+  function sanitizeStorageFilename(name) {
+    return String(name || '')
+      .replace(/[–—]/g, '-')  // en-dash, em-dash → hyphen
+      .replace(/[‘’]/g, "'")  // smart single quotes
+      .replace(/[“”]/g, '"')  // smart double quotes
+      .replace(/[ ]/g, ' ')        // non-breaking space
+      .replace(/[^\w\s.\-()&]/g, '')    // strip alle non-ASCII letters/digits/_/space/./-/()/&
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+
   // Bouw evidence-filename uit klant-toelichting. Behoudt extensie zodat:
   // - admin.html substring-match werkt (procLower vs fn)
   // - AI document-input op .pdf werkt
   // - klant ziet realistische bestandsnaam met spaces en originele extensie
   function deriveEvidenceFilename(procedureName, fallback) {
     if (procedureName && procedureName.trim()) {
-      const trimmed = procedureName.trim();
-      // Als er al een extensie is, behouden. Anders .pdf default (mock-policies zijn PDFs).
+      const trimmed = sanitizeStorageFilename(procedureName);
+      if (!trimmed) return fallback;
       return /\.(pdf|docx?|xlsx?|pptx?|txt|md|csv)$/i.test(trimmed) ? trimmed : trimmed + '.pdf';
     }
     return fallback;
@@ -512,14 +525,75 @@
     return doc.output('blob');
   }
 
-  // Fetch basispakket-MD, render als ECHTE PDF, upload naar evidence storage.
+  // Vult template-placeholders in met realistische mock-data zodat de PDF eruit ziet
+  // als een ECHT ingevuld ISMS-document. Voor 'strong' alle velden compleet, voor 'medium'
+  // sommige placeholders bewust open zodat AI kan zien dat het een concept is.
+  function fillPolicyPlaceholders(mdText, level, controlId, sourceFile) {
+    const isStrong = level === 'strong';
+    // Casus: SaaS-onderneming "De Vries IT BV" (info@annex27.nl-archetype)
+    const mockData = {
+      // Namen
+      '[Naam CISO / Verantwoordelijke]':  isStrong ? 'M. de Vries (CTO, plv. CISO)' : '[CISO — nog te benoemen]',
+      '[Naam CISO]':                       isStrong ? 'M. de Vries (CTO, plv. CISO)' : '[CISO — nog te benoemen]',
+      '[Naam Directie / Bestuurder]':      isStrong ? 'J. van der Berg (CEO)'        : '[Directie — concept niet ondertekend]',
+      '[Naam directie]':                   isStrong ? 'J. van der Berg (CEO)'        : '[Directie]',
+      '[Naam organisatie]':                'De Vries IT BV',
+      '[Bedrijfsnaam]':                    'De Vries IT BV',
+      '[bedrijfsnaam]':                    'De Vries IT BV',
+      '[organisatie]':                     'De Vries IT BV',
+      '[Organisatie]':                     'De Vries IT BV',
+      '[bedrijfsnaam invullen]':           'De Vries IT BV',
+      '[Eigenaar]':                        isStrong ? 'M. de Vries (CTO)' : '[Eigenaar — TBD]',
+      '[eigenaar]':                        isStrong ? 'M. de Vries (CTO)' : '[Eigenaar — TBD]',
+      '[Naam proceseigenaar]':             isStrong ? 'M. de Vries (CTO)' : '[TBD]',
+      '[Goedgekeurd door]':                isStrong ? 'J. van der Berg (CEO)' : '[Concept]',
+      // Datums
+      '[DD-MM-JJJJ]':                      isStrong ? '15-09-2025' : '[concept — geen datum]',
+      '[dd-mm-jjjj]':                      isStrong ? '15-09-2025' : '[concept — geen datum]',
+      '[Datum goedkeuring]':               isStrong ? '15-09-2025' : '[nog te plannen]',
+      '[Datum]':                           isStrong ? '15-09-2025' : '[TBD]',
+      '[datum]':                           isStrong ? '15-09-2025' : '[TBD]',
+      '[Volgende review]':                 isStrong ? '15-09-2026' : '[nog te plannen]',
+      // Versie
+      '[Versie]':                          isStrong ? '2.3' : '0.6',
+      '[versie]':                          isStrong ? '2.3' : '0.6',
+      '[X.Y]':                             isStrong ? '2.3' : '0.6',
+      // Documentnummer (laat ISMS-XXX zoals is)
+      // Scope + locaties
+      '[Scope ISMS]':                      'Volledige SaaS-platform en supportprocessen van De Vries IT BV (NL + BE klanten)',
+      '[scope]':                           'SaaS-platform en supportprocessen',
+      '[Locatie]':                         'Hoofdkantoor Amsterdam + AWS eu-west-1',
+      '[Locaties]':                        'Amsterdam (HQ) + AWS eu-west-1 + remote-werkplekken',
+      // Tooling-namen
+      '[Tooling]':                         'Notion, GitHub, AWS, Okta, 1Password',
+      // Numerieke placeholders
+      '[X]':                               '12',
+      '[N]':                               '5',
+      '[aantal]':                          '12',
+    };
+    let out = mdText;
+    for (const [from, to] of Object.entries(mockData)) {
+      out = out.split(from).join(to);
+    }
+    // Catch-all: vervang nog overgebleven [tekst] door italic-stijl markering zodat AI weet
+    // dat het een placeholder was. Behoud daarmee de "draft"-look voor medium-level.
+    if (!isStrong) {
+      out = out.replace(/\[([^\]]{1,60})\]/g, (_, inner) => `[${inner} — niet ingevuld]`);
+    } else {
+      out = out.replace(/\[([^\]]{1,60})\]/g, (_, inner) => `${inner}`);
+    }
+    return out;
+  }
+
+  // Fetch basispakket-MD, vul placeholders, render als ECHTE PDF, upload naar evidence storage.
   // AI leest via document-input (PDF) en kan visueel layout, datums, ondertekening checken.
   async function uploadBeleidsdocAsEvidence(sb, klantUserId, controlId, mdSourceFile, level, procedureName) {
     try {
       const baseUrl = '/beleidspakket/basispakket/' + mdSourceFile;
       const resp = await fetch(baseUrl);
       if (!resp.ok) return false;
-      const mdContent = await resp.text();
+      const mdContentRaw = await resp.text();
+      const mdContent = fillPolicyPlaceholders(mdContentRaw, level, controlId, mdSourceFile);
       const title = procedureName
         ? procedureName.replace(/\.(pdf|docx?|xlsx?|pptx?|txt|md|csv)$/i, '')
         : mdSourceFile.replace(/^\d+-/, '').replace(/-/g, ' ').replace(/\.md$/, '');
