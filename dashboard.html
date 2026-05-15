@@ -7723,8 +7723,8 @@ async function generateReport() {
     gap: 10px;
   }
   .exec-insights li {
-    display: flex;
-    gap: 12px;
+    position: relative;
+    padding-left: 18px;
     font-size: 0.92rem;
     line-height: 1.55;
     color: #1F2937;
@@ -7732,11 +7732,12 @@ async function generateReport() {
   .exec-insights li strong { color: #0F172A; }
   .exec-insights li::before {
     content: '';
+    position: absolute;
+    left: 0;
+    top: 9px;
     width: 6px; height: 6px;
     background: #0D9488;
     border-radius: 50%;
-    flex-shrink: 0;
-    margin-top: 9px;
   }
 
   /* Maturity-radar SVG container */
@@ -8028,11 +8029,18 @@ async function generateReport() {
       return `<polygon points="${pts}" fill="none" stroke="#E5E5E5" stroke-width="1" />`;
     }).join('');
     const axes = points.map(p => `<line x1="${cx}" y1="${cy}" x2="${(cx + maxR * Math.cos(-Math.PI/2 + points.indexOf(p) * angleStep)).toFixed(1)}" y2="${(cy + maxR * Math.sin(-Math.PI/2 + points.indexOf(p) * angleStep)).toFixed(1)}" stroke="#E5E5E5" stroke-width="1" />`).join('');
-    const labels = points.map(p => `<text x="${p.labelX.toFixed(1)}" y="${p.labelY.toFixed(1)}" text-anchor="middle" font-family="Sora,sans-serif" font-size="11" font-weight="700" fill="#475569">${esc(p.label.split(' ')[0])}</text>`).join('');
+    const labelAbbr = { 'ISMS Clausules': 'ISMS', 'Organisatorisch': 'Org.', 'Technologie': 'Tech.', 'Personeel': 'Personeel', 'Fysiek': 'Fysiek' };
+    const labels = points.map((p, i) => {
+      const ang = -Math.PI / 2 + i * angleStep;
+      const cosA = Math.cos(ang);
+      const anchor = cosA > 0.3 ? 'start' : (cosA < -0.3 ? 'end' : 'middle');
+      const short = labelAbbr[p.label] || p.label.split(' ')[0];
+      return `<text x="${p.labelX.toFixed(1)}" y="${p.labelY.toFixed(1)}" text-anchor="${anchor}" dominant-baseline="middle" font-family="Sora,sans-serif" font-size="11" font-weight="700" fill="#475569">${esc(short)}</text>`;
+    }).join('');
     const dots = points.map(p => `<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="3.5" fill="#0D9488" />`).join('');
     const legendItems = radarData.map(d => `<li><span>${esc(d.label)}</span><span class="axis-pct">${d.pct}%</span></li>`).join('');
     return `<div class="maturity-radar-wrap">
-      <svg viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg">
+      <svg viewBox="-40 -10 400 340" xmlns="http://www.w3.org/2000/svg">
         ${grid}${axes}
         <polygon points="${polygonPoints}" fill="rgba(13,148,136,0.18)" stroke="#0D9488" stroke-width="2" stroke-linejoin="round" />
         ${dots}${labels}
