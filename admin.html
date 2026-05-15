@@ -1979,8 +1979,16 @@ async function invokeEdgeFn(name, body, opts = {}) {
     const ms = Date.now() - start;
     const { data, error } = result;
     if (error) {
-      console.error(`[edge:${name}]`, error, 'body:', body);
-      return { ok: false, error: error.message || String(error), data, ms, name };
+      // Supabase client verbergt response-body bij non-2xx. Probeer body alsnog te lezen.
+      let bodyText = '';
+      try {
+        if (error.context && typeof error.context.text === 'function') {
+          bodyText = await error.context.text();
+        }
+      } catch (_) {}
+      console.error(`[edge:${name}]`, error, 'response-body:', bodyText, 'request-body:', body);
+      const detail = bodyText ? ` · body: ${bodyText.slice(0, 400)}` : '';
+      return { ok: false, error: (error.message || String(error)) + detail, data, ms, name };
     }
     if (data && data.error) {
       console.error(`[edge:${name}] data.error`, data, 'body:', body);
