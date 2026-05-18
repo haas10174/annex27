@@ -3058,8 +3058,8 @@
 
 <!-- Mobile header -->
 <div class="mobile-header">
-  <a class="mobile-header-logo">annex<span>27</span></a>
-  <button class="hamburger" onclick="toggleSidebar()"><span></span><span></span><span></span></button>
+  <a href="#" class="mobile-header-logo" onclick="event.preventDefault();showView('dashboard');return false;">annex<span>27</span></a>
+  <button class="hamburger" onclick="toggleSidebar()" aria-label="Menu"><span></span><span></span><span></span></button>
 </div>
 <div class="sidebar-overlay" id="overlay" onclick="toggleSidebar()"></div>
 
@@ -3067,7 +3067,7 @@
   <!-- Sidebar -->
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-header">
-      <a href="/" class="sidebar-logo">annex<span>27</span></a>
+      <a href="#" class="sidebar-logo" onclick="event.preventDefault();showView('dashboard');return false;">annex<span>27</span></a>
     </div>
     <nav class="sidebar-nav" role="navigation" aria-label="Dashboard navigatie">
       <button class="sidebar-link active" onclick="showView('dashboard')" data-view="dashboard">
@@ -6668,6 +6668,11 @@ function backToOverview() {
   currentModule = null;
   renderModuleOverview();
   window.scrollTo({ top: 0, behavior: 'smooth' });
+  // Mobile: sluit sidebar als die open stond
+  const sb = document.getElementById('sidebar');
+  const ov = document.getElementById('overlay');
+  if (sb) sb.classList.remove('open');
+  if (ov) ov.classList.remove('open');
 }
 
 function renderModuleAssessment(cat) {
