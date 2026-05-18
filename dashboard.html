@@ -2529,6 +2529,16 @@
       .check-status-btn { padding: 6px 14px; font-size: 0.78rem; min-height: 36px; }
       .gap-q-opt { padding: 10px 14px; min-height: 44px; display: inline-flex; align-items: center; }
 
+      /* Score-card compactie op mobile */
+      .score-card { padding: 20px 18px; }
+      .score-ring { width: 130px; height: 130px; }
+      .score-ring svg { width: 130px; height: 130px; }
+      .score-ring-pct { font-size: 1.9rem; }
+      .score-ring-label { font-size: 0.62rem; margin-top: 2px; }
+      .score-card-sub { font-size: 0.74rem; margin-top: 12px; line-height: 1.5; }
+      #dashReadinessRow { margin-top: 10px !important; padding-top: 10px !important; }
+      #dashReadinessRow span { font-size: 0.78rem !important; }
+
       /* MOBILE UX FIXES — tap-targets, sticky-bars, spacing (audit 2026-05-18) */
       .ga-module-sticky { top: 56px; }
       .ga-nav-bar { position: static; margin-top: 16px; }
@@ -5167,11 +5177,12 @@ function renderDashboard() {
         const diff = dual.selfPct - dual.readinessPct;
         const colorStop = diff > 30 ? '#dc2626' : diff > 10 ? '#d97706' : '#059669';
         readinessEl.innerHTML = `
-          <span style="display:inline-flex;align-items:center;gap:6px;font-size:0.85rem;color:var(--text-muted);">
-            <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${colorStop};"></span>
-            <span><strong style="color:var(--text-primary);">Audit-readiness: ${dual.readinessPct}%</strong></span>
-            <span style="opacity:0.7;">&middot; wat een Lead Auditor zou geven op basis van uw bewijs</span>
-            <span class="tooltip-trigger" title="Audit-readiness = uw zelfevaluatie maal de mate waarin u bewijs heeft aangeleverd. Telt mee: bestand-upload (40%), toelichting van minstens 50 woorden (30%), meta-velden compleet (30%). Per control kunt u dit verbeteren in de gap-analyse." style="cursor:help;opacity:0.6;">&#9432;</span>
+          <span style="display:inline-flex;align-items:center;gap:8px;font-size:0.86rem;color:var(--text-muted);flex-wrap:wrap;">
+            <span style="display:inline-flex;align-items:center;gap:6px;">
+              <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${colorStop};flex-shrink:0;"></span>
+              <strong style="color:var(--text-primary);font-weight:700;">Audit-readiness: ${dual.readinessPct}%</strong>
+              <span class="tooltip-trigger" title="Audit-readiness = uw zelfevaluatie maal de mate waarin u bewijs heeft aangeleverd. Telt mee: bestand-upload (40%), toelichting van minstens 50 woorden (30%), meta-velden compleet (30%). Per control kunt u dit verbeteren in de gap-analyse." style="cursor:help;opacity:0.65;font-size:0.95em;">&#9432;</span>
+            </span>
           </span>`;
         readinessEl.style.display = 'block';
       }
@@ -7107,6 +7118,36 @@ function setGaAnswer(key, value, btn) {
     if (pctEl) pctEl.textContent = pct + '%';
     if (navInfo) navInfo.innerHTML = `Module <strong>${moduleLabel(currentModule)}</strong> — ${a}/${t} beoordeeld`;
   }
+
+  // Auto-scroll naar volgende onbeantwoorde vraag (mobile UX zonder eigen scrollen)
+  setTimeout(() => {
+    try {
+      const m = key.match(/^(.+?)_(\d+)$/);
+      if (!m) return;
+      const cId = m[1];
+      const curQi = parseInt(m[2], 10);
+      const cQs = gapQuestions[cId] || [];
+      let nextQi = -1;
+      for (let i = curQi + 1; i < cQs.length; i++) {
+        if (gapAnswers[cId + '_' + i] === undefined) { nextQi = i; break; }
+      }
+      if (nextQi >= 0) {
+        // Volgende onbeantwoorde vraag binnen deze control
+        const card = document.getElementById('ctrl_' + cId.replace(/\./g, '_'));
+        if (card) {
+          const qRows = card.querySelectorAll('.ga-q-row');
+          if (qRows[nextQi]) qRows[nextQi].scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      } else {
+        // Alle vragen beantwoord: scroll naar volgende control-card
+        const allCards = Array.from(document.querySelectorAll('.ga-control-card'));
+        const curIdx = allCards.findIndex(el => el.id === 'ctrl_' + cId.replace(/\./g, '_'));
+        if (curIdx >= 0 && curIdx + 1 < allCards.length) {
+          allCards[curIdx + 1].scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }
+    } catch (e) { /* niet kritiek */ }
+  }, 180);
 
   // Toast: subtiele save-feedback (debounced)
   scheduleSaveToast();
