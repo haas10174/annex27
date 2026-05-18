@@ -1875,28 +1875,18 @@
         </div>
       </article>
 
-      <!-- CARD 3 — RAPPORT -->
+      <!-- CARD 3 — RAPPORT (simpel: alleen handtekening) -->
       <article class="how-card" aria-label="Stap 3 van 3: Rapport — Een Lead Auditor reviewt, tekent en levert.">
         <div class="how-frame"></div>
         <div class="how-stage">
-          <div class="s3">
-            <div class="s3-hero">
-              <div class="s3-num"><span class="s3-pc">%</span></div>
-              <div class="s3-eyebrow-r">Compliance score · sector &oslash; <span>38%</span></div>
-            </div>
-            <div class="s3-cats">
-              <div class="s3-cat"><div class="s3-v">85</div><div class="s3-k">Pers.</div></div>
-              <div class="s3-cat"><div class="s3-v">78</div><div class="s3-k">Org.</div></div>
-              <div class="s3-cat"><div class="s3-v">62</div><div class="s3-k">Tech.</div></div>
-              <div class="s3-cat"><div class="s3-v">81</div><div class="s3-k">Risico</div></div>
-              <div class="s3-cat"><div class="s3-v">54</div><div class="s3-k">Fysiek</div></div>
-            </div>
-            <div class="s3-sign">
+          <div class="s3 s3-simple">
+            <div class="s3-sign-card">
+              <div class="s3-sign-eyebrow">Gevalideerd door</div>
               <div class="s3-sig-wrap">
                 <div class="s3-sig">K. de Vries</div>
                 <svg class="s3-sig-rule" viewBox="0 0 90 14" aria-hidden="true"><path d="M 2 8 C 16 4, 36 11, 56 6 C 70 3, 80 5, 88 2"/></svg>
               </div>
-              <div class="s3-role"><b>K. de Vries</b> · Lead Auditor<br/>IRCA &mdash; ISO 27001:2022</div>
+              <div class="s3-role">Lead Auditor<br/>IRCA &mdash; ISO 27001:2022</div>
             </div>
           </div>
         </div>
@@ -2039,7 +2029,14 @@
 .s1-price::after { content: counter(hn); font-variant-numeric: tabular-nums; }
 @keyframes how-price-count {
   0%   { --how-num1: 0; opacity: 0; }
-  6%   { --how-num1: 0; opacity: 1; }
+  4%   { opacity: 1; }
+  6%   { --how-num1: 0; }
+  10%  { --how-num1: 95; }
+  14%  { --how-num1: 215; }
+  18%  { --how-num1: 345; }
+  22%  { --how-num1: 480; }
+  26%  { --how-num1: 615; }
+  30%  { --how-num1: 740; }
   32%  { --how-num1: 795; }
   100% { --how-num1: 795; opacity: 1; }
 }
@@ -2151,7 +2148,29 @@
 }
 .s2-save b { color: var(--accent); font-weight: 700; }
 
-/* CARD 3 — Rapport */
+/* CARD 3 — Rapport (simpel signature-card) */
+.s3.s3-simple { display: flex; align-items: center; justify-content: center; height: 100%; }
+.s3-sign-card {
+  background: #fff;
+  border: 1px solid var(--rule-2);
+  border-radius: 10px;
+  padding: 28px 24px;
+  width: 100%;
+  text-align: center;
+  position: relative;
+}
+.s3-sign-card::before {
+  content: ""; position: absolute; top: 0; left: 24px; right: 24px;
+  height: 3px; background: var(--accent); border-radius: 0 0 3px 3px;
+}
+.s3-sign-eyebrow {
+  font: 700 9.5px/1 'JetBrains Mono', ui-monospace, monospace;
+  letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted);
+  margin-bottom: 18px;
+}
+.s3.s3-simple .s3-sig-wrap { display: flex; flex-direction: column; align-items: center; }
+.s3.s3-simple .s3-sig { text-align: center; max-width: 200px; }
+.s3.s3-simple .s3-role { margin-top: 14px; text-align: center; }
 .s3 { display: grid; grid-template-rows: 1fr auto auto; height: 100%; gap: 0; align-content: start; }
 .s3-hero { display: grid; place-content: center; text-align: center; padding: 4px 0; }
 .s3-num {
@@ -2172,6 +2191,13 @@
 @keyframes how-score-count {
   0%   { --how-num3: 0; opacity: 0; }
   4%   { opacity: 1; }
+  6%   { --how-num3: 0; }
+  10%  { --how-num3: 8; }
+  14%  { --how-num3: 20; }
+  18%  { --how-num3: 32; }
+  22%  { --how-num3: 44; }
+  26%  { --how-num3: 56; }
+  30%  { --how-num3: 65; }
   34%  { --how-num3: 72; }
   100% { --how-num3: 72; opacity: 1; }
 }
