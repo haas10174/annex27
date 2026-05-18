@@ -2526,8 +2526,61 @@
       .dash-grid { grid-template-columns: 1fr; }
       .quick-actions { grid-template-columns: 1fr; }
       .check-box { width: 28px; height: 28px; }
-      .check-status-btn { padding: 6px 14px; font-size: 0.78rem; }
-      .gap-q-opt { padding: 8px 14px; min-height: 44px; display: inline-flex; align-items: center; }
+      .check-status-btn { padding: 6px 14px; font-size: 0.78rem; min-height: 36px; }
+      .gap-q-opt { padding: 10px 14px; min-height: 44px; display: inline-flex; align-items: center; }
+
+      /* MOBILE UX FIXES — tap-targets, sticky-bars, spacing (audit 2026-05-18) */
+      .ga-module-sticky { top: 56px; }
+      .ga-nav-bar { position: static; margin-top: 16px; }
+      .ga-nav-buttons { gap: 12px; flex-wrap: wrap; }
+      .ga-nav-buttons .ga-nav-btn { flex: 1 1 calc(50% - 6px); min-height: 44px; }
+      .ga-nav-buttons .ga-nav-btn.primary { flex: 1 1 100%; }
+      .ga-answer-btn { padding: 12px 10px; min-height: 56px; }
+      .ga-answer-btn::before { font-size: 0.72rem; }
+      .ga-toc { gap: 8px; }
+      .ga-toc-dot { min-width: 52px; height: 32px; font-size: 0.78rem; }
+      .a27-modal-btn { min-height: 44px; padding: 12px 18px; white-space: normal; line-height: 1.25; }
+      .a27-modal-actions { gap: 12px; }
+      .ga-sector-banner-eyebrow { font-size: 0.78rem; }
+      .ga-control-id { font-size: 0.82rem; }
+      .ga-control-title { font-size: 1rem; line-height: 1.35; }
+      table { font-size: 0.84rem; }
+
+      /* Modal close button — toegankelijk vanuit positie */
+      .a27-modal-header { position: relative; padding-right: 48px; }
+      .a27-modal-close {
+        position: absolute;
+        top: 12px; right: 12px;
+        width: 36px; height: 36px;
+        background: rgba(13,148,136,0.10);
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--text-primary);
+        font-size: 1.25rem;
+        line-height: 1;
+        font-weight: 600;
+        transition: background 0.15s, transform 0.1s;
+      }
+      .a27-modal-close:hover { background: rgba(13,148,136,0.18); }
+      .a27-modal-close:active { transform: scale(0.94); }
+    }
+
+    /* Smartphone-spec: extra tap-target garanties op 414px en kleiner */
+    @media (max-width: 414px) {
+      .main { padding: 56px 12px 16px; }
+      .ga-nav-btn, .a27-modal-btn, .gap-q-opt, .ga-answer-btn,
+      .check-status-btn, .invoice-new-btn {
+        min-height: 44px;
+      }
+      .ga-nav-buttons .ga-nav-btn { flex: 1 1 100%; }
+      .ga-answer-btn { min-height: 60px; padding: 14px 10px; }
+      .ga-toc-dot { min-width: 56px; height: 34px; font-size: 0.82rem; }
+      .quick-actions, .ga-modules { gap: 12px; }
+      h1, h2, h3 { line-height: 1.25; }
     }
 
     /* ── FACTUREN VIEW (admin only) ──── */
@@ -3921,6 +3974,7 @@ function showSubmitReviewModal(totalAnswers) {
     modal.innerHTML = `
       <div class="a27-modal" role="dialog" aria-labelledby="submitReviewTitle">
         <div class="a27-modal-header">
+          <button type="button" class="a27-modal-close" aria-label="Sluiten" onclick="document.getElementById('submitReviewModal').classList.remove('open');setTimeout(()=>{const m=document.getElementById('submitReviewModal');if(m)m.remove();},250);">&times;</button>
           <div class="a27-modal-eyebrow">Self-assessment indienen</div>
           <h2 id="submitReviewTitle" class="a27-modal-title">Klaar voor Lead Auditor review?</h2>
           <p class="a27-modal-lead">U heeft <strong>${totalAnswers}</strong> vragen beantwoord. Hieronder ziet u wat er na bevestiging gebeurt.</p>
@@ -3937,7 +3991,7 @@ function showSubmitReviewModal(totalAnswers) {
             <span class="a27-modal-step-num">2</span>
             <div>
               <div class="a27-modal-step-title">Lead Auditor krijgt notificatie</div>
-              <div class="a27-modal-step-sub">Raoul ontvangt direct bericht en start de review binnen één werkdag.</div>
+              <div class="a27-modal-step-sub">De Lead Auditor ontvangt direct bericht en start de review binnen één werkdag.</div>
             </div>
           </li>
           <li>
@@ -4005,6 +4059,7 @@ function showMissingEvidenceModal(missingControls) {
     modal.innerHTML = `
       <div class="a27-modal" role="dialog" aria-labelledby="meTitle">
         <div class="a27-modal-header">
+          <button type="button" class="a27-modal-close" aria-label="Sluiten" onclick="(function(){const m=document.querySelector('.a27-modal-backdrop.open');if(m){m.classList.remove('open');setTimeout(()=>m.remove(),250);}})();">&times;</button>
           <div class="a27-modal-eyebrow" style="color:#B45309;">Onderbouwing ontbreekt</div>
           <h2 id="meTitle" class="a27-modal-title">${missingControls.length} control(s) zonder bewijs</h2>
           <p class="a27-modal-lead">U claimt "Grotendeels" of "Volledig" compliant op deze controls, maar er is geen bewijsstuk of toelichting aangeleverd. Voor een auditor-ready rapport is per claim minimaal één van deze vereist:</p>
