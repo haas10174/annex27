@@ -9451,6 +9451,161 @@ async function renderRapport() {
         <p style="font-size:0.95rem;line-height:1.7;color:#334155;margin-bottom:28px;">${escapeHtml(s.score_summary)}</p>`;
     }
 
+    // ── LEAD AUDITOR OPINION blok (rapport-voorbeeld stijl) ──
+    {
+      const verdict = pctOk === null ? null
+        : pctOk >= 80 ? { tone: 'high', label: 'Audit-ready met aanscherping', narrative: 'De basis voor certificering staat. Resterende observaties betreffen verfijning en bewijsvoering. Aanbevolen route: pre-audit review, daarna Stage 1.' }
+        : pctOk >= 50 ? { tone: 'mid', label: 'Basis aanwezig, structurele gaps', narrative: 'De organisatie heeft een werkbare basis maar mist aantoonbaarheid op meerdere controls. Eerst de Critical en Major NC sluiten, dan opnieuw beoordelen.' }
+        : { tone: 'low', label: 'Onvolledig voor certificering', narrative: 'Substantieel werk vóór Stage 1 mogelijk is. Begin bij governance + risicobeoordeling. Onderbouw elke claim met evidence.' };
+      if (verdict) {
+        html += `
+        <div style="background:linear-gradient(135deg,#FFFFFF 0%,#F0FDFA 100%);border:1px solid #99F6E4;border-left:4px solid #0D9488;border-radius:4px 14px 14px 4px;padding:28px 32px;margin:8px 0 32px;box-shadow:0 8px 24px -16px rgba(13,148,136,0.30);">
+          <div style="font-family:'Sora',sans-serif;font-size:0.66rem;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:#0D9488;margin-bottom:10px;">Lead Auditor opinion</div>
+          <div style="font-family:'Sora',sans-serif;font-size:1.2rem;font-weight:800;color:#0F172A;letter-spacing:-0.02em;margin-bottom:14px;">Professioneel oordeel — ${verdict.label}</div>
+          <p style="font-size:0.96rem;line-height:1.7;color:#1F2937;margin:0 0 18px;">${escapeHtml(verdict.narrative)}</p>
+          ${numCritical + numGap > 0 ? `<div style="background:rgba(13,148,136,0.06);border-radius:8px;padding:14px 16px;margin-bottom:18px;">
+            <div style="font-family:'Sora',sans-serif;font-size:0.84rem;font-weight:700;color:#0F172A;margin-bottom:6px;">Specifieke aandachtspunten</div>
+            <ul style="margin:0;padding-left:18px;font-size:0.88rem;line-height:1.65;color:#475569;">
+              ${numCritical > 0 ? `<li><strong style="color:#DC2626;">${numCritical}</strong> ${numCritical === 1 ? 'Critical NC' : 'Critical NCs'} — geen Stage 1 mogelijk zonder oplossing</li>` : ''}
+              ${numGap > 0 ? `<li><strong style="color:#D97706;">${numGap}</strong> Minor NC / OFI — oplosbaar tijdens implementatie</li>` : ''}
+              ${pctOk !== null && pctOk < 80 ? `<li>Volwassenheid <strong>${pctOk}%</strong> — richt op evidence-onderbouwing in zwakkere categorieën</li>` : ''}
+            </ul>
+          </div>` : ''}
+          <div style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:12px;padding-top:14px;border-top:1px dashed #99F6E4;">
+            <div>
+              <div style="font-family:'Sora',sans-serif;font-size:0.78rem;font-weight:700;color:#0F172A;">Lead Auditor</div>
+              <div style="font-size:0.78rem;color:#64748B;">IRCA-gecertificeerd · ISO 27001:2022</div>
+            </div>
+            <div style="font-size:0.76rem;color:#64748B;letter-spacing:0.02em;">Annex27 · ${releasedOn}</div>
+          </div>
+        </div>`;
+      }
+    }
+
+    // ── SCOPE-kaarten (4-stat row) ──
+    {
+      const totalControls = numTotal || 0;
+      const evidenceCount = findings.reduce((acc, f) => acc + (Array.isArray(f.evidence_referenced) ? f.evidence_referenced.length : 0), 0);
+      const sectorLabel = (user && user.sector) ? user.sector : 'MKB';
+      html += `
+        <div style="font-family:'Sora',sans-serif;font-size:0.66rem;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:#0D9488;margin:0 0 8px;display:inline-flex;align-items:center;gap:10px;">
+          <span style="display:inline-block;width:22px;height:1px;background:#0D9488;"></span> Scope en methodologie
+        </div>
+        <h2 style="font-family:'Sora',sans-serif;font-size:1.45rem;font-weight:800;color:#0F172A;letter-spacing:-0.025em;margin:6px 0 18px;padding-bottom:10px;position:relative;">
+          Wat is beoordeeld
+          <span style="position:absolute;left:0;bottom:0;width:44px;height:3px;background:#0D9488;border-radius:2px;"></span>
+        </h2>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:32px;">
+          <div style="background:#FFFFFF;border:1px solid #E5E5E5;border-radius:10px;padding:18px 16px;text-align:center;">
+            <div style="font-family:'Sora',sans-serif;font-size:1.8rem;font-weight:800;color:#0F172A;letter-spacing:-0.025em;line-height:1;margin-bottom:6px;">${totalControls}</div>
+            <div style="font-family:'Sora',sans-serif;font-size:0.62rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#0D9488;">Controls beoordeeld</div>
+          </div>
+          <div style="background:#FFFFFF;border:1px solid #E5E5E5;border-radius:10px;padding:18px 16px;text-align:center;">
+            <div style="font-family:'Sora',sans-serif;font-size:1.8rem;font-weight:800;color:#0F172A;letter-spacing:-0.025em;line-height:1;margin-bottom:6px;">${evidenceCount}</div>
+            <div style="font-family:'Sora',sans-serif;font-size:0.62rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#0D9488;">Evidence-items</div>
+          </div>
+          <div style="background:#FFFFFF;border:1px solid #E5E5E5;border-radius:10px;padding:18px 16px;text-align:center;">
+            <div style="font-family:'Sora',sans-serif;font-size:1.8rem;font-weight:800;color:#0F172A;letter-spacing:-0.025em;line-height:1;margin-bottom:6px;">1</div>
+            <div style="font-family:'Sora',sans-serif;font-size:0.62rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#0D9488;">Lead Auditor review</div>
+          </div>
+          <div style="background:#FFFFFF;border:1px solid #E5E5E5;border-radius:10px;padding:18px 16px;text-align:center;">
+            <div style="font-family:'Sora',sans-serif;font-size:1.1rem;font-weight:800;color:#0F172A;letter-spacing:-0.025em;line-height:1.2;margin-bottom:6px;">${escapeHtml(sectorLabel)}</div>
+            <div style="font-family:'Sora',sans-serif;font-size:0.62rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#0D9488;">Sectorprofiel</div>
+          </div>
+        </div>`;
+    }
+
+    // ── CAPABILITY MATURITY tabel (per Annex A categorie + Clausules) ──
+    {
+      const buckets = {
+        'A.5': { label: 'A.5 — Organisatorische controls', total: 0, ok: 0, gap: 0, critical: 0 },
+        'A.6': { label: 'A.6 — Personeel', total: 0, ok: 0, gap: 0, critical: 0 },
+        'A.7': { label: 'A.7 — Fysieke beveiliging', total: 0, ok: 0, gap: 0, critical: 0 },
+        'A.8': { label: 'A.8 — Technologische controls', total: 0, ok: 0, gap: 0, critical: 0 },
+        'C':   { label: 'Clausules 4-10 — ISMS', total: 0, ok: 0, gap: 0, critical: 0 },
+      };
+      findings.forEach(f => {
+        const id = String(f.control_id || '');
+        let key = null;
+        if (id.startsWith('A.5')) key = 'A.5';
+        else if (id.startsWith('A.6')) key = 'A.6';
+        else if (id.startsWith('A.7')) key = 'A.7';
+        else if (id.startsWith('A.8')) key = 'A.8';
+        else if (id.startsWith('C.') || id.startsWith('Cl.') || /^\d+(\.\d+)?$/.test(id)) key = 'C';
+        if (!key) return;
+        buckets[key].total++;
+        if (f.status === 'critical') buckets[key].critical++;
+        else if (f.status === 'gap') buckets[key].gap++;
+        else if (f.status === 'ok') buckets[key].ok++;
+      });
+      const levelFor = (score) => {
+        if (score === null || score === undefined) return { label: '—', cls: 'na' };
+        if (score >= 90) return { label: 'Optimizing', cls: 'high' };
+        if (score >= 75) return { label: 'Managed', cls: 'high' };
+        if (score >= 60) return { label: 'Defined', cls: 'mid' };
+        if (score >= 40) return { label: 'Repeatable', cls: 'mid' };
+        if (score >= 20) return { label: 'Emerging', cls: 'low' };
+        return { label: 'Initial', cls: 'low' };
+      };
+      const prioFor = (b) => {
+        if (b.critical > 0) return { label: 'Kritiek', color: '#DC2626' };
+        if (b.gap >= 3) return { label: 'Hoog', color: '#D97706' };
+        if (b.gap >= 1) return { label: 'Midden', color: '#D97706' };
+        if (b.total === 0) return { label: '—', color: '#94A3B8' };
+        return { label: 'Laag', color: '#059669' };
+      };
+      const totalAll = Object.values(buckets).reduce((a, b) => a + b.total, 0);
+      const okAll    = Object.values(buckets).reduce((a, b) => a + b.ok, 0);
+      const totalScore = totalAll > 0 ? Math.round((okAll / totalAll) * 100) : null;
+      const totalLevel = levelFor(totalScore);
+      if (totalAll > 0) {
+        html += `
+        <div style="font-family:'Sora',sans-serif;font-size:0.66rem;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:#0D9488;margin:0 0 8px;display:inline-flex;align-items:center;gap:10px;">
+          <span style="display:inline-block;width:22px;height:1px;background:#0D9488;"></span> Volwassenheid
+        </div>
+        <h2 style="font-family:'Sora',sans-serif;font-size:1.45rem;font-weight:800;color:#0F172A;letter-spacing:-0.025em;margin:6px 0 18px;padding-bottom:10px;position:relative;">
+          Per categorie
+          <span style="position:absolute;left:0;bottom:0;width:44px;height:3px;background:#0D9488;border-radius:2px;"></span>
+        </h2>
+        <table style="width:100%;border-collapse:collapse;background:#FFFFFF;border:1px solid #E5E5E5;border-radius:10px;overflow:hidden;margin-bottom:32px;font-family:Inter,sans-serif;">
+          <thead style="background:#F8F9FA;">
+            <tr>
+              <th style="text-align:left;padding:12px 16px;font-family:'Sora',sans-serif;font-size:0.78rem;font-weight:700;color:#0F172A;letter-spacing:-0.005em;border-bottom:1px solid #E5E5E5;">Categorie</th>
+              <th style="text-align:right;padding:12px 16px;font-family:'Sora',sans-serif;font-size:0.78rem;font-weight:700;color:#0F172A;letter-spacing:-0.005em;border-bottom:1px solid #E5E5E5;">Aantal</th>
+              <th style="text-align:right;padding:12px 16px;font-family:'Sora',sans-serif;font-size:0.78rem;font-weight:700;color:#0F172A;letter-spacing:-0.005em;border-bottom:1px solid #E5E5E5;">Score</th>
+              <th style="text-align:left;padding:12px 16px;font-family:'Sora',sans-serif;font-size:0.78rem;font-weight:700;color:#0F172A;letter-spacing:-0.005em;border-bottom:1px solid #E5E5E5;">Niveau</th>
+              <th style="text-align:left;padding:12px 16px;font-family:'Sora',sans-serif;font-size:0.78rem;font-weight:700;color:#0F172A;letter-spacing:-0.005em;border-bottom:1px solid #E5E5E5;">Prioriteit</th>
+            </tr>
+          </thead>
+          <tbody>`;
+        Object.entries(buckets).forEach(([k, b]) => {
+          if (b.total === 0) return;
+          const score = Math.round((b.ok / b.total) * 100);
+          const lvl = levelFor(score);
+          const pri = prioFor(b);
+          const lvlColor = lvl.cls === 'high' ? '#059669' : lvl.cls === 'mid' ? '#D97706' : '#DC2626';
+          html += `
+            <tr style="border-bottom:1px solid #F1F5F9;">
+              <td style="padding:12px 16px;font-size:0.92rem;color:#0F172A;font-weight:600;">${b.label}</td>
+              <td style="text-align:right;padding:12px 16px;font-size:0.92rem;color:#475569;font-variant-numeric:tabular-nums;">${b.total}</td>
+              <td style="text-align:right;padding:12px 16px;font-family:'Sora',sans-serif;font-size:0.95rem;font-weight:700;color:${lvlColor};font-variant-numeric:tabular-nums;">${score}%</td>
+              <td style="padding:12px 16px;font-size:0.88rem;color:${lvlColor};font-weight:600;">${lvl.label}</td>
+              <td style="padding:12px 16px;"><span style="display:inline-block;padding:3px 10px;border-radius:6px;font-size:0.74rem;font-weight:700;background:${pri.color}22;color:${pri.color};">${pri.label}</span></td>
+            </tr>`;
+        });
+        html += `
+            <tr style="background:#F8F9FA;font-weight:700;">
+              <td style="padding:12px 16px;font-size:0.92rem;color:#0F172A;">Totaal / gewogen</td>
+              <td style="text-align:right;padding:12px 16px;font-size:0.92rem;color:#0F172A;font-variant-numeric:tabular-nums;">${totalAll}</td>
+              <td style="text-align:right;padding:12px 16px;font-family:'Sora',sans-serif;font-size:0.95rem;color:#0F172A;font-variant-numeric:tabular-nums;">${totalScore}%</td>
+              <td style="padding:12px 16px;font-size:0.88rem;color:#0F172A;">${totalLevel.label}</td>
+              <td style="padding:12px 16px;color:#475569;">—</td>
+            </tr>
+          </tbody>
+        </table>`;
+      }
+    }
+
     if (s.findings_by_category && typeof s.findings_by_category === 'object') {
       html += `
         <div style="font-family:'Sora',sans-serif;font-size:0.66rem;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:#0D9488;margin:36px 0 8px;display:inline-flex;align-items:center;gap:10px;">
