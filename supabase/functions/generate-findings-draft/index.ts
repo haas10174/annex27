@@ -443,14 +443,21 @@ Geef terug **alleen JSON** (geen markdown-fence) in dit schema:
 \`\`\`json
 {
   "severity": "observation|minor|major|critical",
-  "finding": "Concrete observatie. Weeg alle drie bronnen — niet alleen formele evidence. Citeer letterlijk waar mogelijk.",
-  "recommendation": "Concrete actie. Geen uren-schatting.",
+  "finding": "Lead-zin (max 25 woorden) over de status van deze control.\\n\\n**Geconstateerd:**\\n- Eerste concrete observatie met versie/datum/scope-detail.\\n- Tweede observatie, bv. ondertekening-status of scope-discrepantie.\\n- Derde observatie indien relevant.\\n\\n**Klant-onderbouwing:** Korte zin met letterlijk citaat tussen aanhalingstekens (max 150 tekens) waar relevant.",
+  "recommendation": "Lead-zin met concrete actie.\\n\\n**Concreet uit te voeren:**\\n- Stap 1\\n- Stap 2\\n- Stap 3\\n\\n**Eigenaar + tijdslijn:** wie + wanneer.",
   "evidence_cited": ["filename.pdf"],
   "evidence_assessment": "Korte beoordeling van wat de evidence wel/niet aantoont (max 200 tekens).",
   "confidence": 0.85,
   "reasoning": "1-2 zinnen waarom deze severity. Vermeld expliciet hoe je de drie bronnen tegen elkaar afgewogen hebt."
 }
 \`\`\`
+
+**Schrijfstijl voor finding/recommendation:**
+- **Niet:** één doorlopende paragraaf met "het document X heeft status Y, geen handtekening, geen eigenaar, geen reviewdatum, refereert aan A.B.C, …"
+- **Wel:** beknopte lead-zin → bullet-list van observaties → korte klant-onderbouwing met quote.
+- Bullets beginnen met `-` (markdown), labels in `**bold**`. Renderer zet om naar opsomming.
+- Lead-zin moet stand-alone leesbaar zijn — geen "Het document toont dat..." maar "Beleid niet formeel goedgekeurd door directie."
+- Klant-quote tussen "" (aanhalingstekens), max 150 tekens, alleen letterlijk uit toelichting.
 
 **Severity-rubric (IRCA-conform, weegt ALLE drie bronnen):**
 

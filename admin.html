@@ -4021,32 +4021,94 @@ function renderPriorities(list) {
     </div>`;
 }
 
+// Markdown-light → HTML helper: escapet alle HTML, daarna `**bold**` + `- bullet` + paragraph-breaks.
+// Bewust beperkt om injectie te voorkomen (geen <a>, <img>, etc).
+function mdToHtml(raw) {
+  if (!raw) return '';
+  const esc = String(raw).replace(/[<>&"]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c]));
+  const lines = esc.split(/\r?\n/);
+  let html = '';
+  let inList = false;
+  let paraBuffer = [];
+  const flushPara = () => {
+    if (paraBuffer.length) {
+      html += `<p style="margin:0 0 8px;">${paraBuffer.join(' ').replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')}</p>`;
+      paraBuffer = [];
+    }
+  };
+  for (const ln of lines) {
+    const trimmed = ln.trim();
+    if (!trimmed) { flushPara(); if (inList) { html += '</ul>'; inList = false; } continue; }
+    if (/^[-•]\s+/.test(trimmed)) {
+      flushPara();
+      if (!inList) { html += '<ul style="margin:4px 0 8px;padding-left:20px;">'; inList = true; }
+      const itemText = trimmed.replace(/^[-•]\s+/, '').replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+      html += `<li style="margin-bottom:3px;">${itemText}</li>`;
+    } else {
+      if (inList) { html += '</ul>'; inList = false; }
+      paraBuffer.push(trimmed);
+    }
+  }
+  flushPara();
+  if (inList) html += '</ul>';
+  return html;
+}
+
 function renderDetailedFindings(arr) {
   const esc = (s) => String(s ?? '').replace(/[<>&"]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c]));
   const sevColor = { critical: '#dc2626', major: '#D97706', minor: '#0D9488', info: '#94A3B8' };
+  // Groepeer per categorie-prefix
+  const groups = [
+    { key: 'org',     label: 'Organisatorisch', prefix: /^A\.5/i },
+    { key: 'hr',      label: 'Personeel',       prefix: /^A\.6/i },
+    { key: 'phys',    label: 'Fysiek',          prefix: /^A\.7/i },
+    { key: 'tech',    label: 'Technologisch',   prefix: /^A\.8/i },
+    { key: 'clauses', label: 'ISMS-clausules',  prefix: /^C\./i  },
+    { key: 'other',   label: 'Overig',          prefix: /./       }
+  ];
+  const groupedFindings = {};
+  groups.forEach(g => groupedFindings[g.key] = []);
+  arr.forEach(f => {
+    const cid = String(f.control_id || '');
+    const g = groups.find(g => g.prefix.test(cid)) || groups[groups.length - 1];
+    if (g.key !== 'other' || !groupedFindings.org.some(x => x === f)) groupedFindings[g.key].push(f);
+  });
+  const cid = 'finCar_' + Math.random().toString(36).slice(2,9);
+  // Eerste categorie met findings = default actief
+  const firstActive = groups.find(g => groupedFindings[g.key].length > 0)?.key || 'org';
   return `
     <div class="draft-section">
-      <label style="font-size:0.74rem;font-weight:800;letter-spacing:0.06em;text-transform:uppercase;color:var(--accent);margin-bottom:8px;display:block;">Detailed findings (${arr.length})</label>
-      <div style="display:flex;flex-direction:column;gap:10px;max-height:480px;overflow-y:auto;padding-right:4px;">
-        ${arr.map((f,i) => {
-          const sevC = sevColor[f.severity] || sevColor[f.status] || '#94A3B8';
-          return `
-          <div style="background:var(--bg-warm);padding:14px;border-radius:8px;border-left:3px solid ${sevC};">
-            <div style="display:flex;justify-content:space-between;gap:8px;margin-bottom:8px;flex-wrap:wrap;align-items:center;">
-              <strong style="font-size:0.86rem;font-family:'Sora',sans-serif;color:#0F172A;">${esc(f.control_id||'?')}</strong>
-              <div style="display:flex;gap:6px;align-items:center;">
-                ${f.severity ? `<span style="font-size:0.66rem;font-weight:800;padding:2px 8px;border-radius:99px;background:${sevC}22;color:${sevC};letter-spacing:0.06em;text-transform:uppercase;">${esc(f.severity)}</span>` : ''}
-                ${f.status ? `<span style="font-size:0.66rem;font-weight:700;padding:2px 8px;border-radius:99px;background:rgba(15,23,42,0.06);color:#475569;text-transform:uppercase;">${esc(f.status)}</span>` : ''}
-              </div>
-            </div>
-            <div style="font-size:0.82rem;margin-bottom:6px;line-height:1.55;"><strong style="color:#0F172A;">Bevinding:</strong> ${esc(f.finding||'')}</div>
-            ${f.klant_quote ? `<div style="font-size:0.78rem;color:#475569;margin-bottom:6px;line-height:1.55;background:rgba(13,148,136,0.06);padding:6px 10px;border-radius:4px;border-left:2px solid var(--accent);"><strong style="color:#0F172A;">Klant zei:</strong> &ldquo;${esc(f.klant_quote)}&rdquo;</div>` : ''}
-            ${Array.isArray(f.evidence_referenced) && f.evidence_referenced.length ? `<div style="font-size:0.74rem;color:#475569;margin-bottom:6px;display:flex;gap:6px;flex-wrap:wrap;align-items:center;"><strong style="color:#0F172A;">Evidence:</strong> ${f.evidence_referenced.map(fn => `<span style="background:rgba(15,23,42,0.05);padding:2px 8px;border-radius:99px;font-family:monospace;">${esc(fn)}</span>`).join('')}</div>` : ''}
-            ${f.evidence_assessment ? `<div style="font-size:0.78rem;color:#475569;margin-bottom:6px;line-height:1.55;background:rgba(15,23,42,0.03);padding:6px 10px;border-radius:4px;"><strong style="color:#0F172A;">Bewijs-evaluatie:</strong> ${esc(f.evidence_assessment)}</div>` : ''}
-            <div style="font-size:0.82rem;color:var(--text-secondary);line-height:1.55;"><strong style="color:#0F172A;">Aanbeveling:</strong> ${esc(f.recommendation||'')}</div>
-          </div>`;
-        }).join('')}
+      <label style="font-size:0.74rem;font-weight:800;letter-spacing:0.06em;text-transform:uppercase;color:var(--accent);margin-bottom:10px;display:block;">Detailed findings (${arr.length})</label>
+      <div class="fin-carousel" data-cid="${cid}">
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;border-bottom:1px solid var(--border);padding-bottom:10px;">
+          ${groups.filter(g => groupedFindings[g.key].length > 0).map(g => `
+            <button onclick="(function(b){const c=b.closest('.fin-carousel');c.querySelectorAll('.fin-tab').forEach(t=>t.classList.remove('active'));b.classList.add('active');c.querySelectorAll('.fin-group').forEach(p=>p.style.display='none');c.querySelector('[data-group=\\'${g.key}\\']').style.display='flex';})(this)" class="fin-tab ${g.key === firstActive ? 'active' : ''}" style="background:transparent;border:1px solid var(--border);border-radius:99px;padding:6px 14px;font-size:0.78rem;font-weight:600;color:var(--text-muted);cursor:pointer;display:inline-flex;align-items:center;gap:6px;">
+              ${esc(g.label)} <span style="background:rgba(15,23,42,0.08);color:#0F172A;font-size:0.7rem;font-weight:800;padding:1px 7px;border-radius:99px;font-family:'JetBrains Mono',monospace;">${groupedFindings[g.key].length}</span>
+            </button>`).join('')}
+        </div>
+        ${groups.filter(g => groupedFindings[g.key].length > 0).map(g => `
+          <div class="fin-group" data-group="${g.key}" style="display:${g.key === firstActive ? 'flex' : 'none'};flex-direction:column;gap:10px;max-height:560px;overflow-y:auto;padding-right:4px;">
+            ${groupedFindings[g.key].map((f,i) => {
+              const sevC = sevColor[f.severity] || sevColor[f.status] || '#94A3B8';
+              return `
+              <div style="background:var(--bg-warm);padding:14px;border-radius:8px;border-left:3px solid ${sevC};">
+                <div style="display:flex;justify-content:space-between;gap:8px;margin-bottom:8px;flex-wrap:wrap;align-items:center;">
+                  <strong style="font-size:0.86rem;font-family:'Sora',sans-serif;color:#0F172A;">${esc(f.control_id||'?')}</strong>
+                  <div style="display:flex;gap:6px;align-items:center;">
+                    ${f.severity ? `<span style="font-size:0.66rem;font-weight:800;padding:2px 8px;border-radius:99px;background:${sevC}22;color:${sevC};letter-spacing:0.06em;text-transform:uppercase;">${esc(f.severity)}</span>` : ''}
+                    ${f.status ? `<span style="font-size:0.66rem;font-weight:700;padding:2px 8px;border-radius:99px;background:rgba(15,23,42,0.06);color:#475569;text-transform:uppercase;">${esc(f.status)}</span>` : ''}
+                  </div>
+                </div>
+                <div style="font-size:0.82rem;margin-bottom:6px;line-height:1.55;"><strong style="color:#0F172A;display:block;margin-bottom:4px;">Bevinding:</strong> ${mdToHtml(f.finding||'')}</div>
+                ${f.klant_quote ? `<div style="font-size:0.78rem;color:#475569;margin-bottom:6px;line-height:1.55;background:rgba(13,148,136,0.06);padding:6px 10px;border-radius:4px;border-left:2px solid var(--accent);"><strong style="color:#0F172A;">Klant zei:</strong> &ldquo;${esc(f.klant_quote)}&rdquo;</div>` : ''}
+                ${Array.isArray(f.evidence_referenced) && f.evidence_referenced.length ? `<div style="font-size:0.74rem;color:#475569;margin-bottom:6px;display:flex;gap:6px;flex-wrap:wrap;align-items:center;"><strong style="color:#0F172A;">Evidence:</strong> ${f.evidence_referenced.map(fn => `<span style="background:rgba(15,23,42,0.05);padding:2px 8px;border-radius:99px;font-family:monospace;">${esc(fn)}</span>`).join('')}</div>` : ''}
+                ${f.evidence_assessment ? `<div style="font-size:0.78rem;color:#475569;margin-bottom:6px;line-height:1.55;background:rgba(15,23,42,0.03);padding:6px 10px;border-radius:4px;"><strong style="color:#0F172A;">Bewijs-evaluatie:</strong> ${esc(f.evidence_assessment)}</div>` : ''}
+                <div style="font-size:0.82rem;color:var(--text-secondary);line-height:1.55;"><strong style="color:#0F172A;display:block;margin-bottom:4px;">Aanbeveling:</strong> ${mdToHtml(f.recommendation||'')}</div>
+              </div>`;
+            }).join('')}
+          </div>`).join('')}
       </div>
+      <style>.fin-tab.active{background:var(--accent)!important;color:#fff!important;border-color:var(--accent)!important;} .fin-tab.active span{background:rgba(255,255,255,0.25)!important;color:#fff!important;}</style>
     </div>`;
 }
 
