@@ -1572,17 +1572,17 @@
 
       <div class="tabs">
         <button class="tab active" data-tab="findings">
-          Bevindingen <span class="tab-count" id="findingsCount">0</span>
+          1. Bevindingen <span class="tab-count" id="findingsCount">0</span>
         </button>
-        <button class="tab" data-tab="nis2admin">
+        <button class="tab" data-tab="rapport">2. Rapport</button>
+        <button class="tab" data-tab="nis2admin" id="tabNis2admin" style="display:none;">
           NIS2 <span class="tab-count" id="nis2adminCount">0/39</span>
+        </button>
+        <button class="tab" data-tab="policies" id="tabPolicies">
+          Policy signoffs <span class="tab-count" id="policyCount">0</span>
         </button>
         <button class="tab" data-tab="messages">
           Berichten <span class="tab-count" id="msgCount">0</span>
-        </button>
-        <button class="tab" data-tab="rapport">Rapport</button>
-        <button class="tab" data-tab="policies">
-          Policy signoffs <span class="tab-count" id="policyCount">0</span>
         </button>
         <button class="tab" data-tab="invoices">
           Facturen <span class="tab-count" id="invoiceCount">0</span>
@@ -3905,20 +3905,26 @@ function renderRapportPanel() {
   let aiBlock = '';
   if (!currentDraft) {
     aiBlock = `
+      <div style="background:#FFFFFF;border:1px solid var(--border);border-left:3px solid #0D9488;border-radius:10px;padding:16px 20px;margin-bottom:16px;font-size:0.86rem;color:#475569;line-height:1.6;">
+        <div style="font-family:'Sora',sans-serif;font-size:0.68rem;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;color:#0D9488;margin-bottom:6px;">Wat is het verschil?</div>
+        <strong style="color:#0F172A;">AI-draft in Bevindingen-tab</strong> = per-control concept-bevinding (1 stuk per control, korte severity + tekst + aanbeveling). Helpt om snel 93 bevindingen te schrijven.<br>
+        <strong style="color:#0F172A;">AI-draft in Rapport-tab (deze knop)</strong> = volledig rapport-document: executive summary, score-samenvatting, categorie-overzicht, top-prioriteiten, 30/60/90-roadmap, disclosure. Pakt uw eigen vastgestelde bevindingen 1-op-1 over.
+      </div>
       <div style="background:linear-gradient(135deg,#0c0f1a 0%,#1e293b 100%);color:#fff;border-radius:14px;padding:28px;margin-bottom:24px;">
         <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
           <span style="font-size:1.4rem;">\uD83E\uDD16</span>
-          <h3 style="font-family:'Sora',sans-serif;font-size:1.15rem;margin:0;">AI-gegenereerd rapport</h3>
+          <h3 style="font-family:'Sora',sans-serif;font-size:1.15rem;margin:0;">Stap 2 \u2014 AI-gegenereerd rapport</h3>
           <span style="font-size:0.7rem;background:rgba(20,184,166,0.2);color:#5eead4;padding:3px 9px;border-radius:99px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;">Opus 4.7</span>
         </div>
         <p style="color:rgba(255,255,255,0.7);font-size:0.9rem;margin:0 0 18px;max-width:620px;line-height:1.55;">
-          Genereer een eerste draft van het gap-analyse rapport op basis van de quickscan-antwoorden, aangeleverde bewijsvoering (foto's + bestanden) en eerdere auditor-bevindingen. Claude leest evidence visueel en schrijft in jouw stijl.
+          Composeert het complete rapport op basis van uw vastgestelde bevindingen, quickscan-antwoorden en aangeleverde bewijsvoering. Claude leest evidence visueel en schrijft de rapport-tekst in jouw stijl. Bevindingen die u zelf heeft gezet worden ongewijzigd overgenomen.
         </p>
         <button onclick="generateAIDraft()" id="genDraftBtn" style="background:#14b8a6;color:#fff;border:none;padding:11px 22px;border-radius:10px;font-weight:700;font-size:0.9rem;cursor:pointer;display:inline-flex;align-items:center;gap:8px;">
           <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
           Genereer AI-draft
         </button>
         <div id="genDraftStatus" style="margin-top:12px;font-size:0.82rem;color:rgba(255,255,255,0.5);display:none;"></div>
+        <p style="color:rgba(255,255,255,0.45);font-size:0.74rem;margin:14px 0 0;line-height:1.5;">Duurt ~90 sec &middot; kost ca. $1-2 aan tokens &middot; bij fout (WORKER_RESOURCE_LIMIT) wordt deze in #127 opgelost</p>
       </div>`;
   } else {
     const s = currentDraft.sections || {};
@@ -3963,7 +3969,8 @@ function renderRapportPanel() {
   container.innerHTML = `
     ${aiBlock}
     <div style="border-top:1px solid var(--border-light);padding-top:20px;">
-      <h4 style="font-size:0.9rem;margin:0 0 10px;color:var(--text-secondary);">Handmatige PDF-upload (legacy / extern rapport)</h4>
+      <h4 style="font-size:0.9rem;margin:0 0 6px;color:var(--text-secondary);">Handmatige PDF-upload (escalatie-pad)</h4>
+      <p style="font-size:0.8rem;color:var(--text-muted);margin:0 0 12px;line-height:1.55;max-width:680px;">Gebruik dit alleen als de AI-draft faalt of als u een extern opgesteld rapport wilt uitleveren (bv. legacy klant, custom maatwerk-audit, klant levert eigen template). Upload vervangt de AI-flow voor deze klant.</p>
       <div style="margin-bottom:16px;">
         <label style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:rgba(15,23,42,0.06);color:#0F172A;border:1px solid var(--border);border-radius:8px;cursor:pointer;font-weight:600;font-size:0.82rem;">
           <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
@@ -4664,6 +4671,28 @@ async function selectClient(userId) {
   document.getElementById('clientTitle').textContent = currentClient.bedrijf || currentClient.naam || currentClient.email;
   document.getElementById('clientInfo').textContent = `${currentClient.naam || ''} · ${currentClient.email} · ${currentClient.pakket || 'gap'}-pakket`;
 
+  // NIS2-tab alleen tonen als klant er recht op heeft (pakket bevat 'nis2'/'admin', of klant heeft al NIS2-antwoorden ingevuld)
+  (async () => {
+    const tabNis2 = document.getElementById('tabNis2admin');
+    if (!tabNis2) return;
+    const pk = String(currentClient.pakket || '').toLowerCase();
+    let visible = pk.includes('nis2') || pk === 'admin';
+    if (!visible) {
+      try {
+        const [ordRes, gaRes] = await Promise.all([
+          sb.from('orders').select('product').eq('user_id', userId).limit(20),
+          sb.from('gap_analyse').select('answers').eq('user_id', userId).maybeSingle()
+        ]);
+        const products = (ordRes.data || []).map(o => String(o.product || '').toLowerCase());
+        if (products.some(p => p.includes('nis2'))) visible = true;
+        if (!visible && gaRes.data?.answers) {
+          visible = Object.keys(gaRes.data.answers).some(k => typeof k === 'string' && k.startsWith('NIS2::'));
+        }
+      } catch (_) { /* fail-open: laat tab verborgen bij fout */ }
+    }
+    tabNis2.style.display = visible ? '' : 'none';
+  })();
+
   // Update evidence file-count voor toolbar (async, blokkeert geen render)
   if (typeof updateEvidenceFileCount === 'function') updateEvidenceFileCount(userId);
   // Status-pipeline visualiseren
@@ -4738,7 +4767,47 @@ async function loadClientFindings(userId) {
     });
   });
 
-  list.innerHTML = html;
+  // ── Klaar-voor-rapport completion banner ──
+  // Toon prominent CTA wanneer alle controls een bevinding hebben (of N.v.t. zijn).
+  const totalCtrls = controls.length;
+  const findingsSet = new Set(findings.map(f => f.control_id));
+  // Controls die effectief 'klaar' zijn: bevinding gezet OF antwoord = N.v.t. voor alle vragen
+  const ctrlsReady = controls.filter(c => {
+    if (findingsSet.has(c.id)) return true;
+    const ansKeys = Object.keys(gapAnswers).filter(k => k.startsWith(c.id + '_'));
+    return ansKeys.length > 0 && ansKeys.every(k => gapAnswers[k] === 'nvt');
+  }).length;
+  const completionPct = totalCtrls > 0 ? Math.round((ctrlsReady / totalCtrls) * 100) : 0;
+  const isComplete = ctrlsReady === totalCtrls && totalCtrls > 0;
+  const banner = isComplete
+    ? `<div id="findingsCompleteBanner" style="background:linear-gradient(135deg,#0c0f1a 0%,#134e4a 100%);color:#fff;border-radius:14px;padding:24px 28px;margin-bottom:18px;display:flex;align-items:center;gap:20px;flex-wrap:wrap;box-shadow:0 10px 28px -16px rgba(13,148,136,0.55);">
+        <div style="flex-shrink:0;width:48px;height:48px;border-radius:50%;background:rgba(20,184,166,0.18);display:flex;align-items:center;justify-content:center;">
+          <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#5eead4" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div style="flex:1;min-width:240px;">
+          <div style="font-family:'Sora',sans-serif;font-size:0.7rem;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:#5eead4;margin-bottom:4px;">Stap 1 voltooid</div>
+          <div style="font-family:'Sora',sans-serif;font-size:1.15rem;font-weight:700;letter-spacing:-0.01em;margin-bottom:4px;">Alle ${totalCtrls} controls zijn beoordeeld &amp; voorzien van een bevinding</div>
+          <div style="font-size:0.86rem;color:rgba(255,255,255,0.72);line-height:1.55;">Ga door naar <strong style="color:#fff;">stap 2 — Rapport</strong> om de AI-draft te laten opstellen op basis van uw bevindingen, of upload een handmatig rapport.</div>
+        </div>
+        <button onclick="(function(){const t=document.querySelector('[data-tab=\\'rapport\\']');if(t)t.click();})()" style="background:#14b8a6;color:#fff;border:0;border-radius:10px;padding:13px 22px;font-family:'Sora',sans-serif;font-size:0.92rem;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:9px;letter-spacing:-0.005em;flex-shrink:0;box-shadow:0 6px 18px -8px rgba(20,184,166,0.6);">
+          Doorgaan naar Rapport
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+      </div>`
+    : (totalCtrls > 0 && ctrlsReady > 0)
+    ? `<div id="findingsProgressBanner" style="background:#FFFFFF;border:1px solid var(--border);border-left:3px solid #0D9488;border-radius:10px;padding:14px 18px;margin-bottom:18px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+        <div style="flex:1;min-width:200px;">
+          <div style="font-family:'Sora',sans-serif;font-size:0.68rem;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;color:#0D9488;margin-bottom:3px;">Stap 1 — Bevindingen</div>
+          <div style="font-size:0.92rem;color:#0F172A;line-height:1.5;"><strong>${ctrlsReady}/${totalCtrls}</strong> controls klaar &middot; <span style="color:#64748B;">${totalCtrls - ctrlsReady} resterend voordat u een rapport kunt opstellen</span></div>
+        </div>
+        <div style="flex-shrink:0;width:160px;height:6px;background:#F1F5F9;border-radius:3px;overflow:hidden;">
+          <div style="width:${completionPct}%;height:100%;background:linear-gradient(90deg,#0D9488,#14b8a6);border-radius:3px;transition:width 0.4s ease;"></div>
+        </div>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:0.78rem;font-weight:700;color:#0D9488;flex-shrink:0;">${completionPct}%</span>
+      </div>`
+    : '';
+
+  list.innerHTML = banner + html;
   document.getElementById('findingsCount').textContent = findings.length;
   applyControlFilter(currentControlFilter);
 
@@ -5478,18 +5547,22 @@ async function renderClientPipeline() {
   // Bepaal huidige stage uit beschikbare data
   let current = 'lead';
   try {
-    const [orderRes, asmRes, draftRes] = await Promise.all([
+    const [orderRes, asmRes, draftRes, findRes] = await Promise.all([
       sb.from('orders').select('status, confirmed_at, archived_at, paid_at').eq('user_id', currentClient.user_id).order('created_at', { ascending: false }).limit(1).maybeSingle(),
       sb.from('assessments').select('status, status_detail, deleted_at').eq('user_id', currentClient.user_id).maybeSingle(),
-      sb.from('report_drafts').select('status, released_at').eq('user_id', currentClient.user_id).order('generated_at', { ascending: false }).limit(1).maybeSingle()
+      sb.from('report_drafts').select('status, released_at').eq('user_id', currentClient.user_id).order('generated_at', { ascending: false }).limit(1).maybeSingle(),
+      sb.from('auditor_findings').select('control_id', { count: 'exact', head: true }).eq('user_id', currentClient.user_id)
     ]);
     const order = orderRes?.data;
     const asm = asmRes?.data;
     const draft = draftRes?.data;
+    const findingsCount = findRes?.count || 0;
+    // Auditor heeft alle 93 controls voorzien van bevinding → klant zit in Review-fase
+    const allFindingsDone = findingsCount >= 93;
 
     if (asm?.deleted_at || order?.archived_at) current = 'archived';
     else if (draft?.released_at) current = 'released';
-    else if (asm?.status_detail === 'review_requested' || asm?.status_detail === 'in_review') current = 'review';
+    else if (allFindingsDone || asm?.status_detail === 'review_requested' || asm?.status_detail === 'in_review') current = 'review';
     else if (asm?.status_detail === 'in_progress' || asm?.status === 'active') current = 'in_progress';
     else if (currentClient.user_id) current = 'user';
     else if (order?.confirmed_at) current = 'order';
@@ -6012,6 +6085,13 @@ async function saveFinding(ctrlId) {
     if (error) throw error;
     if (status) { status.textContent = '✓ Opgeslagen'; status.className = 'save-status saved'; }
     setTimeout(() => { if (status) status.textContent = ''; }, 2500);
+    // Cache + pipeline-update. Bij eerste bevinding voor deze control → herlaad findings-list zodat completion-banner verschijnt.
+    const wasNew = !findingCache[ctrlId];
+    findingCache[ctrlId] = { ...(findingCache[ctrlId] || {}), control_id: ctrlId, severity: sev, finding: findingEl?.value || '', recommendation: recEl?.value || '' };
+    if (typeof renderClientPipeline === 'function') renderClientPipeline();
+    if (wasNew && typeof loadClientFindings === 'function' && currentClient?.user_id) {
+      loadClientFindings(currentClient.user_id);
+    }
   } catch(e) {
     if (status) { status.textContent = 'Fout: ' + e.message; status.className = 'save-status'; }
   }
