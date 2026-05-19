@@ -9606,6 +9606,140 @@ async function renderRapport() {
       }
     }
 
+    // ── RISICO-HEATMAP (5x5 prob × impact, severity-buckets) ──
+    if (findings.length > 0) {
+      // Map status → probability + impact assignment
+      // Critical: high prob (4), high impact (4)
+      // Major: high prob (3), medium impact (3)
+      // Minor/Gap: medium prob (2), low-medium impact (2)
+      // Observation: low prob (1), low impact (1)
+      const riskMap = {};
+      for (let p = 0; p < 5; p++) for (let i = 0; i < 5; i++) riskMap[`${p}_${i}`] = [];
+      findings.forEach(f => {
+        const s = f.status;
+        if (s === 'ok') return;
+        let p = 0, i = 0;
+        if (s === 'critical') { p = 4; i = 4; }
+        else if (s === 'major') { p = 3; i = 3; }
+        else if (s === 'gap' || s === 'minor') { p = 2; i = 2; }
+        else if (s === 'observation') { p = 1; i = 1; }
+        riskMap[`${p}_${i}`].push(f);
+      });
+      const cellColor = (p, i) => {
+        const intensity = (p + i) / 8;
+        if (intensity >= 0.75) return '#FEE2E2';
+        if (intensity >= 0.50) return '#FED7AA';
+        if (intensity >= 0.25) return '#FEF3C7';
+        return '#D1FAE5';
+      };
+      const cellBorder = (p, i) => {
+        const intensity = (p + i) / 8;
+        if (intensity >= 0.75) return '#FCA5A5';
+        if (intensity >= 0.50) return '#FDBA74';
+        if (intensity >= 0.25) return '#FDE68A';
+        return '#6EE7B7';
+      };
+      const impactLabels = ['Triviaal', 'Laag', 'Middel', 'Hoog', 'Kritiek'];
+      const probLabels = ['Zelden', 'Onwaarschijnlijk', 'Mogelijk', 'Waarschijnlijk', 'Bijna zeker'];
+      html += `
+        <div style="font-family:'Sora',sans-serif;font-size:0.66rem;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:#0D9488;margin:36px 0 8px;display:inline-flex;align-items:center;gap:10px;">
+          <span style="display:inline-block;width:22px;height:1px;background:#0D9488;"></span> Risico-analyse
+        </div>
+        <h2 style="font-family:'Sora',sans-serif;font-size:1.45rem;font-weight:800;color:#0F172A;letter-spacing:-0.025em;margin:6px 0 18px;padding-bottom:10px;position:relative;">
+          Heatmap waarschijnlijkheid × impact
+          <span style="position:absolute;left:0;bottom:0;width:44px;height:3px;background:#0D9488;border-radius:2px;"></span>
+        </h2>
+        <div style="background:#FFFFFF;border:1px solid #E5E5E5;border-radius:10px;padding:20px;margin-bottom:32px;overflow:auto;">
+          <table style="width:100%;border-collapse:collapse;font-family:Inter,sans-serif;">
+            <tr>
+              <td style="width:90px;"></td>
+              <td colspan="5" style="text-align:center;font-family:'Sora',sans-serif;font-size:0.72rem;font-weight:700;color:#64748B;text-transform:uppercase;letter-spacing:0.1em;padding:0 0 8px;">Waarschijnlijkheid →</td>
+            </tr>
+            <tr>
+              <td style="width:90px;"></td>
+              ${probLabels.map(l => `<td style="text-align:center;font-size:0.7rem;color:#94A3B8;padding:6px 4px;font-weight:600;">${l}</td>`).join('')}
+            </tr>
+            ${[4, 3, 2, 1, 0].map(i => `
+              <tr>
+                <td style="font-family:'Sora',sans-serif;font-size:0.74rem;font-weight:700;color:${i >= 3 ? '#DC2626' : i >= 2 ? '#D97706' : '#0F172A'};padding:4px 8px;text-align:right;white-space:nowrap;">
+                  ${i === 4 ? `<span style="display:inline-block;writing-mode:vertical-rl;transform:rotate(180deg);font-size:0.66rem;color:#64748B;text-transform:uppercase;letter-spacing:0.1em;margin-right:6px;">Impact ↑</span>` : ''}${impactLabels[i]}
+                </td>
+                ${[0, 1, 2, 3, 4].map(p => {
+                  const cell = riskMap[`${p}_${i}`];
+                  const cnt = cell.length;
+                  return `<td style="background:${cellColor(p, i)};border:1px solid ${cellBorder(p, i)};text-align:center;padding:12px 4px;font-family:'Sora',sans-serif;font-size:1.05rem;font-weight:800;color:#0F172A;width:18%;min-width:60px;">${cnt > 0 ? cnt : '·'}</td>`;
+                }).join('')}
+              </tr>`).join('')}
+          </table>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:14px;font-size:0.78rem;color:#64748B;flex-wrap:wrap;gap:8px;">
+            <span style="font-style:italic;">Aantallen tonen bevindingen per risico-quadrant.</span>
+            <span style="display:inline-flex;gap:12px;align-items:center;">
+              <span style="display:inline-flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;background:#FEE2E2;border:1px solid #FCA5A5;display:inline-block;"></span> Hoog</span>
+              <span style="display:inline-flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;background:#FED7AA;border:1px solid #FDBA74;display:inline-block;"></span> Middel</span>
+              <span style="display:inline-flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;background:#D1FAE5;border:1px solid #6EE7B7;display:inline-block;"></span> Laag</span>
+            </span>
+          </div>
+        </div>`;
+    }
+
+    // ── EVIDENCE-GROUPS per categorie ──
+    if (findings.length > 0) {
+      const evGroups = {
+        'A.5': { label: 'A.5 — Organisatorische controls', items: [] },
+        'A.6': { label: 'A.6 — Personeel', items: [] },
+        'A.7': { label: 'A.7 — Fysieke beveiliging', items: [] },
+        'A.8': { label: 'A.8 — Technologische controls', items: [] },
+        'C':   { label: 'Clausules 4-10 — ISMS', items: [] },
+      };
+      findings.forEach(f => {
+        if (!Array.isArray(f.evidence_referenced) || !f.evidence_referenced.length) return;
+        const id = String(f.control_id || '');
+        let key = null;
+        if (id.startsWith('A.5')) key = 'A.5';
+        else if (id.startsWith('A.6')) key = 'A.6';
+        else if (id.startsWith('A.7')) key = 'A.7';
+        else if (id.startsWith('A.8')) key = 'A.8';
+        else key = 'C';
+        evGroups[key].items.push({ control_id: f.control_id, status: f.status, files: f.evidence_referenced });
+      });
+      const totalEvCount = Object.values(evGroups).reduce((a, g) => a + g.items.length, 0);
+      if (totalEvCount > 0) {
+        html += `
+          <div style="font-family:'Sora',sans-serif;font-size:0.66rem;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:#0D9488;margin:36px 0 8px;display:inline-flex;align-items:center;gap:10px;">
+            <span style="display:inline-block;width:22px;height:1px;background:#0D9488;"></span> Bewijsvoering
+          </div>
+          <h2 style="font-family:'Sora',sans-serif;font-size:1.45rem;font-weight:800;color:#0F172A;letter-spacing:-0.025em;margin:6px 0 18px;padding-bottom:10px;position:relative;">
+            Aangeleverd bewijs per categorie
+            <span style="position:absolute;left:0;bottom:0;width:44px;height:3px;background:#0D9488;border-radius:2px;"></span>
+          </h2>
+          <div style="margin-bottom:32px;">`;
+        Object.entries(evGroups).forEach(([k, g]) => {
+          if (g.items.length === 0) return;
+          html += `
+            <div style="background:#FFFFFF;border:1px solid #E5E5E5;border-radius:10px;margin-bottom:12px;overflow:hidden;">
+              <div style="background:#0c0f1a;color:#FFFFFF;padding:10px 16px;display:flex;justify-content:space-between;align-items:center;font-family:'Sora',sans-serif;font-size:0.84rem;font-weight:700;letter-spacing:-0.005em;">
+                <span>${g.label}</span>
+                <span style="font-size:0.74rem;color:#94A3B8;font-weight:600;">${g.items.length} ${g.items.length === 1 ? 'control' : 'controls'} met bewijs</span>
+              </div>
+              ${g.items.map(it => {
+                const dotColor = statusColor[it.status] || '#94A3B8';
+                return `<div style="padding:10px 16px;border-top:1px solid #F1F5F9;display:flex;gap:10px;align-items:flex-start;flex-wrap:wrap;">
+                  <span style="display:inline-flex;align-items:center;gap:6px;flex-shrink:0;">
+                    <span style="width:7px;height:7px;border-radius:50%;background:${dotColor};display:inline-block;"></span>
+                    <span style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:0.82rem;font-weight:700;color:#0D9488;">${escapeHtml(it.control_id)}</span>
+                  </span>
+                  <span style="display:inline-flex;flex-wrap:wrap;gap:5px;flex:1;">
+                    ${it.files.slice(0, 6).map(fn => `<span style="background:rgba(15,23,42,0.05);padding:2px 9px;border-radius:99px;font-family:'JetBrains Mono',ui-monospace,monospace;font-size:0.72rem;color:#0F172A;">${escapeHtml(fn)}</span>`).join('')}
+                    ${it.files.length > 6 ? `<span style="font-size:0.72rem;color:#94A3B8;align-self:center;">+${it.files.length - 6} meer</span>` : ''}
+                  </span>
+                </div>`;
+              }).join('')}
+            </div>`;
+        });
+        html += `</div>`;
+      }
+    }
+
     if (s.findings_by_category && typeof s.findings_by_category === 'object') {
       html += `
         <div style="font-family:'Sora',sans-serif;font-size:0.66rem;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:#0D9488;margin:36px 0 8px;display:inline-flex;align-items:center;gap:10px;">
