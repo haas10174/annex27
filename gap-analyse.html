@@ -729,61 +729,133 @@
     .big-ring-verdict.mid { border-left-color: #D97706; }
     .big-ring-verdict.low { border-left-color: #DC2626; }
     .big-ring-compare {
-      text-align: center;
-      font-size: 0.78rem;
-      color: #64748B;
-      margin-top: 14px;
+      margin-top: 18px;
       line-height: 1.55;
     }
     .big-ring-compare strong { color: #0F172A; font-weight: 600; }
-
-    /* Categorie-resultaten — strakke kaart-rijen */
-    .results-cats { display: flex; flex-direction: column; gap: 10px; }
-    .result-cat {
+    .bench-clean {
       background: #FFFFFF;
       border: 1px solid #E8E4DC;
-      border-left: 3px solid #94A3B8;
-      border-radius: 0 8px 8px 0;
-      padding: 18px 22px;
-      transition: border-left-color 0.2s, box-shadow 0.2s;
+      border-radius: 10px;
+      padding: 14px 18px;
     }
-    .result-cat:hover { box-shadow: 0 4px 14px rgba(15,23,42,0.05); }
-    .result-cat.high { border-left-color: #059669; }
-    .result-cat.mid { border-left-color: #D97706; }
-    .result-cat.low { border-left-color: #DC2626; }
-    .result-cat-header {
+    .bench-clean-row {
       display: flex;
-      justify-content: space-between;
       align-items: baseline;
-      margin-bottom: 10px;
+      justify-content: space-between;
+      padding: 6px 0;
+      border-bottom: 1px solid #F1ECE2;
+    }
+    .bench-clean-row:last-of-type { border-bottom: none; }
+    .bench-clean-label {
+      font-family: 'Sora', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: #475569;
+      letter-spacing: -0.005em;
+    }
+    .bench-clean-val {
+      font-family: 'Sora', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      font-variant-numeric: tabular-nums;
+    }
+    .bench-clean-val.you { color: #0D9488; }
+    .bench-clean-val.sector { color: #0F172A; }
+    .bench-clean-delta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px dashed #E8E4DC;
+      font-family: 'Sora', sans-serif;
+      font-size: 0.86rem;
+      font-weight: 600;
+      letter-spacing: -0.005em;
+    }
+    .bench-clean-delta.up { color: #059669; }
+    .bench-clean-delta.down { color: #DC2626; }
+    .bench-clean-delta.eq { color: #64748B; }
+    .bench-clean-arrow {
+      width: 22px; height: 22px;
+      display: inline-flex; align-items: center; justify-content: center;
+      border-radius: 50%;
+      background: currentColor;
+      color: #FFFFFF !important;
+      font-size: 0.7rem;
+      font-weight: 700;
+    }
+    .bench-clean-delta.up .bench-clean-arrow { background: #059669; }
+    .bench-clean-delta.down .bench-clean-arrow { background: #DC2626; }
+    .bench-clean-delta.eq .bench-clean-arrow { background: #64748B; }
+
+    /* Categorie-resultaten — editorial bar-list (geen tegels) */
+    .results-cats {
+      background: #FFFFFF;
+      border: 1px solid #E8E4DC;
+      border-radius: 12px;
+      padding: 24px 26px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      position: relative;
+    }
+    .results-cats::before {
+      content: 'Per categorie';
+      display: block;
+      font-family: 'Sora', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #0D9488;
+      margin-bottom: 16px;
+    }
+    .result-cat {
+      display: grid;
+      grid-template-columns: 1.4fr auto;
+      gap: 8px 18px;
+      padding: 14px 0;
+      border-bottom: 1px dashed #E8E4DC;
+    }
+    .result-cat:last-child { border-bottom: none; padding-bottom: 4px; }
+    .result-cat-header {
+      display: contents;
     }
     .result-cat-name {
       font-family: 'Sora', sans-serif;
-      font-size: 0.92rem;
+      font-size: 0.95rem;
       font-weight: 700;
       color: #0F172A;
       letter-spacing: -0.01em;
+      grid-column: 1;
     }
     .result-cat-pct {
       font-family: 'Sora', sans-serif;
-      font-size: 0.95rem;
+      font-size: 1.05rem;
       font-weight: 800;
       letter-spacing: -0.02em;
+      grid-column: 2;
+      text-align: right;
+      font-variant-numeric: tabular-nums;
     }
     .result-cat-pct.high { color: #059669; }
     .result-cat-pct.mid { color: #D97706; }
     .result-cat-pct.low { color: #DC2626; }
     .result-cat-bar {
+      grid-column: 1 / -1;
       width: 100%;
-      height: 4px;
+      height: 6px;
       background: #F1ECE2;
-      border-radius: 2px;
+      border-radius: 3px;
       overflow: hidden;
-      margin-bottom: 10px;
+      margin: 2px 0 6px;
     }
     .result-cat-bar-fill {
       height: 100%;
-      border-radius: 2px;
+      border-radius: 3px;
       width: 0%;
       transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
     }
@@ -791,44 +863,82 @@
     .result-cat-bar-fill.mid { background: #D97706; }
     .result-cat-bar-fill.low { background: #DC2626; }
     .result-cat-tip {
-      font-size: 0.84rem;
+      grid-column: 1 / -1;
+      font-size: 0.86rem;
       color: #475569;
       line-height: 1.6;
     }
 
     .nis2-result {
-      background: #FAF9F6;
-      border: 1px solid var(--border, #E5E5E5);
+      background: #0F172A;
+      color: #FAFAFA;
       border-radius: 14px;
-      padding: 22px 24px 18px;
-      margin-top: 8px;
+      padding: 22px 22px 20px;
+      margin-top: 14px;
       display: none;
       position: relative;
+      overflow: hidden;
     }
     .nis2-result::before {
-      content: '';
+      content: 'NIS2';
       position: absolute;
-      top: 0;
-      left: 22px;
-      right: 22px;
-      height: 2px;
-      background: #0D9488;
-      border-radius: 0 0 2px 2px;
+      top: -10px; right: -10px;
+      font-family: 'Sora', sans-serif;
+      font-weight: 800;
+      font-size: 3.6rem;
+      letter-spacing: -0.04em;
+      color: rgba(20,184,166,0.16);
+      line-height: 1;
+      pointer-events: none;
     }
     .nis2-result.visible { display: block; }
+    .nis2-result-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Sora', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: #5EEAD4;
+      margin-bottom: 10px;
+    }
+    .nis2-result-eyebrow::before {
+      content: '';
+      width: 18px;
+      height: 1px;
+      background: #14b8a6;
+    }
     .nis2-result-title {
       font-family: 'Sora', sans-serif;
-      font-size: 0.92rem;
+      font-size: 1.08rem;
       font-weight: 700;
-      color: #0F172A;
-      margin-bottom: 6px;
+      color: #FAFAFA;
+      margin-bottom: 8px;
       letter-spacing: -0.01em;
+      line-height: 1.25;
     }
     .nis2-result-desc {
-      font-size: 0.84rem;
-      color: #475569;
+      font-size: 0.88rem;
+      color: rgba(250,250,250,0.78);
       line-height: 1.65;
     }
+    .nis2-result-desc a {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 10px;
+      padding: 7px 14px;
+      background: #14b8a6;
+      color: #0F172A !important;
+      font-weight: 700;
+      text-decoration: none !important;
+      border-radius: 8px;
+      font-size: 0.84rem;
+      transition: background 0.2s;
+    }
+    .nis2-result-desc a:hover { background: #5EEAD4; }
 
     /* Upsell-block — print-ready, strakke witte kaart */
     .upsell-block {
@@ -974,41 +1084,77 @@
 
     /* Lead capture — print-ready */
     .lead-capture {
-      background: #FFFFFF;
+      background: linear-gradient(180deg, #FFFFFF 0%, #FAF9F6 100%);
       border: 1px solid #E8E4DC;
-      border-radius: 12px;
-      padding: 36px;
-      text-align: center;
-      margin-top: 20px;
+      border-left: 4px solid #0D9488;
+      border-radius: 4px 14px 14px 4px;
+      padding: 36px 36px 30px;
+      margin-top: 32px;
       position: relative;
+      box-shadow: 0 6px 24px -16px rgba(13,148,136,0.30), 0 2px 8px rgba(15,23,42,0.04);
     }
-    .lead-capture::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 36px; right: 36px;
-      height: 2px;
-      background: #0D9488;
+    .lead-capture-eyebrow {
+      font-family: 'Sora', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #0D9488;
+      margin-bottom: 10px;
     }
     .lead-capture h3 {
       font-family: 'Sora', sans-serif;
-      font-size: 1.3rem;
+      font-size: 1.5rem;
       font-weight: 700;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
       color: #0F172A;
       letter-spacing: -0.02em;
+      line-height: 1.2;
     }
     .lead-capture p {
-      font-size: 0.92rem;
-      color: #64748B;
-      margin-bottom: 24px;
+      font-size: 0.96rem;
+      color: #475569;
+      margin-bottom: 18px;
+      line-height: 1.65;
+      max-width: 560px;
+    }
+    .lead-capture-list {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 24px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 6px;
+    }
+    .lead-capture-list li {
+      position: relative;
+      padding-left: 24px;
+      font-size: 0.9rem;
+      color: #475569;
       line-height: 1.6;
+    }
+    .lead-capture-list li::before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      color: #0D9488;
+      font-weight: 700;
+    }
+    .lead-capture-trust {
+      margin-top: 14px;
+      font-size: 0.78rem;
+      color: #94A3B8;
+      text-align: left;
+    }
+    @media (min-width: 720px) {
+      .lead-capture-list { grid-template-columns: 1fr 1fr; gap: 6px 24px; }
     }
     .lead-form {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 10px;
-      max-width: 480px;
-      margin: 0 auto;
+      max-width: 100%;
+      margin: 0;
     }
     .lead-form .full { grid-column: 1 / -1; }
     .lead-input {
@@ -1708,6 +1854,7 @@
       <div>
         <div class="results-cats" id="resultsCats"></div>
         <div class="nis2-result" id="nis2Result">
+          <div class="nis2-result-eyebrow">Deadline 1 juli 2026</div>
           <div class="nis2-result-title" id="nis2ResultTitle"></div>
           <div class="nis2-result-desc" id="nis2ResultDesc"></div>
         </div>
@@ -1762,14 +1909,21 @@
     </div>
 
     <div class="lead-capture" id="leadCapture">
-      <h3>Bewaar uw resultaat</h3>
-      <p>Vul uw gegevens in om uw score te bewaren en ontdek hoe u uw compliance kunt verbeteren.</p>
+      <div class="lead-capture-eyebrow">Ontvang per e-mail</div>
+      <h3>Uw rapport in uw inbox</h3>
+      <p>Direct beschikbaar als PDF: uw compliance-score, sector-benchmark, gedetailleerde aanbevelingen en de volgende stappen naar certificering.</p>
+      <ul class="lead-capture-list">
+        <li>Volledig rapport als PDF in uw inbox</li>
+        <li>Sector-specifieke benchmark en valkuilen</li>
+        <li>Geprioriteerd actieplan voor uw scope</li>
+      </ul>
       <form class="lead-form" id="leadForm" onsubmit="submitLead(event)">
-        <input class="lead-input" type="text" name="naam" placeholder="Naam" required />
+        <input class="lead-input" type="text" name="naam" placeholder="Voor- en achternaam" required />
         <input class="lead-input" type="text" name="bedrijf" placeholder="Bedrijfsnaam" required />
-        <input class="lead-input full" type="email" name="email" placeholder="E-mailadres" required />
-        <button type="submit" class="lead-submit">Resultaat bewaren</button>
+        <input class="lead-input full" type="email" name="email" placeholder="Zakelijk e-mailadres" required />
+        <button type="submit" class="lead-submit">Stuur mijn rapport →</button>
       </form>
+      <div class="lead-capture-trust">Geen abonnement, geen marketing-spam. Eénmalige levering.</div>
     </div>
     <div class="lead-success" id="leadSuccess">
       <div class="ls-icon">
@@ -2492,18 +2646,19 @@ function showResults() {
                   : delta > 0 ? `${delta}% boven sectorgemiddelde`
                   : `gelijk aan sectorgemiddelde`;
   document.getElementById('bigCompare').innerHTML = `
-    <div class="bench">
-      <div class="bench-row">
-        <span class="bench-label">U</span>
-        <span class="bench-bar"><span class="bench-fill you" style="width:${pct}%"></span></span>
-        <span class="bench-val">${pct}%</span>
+    <div class="bench-clean">
+      <div class="bench-clean-row">
+        <span class="bench-clean-label">Uw score</span>
+        <span class="bench-clean-val you">${pct}%</span>
       </div>
-      <div class="bench-row">
-        <span class="bench-label">${profile.label}</span>
-        <span class="bench-bar"><span class="bench-fill sector" style="width:${benchmark}%"></span></span>
-        <span class="bench-val">${benchmark}%</span>
+      <div class="bench-clean-row">
+        <span class="bench-clean-label">${profile.label}</span>
+        <span class="bench-clean-val sector">${benchmark}%</span>
       </div>
-      <div class="bench-delta ${deltaClass}">${delta < 0 ? '▼' : delta > 0 ? '▲' : '＝'} ${deltaText}</div>
+      <div class="bench-clean-delta ${deltaClass}">
+        <span class="bench-clean-arrow">${delta < 0 ? '▼' : delta > 0 ? '▲' : '＝'}</span>
+        <span>${deltaText}</span>
+      </div>
     </div>`;
 
   // Sector badge
@@ -2547,8 +2702,8 @@ function showResults() {
     nis2Res.classList.add('visible');
     const nt = document.getElementById('nis2ResultTitle');
     const nd = document.getElementById('nis2ResultDesc');
-    if (nt) nt.textContent = 'NIS2-richtlijn ook van toepassing?';
-    if (nd) nd.innerHTML = 'Bent u actief in IT, SaaS, zorg, energie of overheid? Dan valt u mogelijk onder NIS2. <a href="/nis2" target="_blank" rel="noopener" style="color:var(--sector-accent,var(--accent));font-weight:600;text-decoration:underline;">Bekijk de NIS2-checklist &rarr;</a>';
+    if (nt) nt.textContent = 'Valt uw bedrijf ook onder NIS2?';
+    if (nd) nd.innerHTML = 'Bent u actief in IT, SaaS, zorg, energie of overheid met 50+ medewerkers of €10M+ omzet? Dan valt u onder NIS2 — bestuursaansprakelijkheid, boetes tot €10M.<br/><a href="/nis2" target="_blank" rel="noopener">Bekijk de NIS2-readiness check &rarr;</a>';
   }
 
   // ── Sector-specific insights ──
