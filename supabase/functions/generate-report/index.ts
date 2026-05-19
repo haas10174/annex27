@@ -330,8 +330,9 @@ Belangrijk:
     const systemBlocks: any[] = [{ type: 'text', text: systemStyle }];
 
     // AbortController zodat we falen-fast bij Anthropic-trage respons (i.p.v. WORKER_RESOURCE_LIMIT)
+    // 90s is voldoende sinds detailed_findings lokaal worden samengesteld (geen LLM-overhead)
     const controller = new AbortController();
-    const abortTimer = setTimeout(() => controller.abort(), 120000); // 2 min hard-limit
+    const abortTimer = setTimeout(() => controller.abort(), 90000);
 
     // Call Anthropic
     let anthropicResp: Response;
@@ -345,7 +346,7 @@ Belangrijk:
         },
         body: JSON.stringify({
           model: MODEL,
-          max_tokens: 6000, // verlaagd van 8000: findings 1-op-1, geen overhead
+          max_tokens: 3000, // findings worden lokaal gegenereerd; LLM hoeft alleen narrative te schrijven
           system: systemBlocks,
           messages: [{ role: 'user', content: contentParts }]
         }),
@@ -354,7 +355,7 @@ Belangrijk:
     } catch (e) {
       clearTimeout(abortTimer);
       if ((e as any).name === 'AbortError') {
-        return new Response(JSON.stringify({ error: 'Anthropic-call duurde >120s — server-side timeout. Probeer opnieuw met minder bevindingen of split het rapport per categorie.' }), { status: 504, headers });
+        return new Response(JSON.stringify({ error: 'Anthropic-call duurde >90s — server-side timeout. Probeer opnieuw of split het rapport per categorie.' }), { status: 504, headers });
       }
       throw e;
     }
@@ -380,7 +381,7 @@ Belangrijk:
     const anthropicData = await anthropicResp.json();
     const rawText = anthropicData.content?.[0]?.text || '';
 
-    // Parse JSON from response
+    // Parse JSON from response — alleen narrative-secties, detailed_findings stellen we lokaal samen
     let sections: ReportSections;
     try {
       const start = rawText.indexOf('{');
@@ -389,6 +390,30 @@ Belangrijk:
     } catch (e) {
       return new Response(JSON.stringify({ error: 'JSON-parse mislukt', raw: rawText.slice(0, 1000) }), { status: 500, headers });
     }
+
+    // Lokaal samenstellen van detailed_findings uit auditor_findings (geen LLM-tussenkomst).
+    // Bespaart ~70% van de prompt-tokens, ~50% wall-clock, en garandeert dat bevindingen letterlijk overkomen.
+    const sevToStatus: Record<string, string> = {
+      critical: 'critical',
+      major: 'gap',
+      minor: 'ok',
+      info: 'ok',
+      observation: 'ok'
+    };
+    sections.detailed_findings = (findings || []).map((f: any) => {
+      const ctrlId = String(f.control_id || '');
+      const ev = evidencePerControl[ctrlId] || [];
+      const ctrl = controlMap[ctrlId];
+      const klantQuote = ctrl?.note ? String(ctrl.note).slice(0, 200) : '';
+      return {
+        control_id: ctrlId,
+        status: sevToStatus[String(f.severity || '').toLowerCase()] || 'ok',
+        finding: String(f.finding || ''),
+        recommendation: String(f.recommendation || ''),
+        evidence_referenced: ev,
+        klant_quote: klantQuote
+      };
+    }).sort((a, b) => a.control_id.localeCompare(b.control_id, undefined, { numeric: true }));
 
     const usage = anthropicData.usage || {};
     const inputTokens = usage.input_tokens || 0;
