@@ -323,21 +323,14 @@ Geef **ALLEEN JSON** terug (geen markdown-codeblock, geen uitleg buiten de JSON)
 Doel: het eindrapport moet voor de klant aantoonbaar maken dat zijn aangeleverde materiaal daadwerkelijk gelezen en gewogen is, niet generiek omgezet.`
     });
 
-    // Load DNV RAG-corpus uit Supabase Storage (prompt-cached voor cost-savings)
-    let dnvCorpus = '';
-    let dnvExamen = '';
-    try {
-      const [corp, exam] = await Promise.all([
-        sb.storage.from('rag-corpus').download('DNV-CORPUS.md'),
-        sb.storage.from('rag-corpus').download('DNV-EXAMEN.md'),
-      ]);
-      if (corp.data) dnvCorpus = await corp.data.text();
-      if (exam.data) dnvExamen = await exam.data.text();
-    } catch (e) {
-      console.warn('RAG-corpus load failed (continuing without):', e);
-    }
+    // DNV-CORPUS is intentioneel UITGESCHAKELD — veroorzaakte WORKER_RESOURCE_LIMIT op Supabase
+    // Edge Functions (2s CPU-budget). De auditor-bevindingen zijn al methodologie-conform; het
+    // rapport hoeft enkel geformatteerd te worden. DNV-stijl-cues staan ingebakken in systemStyle.
+    // Re-enabling vereist een herontwerp (DB-cached corpus, of move naar background-worker).
 
-    const systemStyle = `Je bent onze Lead Auditor, ervaren ISO 27001 Lead Auditor gecertificeerd via DNV. Je stijl: direct, bewijsgericht, geen consultancy-jargon. Je schrijft in vloeiend Nederlands met concrete voorbeelden. Je benoemt gaps expliciet maar constructief. Je sluit aan bij de methodiek van DNV Training Auditor/Lead Auditor ISMS ISO 27001:2022 — steekproefneming, evidence-gebaseerde conclusies, scheiding tussen observatie en aanbeveling. Je rapport is bedoeld om de klant klaar te stomen voor een formele certificeringsaudit bij een geaccrediteerde instelling.
+    const systemStyle = `Je bent onze Lead Auditor, ervaren ISO 27001 Lead Auditor gecertificeerd via DNV. Je stijl: direct, bewijsgericht, geen consultancy-jargon. Je schrijft in vloeiend Nederlands met concrete voorbeelden. Je benoemt gaps expliciet maar constructief.
+
+DNV-methodiek (kort): steekproefneming · evidence-gebaseerde conclusies · scheiding tussen observatie en aanbeveling · severity-classificatie IRCA-conform (Critical NC, Major NC, Minor NC, Observation/OFI) · scope-disclaimer expliciet. Doel: klant klaarstomen voor een formele certificeringsaudit bij een geaccrediteerde instelling (DNV, BSI, LRQA, TÜV).
 
 Belangrijk:
 - Nooit verzinnen wat er in evidence staat — alleen rapporteren wat je werkelijk ziet/leest.
@@ -345,41 +338,40 @@ Belangrijk:
 - Houd toon persoonlijk: gebruik "u" (niet "je") naar klant toe, en schrijf alsof je naast ze zit.
 - Lengte: executive summary 3-5 zinnen, findings per categorie 2-4 zinnen.
 - **detailed_findings**: neem ELKE auditor-bevinding 1-op-1 over (severity + finding-tekst + recommendation). Filter ze NIET, beperk NIET tot 10-15. Alle door Lead Auditor gevalideerde bevindingen horen in het rapport.
-- Severity-mapping naar status veld: \`critical\` → \`critical\` · \`major\` → \`gap\` · \`minor\`/\`info\` → \`ok\` (lichte observation/OFI) — maar de finding-tekst en recommendation 1-op-1 van auditor.
-- Gebruik terminologie + methodologie zoals beschreven in de DNV-cursus die je hieronder als referentiemateriaal krijgt.`;
+- Severity-mapping naar status veld: \`critical\` → \`critical\` · \`major\` → \`gap\` · \`minor\`/\`info\` → \`ok\` (lichte observation/OFI) — maar de finding-tekst en recommendation 1-op-1 van auditor.`;
 
-    // Structured system-messages met prompt caching voor RAG-corpus (dag-cache)
     const systemBlocks: any[] = [{ type: 'text', text: systemStyle }];
-    if (dnvCorpus) {
-      systemBlocks.push({
-        type: 'text',
-        text: '\n\n# DNV Cursus — Training Auditor / Lead Auditor ISMS ISO 27001:2022 (referentiemateriaal voor methodologie + stijl)\n\n' + dnvCorpus,
-        cache_control: { type: 'ephemeral' }
-      });
-    }
-    if (dnvExamen) {
-      systemBlocks.push({
-        type: 'text',
-        text: '\n\n# DNV Proefexamen met Raoul\'s eigen aantekeningen (referentiemateriaal voor auditor-denktrant)\n\n' + dnvExamen,
-        cache_control: { type: 'ephemeral' }
-      });
-    }
+
+    // AbortController zodat we falen-fast bij Anthropic-trage respons (i.p.v. WORKER_RESOURCE_LIMIT)
+    const controller = new AbortController();
+    const abortTimer = setTimeout(() => controller.abort(), 120000); // 2 min hard-limit
 
     // Call Anthropic
-    const anthropicResp = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'x-api-key': ANTHROPIC_KEY,
-        'anthropic-version': '2023-06-01',
-        'content-type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: MODEL,
-        max_tokens: 8000,
-        system: systemBlocks,
-        messages: [{ role: 'user', content: contentParts }]
-      })
-    });
+    let anthropicResp: Response;
+    try {
+      anthropicResp = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: {
+          'x-api-key': ANTHROPIC_KEY,
+          'anthropic-version': '2023-06-01',
+          'content-type': 'application/json',
+        },
+        body: JSON.stringify({
+          model: MODEL,
+          max_tokens: 6000, // verlaagd van 8000: findings 1-op-1, geen overhead
+          system: systemBlocks,
+          messages: [{ role: 'user', content: contentParts }]
+        }),
+        signal: controller.signal
+      });
+    } catch (e) {
+      clearTimeout(abortTimer);
+      if ((e as any).name === 'AbortError') {
+        return new Response(JSON.stringify({ error: 'Anthropic-call duurde >120s — server-side timeout. Probeer opnieuw met minder bevindingen of split het rapport per categorie.' }), { status: 504, headers });
+      }
+      throw e;
+    }
+    clearTimeout(abortTimer);
 
     if (!anthropicResp.ok) {
       const errText = await anthropicResp.text();
