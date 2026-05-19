@@ -283,44 +283,31 @@ ${otherFiles.map(f => `- ${f.name} (${Math.round(f.size/1024)}KB)`).join('\n') |
       type: 'text',
       text: `
 **Opdracht:**
-Stel een gap-analyse rapport op in de persoonlijke toon van een ervaren ISO 27001 Lead Auditor (je bent onze Lead Auditor). Analyseer de bewijsvoering zorgvuldig, benoem gaps expliciet, geef concrete aanbevelingen.
+Stel ALLEEN de narrative-secties op van het gap-analyse rapport, in de toon van een ervaren ISO 27001 Lead Auditor.
 
-Geef **ALLEEN JSON** terug (geen markdown-codeblock, geen uitleg buiten de JSON) in exact dit schema:
+⚠️ **BELANGRIJK**: \`detailed_findings\` worden NIET door jou gegenereerd — die worden lokaal samengesteld uit \`auditor_findings\` (1-op-1, geen LLM-tussenkomst). Concentreer je dus uitsluitend op exec summary, score-samenvatting, categorie-overzichten en top-prioriteiten, gebaseerd op het overzicht van bevindingen hierboven.
+
+Geef **ALLEEN JSON** terug (geen markdown-codeblock, geen uitleg) in exact dit schema:
 \`\`\`
 {
-  "executive_summary": "3-5 zinnen persoonlijke samenvatting — auditor-stijl, geen marketingtaal",
-  "score_summary": "Een paragraaf met overall status en sector-vergelijking",
+  "executive_summary": "3-5 zinnen persoonlijke samenvatting — auditor-stijl, geen marketingtaal. Benoem grote thema's uit de bevindingen, niet de losse details.",
+  "score_summary": "Een paragraaf met overall status en sector-positionering (4-6 zinnen)",
   "findings_by_category": {
-    "Governance & beleid": "Analyse + observatie in 2-4 zinnen",
-    "Personeel": "...",
-    "Fysiek & assets": "...",
-    "Technische controls": "...",
-    "Operationeel": "..."
+    "Governance & beleid": "Analyse in 2-4 zinnen, gebaseerd op A.5-bevindingen",
+    "Personeel": "2-4 zinnen, A.6-bevindingen",
+    "Fysiek & assets": "2-4 zinnen, A.7-bevindingen",
+    "Technische controls": "2-4 zinnen, A.8-bevindingen",
+    "Operationeel": "2-4 zinnen, clausule-bevindingen + cross-control thema's"
   },
   "top_priorities": ["Prioriteit 1: ...", "Prioriteit 2: ...", "Prioriteit 3: ...", "Prioriteit 4: ...", "Prioriteit 5: ..."],
-  "detailed_findings": [
-    {
-      "control_id": "A.5.1",
-      "status": "gap|ok|critical",
-      "finding": "Concrete observatie. Refereer letterlijk aan evidence-bestand of klant-toelichting waar relevant.",
-      "recommendation": "Concrete actie",
-      "evidence_referenced": ["informatiebeveiligingsbeleid_v2.pdf", "screenshot_intranet.png"],
-      "klant_quote": "Letterlijk citaat uit klant-toelichting (max 200 tekens) als die de bevinding ondersteunt"
-    }
-  ],
   "disclosure": "Dit rapport is opgesteld door Lead Auditor, met AI-geassisteerde analyse van uw bewijsvoering."
 }
 \`\`\`
 
-**Hard-vereisten voor detailed_findings:**
-1. **Refereer concreet aan evidence**. Wanneer een evidence-bestand de bevinding ondersteunt of weerspreekt, vermeld de bestandsnaam in \`evidence_referenced\` EN noem het in de \`finding\`-tekst (bv. "Het document _informatiebeveiligingsbeleid_v2.pdf_ toont een policy uit 2023, niet recent herzien"). Niet generiek "evidence aangeleverd".
-2. **PDF-controle expliciet**. Voor elk meegestuurd PDF-document: noem in de finding minimaal één van [versiedatum, ondertekening aanwezig/afwezig, scope-paragraaf, geldigheidsperiode] dat je daadwerkelijk in de inhoud zag. Verzin niets — alleen wat zichtbaar is. Bij ontbreken van ondertekening of recente review-datum: noteer dat expliciet als gap.
-3. **Quote de klant-toelichting** wanneer de klant zelf iets relevants schrijft. Letterlijk citaat in \`klant_quote\`, max 200 tekens. Refereer ernaar in de \`finding\` (bv. "Klant geeft zelf aan: '...'. Dit bevestigt de gap").
-4. **Bij ontbrekende evidence**: zeg expliciet "Geen evidence aangeleverd voor [aspect]" — niet stilzwijgend overslaan. Laat \`evidence_referenced\` leeg.
-5. **Bij ontbrekende toelichting**: laat \`klant_quote\` leeg.
-6. **Liever 10-15 gefundeerde bevindingen dan 93 oppervlakkige**. Baseer je alleen op controls waar je evidence voor zag of waar de klant een toelichting/antwoord gaf.
-
-Doel: het eindrapport moet voor de klant aantoonbaar maken dat zijn aangeleverde materiaal daadwerkelijk gelezen en gewogen is, niet generiek omgezet.`
+**Vereisten:**
+- Top-prioriteiten: kies uit de critical/major bevindingen hierboven, formuleer als actie-statement
+- Per categorie: vat de gevonden patronen samen, refereer naar specifieke control-ids waar relevant
+- Geen losse \`detailed_findings\`-array in je response — die slaan we over`
     });
 
     // DNV-CORPUS is intentioneel UITGESCHAKELD — veroorzaakte WORKER_RESOURCE_LIMIT op Supabase
