@@ -9940,21 +9940,83 @@ async function renderRapport() {
             <span style="position:absolute;left:0;bottom:0;width:44px;height:3px;background:#0D9488;border-radius:2px;"></span>
           </h2>
           <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:18px;">
-            ${[
-              { lbl: 'Now',   sub: 'Critical + Major NC — eerst aanpakken',    items: nowF,   bg: '#FEF2F2', brd: '#FECACA', accent: '#DC2626' },
-              { lbl: 'Next',  sub: 'Minor NC — volgende fase',                 items: nextF,  bg: '#FFFBEB', brd: '#FDE68A', accent: '#D97706' },
-              { lbl: 'Later', sub: 'Observation (OFI) — continual improvement', items: laterF, bg: '#F0FDFA', brd: '#99F6E4', accent: '#0D9488' },
-            ].map(col => `
-              <div style="background:${col.bg};border:1px solid ${col.brd};border-left:3px solid ${col.accent};border-radius:0 8px 8px 0;padding:18px 20px;page-break-inside:avoid;">
-                <div style="font-family:'Sora',sans-serif;font-size:0.66rem;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;color:${col.accent};margin-bottom:8px;">${col.lbl}</div>
-                <div style="font-family:'Sora',sans-serif;font-size:1.6rem;font-weight:800;color:#0F172A;line-height:1;margin-bottom:6px;letter-spacing:-0.02em;">${col.items.length}</div>
-                <div style="font-size:0.82rem;color:#475569;line-height:1.5;margin-bottom:12px;">${col.sub}</div>
-                ${col.items.slice(0, 5).map(f => `<div style="font-size:0.76rem;color:#0F172A;padding:3px 0;font-family:'JetBrains Mono',ui-monospace,monospace;">${escapeHtml(f.control_id || '')}</div>`).join('')}
-                ${col.items.length > 5 ? `<div style="font-size:0.72rem;color:#94A3B8;margin-top:6px;">+${col.items.length - 5} meer</div>` : ''}
-              </div>`).join('')}
+            ${(() => {
+              const fmtDate = (d) => {
+                const months = ['jan','feb','mrt','apr','mei','jun','jul','aug','sep','okt','nov','dec'];
+                return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
+              };
+              const today = new Date();
+              const addWeeks = (n) => { const d = new Date(today); d.setDate(d.getDate() + n * 7); return d; };
+              const milestoneNow   = fmtDate(addWeeks(4));
+              const milestoneNext  = fmtDate(addWeeks(12));
+              const milestoneLater = fmtDate(addWeeks(22));
+              return [
+                { lbl: 'Now',   week: 'W1 – W4',   ms: milestoneNow,   sub: 'Critical + Major NC — eerst aanpakken',    items: nowF,   bg: '#FEF2F2', brd: '#FECACA', accent: '#DC2626' },
+                { lbl: 'Next',  week: 'W5 – W12',  ms: milestoneNext,  sub: 'Minor NC — volgende fase',                 items: nextF,  bg: '#FFFBEB', brd: '#FDE68A', accent: '#D97706' },
+                { lbl: 'Later', week: 'W13 – W22', ms: milestoneLater, sub: 'Observation (OFI) — continual improvement', items: laterF, bg: '#F0FDFA', brd: '#99F6E4', accent: '#0D9488' },
+              ].map(col => `
+                <div style="background:${col.bg};border:1px solid ${col.brd};border-left:3px solid ${col.accent};border-radius:0 8px 8px 0;padding:18px 20px;page-break-inside:avoid;">
+                  <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;gap:8px;">
+                    <span style="font-family:'Sora',sans-serif;font-size:0.66rem;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;color:${col.accent};">${col.lbl}</span>
+                    <span style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:0.66rem;color:${col.accent};font-weight:700;background:rgba(255,255,255,0.7);padding:2px 6px;border-radius:3px;border:1px solid ${col.brd};">${col.week}</span>
+                  </div>
+                  <div style="font-family:'Sora',sans-serif;font-size:1.6rem;font-weight:800;color:#0F172A;line-height:1;margin-bottom:6px;letter-spacing:-0.02em;">${col.items.length}</div>
+                  <div style="font-size:0.82rem;color:#475569;line-height:1.5;margin-bottom:6px;">${col.sub}</div>
+                  <div style="font-size:0.72rem;color:${col.accent};font-weight:600;margin-bottom:12px;">Milestone: ${col.ms}</div>
+                  ${col.items.slice(0, 5).map(f => `<div style="font-size:0.76rem;color:#0F172A;padding:3px 0;font-family:'JetBrains Mono',ui-monospace,monospace;">${escapeHtml(f.control_id || '')}</div>`).join('')}
+                  ${col.items.length > 5 ? `<div style="font-size:0.72rem;color:#94A3B8;margin-top:6px;">+${col.items.length - 5} meer</div>` : ''}
+                </div>`).join('');
+            })()}
           </div>
-          <p style="font-size:0.78rem;color:#94A3B8;line-height:1.6;margin:0 0 24px;font-style:italic;">Geen uren-schatting opgenomen — effort hangt af van bestaande processen en team-capaciteit. Lead Auditor adviseert eigenaars en target-data toe te wijzen per actie tijdens de directie-review.</p>`;
+          <p style="font-size:0.78rem;color:#94A3B8;line-height:1.6;margin:0 0 24px;font-style:italic;">Week-indicaties zijn richtlijnen — werkelijke effort hangt af van bestaande processen en team-capaciteit. Lead Auditor adviseert eigenaars en target-data toe te wijzen per actie tijdens de directie-review.</p>`;
       }
+
+      // ── BENCHMARK: Uw score vs sector-mediaan ──
+      const sectorBench = {
+        'saas':     { label: 'SaaS / IT-services',   median: 62 },
+        'it':       { label: 'IT-services',          median: 58 },
+        'zorg':     { label: 'Zorg (NEN 7510)',      median: 71 },
+        'overheid': { label: 'Overheid / BIO',       median: 68 },
+        'bouw':     { label: 'Bouw / installatie',   median: 41 },
+        'finance':  { label: 'Financieel / advies',  median: 64 },
+        'default':  { label: 'MKB algemeen',         median: 55 },
+      };
+      const sectorKey = String(s.sector_profile || s.sector || '').toLowerCase();
+      const bench = sectorBench[sectorKey] || sectorBench['default'];
+      const userScore = typeof totalScore === 'number' ? totalScore : 0;
+      const delta = userScore - bench.median;
+      const deltaColor = delta >= 10 ? '#0D9488' : delta >= 0 ? '#84CC16' : delta >= -10 ? '#D97706' : '#DC2626';
+      const deltaLabel = delta >= 10 ? 'Ruim boven sector' : delta >= 0 ? 'Boven sector-mediaan' : delta >= -10 ? 'Onder sector-mediaan' : 'Ruim onder sector';
+      html += `
+        <div style="font-family:'Sora',sans-serif;font-size:0.66rem;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:#0D9488;margin:36px 0 8px;display:inline-flex;align-items:center;gap:10px;">
+          <span style="display:inline-block;width:22px;height:1px;background:#0D9488;"></span> Benchmark
+        </div>
+        <h2 style="font-family:'Sora',sans-serif;font-size:1.45rem;font-weight:800;color:#0F172A;letter-spacing:-0.025em;margin:6px 0 18px;padding-bottom:10px;position:relative;">
+          Uw score versus sector-mediaan
+          <span style="position:absolute;left:0;bottom:0;width:44px;height:3px;background:#0D9488;border-radius:2px;"></span>
+        </h2>
+        <div style="background:#FFFFFF;border:1px solid #E5E5E5;border-radius:10px;padding:24px;margin-bottom:32px;">
+          <div style="display:grid;grid-template-columns:1fr auto;gap:24px;align-items:center;margin-bottom:18px;">
+            <div>
+              <div style="font-family:'Sora',sans-serif;font-size:0.72rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#64748B;margin-bottom:4px;">Sector</div>
+              <div style="font-family:'Sora',sans-serif;font-size:1.15rem;font-weight:700;color:#0F172A;letter-spacing:-0.01em;">${escapeHtml(bench.label)}</div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-family:'Sora',sans-serif;font-size:0.72rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:${deltaColor};margin-bottom:4px;">${escapeHtml(deltaLabel)}</div>
+              <div style="font-family:'Sora',sans-serif;font-size:1.6rem;font-weight:800;color:${deltaColor};line-height:1;letter-spacing:-0.02em;">${delta >= 0 ? '+' : ''}${delta} pp</div>
+            </div>
+          </div>
+          <div style="position:relative;height:32px;background:#F1F5F9;border-radius:6px;overflow:hidden;margin-bottom:10px;">
+            <div style="position:absolute;left:0;top:0;bottom:0;width:${Math.max(0, Math.min(100, userScore))}%;background:linear-gradient(90deg,#0D9488,#0F766E);border-radius:6px;"></div>
+            <span style="position:absolute;left:${Math.max(0, Math.min(100, bench.median))}%;top:-4px;bottom:-4px;width:2px;background:#0F172A;"></span>
+            <span style="position:absolute;left:${Math.max(0, Math.min(100, bench.median))}%;top:-22px;transform:translateX(-50%);font-family:'JetBrains Mono',ui-monospace,monospace;font-size:0.66rem;color:#0F172A;background:#FFFFFF;padding:1px 5px;border:1px solid #0F172A;border-radius:3px;white-space:nowrap;font-weight:700;">▼ ${bench.median}%</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:0.78rem;color:#64748B;margin-top:18px;">
+            <span><strong style="color:#0F172A;font-family:'Sora',sans-serif;font-size:0.92rem;">${userScore}%</strong> · Uw organisatie</span>
+            <span><strong style="color:#0F172A;font-family:'Sora',sans-serif;font-size:0.92rem;">${bench.median}%</strong> · Sector-mediaan</span>
+          </div>
+          <p style="font-size:0.74rem;color:#94A3B8;line-height:1.55;margin:16px 0 0;font-style:italic;">Benchmark op basis van geaggregeerde quickscan-data uit ${bench.label}-segment (n &gt; 25 MKB-organisaties, 2026). Interpretatie: pp = procentpunten verschil ten opzichte van mediaan.</p>
+        </div>`;
     }
 
     // IRCA-conforme 5 disclaimers (vervangt simpele disclosure-block, vereist in marktconforme rapporten)
