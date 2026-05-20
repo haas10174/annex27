@@ -283,31 +283,36 @@ ${otherFiles.map(f => `- ${f.name} (${Math.round(f.size/1024)}KB)`).join('\n') |
       type: 'text',
       text: `
 **Opdracht:**
-Stel ALLEEN de narrative-secties op van het gap-analyse rapport, in de toon van een ervaren ISO 27001 Lead Auditor.
+Stel de narrative-secties op van een volwaardig gap-analyse rapport (target: 12-15 PDF-pagina's totaal incl. detailed findings). Schrijf in de toon van een ervaren ISO 27001 Lead Auditor — substantieel maar overzichtelijk, met bullet-lists waar passend, niet 1 lap tekst.
 
-⚠️ **BELANGRIJK**: \`detailed_findings\` worden NIET door jou gegenereerd — die worden lokaal samengesteld uit \`auditor_findings\` (1-op-1, geen LLM-tussenkomst). Concentreer je dus uitsluitend op exec summary, score-samenvatting, categorie-overzichten en top-prioriteiten, gebaseerd op het overzicht van bevindingen hierboven.
+⚠️ **BELANGRIJK**: \`detailed_findings\` (individuele control-bevindingen, ~70 stuks) worden NIET door jou gegenereerd — die worden lokaal samengesteld uit \`auditor_findings\` (1-op-1, geen LLM-tussenkomst). Concentreer je uitsluitend op de narrative-secties hieronder.
 
-Geef **ALLEEN JSON** terug (geen markdown-codeblock, geen uitleg) in exact dit schema:
+Geef **ALLEEN JSON** terug (geen markdown-codeblock, geen uitleg buiten de JSON) in exact dit schema:
 \`\`\`
 {
-  "executive_summary": "3-5 zinnen persoonlijke samenvatting — auditor-stijl, geen marketingtaal. Benoem grote thema's uit de bevindingen, niet de losse details.",
-  "score_summary": "Een paragraaf met overall status en sector-positionering (4-6 zinnen)",
+  "executive_summary": "8-12 zinnen substantieel: (1) wie is de klant + scope, (2) wat is beoordeeld + methodologie, (3) overall maturity-oordeel met getal/range, (4) 3-4 zwaartepunten uit bevindingen, (5) waar staat de klant t.o.v. certificering-readiness, (6) advies vervolgstap. Auditor-stijl, geen marketing.",
+  "scope_methodology": "6-10 zinnen: scope (welke locaties/processen/IT-assets), audit-type (gap-analyse pre-certification), referenties (ISO/IEC 27001:2022 + Annex A controls + relevante clausules 4-10), sample-based assessment-methode, evidence-bronnen (klant-zelfassessment + uploads + bewijsstukken), beperkingen (geen verificatie ter plaatse, point-in-time). Maak helder dat dit geen geaccrediteerde certificatie-audit is.",
+  "score_summary": "8-12 zinnen + bullets indien zinnig: overall % met interpretatie, sector-mediaan-vergelijking met richting (boven/onder), volwassenheids-niveau (Initial/Managed/Defined/etc.), verdeling critical/major/minor/observation, sterke gebieden (specifieke control-IDs), zwakke gebieden (specifieke control-IDs).",
   "findings_by_category": {
-    "Governance & beleid": "Analyse in 2-4 zinnen, gebaseerd op A.5-bevindingen",
-    "Personeel": "2-4 zinnen, A.6-bevindingen",
-    "Fysiek & assets": "2-4 zinnen, A.7-bevindingen",
-    "Technische controls": "2-4 zinnen, A.8-bevindingen",
-    "Operationeel": "2-4 zinnen, clausule-bevindingen + cross-control thema's"
+    "Governance & beleid (A.5)": "5-8 zinnen analyse + bullet-list met 3-5 kern-observaties (gebaseerd op A.5-bevindingen). Patronen, geen losse details.",
+    "Personeel (A.6)": "5-8 zinnen + bullets, A.6-bevindingen",
+    "Fysiek & assets (A.7)": "5-8 zinnen + bullets, A.7-bevindingen",
+    "Technische controls (A.8)": "5-8 zinnen + bullets, A.8-bevindingen",
+    "Operationeel (Clausules 4-10)": "5-8 zinnen + bullets, ISMS-clausule bevindingen + cross-control thema's"
   },
-  "top_priorities": ["Prioriteit 1: ...", "Prioriteit 2: ...", "Prioriteit 3: ...", "Prioriteit 4: ...", "Prioriteit 5: ..."],
-  "disclosure": "Dit rapport is opgesteld door Lead Auditor, met AI-geassisteerde analyse van uw bewijsvoering."
+  "top_priorities": ["Prioriteit 1: actie-statement", "Prioriteit 2: ...", "Prioriteit 3: ...", "Prioriteit 4: ...", "Prioriteit 5: ...", "Prioriteit 6: ...", "Prioriteit 7: ..."],
+  "lead_auditor_opinion": "6-9 zinnen Lead Auditor verdict — persoonlijk, eerlijk. Welke kant gaat het op (gunstig/lastig pad richting certificering), wat zou je adviseren als deze klant morgen een Stage 1-audit zou ondergaan, wat is het grootste risico op afkeuring, wat is het belangrijkste verbeterpunt. Schrijf alsof je naast de klant zit.",
+  "conclusion": "5-7 zinnen afsluiting: samenvatting van de positie, realistisch pad naar Stage 1/Stage 2 certificering, geschatte doorlooptijd voor remediatie (in maanden, niet uren), aanbevolen vervolgstap (intern, pre-audit, certificatie).",
+  "disclosure": "Dit rapport is opgesteld door Lead Auditor, met AI-geassisteerde analyse van uw bewijsvoering. (1 zin, formeel)"
 }
 \`\`\`
 
-**Vereisten:**
-- Top-prioriteiten: kies uit de critical/major bevindingen hierboven, formuleer als actie-statement
-- Per categorie: vat de gevonden patronen samen, refereer naar specifieke control-ids waar relevant
-- Geen losse \`detailed_findings\`-array in je response — die slaan we over`
+**Schrijfstijl-vereisten:**
+- Gebruik **bullet-lists** binnen secties waar het de leesbaarheid verbetert. Markdown: \`- item\` per regel. Lead-zin → bullets → afsluitende zin.
+- Refereer naar specifieke control-IDs (bv. "Op A.5.30 en A.5.32 ontbreekt..."). Geen generieke uitspraken.
+- Top-prioriteiten: kies uit critical/major bevindingen hierboven, formuleer als concrete actie-statement.
+- Geen losse \`detailed_findings\`-array in je response — die slaan we over.
+- Schrijf in vloeiend Nederlands, "u"-vorm, persoonlijk maar professioneel.`
     });
 
     // DNV-CORPUS is intentioneel UITGESCHAKELD — veroorzaakte WORKER_RESOURCE_LIMIT op Supabase
