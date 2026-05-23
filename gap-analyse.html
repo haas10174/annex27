@@ -2580,6 +2580,19 @@ function showResults() {
   applyUpsellContent();
   saveQuickscanState();
 
+  // Trechter-tracking: bezoeker heeft de quickscan afgemaakt en ziet de score (vóór e-mail).
+  // Onmisbaar om in GA4 het verschil te zien tussen "haakt mid-quiz af" en "ziet score, geeft geen e-mail".
+  try {
+    let sid = '';
+    try { sid = sessionStorage.getItem('annex27_qs_session_id') || ''; } catch (e) {}
+    if (window.annex27Track) {
+      window.annex27Track('quickscan_results_viewed', {
+        sector: selectedSector || 'onbekend',
+        session_id: sid
+      });
+    }
+  } catch (e) { /* tracking mag de resultaatweergave nooit blokkeren */ }
+
   // Calculate final weighted scores
   for (const key in categories) categories[key].score = 0;
   let weightedScore = 0;
