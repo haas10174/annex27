@@ -5233,11 +5233,11 @@ function renderDashboard() {
         const diff = dual.selfPct - dual.readinessPct;
         const colorStop = diff > 30 ? '#dc2626' : diff > 10 ? '#d97706' : '#059669';
         readinessEl.innerHTML = `
-          <span style="display:inline-flex;align-items:center;gap:8px;font-size:0.86rem;color:var(--text-muted);flex-wrap:wrap;">
+          <span style="display:inline-flex;align-items:center;gap:8px;font-size:0.86rem;color:rgba(255,255,255,0.65);flex-wrap:wrap;">
             <span style="display:inline-flex;align-items:center;gap:6px;">
               <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${colorStop};flex-shrink:0;"></span>
-              <strong style="color:var(--text-primary);font-weight:700;">Audit-readiness: ${dual.readinessPct}%</strong>
-              <span class="tooltip-trigger" title="Audit-readiness = uw zelfevaluatie maal de mate waarin u bewijs heeft aangeleverd. Telt mee: bestand-upload (40%), toelichting van minstens 50 woorden (30%), meta-velden compleet (30%). Per control kunt u dit verbeteren in de gap-analyse." style="cursor:help;opacity:0.65;font-size:0.95em;">&#9432;</span>
+              <strong style="color:#FFFFFF;font-weight:700;">Audit-readiness: ${dual.readinessPct}%</strong>
+              <span class="tooltip-trigger" title="Audit-readiness = uw zelfevaluatie maal de mate waarin u bewijs heeft aangeleverd. Telt mee: bestand-upload (40%), toelichting van minstens 50 woorden (30%), meta-velden compleet (30%). Per control kunt u dit verbeteren in de gap-analyse." style="cursor:help;opacity:0.65;font-size:0.95em;color:rgba(255,255,255,0.8);">&#9432;</span>
             </span>
           </span>`;
         readinessEl.style.display = 'block';
