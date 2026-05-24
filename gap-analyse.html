@@ -486,24 +486,22 @@
       width: 100%;
     }
 
-    /* Segmented score ring (5 arcs — één per categorie) */
+    /* Score ring — één doorlopende ring met oplopend percentage (geen segmenten) */
     .live-ring { width: 170px; height: 170px; position: relative; }
     .live-ring svg { width: 170px; height: 170px; transform: rotate(-90deg); }
     .live-arc-bg {
       fill: none;
-      stroke: rgba(255,255,255,0.06);
+      stroke: rgba(255,255,255,0.10);
       stroke-width: 11;
-      stroke-linecap: butt;
+      stroke-linecap: round;
     }
     .live-arc-fill {
       fill: none;
+      stroke: #FFFFFF;
       stroke-width: 11;
-      stroke-linecap: butt;
-      transition: stroke-dasharray 0.6s cubic-bezier(0.4, 0, 0.2, 1), stroke 0.3s ease;
+      stroke-linecap: round;
+      transition: stroke-dashoffset 0.6s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    .live-arc-fill.low  { stroke: #EF4444; filter: drop-shadow(0 0 8px rgba(239,68,68,0.35)); }
-    .live-arc-fill.mid  { stroke: #F59E0B; filter: drop-shadow(0 0 8px rgba(245,158,11,0.35)); }
-    .live-arc-fill.high { stroke: #10B981; filter: drop-shadow(0 0 8px rgba(16,185,129,0.35)); }
     .live-ring-text {
       position: absolute;
       inset: 0;
@@ -2240,35 +2238,32 @@ const questions = [
   // Phase 1: Governance & beleid — 3 kernvragen
   { phase:'gov', cat:'org', catLabel:'Governance & beleid', q:'Heeft uw organisatie een formeel informatiebeveiligingsbeleid, goedgekeurd door directie?', weight:3, controls:['A.5.1'] },
   { phase:'gov', cat:'org', catLabel:'Governance & beleid', q:'Voert u periodiek een risicobeoordeling uit voor informatiebeveiliging?', weight:3, controls:['Cl.6.1.2'] },
-  { phase:'gov', cat:'org', catLabel:'Governance & beleid', q:'Zijn rollen en verantwoordelijkheden voor informatiebeveiliging vastgelegd (bv. RACI)?', weight:2, controls:['A.5.2'] },
-
   // Phase 3: Personeel — 2 kernvragen
   { phase:'hr', cat:'hr', catLabel:'Personeel', q:'Ontvangen medewerkers periodiek bewustzijnstraining over informatiebeveiliging?', weight:3, controls:['A.6.3'] },
-  { phase:'hr', cat:'hr', catLabel:'Personeel', q:'Worden toegangsrechten direct ingetrokken bij uitdiensttreding of functiewijziging?', weight:2, controls:['A.6.5'] },
-
   // Phase 4: Fysiek & assets — 1 kernvraag
   { phase:'phys', cat:'phys', catLabel:'Fysiek & assets', q:'Zijn alle informatie-assets (apparatuur, data, software) in kaart gebracht in een asset-register?', weight:2, controls:['A.5.9','A.8.10'] },
 
   // Phase 5: Technische controls — 4 kernvragen
   { phase:'tech', cat:'tech', catLabel:'Technische controls', q:'Wordt toegang tot kritieke systemen beschermd met multi-factor authenticatie (MFA)?', weight:3, controls:['A.8.5'] },
   { phase:'tech', cat:'tech', catLabel:'Technische controls', q:'Worden gegevens versleuteld bij verzending (TLS) en opslag (AES)?', weight:3, controls:['A.8.24'] },
-  { phase:'tech', cat:'tech', catLabel:'Technische controls', q:'Heeft u een vulnerability management proces met patch-deadlines?', weight:2, controls:['A.8.8'] },
-  { phase:'tech', cat:'tech', catLabel:'Technische controls', q:'Worden security-events centraal gelogd en gemonitord?', weight:2, controls:['A.8.15','A.8.16'] },
 
   // Phase 6: Operationeel — 3 kernvragen
-  { phase:'ops', cat:'ops', catLabel:'Operationeel', q:'Heeft u een incident response plan met rollen en escalatiepaden?', weight:3, controls:['A.5.24'] },
-  { phase:'ops', cat:'ops', catLabel:'Operationeel', q:'Wordt de restore-functie van uw backups periodiek getest?', weight:2, controls:['A.8.13'] },
-  { phase:'ops', cat:'ops', catLabel:'Operationeel', q:'Heeft u een leveranciersregister met DPA\u2019s/verwerkersovereenkomsten voor kritieke verwerkers?', weight:3, controls:['A.5.19','A.5.20'] },
+  { phase:'ops', cat:'ops', catLabel:'Operationeel', q:'Heeft u een incident response plan met rollen en escalatiepaden?', weight:3, controls:['A.5.24'] },  { phase:'ops', cat:'ops', catLabel:'Operationeel', q:'Heeft u een leveranciersregister met DPA\u2019s/verwerkersovereenkomsten voor kritieke verwerkers?', weight:3, controls:['A.5.19','A.5.20'] },
 
   // Phase 7: Sector-light (1-2 vragen per sector — high-level, geen diepgang).
   // De volledige 14 NEN 7510-deltavragen voor zorg zitten in de echte gap-analyse (dashboard.html), niet hier.
   { phase:'saas',     cat:'tech', sector:'saas',     catLabel:'SaaS',         q:'Is de data van uw klanten in uw multi-tenant platform logisch van elkaar geïsoleerd?', weight:2, controls:['A.8.22'] },
+  { phase:'saas',     cat:'tech', sector:'saas',     catLabel:'SaaS',         q:'Brengt u software uit via een beveiligd ontwikkelproces met code-review en dependency-scanning (secure SDLC)?', weight:2, controls:['A.8.25','A.8.28'] },
   { phase:'it',       cat:'tech', sector:'it',       catLabel:'IT-dienstverlener', q:'Zijn omgevingen van verschillende klanten logisch van elkaar gescheiden?', weight:2, controls:['A.8.20'] },
+  { phase:'it',       cat:'ops',  sector:'it',       catLabel:'IT-dienstverlener', q:'Heeft u met elke klant een verwerkersovereenkomst met concrete beveiligingsafspraken (SLA, incident-melding)?', weight:2, controls:['A.5.19','A.5.20'] },
   { phase:'zorg',     cat:'tech', sector:'zorg',     catLabel:'Toegang patiëntdossiers', q:'Is toegang tot patiëntdossiers gebaseerd op een actieve behandelrelatie, met logging en een gedocumenteerde noodtoegang-procedure?', weight:3, controls:['A.5.15','A.8.15','NEN 7510-2 §5.15','NEN 7510-2 §8.15'] },
   { phase:'zorg',     cat:'ops',  sector:'zorg',     catLabel:'Meldplicht & zorgketen', q:'Heeft u een datalek-meldprocedure naar de Autoriteit Persoonsgegevens én de Inspectie Gezondheidszorg, plus zorgspecifieke verwerkersovereenkomsten met EPD- en PACS-leveranciers?', weight:3, controls:['A.5.19','A.5.24','A.6.8','NEN 7510-2 §5.19','NEN 7510-2 §6.8'] },
   { phase:'overheid', cat:'org',  sector:'overheid', catLabel:'Overheid',     q:'Past u de Baseline Informatiebeveiliging Overheid (BIO) toe?', weight:2, controls:['A.5.31'] },
+  { phase:'overheid', cat:'tech', sector:'overheid', catLabel:'Overheid',     q:'Classificeert u informatie per systeem op beschikbaarheid, integriteit en vertrouwelijkheid (BIV)?', weight:2, controls:['A.5.12','A.5.13'] },
   { phase:'bouw',     cat:'ops',  sector:'bouw',     catLabel:'Bouw',         q:'Zijn onderaannemers met toegang tot projectdata contractueel geborgd (NDA, security-clausules)?', weight:2, controls:['A.5.19','A.5.20'] },
+  { phase:'bouw',     cat:'tech', sector:'bouw',     catLabel:'Bouw',         q:'Beschermt u project- en ontwerpdata (o.a. BIM) tegen ongeautoriseerde toegang bij het delen met ketenpartners?', weight:2, controls:['A.5.14','A.8.12'] },
   { phase:'overig',   cat:'ops',  sector:'overig',   catLabel:'MKB algemeen', q:'Heeft u een actueel overzicht van alle SaaS-tooling die uw organisatie gebruikt?', weight:2, controls:['A.5.23'] },
+  { phase:'overig',   cat:'tech', sector:'overig',   catLabel:'MKB algemeen', q:'Heeft u een proces voor toegangsbeheer met periodieke review (wie heeft toegang tot welke systemen)?', weight:2, controls:['A.5.18','A.8.2'] },
 ];
 
 // 4-punts maturity-rubric (zonder ad-hoc)
@@ -2322,19 +2317,11 @@ const CAT_ORDER = ['org', 'hr', 'phys', 'tech', 'ops'];
 function renderLiveRing() {
   const svg = document.getElementById('liveRingSvg');
   if (!svg) return;
-  // Build 5 background + 5 foreground arcs
-  let html = '';
-  CAT_ORDER.forEach((key, i) => {
-    // Rotation offset per segment (-90° = start bovenaan)
-    const rot = -90 + i * (RING_SEG_DEG + RING_GAP_DEG);
-    html += `<circle class="live-arc-bg" cx="${RING_CX}" cy="${RING_CY}" r="${RING_R}"
-      stroke-dasharray="${RING_SEG_LEN} ${RING_C - RING_SEG_LEN}"
-      transform="rotate(${rot} ${RING_CX} ${RING_CY})" />`;
-    html += `<circle class="live-arc-fill" id="arc_${key}" cx="${RING_CX}" cy="${RING_CY}" r="${RING_R}"
-      stroke-dasharray="0 ${RING_C}"
-      transform="rotate(${rot} ${RING_CX} ${RING_CY})" />`;
-  });
-  svg.innerHTML = html;
+  // Eén doorlopende ring: achtergrond-track + oplopende fill (start leeg, vult op basis van overall %).
+  svg.innerHTML =
+    `<circle class="live-arc-bg" cx="${RING_CX}" cy="${RING_CY}" r="${RING_R}" />` +
+    `<circle class="live-arc-fill" id="liveArcFill" cx="${RING_CX}" cy="${RING_CY}" r="${RING_R}"` +
+    ` stroke-dasharray="${RING_C} ${RING_C}" stroke-dashoffset="${RING_C}" />`;
 }
 renderLiveRing();
 
@@ -2459,21 +2446,14 @@ function updateLiveDash() {
   // Update overall percentage (center text)
   document.getElementById('livePct').textContent = pct;
 
-  // Update elk segment (arc + optionele category-bar) op basis van score per categorie
+  // Eén doorlopende ring: vul op basis van overall %
+  const ringFill = document.getElementById('liveArcFill');
+  if (ringFill) ringFill.style.strokeDashoffset = RING_C * (1 - pct / 100);
+
+  // Update category-bars (onder de ring) op basis van score per categorie
   for (const [key, cat] of Object.entries(categories)) {
     const maxPossible = cat.weightTotal * 4;
     const catPct = maxPossible > 0 ? Math.round((cat.score / maxPossible) * 100) : 0;
-
-    // Segmented ring arc
-    const arc = document.getElementById('arc_' + key);
-    if (arc) {
-      const fillLen = (catPct / 100) * RING_SEG_LEN;
-      arc.setAttribute('stroke-dasharray', `${fillLen} ${RING_C - fillLen}`);
-      arc.classList.remove('low', 'mid', 'high');
-      if (catPct <= 33) arc.classList.add('low');
-      else if (catPct <= 66) arc.classList.add('mid');
-      else arc.classList.add('high');
-    }
 
     // Category bar labels (onder de ring)
     const fillEl = document.getElementById('catFill_' + key);
