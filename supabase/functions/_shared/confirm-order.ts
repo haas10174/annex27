@@ -10,10 +10,13 @@ import { sendPaymentConfirmation } from './send-mail.ts';
 const PLAN_TO_PAKKET: Record<string, string> = {
   'gap': 'gap',
   'nis2': 'nis2',
+  'iso_nis2_bundle': 'iso_nis2_bundle',
   'beleid': 'beleid',
   'preaudit': 'admin',
 };
-const PAKKET_RANK: Record<string, number> = { 'gap': 1, 'nis2': 2, 'beleid': 3, 'admin': 5 };
+// Rank bepaalt welk pakket behouden blijft als een klant meerdere keren koopt (hoogste wint).
+// Bundle staat boven los gap/nis2/beleid omdat het die toegang allemaal omvat (zie userAccess() in dashboard).
+const PAKKET_RANK: Record<string, number> = { 'gap': 1, 'nis2': 2, 'beleid': 3, 'iso_nis2_bundle': 4, 'admin': 5 };
 
 export type ConfirmResult =
   | { ok: true; user_id: string; invoice_number: string | null; invited_new_user: boolean; already_confirmed: boolean }
