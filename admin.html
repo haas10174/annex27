@@ -2275,7 +2275,8 @@ async function loadOverview() {
     // New leads (not yet processed)
     const { count: leadCount } = await sb.from('waitlist')
       .select('*', { count: 'exact', head: true })
-      .is('processed_at', null);
+      .is('processed_at', null)
+      .neq('product', 'quickscan_started');
     document.getElementById('ovNewLeads').textContent = leadCount || 0;
 
     // Latest 5 orders (any status, excluding archived)
@@ -2322,6 +2323,7 @@ async function loadOverview() {
     // Latest 5 leads
     const { data: latestLeads } = await sb.from('waitlist')
       .select('bedrijf, email, product, created_at, processed_at')
+      .neq('product', 'quickscan_started')
       .order('created_at', { ascending: false })
       .limit(5);
     const ovLL = document.getElementById('ovLatestLeads');
