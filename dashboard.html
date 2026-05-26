@@ -1128,7 +1128,7 @@
     /* Overview screen — choose module */
     .ga-overview {
       max-width: 860px;
-      margin: 0;
+      margin: 0 auto;
       padding: 24px 0 80px;
     }
     .ga-intro {
@@ -1318,7 +1318,7 @@
     /* Module detail view — control-by-control assessment */
     .ga-assessment {
       max-width: 760px;
-      margin: 0;
+      margin: 0 auto;
       padding: 8px 0 120px;
     }
     .ga-back {
@@ -6794,7 +6794,7 @@ function renderModuleAssessment(cat) {
             ${adviceFlagged ? 'Advies aangevraagd' : 'Vraag Lead Auditor advies'}
           </button>
           <button class="ga-nav-btn" onclick="backToOverview()">Later verdergaan</button>
-          <button class="ga-nav-btn primary" onclick="nextModule()">${answered === total ? 'Volgende module' : 'Sla op & sluit'}</button>
+          <button class="ga-nav-btn primary" onclick="${answered === total ? 'nextModule()' : 'saveAndClose()'}">${answered === total ? 'Volgende module' : 'Sla op & sluit'}</button>
         </div>
       </div>
     </div>
@@ -7100,11 +7100,7 @@ function renderControlCard(ctrl, idx, total) {
             </div>
           </div>
           <div class="ga-ef-row">
-            <label class="ga-ef-label" style="font-size:0.86rem;font-weight:700;color:var(--text-primary);margin-bottom:6px;">Toelichting in eigen woorden &mdash; <span style="font-weight:400;color:var(--text-muted);">tekstueel bewijs naast uw documenten</span></label>
-            <div style="font-size:0.78rem;color:var(--text-muted);margin-bottom:8px;line-height:1.55;">
-              Beschrijf hoe u deze maatregel toepast in de praktijk: welke procedure volgt u, hoe controleert u de werking, wat gaat goed en waar zit nog werk?
-              De Lead Auditor leest dit als aanvulling op uw documenten \u2014 uitgebreide toelichting versterkt uw zaak.
-            </div>
+            <label class="ga-ef-label" style="font-size:0.86rem;font-weight:700;color:var(--text-primary);margin-bottom:8px;">Toelichting in eigen woorden &mdash; <span style="font-weight:400;color:var(--text-muted);">tekstueel bewijs naast uw documenten</span></label>
             <textarea class="ga-ef-textarea ga-ef-remark" data-field="remark"
                       onblur="saveEvidenceField('${esc(ctrl.id)}','remark',this.value)"
                       placeholder="Bijvoorbeeld: &quot;Wij hebben dit beleid in 2024 geformaliseerd na een datalek-incident. Het wordt jaarlijks gereviewd door de directie. Onlangs hebben we de procedure aangescherpt voor remote work. We zien nog ruimte voor verbetering in de awareness-training \u2014 dat staat op de roadmap voor Q2 2026...&quot;">${esc(nf.remark || '')}</textarea>
@@ -7354,6 +7350,17 @@ function saveEvidenceNote(ctrlId, noteVal) {
   // Debounced upsert naar gap_control_notes (alleen toelichting bij legacy single-note)
   if (_evidenceSyncTimers[ctrlId]) clearTimeout(_evidenceSyncTimers[ctrlId]);
   _evidenceSyncTimers[ctrlId] = setTimeout(() => syncEvidenceNoteToDb(ctrlId), 800);
+}
+
+// Sla op & sluit: bewaar antwoorden en ga terug naar het module-overzicht (niet door naar volgende module).
+async function saveAndClose() {
+  try {
+    const payload = { user_id: user.id, answers: gapAnswers, updated_at: new Date().toISOString() };
+    if (userSector) payload.sector = userSector;
+    await sb.from('gap_analyse').upsert(payload, { onConflict: 'user_id' });
+    showToast('Opgeslagen');
+  } catch(e) { showToast('Kon niet opslaan — probeer opnieuw', { error: true }); }
+  backToOverview();
 }
 
 async function nextModule() {
