@@ -9265,6 +9265,8 @@ async function renderDocumenten() {
   const sub = document.getElementById('docsSubtitle');
   const access = userDocAccess();
   const totalDocs = DOC_GROUPS.reduce((s, g) => s + g.docs.length, 0);
+  const policyDocsCount = DOC_GROUPS.filter(g => !g.sector).reduce((s, g) => s + g.docs.length, 0);
+  const mappingDocsCount = DOC_GROUPS.filter(g => g.sector).reduce((s, g) => s + g.docs.length, 0);
 
   if (!access.basis && !access.premium && !access.werkinstructies) {
     sub.textContent = 'Beleidsdocumenten zijn beschikbaar bij het Beleidspakket.';
@@ -9281,7 +9283,7 @@ async function renderDocumenten() {
     return;
   }
 
-  sub.textContent = `${totalDocs} beleidsdocumenten gegroepeerd per ISO 27001-domein. Klik op een groep om uit te klappen.`;
+  sub.textContent = `${policyDocsCount} beleidsdocumenten gegroepeerd per ISO 27001-domein${mappingDocsCount ? `, plus ${mappingDocsCount} norm-mappings als aparte categorie` : ''}. Klik op een groep om uit te klappen.`;
 
   // Sector-mappings prominent bovenaan + scope-afhankelijk: alleen tonen wat past bij klant-sector
   // (admins/auditors zien alles, regulier klant ziet alleen eigen sector + universele groepen)
@@ -9309,7 +9311,11 @@ async function renderDocumenten() {
     </div>`;
   }
 
+  let printedMappingHeader = false, printedPolicyHeader = false;
+  const docSectionHeader = (title, desc) => `<div style="margin:26px 0 12px;padding-top:6px;"><div style="font-family:'Sora',sans-serif;font-size:0.72rem;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;color:var(--accent);">${title}</div><div style="font-size:0.82rem;color:var(--text-muted);margin-top:3px;line-height:1.5;">${desc}</div></div>`;
   orderedGroups.forEach((group, gi) => {
+    if (group.sector && !printedMappingHeader) { printedMappingHeader = true; html += docSectionHeader('Normen-mappings', 'Sectorkoppelingen — geen beleidsdocumenten, maar de mapping van uw norm (BIO / NEN 7510 / NIS2) naar ISO 27001.'); }
+    if (!group.sector && !printedPolicyHeader) { printedPolicyHeader = true; html += docSectionHeader('Beleidsdocumenten', 'ISO 27001-conforme templates, gegroepeerd per Annex A-domein.'); }
     const accessibleDocs = group.docs.filter(d =>
       d.src === 'basispakket' ? access.basis :
       d.src === 'premium' ? access.premium :
