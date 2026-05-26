@@ -343,6 +343,8 @@ async function init() {
   klantData = {
     bedrijf: u.user_metadata?.bedrijf || '',
     naam: u.user_metadata?.naam || u.email,
+    ciso: u.user_metadata?.ciso || '',
+    functie: u.user_metadata?.functie || '',
     sector: u.user_metadata?.sector || '',
     sectorLabel: u.user_metadata?.sectorLabel || u.user_metadata?.sector || '',
     email: u.email,

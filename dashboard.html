@@ -3221,7 +3221,7 @@
             </svg>
             <div class="score-ring-text">
               <span class="score-ring-pct" id="dashPct">0%</span>
-              <span class="score-ring-label">Compliance</span>
+              <span class="score-ring-label" id="dashScoreLabel">Audit-readiness</span>
             </div>
           </div>
           <div class="score-card-sub" id="dashScoreSub">Begin met het afvinken van controls</div>
@@ -3467,6 +3467,22 @@
         <div class="profile-field">
           <div class="profile-label">Pakket</div>
           <div class="profile-value" id="profilePakket">-</div>
+        </div>
+      </div>
+
+      <div class="profile-card" style="margin-top:20px;">
+        <h3>Organisatiegegevens</h3>
+        <p style="font-size:0.85rem;color:var(--text-muted);margin:-4px 0 18px;line-height:1.55;">Vul deze één keer in. Ze worden automatisch ingevuld in al uw beleidsdocumenten (organisatienaam, CISO, sector, KvK) — zodat een gedownloade PDF direct de juiste gegevens bevat.</p>
+        <div style="display:flex;flex-direction:column;gap:14px;">
+          <label style="display:block;"><span style="display:block;font-size:0.78rem;font-weight:600;color:var(--text-muted);margin-bottom:5px;">Organisatienaam</span><input id="orgNaam" type="text" placeholder="bv. Voorbeeld B.V." style="width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:8px;font-family:inherit;font-size:0.9rem;color:var(--text-primary);background:var(--surface);box-sizing:border-box;" /></label>
+          <label style="display:block;"><span style="display:block;font-size:0.78rem;font-weight:600;color:var(--text-muted);margin-bottom:5px;">Contactpersoon / CISO</span><input id="orgCiso" type="text" placeholder="bv. J. de Vries" style="width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:8px;font-family:inherit;font-size:0.9rem;color:var(--text-primary);background:var(--surface);box-sizing:border-box;" /></label>
+          <label style="display:block;"><span style="display:block;font-size:0.78rem;font-weight:600;color:var(--text-muted);margin-bottom:5px;">Functie contactpersoon</span><input id="orgFunctie" type="text" placeholder="bv. CISO / IT-manager" style="width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:8px;font-family:inherit;font-size:0.9rem;color:var(--text-primary);background:var(--surface);box-sizing:border-box;" /></label>
+          <label style="display:block;"><span style="display:block;font-size:0.78rem;font-weight:600;color:var(--text-muted);margin-bottom:5px;">Sector</span><select id="orgSector" style="width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:8px;font-family:inherit;font-size:0.9rem;color:var(--text-primary);background:var(--surface);box-sizing:border-box;"><option value="">&mdash; kies sector &mdash;</option><option value="saas">SaaS &amp; Cloud</option><option value="it">IT-dienstverlener</option><option value="zorg">Zorg &amp; Medisch</option><option value="overheid">Overheid</option><option value="bouw">Bouw</option><option value="overig">Overig MKB</option></select></label>
+          <label style="display:block;"><span style="display:block;font-size:0.78rem;font-weight:600;color:var(--text-muted);margin-bottom:5px;">KvK / KBO-nummer</span><input id="orgKvk" type="text" placeholder="bv. 12345678" style="width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:8px;font-family:inherit;font-size:0.9rem;color:var(--text-primary);background:var(--surface);box-sizing:border-box;" /></label>
+          <div style="display:flex;align-items:center;gap:14px;margin-top:4px;">
+            <button id="orgSaveBtn" onclick="saveOrgProfile()" style="background:var(--accent);color:#fff;border:none;padding:11px 22px;border-radius:8px;font-family:'Sora',sans-serif;font-weight:700;font-size:0.9rem;cursor:pointer;">Opslaan</button>
+            <span id="orgSaveMsg" style="font-size:0.85rem;color:var(--accent);"></span>
+          </div>
         </div>
       </div>
     </div>
@@ -4422,8 +4438,51 @@ async function loadProfile() {
   const pakketLabels = { gap: 'Gap-analyse', readiness: 'Readiness Platform', admin: 'Administrator' };
   document.getElementById('profilePakket').textContent = pakketLabels[userPakket] || userPakket;
 
+  // Organisatiegegevens-formulier vullen (voedt document-placeholders)
+  const _md = user.user_metadata || {};
+  const _setVal = (id, v) => { const el = document.getElementById(id); if (el) el.value = v || ''; };
+  _setVal('orgNaam', _md.bedrijf);
+  _setVal('orgCiso', _md.ciso || _md.naam);
+  _setVal('orgFunctie', _md.functie);
+  _setVal('orgKvk', _md.kvk || _md.kbo || _md.kvk_kbo);
+  const _sectorEl = document.getElementById('orgSector');
+  if (_sectorEl) _sectorEl.value = _md.sector || '';
+
   // Lock features based on pakket
   applyPakketRestrictions();
+}
+
+// Org-gegevens opslaan in user_metadata → voedt automatisch de document-placeholders.
+const SECTOR_LABELS = { saas:'SaaS & Cloud', it:'IT-dienstverlener', zorg:'Zorg & Medisch', overheid:'Overheid', bouw:'Bouw', overig:'Overig MKB' };
+async function saveOrgProfile() {
+  const btn = document.getElementById('orgSaveBtn');
+  const msg = document.getElementById('orgSaveMsg');
+  const v = id => (document.getElementById(id)?.value || '').trim();
+  const sector = v('orgSector');
+  const data = {
+    ...(user.user_metadata || {}),
+    bedrijf: v('orgNaam'),
+    ciso: v('orgCiso'),
+    functie: v('orgFunctie'),
+    sector: sector,
+    sectorLabel: SECTOR_LABELS[sector] || '',
+    kvk: v('orgKvk'),
+  };
+  if (btn) { btn.disabled = true; btn.textContent = 'Opslaan...'; }
+  if (msg) { msg.style.color = 'var(--accent)'; msg.textContent = ''; }
+  try {
+    const { error } = await sb.auth.updateUser({ data });
+    if (error) throw error;
+    user.user_metadata = data;
+    userSector = sector || userSector;
+    if (msg) msg.textContent = 'Opgeslagen — wordt nu automatisch in uw documenten ingevuld.';
+    const pc = document.getElementById('profileCompany'); if (pc) pc.textContent = data.bedrijf || 'Niet ingevuld';
+    const sc = document.getElementById('sidebarCompany'); if (sc) sc.textContent = data.bedrijf || '';
+  } catch (e) {
+    if (msg) { msg.style.color = 'var(--danger)'; msg.textContent = 'Opslaan mislukt — probeer opnieuw.'; }
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = 'Opslaan'; }
+  }
 }
 
 // Pakket-access helper: één bron-of-waarheid voor wat een klant mag zien
@@ -5204,51 +5263,51 @@ function renderDashboard() {
   const maturityPct = totalMaxAnswered > 0 ? Math.round((totalScore / totalMaxAnswered) * 100) : 0;
   const completionPct = totalAll > 0 ? Math.round((totalAssessed / totalAll) * 100) : 0;
 
-  // Ring
+  // ── Audit-readiness = hoofdgetal (eerlijk: weegt bewijs mee). Compliance/volwassenheid = secundair. ──
+  let readinessPct = null, selfPctDual = null;
+  if (window.A27Scoring && typeof window.A27Scoring.calculateDashboardTotals === 'function' && totalAssessed > 0) {
+    try {
+      const ev = (typeof evidenceData !== 'undefined') ? evidenceData : {};
+      const dual = window.A27Scoring.calculateDashboardTotals(controls.map(c => c.id), gapQuestions, gapAnswers, ev);
+      readinessPct = dual.readinessPct;
+      selfPctDual = dual.selfPct;
+    } catch (e) { /* fallback op compliance-score */ }
+  }
+  const headlinePct = (readinessPct !== null) ? readinessPct : pct;
+  const headlineLabel = (readinessPct !== null) ? 'Audit-readiness' : 'Compliance';
+
+  // Ring — toont het hoofdgetal (audit-readiness)
   const circ = 2 * Math.PI * 72;
-  const offset = circ - (pct / 100) * circ;
+  const offset = circ - (headlinePct / 100) * circ;
   const ringFill = document.getElementById('dashRingFill');
   if (ringFill) {
     ringFill.style.strokeDashoffset = offset;
-    // Dimmen wanneer < 25% beoordeeld — score is dan niet representatief
     ringFill.style.opacity = (completionPct < 25 && totalAssessed > 0) ? '0.55' : '1';
   }
-  document.getElementById('dashPct').textContent = pct + '%';
+  document.getElementById('dashPct').textContent = headlinePct + '%';
+  const lblEl = document.getElementById('dashScoreLabel');
+  if (lblEl) lblEl.textContent = headlineLabel;
   const subEl = document.getElementById('dashScoreSub');
   if (subEl) {
     if (totalAssessed === 0) {
       subEl.textContent = 'Start de gap-analyse om uw score te zien';
-    } else if (completionPct < 100) {
-      subEl.innerHTML = `<strong>${totalAssessed}/${totalAll}</strong> beoordeeld &middot; <span style="opacity:0.7">voorlopige score &mdash; volwassenheid bij beoordeelde controls: ${maturityPct}%</span>`;
     } else {
-      subEl.innerHTML = `Alle ${totalAll} controls beoordeeld &middot; volwassenheid: ${maturityPct}%`;
+      const geenBewijs = (readinessPct === 0) ? ' &middot; <span style="opacity:0.8">nog geen bewijs geüpload</span>' : '';
+      subEl.innerHTML = `<strong>${totalAssessed}/${totalAll}</strong> beoordeeld &middot; <span style="opacity:0.7">zelfevaluatie ${maturityPct}%</span>${geenBewijs}`;
     }
   }
 
-  // ── DUAL SCORING v1: audit-readiness naast zelfevaluatie ──
-  // Toont een tweede getal dat het bewijs meeweegt. Beschikbaar zodra scoring-v2.js is geladen.
-  if (window.A27Scoring && typeof window.A27Scoring.calculateDashboardTotals === 'function' && totalAssessed > 0) {
-    try {
-      const ctrlIds = controls.map(c => c.id);
-      const ev = (typeof evidenceData !== 'undefined') ? evidenceData : {};
-      const dual = window.A27Scoring.calculateDashboardTotals(ctrlIds, gapQuestions, gapAnswers, ev);
-      const readinessEl = document.getElementById('dashReadinessRow');
-      if (readinessEl) {
-        const diff = dual.selfPct - dual.readinessPct;
-        const colorStop = diff > 30 ? '#dc2626' : diff > 10 ? '#d97706' : '#059669';
-        readinessEl.innerHTML = `
-          <span style="display:inline-flex;align-items:center;gap:8px;font-size:0.86rem;color:rgba(255,255,255,0.65);flex-wrap:wrap;">
-            <span style="display:inline-flex;align-items:center;gap:6px;">
-              <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${colorStop};flex-shrink:0;"></span>
-              <strong style="color:#FFFFFF;font-weight:700;">Audit-readiness: ${dual.readinessPct}%</strong>
-              <span class="tooltip-trigger" title="Audit-readiness = uw zelfevaluatie maal de mate waarin u bewijs heeft aangeleverd. Telt mee: bestand-upload (40%), toelichting van minstens 50 woorden (30%), meta-velden compleet (30%). Per control kunt u dit verbeteren in de gap-analyse." style="cursor:help;opacity:0.65;font-size:0.95em;color:rgba(255,255,255,0.8);">&#9432;</span>
-            </span>
-          </span>`;
-        readinessEl.style.display = 'block';
-      }
-    } catch (err) {
-      console.warn('Dual scoring berekening faalde:', err);
-    }
+  // ── Secundaire regel: compliance over volledige scope + uitleg van het hoofdgetal ──
+  const readinessEl = document.getElementById('dashReadinessRow');
+  if (readinessEl && totalAssessed > 0) {
+    readinessEl.innerHTML = `
+      <span style="display:inline-flex;align-items:center;gap:8px;font-size:0.82rem;color:rgba(255,255,255,0.6);flex-wrap:wrap;">
+        <span>Compliance (volledige scope): <strong style="color:rgba(255,255,255,0.85);">${pct}%</strong></span>
+        <span class="tooltip-trigger" title="Audit-readiness (hoofdgetal) = uw zelfevaluatie maal de mate waarin u bewijs heeft aangeleverd: bestand-upload (40%), toelichting ≥50 woorden (30%), meta-velden compleet (30%). Zonder bewijs blijft dit 0% — upload bewijs per control in de gap-analyse om het te verhogen." style="cursor:help;opacity:0.7;color:rgba(255,255,255,0.8);">&#9432;</span>
+      </span>`;
+    readinessEl.style.display = 'block';
+  } else if (readinessEl) {
+    readinessEl.style.display = 'none';
   }
 
   // Category bars — gewogen over alle controls per categorie
