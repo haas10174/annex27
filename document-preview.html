@@ -193,12 +193,27 @@
       overflow-wrap: anywhere;
       hyphens: auto;
     }
-    /* Mapping-tabellen (4-kolom): smal ID-kolom, brede Kern-eis-kolom */
-    .doc-body .md-table th:first-child,
-    .doc-body .md-table td:first-child {
+    /* Niet-afbrekende smalle eerste kolom ALLEEN voor de ID-mappingtabellen (4/5-kolom).
+       Universeel toepassen brak 2/3-koloms tabellen: de lange eerste kolom hogde alle breedte op. */
+    .doc-body .md-table.cols-4 th:first-child,
+    .doc-body .md-table.cols-4 td:first-child,
+    .doc-body .md-table.cols-5 th:first-child,
+    .doc-body .md-table.cols-5 td:first-child {
       white-space: nowrap;
       font-variant-numeric: tabular-nums;
     }
+    /* 2-koloms mappingtabel (bv. Dossier | inhoud) */
+    .doc-body .md-table.cols-2 th:nth-child(1),
+    .doc-body .md-table.cols-2 td:nth-child(1) { width: 30%; }
+    .doc-body .md-table.cols-2 th:nth-child(2),
+    .doc-body .md-table.cols-2 td:nth-child(2) { width: 70%; }
+    /* 3-koloms mappingtabel (bv. NIS2-eis | Grondslag | Niet gedekt door ISO) */
+    .doc-body .md-table.cols-3 th:nth-child(1),
+    .doc-body .md-table.cols-3 td:nth-child(1) { width: 22%; }
+    .doc-body .md-table.cols-3 th:nth-child(2),
+    .doc-body .md-table.cols-3 td:nth-child(2) { width: 16%; }
+    .doc-body .md-table.cols-3 th:nth-child(3),
+    .doc-body .md-table.cols-3 td:nth-child(3) { width: 62%; }
     /* Eerste kolom (control-ID) zo smal mogelijk */
     .doc-body .md-table.cols-4 th:nth-child(1),
     .doc-body .md-table.cols-4 td:nth-child(1) { width: 11%; }
