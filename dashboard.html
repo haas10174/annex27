@@ -1452,9 +1452,9 @@
 
     /* Lead Auditor perspective block */
     .ga-auditor-block {
-      background: #FFFBF5;
-      border: 1px solid #FED7AA;
-      border-left: 3px solid #D97706;
+      background: #F7FAF9;
+      border: 1px solid #DCE9E6;
+      border-left: 3px solid var(--accent);
       border-radius: var(--radius);
       padding: 18px 20px;
       margin-bottom: 24px;
@@ -1468,12 +1468,12 @@
       font-weight: 700;
       letter-spacing: 0.1em;
       text-transform: uppercase;
-      color: #B45309;
+      color: var(--accent);
       margin-bottom: 14px;
     }
     .ga-auditor-label svg {
       width: 14px; height: 14px;
-      stroke: #D97706;
+      stroke: var(--accent);
       fill: none;
       stroke-width: 2;
     }
@@ -1514,7 +1514,7 @@
     .ga-killer-question {
       margin-top: 14px;
       padding-top: 14px;
-      border-top: 1px dashed #FED7AA;
+      border-top: 1px dashed #DCE9E6;
     }
     .ga-killer-label {
       font-family: 'Sora', sans-serif;
@@ -1522,7 +1522,7 @@
       font-weight: 700;
       letter-spacing: 0.1em;
       text-transform: uppercase;
-      color: #D97706;
+      color: var(--accent);
       margin-bottom: 6px;
     }
     .ga-killer-text {
@@ -1887,20 +1887,24 @@
       text-transform: uppercase;
       color: var(--text-muted);
       margin-bottom: 8px;
+      cursor: pointer;
     }
     .ga-toc-chevron {
-      display: none;
+      display: block;
       width: 18px; height: 18px;
       stroke: currentColor; fill: none; stroke-width: 2.5;
       flex-shrink: 0;
       transition: transform 0.2s ease;
     }
+    .ga-toc.toc-open .ga-toc-chevron { transform: rotate(180deg); }
+    /* Chips standaard ingeklapt — klik op de titel om ze uit te klappen (overzichtelijker dan 37 losse knoppen) */
     .ga-toc-dots {
-      display: flex;
+      display: none;
       flex-wrap: wrap;
       gap: 6px;
       width: 100%;
     }
+    .ga-toc.toc-open .ga-toc-dots { display: flex; }
     .ga-toc-dot {
       min-width: 46px; height: 26px;
       border-radius: 6px;
@@ -4412,7 +4416,7 @@ async function loadProfile() {
   document.getElementById('sidebarCompany').textContent = bedrijf;
   document.getElementById('welcomeTitle').textContent = `Welkom, ${naam.split(' ')[0]}`;
   document.getElementById('profileName').textContent = naam;
-  document.getElementById('profileCompany').textContent = bedrijf || '—';
+  document.getElementById('profileCompany').textContent = bedrijf || 'Niet ingevuld';
   document.getElementById('profileEmail').textContent = user.email;
 
   const pakketLabels = { gap: 'Gap-analyse', readiness: 'Readiness Platform', admin: 'Administrator' };
