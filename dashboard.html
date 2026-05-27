@@ -4428,6 +4428,18 @@ async function loadProfile() {
   // user_metadata is user-controllable via auth.updateUser() — never trust it for authorization
   userPakket = user.app_metadata?.pakket || 'gap';
 
+  // Admin-only PREVIEW: ?pakket=gap|nis2|beleid|beleid_premium|iso_nis2_bundle toont het dashboard
+  // zoals dat pakket het ziet (welke nav grijst, welke docs zichtbaar). Read-only verificatie —
+  // RLS in de DB blijft de echte autorisatie, dit verandert alleen de client-side weergave.
+  try {
+    const _previewPakket = new URLSearchParams(location.search).get('pakket');
+    const _realAdmin = (user.app_metadata?.pakket === 'admin') || (user.app_metadata?.role === 'auditor');
+    if (_previewPakket && _realAdmin && ['gap','nis2','beleid','beleid_premium','iso_nis2_bundle'].includes(_previewPakket)) {
+      userPakket = _previewPakket;
+      showPakketPreviewBanner(_previewPakket);
+    }
+  } catch (e) { /* preview-override mag laden nooit breken */ }
+
   document.getElementById('sidebarName').textContent = naam;
   document.getElementById('sidebarCompany').textContent = bedrijf;
   document.getElementById('welcomeTitle').textContent = `Welkom, ${naam.split(' ')[0]}`;
@@ -4483,6 +4495,18 @@ async function saveOrgProfile() {
   } finally {
     if (btn) { btn.disabled = false; btn.textContent = 'Opslaan'; }
   }
+}
+
+// Admin-preview banner: maakt zichtbaar dat je het dashboard als een ander pakket bekijkt.
+function showPakketPreviewBanner(pakket) {
+  if (document.getElementById('pakketPreviewBanner')) return;
+  const labels = { gap:'Gap-analyse', nis2:'NIS2 Readiness', beleid:'Beleidspakket', beleid_premium:'Beleidspakket Premium', iso_nis2_bundle:'Bundel ISO 27001 + NIS2' };
+  const bar = document.createElement('div');
+  bar.id = 'pakketPreviewBanner';
+  bar.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:9999;background:#B45309;color:#fff;font-family:Sora,sans-serif;font-size:0.82rem;font-weight:600;padding:8px 16px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,0.2);';
+  bar.innerHTML = `Preview-modus &mdash; dashboard als pakket <strong>${labels[pakket] || pakket}</strong>. <a href="${location.pathname}" style="color:#fff;text-decoration:underline;margin-left:8px;">Terug naar admin-weergave</a>`;
+  document.body.appendChild(bar);
+  document.body.style.paddingTop = '36px';
 }
 
 // Pakket-access helper: één bron-of-waarheid voor wat een klant mag zien
