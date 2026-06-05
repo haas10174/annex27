@@ -384,6 +384,54 @@
       transition: opacity 0.2s;
     }
     .nav-links a.nav-cta:hover { opacity: 0.85; color: white; }
+
+    /* Normen-dropdown */
+    .nav-dropdown { position: relative; }
+    .nav-dropdown-trigger {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: none; border: 0; padding: 0;
+      color: var(--text-secondary); font-family: inherit;
+      font-size: 0.88rem; font-weight: 500; cursor: pointer;
+      transition: color .2s;
+    }
+    .nav-dropdown-trigger:hover { color: var(--text-primary); }
+    .nav-dropdown-trigger svg { transition: transform .2s; }
+    .nav-dropdown[aria-open="true"] .nav-dropdown-trigger svg { transform: rotate(180deg); }
+    .nav-dropdown-panel {
+      position: absolute; top: calc(100% + 14px); left: 50%; transform: translateX(-50%);
+      min-width: 320px; padding: 8px;
+      background: #fff; border: 1px solid var(--border);
+      border-radius: 12px; box-shadow: 0 10px 30px rgba(15,23,42,0.08);
+      opacity: 0; visibility: hidden; pointer-events: none;
+      transition: opacity .15s, visibility .15s;
+      z-index: 120;
+    }
+    .nav-dropdown[aria-open="true"] .nav-dropdown-panel,
+    .nav-dropdown:hover .nav-dropdown-panel {
+      opacity: 1; visibility: visible; pointer-events: auto;
+    }
+    .nav-dropdown-panel a {
+      display: block; padding: 12px 14px;
+      border-radius: 8px; text-decoration: none;
+      transition: background-color .15s;
+    }
+    .nav-dropdown-panel a:hover { background: var(--surface); }
+    .nav-dropdown-panel strong {
+      display: block; font-size: 0.92rem; font-weight: 700;
+      color: var(--text-primary); margin-bottom: 2px;
+    }
+    .nav-dropdown-panel span {
+      display: block; font-size: 0.78rem; color: var(--text-muted);
+      line-height: 1.5;
+    }
+    @media (max-width: 960px) {
+      .nav-dropdown-panel {
+        position: static; transform: none; min-width: 0;
+        box-shadow: none; border: 0; padding: 6px 0 6px 16px;
+        opacity: 1; visibility: visible; pointer-events: auto;
+      }
+      .nav-dropdown-trigger { font-weight: 700; color: var(--text-primary); }
+    }
     .nav-hamburger {
       display: none;
       background: none;
@@ -1602,10 +1650,29 @@
       <span></span><span></span><span></span>
     </button>
     <ul class="nav-links" id="navMenu">
+      <li class="nav-dropdown">
+        <button type="button" class="nav-dropdown-trigger" aria-haspopup="true" aria-expanded="false" id="navNormenTrigger">
+          Normen
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="nav-dropdown-panel" role="menu">
+          <a href="/iso-27001-nederland" role="menuitem">
+            <strong>ISO 27001</strong>
+            <span>De internationale norm voor informatiebeveiliging</span>
+          </a>
+          <a href="/nis2" role="menuitem">
+            <strong>NIS2 / Cbw</strong>
+            <span>Verplichte zorgmaatregelen voor MKB in 18 sectoren</span>
+          </a>
+          <a href="/nen-7510" role="menuitem">
+            <strong>NEN 7510</strong>
+            <span>De Nederlandse norm voor zorginstellingen en EPD</span>
+          </a>
+        </div>
+      </li>
       <li><a href="/werkwijze">Werkwijze</a></li>
-      <li><a href="/vergelijking">Vergelijken</a></li>
       <li><a href="#pakketten">Pakketten</a></li>
-      <li><a href="/faq">FAQ</a></li>
+      <li><a href="/demo">Demo</a></li>
       <li><a href="/portal" class="nav-login">Inloggen</a></li>
       <li><a href="/gap-analyse" class="nav-cta">Gratis quickscan</a></li>
     </ul>

@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=2" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <meta name="theme-color" content="#0D9488" />
+  <script src="/analytics.js"></script>
+  <title>Plan een live demo · Annex27</title>
+  <meta name="description" content="20-minuten live demo van het Annex27-platform door een ISO 27001 Lead Auditor. Bekijk gap-analyse, rapport, beleidsdocumenten en stel vragen voor uw eigen sector. Plan op werkdagen." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://annex27.nl/demo" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://annex27.nl/demo" />
+  <meta property="og:title" content="Plan een live demo · Annex27" />
+  <meta property="og:description" content="20-minuten live demo van het Annex27-platform door een ISO 27001 Lead Auditor." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    :root{--bg:#FAF9F6;--surface:#FFFFFF;--border:#E5E5E5;--border-light:#F0F0F0;--text-primary:#0F172A;--text-secondary:#475569;--text-muted:#94A3B8;--accent:#0D9488;--accent-hover:#0F766E;--accent-light:#CCFBF1;--radius:10px;--radius-lg:16px;}
+    html{scroll-behavior:smooth;}
+    body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text-secondary);line-height:1.7;-webkit-font-smoothing:antialiased;}
+    .container{max-width:1040px;margin:0 auto;padding:0 24px;}
+
+    nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(250,249,246,0.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--border-light);height:64px;display:flex;align-items:center;padding:0 5%;}
+    .nav-inner{display:flex;align-items:center;justify-content:space-between;width:100%;max-width:1120px;margin:0 auto;}
+    .nav-logo{font-family:'Sora',sans-serif;font-size:1.4rem;font-weight:700;color:var(--text-primary);text-decoration:none;letter-spacing:-0.03em;}
+    .nav-logo span{color:var(--accent);}
+    .nav-back{display:inline-flex;align-items:center;gap:6px;font-size:0.85rem;color:var(--text-secondary);text-decoration:none;font-weight:500;}
+    .nav-back:hover{color:var(--text-primary);}
+
+    .demo-hero{padding:120px 0 56px;}
+    .demo-eyebrow{font-size:0.74rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--accent);margin-bottom:18px;}
+    .demo-hero h1{font-family:'Sora',sans-serif;font-size:2.4rem;font-weight:800;letter-spacing:-0.025em;line-height:1.15;color:var(--text-primary);margin-bottom:18px;max-width:680px;}
+    .demo-hero p.lead{font-size:1.05rem;line-height:1.7;color:var(--text-secondary);max-width:640px;margin-bottom:0;}
+
+    .demo-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:48px;align-items:start;padding:24px 0 96px;}
+    @media (max-width:880px){.demo-grid{grid-template-columns:1fr;gap:32px;}.demo-hero h1{font-size:2rem;}}
+
+    .demo-card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:32px;}
+    .demo-card h2{font-family:'Sora',sans-serif;font-size:1.2rem;font-weight:700;color:var(--text-primary);margin-bottom:18px;letter-spacing:-0.01em;}
+    .demo-card h3{font-family:'Sora',sans-serif;font-size:0.95rem;font-weight:700;color:var(--text-primary);margin:22px 0 10px;letter-spacing:-0.01em;}
+
+    .agenda-item{display:flex;gap:14px;padding:12px 0;border-bottom:1px solid var(--border-light);}
+    .agenda-item:last-child{border-bottom:0;}
+    .agenda-time{flex:0 0 64px;font-family:'Sora',sans-serif;font-weight:700;font-size:0.84rem;color:var(--accent);padding-top:2px;}
+    .agenda-content strong{display:block;font-weight:700;color:var(--text-primary);font-size:0.92rem;margin-bottom:2px;}
+    .agenda-content span{font-size:0.84rem;color:var(--text-muted);line-height:1.5;}
+
+    .host-block{display:flex;gap:18px;align-items:center;margin-bottom:22px;padding-bottom:22px;border-bottom:1px solid var(--border-light);}
+    .host-avatar{flex:0 0 64px;width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,#0D9488 0%,#0F766E 100%);display:flex;align-items:center;justify-content:center;color:#fff;font-family:'Sora',sans-serif;font-weight:800;font-size:1.4rem;}
+    .host-info strong{display:block;font-family:'Sora',sans-serif;font-weight:700;color:var(--text-primary);font-size:1rem;margin-bottom:2px;}
+    .host-info span{font-size:0.86rem;color:var(--text-muted);}
+
+    .demo-meta{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:22px;}
+    .demo-meta-item{padding:12px 14px;background:var(--bg);border-radius:8px;border:1px solid var(--border-light);}
+    .demo-meta-label{font-size:0.7rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-muted);margin-bottom:4px;}
+    .demo-meta-value{font-family:'Sora',sans-serif;font-weight:700;color:var(--text-primary);font-size:0.95rem;}
+
+    .checklist{list-style:none;padding:0;margin:0;}
+    .checklist li{display:flex;gap:10px;align-items:flex-start;padding:6px 0;font-size:0.9rem;line-height:1.55;color:var(--text-secondary);}
+    .checklist li svg{flex:0 0 auto;margin-top:3px;color:var(--accent);}
+    .checklist li strong{color:var(--text-primary);font-weight:600;}
+
+    .cta-block{display:flex;flex-direction:column;gap:12px;margin-top:24px;}
+    .cta-primary{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:16px 28px;background:var(--accent);color:#fff;text-decoration:none;border-radius:10px;font-family:'Sora',sans-serif;font-weight:700;font-size:0.96rem;transition:background-color .2s;}
+    .cta-primary:hover{background:var(--accent-hover);}
+    .cta-secondary{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:14px 22px;background:#fff;color:var(--text-primary);text-decoration:none;border-radius:10px;border:1px solid var(--border);font-weight:600;font-size:0.92rem;}
+    .cta-secondary:hover{border-color:var(--accent);color:var(--accent);}
+
+    footer{padding:48px 0;border-top:1px solid var(--border-light);text-align:center;font-size:0.82rem;color:var(--text-muted);}
+    footer a{color:var(--text-secondary);text-decoration:none;}
+    footer a:hover{color:var(--accent);}
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">annex<span>27</span></a>
+    <a href="/" class="nav-back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      Terug naar homepage
+    </a>
+  </div>
+</nav>
+
+<section class="demo-hero">
+  <div class="container">
+    <div class="demo-eyebrow">Live demo · op afspraak</div>
+    <h1>20 minuten met een Lead Auditor. Bekijk het platform zoals uw klanten dat zien.</h1>
+    <p class="lead">
+      Geen sales-pitch. U krijgt een snelle rondleiding door de gap-analyse, een rapport-voorbeeld op uw sector en u kunt rechtstreeks vragen stellen over ISO 27001, NIS2 of NEN 7510.
+    </p>
+  </div>
+</section>
+
+<div class="container">
+  <div class="demo-grid">
+
+    <div class="demo-card">
+      <h2>Agenda van het gesprek</h2>
+      <div class="agenda-item">
+        <div class="agenda-time">0&ndash;3 min</div>
+        <div class="agenda-content">
+          <strong>Uw situatie</strong>
+          <span>Sector, scope, deadline en wat u al heeft.</span>
+        </div>
+      </div>
+      <div class="agenda-item">
+        <div class="agenda-time">3&ndash;9 min</div>
+        <div class="agenda-content">
+          <strong>Rondleiding platform</strong>
+          <span>Quickscan, gap-analyse, dashboard met bewijsvoering en de scoring achter audit-readiness.</span>
+        </div>
+      </div>
+      <div class="agenda-item">
+        <div class="agenda-time">9&ndash;14 min</div>
+        <div class="agenda-content">
+          <strong>Rapport-voorbeeld op uw sector</strong>
+          <span>Hoe een gap-rapport eruitziet voor SaaS, zorg, IT-MSP, overheid of bouw.</span>
+        </div>
+      </div>
+      <div class="agenda-item">
+        <div class="agenda-time">14&ndash;19 min</div>
+        <div class="agenda-content">
+          <strong>Beleidsdocumenten en mappings</strong>
+          <span>De 44 templates, hoe placeholders auto-invullen, en de NEN 7510 / BIO / NIS2-mappings.</span>
+        </div>
+      </div>
+      <div class="agenda-item">
+        <div class="agenda-time">19&ndash;20 min</div>
+        <div class="agenda-content">
+          <strong>Uw vervolgvragen</strong>
+          <span>Kort en bondig: wat past bij uw scope, met of zonder aankoop.</span>
+        </div>
+      </div>
+
+      <h3>Wat u vooraf klaarlegt</h3>
+      <ul class="checklist">
+        <li>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="20 6 9 17 4 12"/></svg>
+          <span><strong>Sector en organisatiegrootte</strong> (medewerkers en jaaromzet, indicatief).</span>
+        </li>
+        <li>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="20 6 9 17 4 12"/></svg>
+          <span><strong>Uw aanleiding</strong>: klantvraag, auditdeadline, NIS2/Cbw of eigen wens.</span>
+        </li>
+        <li>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="20 6 9 17 4 12"/></svg>
+          <span><strong>Eventuele eerdere certificering</strong> of audit-rapporten (op hoofdlijnen, geen documenten nodig).</span>
+        </li>
+      </ul>
+    </div>
+
+    <div class="demo-card">
+      <div class="host-block">
+        <div class="host-avatar" aria-hidden="true">LA</div>
+        <div class="host-info">
+          <strong>ISO 27001 Lead Auditor</strong>
+          <span>IRCA-gecertificeerd &middot; NL en BE</span>
+        </div>
+      </div>
+
+      <div class="demo-meta">
+        <div class="demo-meta-item">
+          <div class="demo-meta-label">Duur</div>
+          <div class="demo-meta-value">20 minuten</div>
+        </div>
+        <div class="demo-meta-item">
+          <div class="demo-meta-label">Vorm</div>
+          <div class="demo-meta-value">Online video</div>
+        </div>
+        <div class="demo-meta-item">
+          <div class="demo-meta-label">Beschikbaar</div>
+          <div class="demo-meta-value">Werkdagen 9&ndash;18u</div>
+        </div>
+        <div class="demo-meta-item">
+          <div class="demo-meta-label">Kosten</div>
+          <div class="demo-meta-value">Gratis</div>
+        </div>
+      </div>
+
+      <p style="font-size:0.88rem;color:var(--text-secondary);margin-bottom:18px;">
+        Plan rechtstreeks per e-mail. U krijgt binnen één werkdag een uitnodiging met een Google Meet-link en de korte voorbereidingsmail.
+      </p>
+
+      <div class="cta-block">
+        <a href="mailto:info@annex27.nl?subject=Demo-aanvraag%20Annex27&body=Hallo%2C%0A%0AIk%20wil%20graag%20een%2020-minuten%20demo%20plannen.%0A%0ABedrijf%3A%20%0ASector%3A%20%0AAanleiding%3A%20%0AVoorkeursdagen%2Ftijden%3A%20%0A%0AMet%20vriendelijke%20groet%2C" class="cta-primary" data-ga-event="demo_request" data-ga-cta-location="demo_page">
+          Plan een demo via e-mail
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <a href="/gap-analyse" class="cta-secondary">
+          Of doe eerst de gratis quickscan
+        </a>
+      </div>
+
+      <p style="font-size:0.78rem;color:var(--text-muted);margin-top:18px;line-height:1.55;">
+        Geen tijd voor een gesprek? Bekijk dan eerst een rapport-voorbeeld op
+        <a href="/rapport-voorbeeld" style="color:var(--accent);text-decoration:underline;">/rapport-voorbeeld</a>
+        of de werkwijze op
+        <a href="/werkwijze" style="color:var(--accent);text-decoration:underline;">/werkwijze</a>.
+      </p>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  <div class="container">
+    Annex27 &middot; ISO 27001, NIS2 en NEN 7510 voor MKB in NL &amp; BE &middot;
+    <a href="/privacy">Privacy</a> &middot;
+    <a href="/trust">Trust &amp; Security</a> &middot;
+    <a href="mailto:info@annex27.nl">info@annex27.nl</a>
+  </div>
+</footer>
+
+</body>
+</html>
