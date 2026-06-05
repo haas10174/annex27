@@ -2220,16 +2220,18 @@
       min-height: 180px;
       font-size: 0.94rem;
       line-height: 1.7;
-      padding: 14px 16px;
-      background: #FFFEF7;
-      border: 1.5px dashed rgba(13,148,136,0.35);
-      transition: all 0.2s;
+      padding: 16px 18px;
+      background: #F7FAF9;
+      border: 1px solid #DCE9E6;
+      border-left: 3px solid var(--accent);
+      border-radius: 8px;
+      transition: background-color .15s, border-color .15s, box-shadow .15s;
     }
     .ga-ef-textarea.ga-ef-remark:focus {
       background: #fff;
-      border-style: solid;
       border-color: var(--accent);
-      box-shadow: 0 0 0 4px rgba(13,148,136,0.08);
+      border-left-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(20,184,166,0.1);
       min-height: 240px;
     }
     .ga-ef-textarea.ga-ef-remark::placeholder { color: rgba(15,23,42,0.32); font-style: italic; line-height: 1.6; }
@@ -3225,7 +3227,7 @@
             </div>
           </div>
           <div class="score-card-sub" id="dashScoreSub">Begin met het afvinken van controls</div>
-          <div id="dashReadinessRow" style="display:none;margin-top:8px;padding-top:8px;border-top:1px dashed var(--border);"></div>
+          <div id="dashReadinessRow" style="display:none;margin-top:10px;"></div>
         </div>
         <div class="cats-card">
           <h3>Voortgang per categorie</h3>
@@ -4367,7 +4369,22 @@ async function adminFillFromMode(mode) {
         const owner = persona.owners[cat] || persona.owners.policy;
         const safeId = ctrlId.replace(/\./g, '_');
         const baseDate = Date.now() - (hash(persona.key + ctrlId) % 240) * 86400000;
-        const remarkPick = persona.remarks[hash(ctrlId) % persona.remarks.length];
+        const biasLvl = persona.bias[cat] || 'mid';
+        const dropoutSeed = hash(persona.key + '_drop_' + ctrlId) % 100;
+
+        // Per-control evidence-completeness varieert met persona-bias → meer spread in audit-readiness
+        //   high bias: 95% files, 80% lange remark (≥50w), 90% meta compleet
+        //   mid bias:  75% files, 40% lange remark,         70% meta compleet
+        //   low bias:  45% files, 10% lange remark,         40% meta compleet
+        const probs = {
+          high: { files: 95, longRemark: 80, meta: 90 },
+          mid:  { files: 75, longRemark: 40, meta: 70 },
+          low:  { files: 45, longRemark: 10, meta: 40 }
+        }[biasLvl] || { files: 75, longRemark: 40, meta: 70 };
+
+        const hasFiles  = dropoutSeed < probs.files;
+        const hasLong   = (hash(persona.key + '_rem_' + ctrlId) % 100) < probs.longRemark;
+        const hasMeta   = (hash(persona.key + '_meta_' + ctrlId) % 100) < probs.meta;
 
         const extType = docs.extra.endsWith('.csv') ? 'text/csv'
                       : docs.extra.endsWith('.xlsx') ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
@@ -4383,16 +4400,23 @@ async function adminFillFromMode(mode) {
                        : docs.primary.endsWith('.md')    ? 'text/markdown'
                        : 'application/octet-stream';
 
-        evidenceData[ctrlId].files = [
+        evidenceData[ctrlId].files = hasFiles ? [
           { name: `${safeId}_${docs.primary}`, size: 240000 + (hash(persona.key + ctrlId + 'a') % 800000), type: primType, date: new Date(baseDate).toISOString(), path: `mock://${persona.key}/${safeId}/${docs.primary}` },
           { name: `${safeId}_${docs.extra}`,   size: 45000  + (hash(persona.key + ctrlId + 'b') % 200000), type: extType,  date: new Date(baseDate + 86400000*7).toISOString(), path: `mock://${persona.key}/${safeId}/${docs.extra}` }
-        ];
+        ] : [];
+
+        // Korte vs lange remark — lang = combinatie van 3 persona-remarks + control-context (≥50 woorden voor toelichting-credit)
+        const shortRemark = persona.remarks[hash(ctrlId) % persona.remarks.length];
+        const longRemark = `${persona.remarks.join(' ')} Voor control ${ctrlId} betekent dit concreet dat de uitvoering nog gefragmenteerd is en periodieke review door ${owner} nodig blijft om de huidige aanpak te borgen.`;
+        const remarkText = hasLong ? longRemark : shortRemark;
+
+        // Meta-velden: bij hasMeta=false sla we 'procedure' en 'last_verified' over → metaFieldsComplete()=false
         evidenceData[ctrlId].note_fields = {
-          procedure: `Document: ${docs.primary} — ${persona.key === 'saas-scaleup' ? 'in concept, nog niet formeel goedgekeurd' : persona.key === 'familiebedrijf-bouw' ? 'fysieke versie in directiekantoor' : 'opgenomen in handboek'}`,
+          procedure: hasMeta ? `Document: ${docs.primary} — ${persona.key === 'saas-scaleup' ? 'in concept, nog niet formeel goedgekeurd' : persona.key === 'familiebedrijf-bouw' ? 'fysieke versie in directiekantoor' : 'opgenomen in handboek'}` : '',
           location:  persona.location,
           owner:     owner,
-          last_verified: new Date(baseDate).toISOString().slice(0, 10),
-          remark:    remarkPick
+          last_verified: hasMeta ? new Date(baseDate).toISOString().slice(0, 10) : '',
+          remark:    remarkText
         };
         const nf = evidenceData[ctrlId].note_fields;
         evidenceData[ctrlId].note = `Procedure: ${nf.procedure}\nLocatie: ${nf.location}\nEigenaar: ${nf.owner}\nLaatst gereviewd: ${nf.last_verified}\nOpmerking: ${nf.remark}`;
@@ -4615,6 +4639,14 @@ function renderQuickActions() {
   const el = document.getElementById('quickActions');
   // nextStepCard show/hide wordt nu beheerd door renderUpsellNextStep()
 
+  const hasBeleid = ['beleid','beleid_premium','iso_nis2_bundle','readiness','admin'].includes(userPakket);
+  const beleidCard = hasBeleid ? `
+      <div class="quick-action" onclick="showView('documenten')">
+        <div class="quick-action-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/></svg></div>
+        <div class="quick-action-title">Beleidsdocumenten</div>
+        <div class="quick-action-desc">Templates met uw organisatiegegevens ingevuld</div>
+      </div>` : '';
+
   if (isReadiness) {
     el.innerHTML = `
       <div class="quick-action" onclick="showView('gapanalyse')">
@@ -4622,7 +4654,8 @@ function renderQuickActions() {
         <div class="quick-action-title">Gap-analyse</div>
         <div class="quick-action-desc">Toets alle 93 Annex A controls</div>
       </div>
-      <div class="quick-action" onclick="showView('messages')">
+      ${beleidCard}
+      <div class="quick-action" onclick="showView('berichten')">
         <div class="quick-action-icon"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
         <div class="quick-action-title">Berichten</div>
         <div class="quick-action-desc">Contact met uw Lead Auditor</div>
@@ -4634,6 +4667,7 @@ function renderQuickActions() {
         <div class="quick-action-title">Start gap-analyse</div>
         <div class="quick-action-desc">Toets alle 93 Annex A controls met maturity scoring</div>
       </div>
+      ${beleidCard}
       <div class="quick-action" onclick="showView('berichten')">
         <div class="quick-action-icon"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
         <div class="quick-action-title">Berichten</div>
@@ -5315,20 +5349,17 @@ function renderDashboard() {
   if (subEl) {
     if (totalAssessed === 0) {
       subEl.textContent = 'Start de gap-analyse om uw score te zien';
+    } else if (readinessPct === 0) {
+      subEl.innerHTML = `<strong>${totalAssessed}/${totalAll}</strong> beoordeeld &middot; <span style="opacity:0.75">nog geen bewijs geüpload</span>`;
     } else {
-      const geenBewijs = (readinessPct === 0) ? ' &middot; <span style="opacity:0.8">nog geen bewijs geüpload</span>' : '';
-      subEl.innerHTML = `<strong>${totalAssessed}/${totalAll}</strong> beoordeeld &middot; <span style="opacity:0.7">zelfevaluatie ${maturityPct}%</span>${geenBewijs}`;
+      subEl.innerHTML = `<strong>${totalAssessed}/${totalAll}</strong> beoordeeld`;
     }
   }
 
-  // ── Secundaire regel: compliance over volledige scope + uitleg van het hoofdgetal ──
+  // ── Secundaire regel: compliance over volledige scope (compact) ──
   const readinessEl = document.getElementById('dashReadinessRow');
   if (readinessEl && totalAssessed > 0) {
-    readinessEl.innerHTML = `
-      <span style="display:inline-flex;align-items:center;gap:8px;font-size:0.82rem;color:rgba(255,255,255,0.6);flex-wrap:wrap;">
-        <span>Compliance (volledige scope): <strong style="color:rgba(255,255,255,0.85);">${pct}%</strong></span>
-        <span class="tooltip-trigger" title="Audit-readiness (hoofdgetal) = uw zelfevaluatie maal de mate waarin u bewijs heeft aangeleverd: bestand-upload (40%), toelichting ≥50 woorden (30%), meta-velden compleet (30%). Zonder bewijs blijft dit 0% — upload bewijs per control in de gap-analyse om het te verhogen." style="cursor:help;opacity:0.7;color:rgba(255,255,255,0.8);">&#9432;</span>
-      </span>`;
+    readinessEl.innerHTML = `<span style="font-size:0.78rem;color:rgba(255,255,255,0.55);">Compliance ${pct}% &middot; zelfevaluatie ${maturityPct}%</span>`;
     readinessEl.style.display = 'block';
   } else if (readinessEl) {
     readinessEl.style.display = 'none';
@@ -5351,15 +5382,7 @@ function renderDashboard() {
   });
   document.getElementById('dashCats').innerHTML = html;
 
-  // Sector benchmark — alleen tonen als je voldoende voortgang hebt (>=25%) anders niet representatief
-  if (userSector && sectorProfiles[userSector] && completionPct >= 25) {
-    const profile = sectorProfiles[userSector];
-    if (pct > 0 && subEl) {
-      const diff = pct - profile.benchmark;
-      const comparison = diff > 0 ? `${diff}% boven` : diff < 0 ? `${Math.abs(diff)}% onder` : 'gelijk aan';
-      subEl.innerHTML = `<strong>${totalAssessed}/${totalAll}</strong> beoordeeld &middot; ${comparison} ${esc(profile.label)} gemiddelde (${profile.benchmark}%)`;
-    }
-  }
+  // Sector benchmark blijft beschikbaar in rapport-cover en summary-cards; score-card houdt het clean
 
   renderSectorInsights();
 }
