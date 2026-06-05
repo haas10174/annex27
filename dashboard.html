@@ -9122,9 +9122,25 @@ const DOC_GROUPS = [
       { src:'premium', file:'36-bio-iso27001-mapping.md', title:'BIO 2.0 ↔ ISO 27001-mapping voor overheidsleveranciers', refs:['A.5.31','A.5.33','A.5.34','A.6.1','A.8.5','A.8.24'], mdOnly:true }
     ]
   },
+  { id: 'fg-overheid', iconKey: 'klassificatie', sector: 'overheid', label: 'FG-dossier — overheid (BIO + dubbele meldplicht)', sub: 'BIO-classificatie + rubricering, dubbele meldplicht AVG + Cbw, cloud-leveranciersbeoordeling + CLOUD Act',
+    docs: [
+      { src:'basispakket', file:'53-overheid-bio-classificatie-rubricering.md', title:'BIO-classificatie en rubricering (BBN1/2/3 + VIR-BI)', refs:['BIO 2.0','VIR-BI 2013','A.5.12','A.5.13'], mdOnly:true },
+      { src:'basispakket', file:'54-overheid-dubbele-meldplicht.md', title:'Dubbele meldplicht (AVG + Cbw/Wbni)', refs:['AVG art. 33','AVG art. 34','Cbw','Wbni'], mdOnly:true },
+      { src:'basispakket', file:'55-overheid-cloud-leveranciers.md', title:'Cloud- en leveranciersbeoordeling (BIO + CLOUD Act-toets)', refs:['BIO 2.0 §5.19-5.22','AVG art. 28','AVG art. 46'], mdOnly:true }
+    ]
+  },
   { id: 'sector-zorg', iconKey: 'klassificatie', sector: 'zorg', label: 'Sector — zorg (NEN 7510)', sub: 'NEN 7510-mapping voor zorginstellingen + leveranciers van zorg-IT (EPD, hosting, ZSP)',
     docs: [
       { src:'premium', file:'37-nen7510-iso27001-mapping.md', title:'NEN 7510 ↔ ISO 27001-mapping voor zorginstellingen', refs:['A.5.12','A.5.34','A.6.3','A.8.15','A.8.22','A.8.24'], mdOnly:true }
+    ]
+  },
+  { id: 'fg-zorg', iconKey: 'klassificatie', sector: 'zorg', label: 'FG-dossier — zorg (NEN 7510 + WGBO)', sub: 'Behandelrelatie, EPD-logging, break-glass, bewaartermijnen WGBO en patientenportaal',
+    docs: [
+      { src:'basispakket', file:'48-zorg-behandelrelatie-procedure.md', title:'Behandelrelatie-procedure', refs:['AVG art. 9','WGBO art. 7:457','NEN 7510-2 §5.15','NEN 7510-2 §8.15'], mdOnly:true },
+      { src:'basispakket', file:'49-zorg-epd-logging-beleid.md', title:'EPD-logging-beleid (NEN 7513-compliant)', refs:['NEN 7510-2 §8.15','NEN 7513','AVG art. 32','WGBO art. 7:454'], mdOnly:true },
+      { src:'basispakket', file:'50-zorg-break-glass-procedure.md', title:'Break-glass-procedure (noodtoegang patientdossier)', refs:['NEN 7510-2 §5.15','AVG art. 9 lid 2 sub c'], mdOnly:true },
+      { src:'basispakket', file:'51-zorg-bewaartermijn-patientdossier.md', title:'Bewaartermijn patientdossier (20 jaar WGBO)', refs:['WGBO art. 7:454','AVG art. 5 lid 1 sub e','NEN 7510-2 §5.33'], mdOnly:true },
+      { src:'basispakket', file:'52-zorg-patientenportaal-toegang.md', title:'Patientenportaal toegangsbeleid', refs:['AVG art. 12-22','WGBO art. 7:456','Wabvpz','NEN 7510-2 §5.18'], mdOnly:true }
     ]
   },
   { id: 'sector-nis2', iconKey: 'klassificatie', sector: 'nis2', label: 'Sector — NIS2 / Cbw', sub: 'NIS2-mapping voor essentiële en belangrijke entiteiten onder de Cyberbeveiligingswet',
