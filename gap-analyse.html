@@ -1422,6 +1422,28 @@
       border-radius: 10px;
       padding: 22px 24px;
     }
+    .qs-disclaimer {
+      margin-top: 18px;
+      padding: 16px 20px;
+      background: #F5F4EF;
+      border: 1px solid #E2DFD7;
+      border-radius: 10px;
+      font-size: 0.82rem;
+      line-height: 1.55;
+      color: #475569;
+    }
+    .qs-disclaimer p { margin: 0; }
+    .qs-disclaimer p + p { margin-top: 10px; }
+    .qs-disclaimer-label {
+      font-family: 'Sora', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #94A3B8;
+      margin-bottom: 8px;
+    }
+    .qs-disclaimer strong { color: #0F172A; font-weight: 600; }
     .sector-insight-card h4 {
       font-family: 'Sora', sans-serif;
       font-size: 0.74rem;
@@ -1880,6 +1902,22 @@
     <div class="sector-insight-card" id="sectorActions" style="display:none;margin-top:16px;">
       <h4>Aanbevolen prioriteiten voor uw sector</h4>
       <ul id="sectorActionList"></ul>
+    </div>
+
+    <!-- Disclaimer / voorbehoud bij quickscan-uitslag -->
+    <div class="qs-disclaimer">
+      <div class="qs-disclaimer-label">Voorbehoud</div>
+      <p>
+        Deze uitkomst is een <strong>indicatie</strong> op basis van uw eigen antwoorden op 10 vragen.
+        Annex27 heeft de juistheid en volledigheid van deze antwoorden niet geverifieerd en de score is
+        geen garantie of beoordeling van uw daadwerkelijke ISO 27001- of NIS2-conformiteit. Een
+        certificerende instelling beoordeelt onafhankelijk en op bewijsvoering.
+      </p>
+      <p>
+        Voor een onderbouwd oordeel met bewijscheck per control verwijzen wij naar de volledige
+        gap-analyse of een review door een geaccrediteerd auditor. Annex27 aanvaardt geen
+        aansprakelijkheid voor beslissingen die uitsluitend op deze indicatie zijn gebaseerd.
+      </p>
     </div>
 
     <!-- Upsell-block: pakkende "next chapter" CTA naar €795 echte gap-analyse -->
