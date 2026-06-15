@@ -389,12 +389,16 @@
     .nav-dropdown { position: relative; }
     .nav-dropdown-trigger {
       display: inline-flex; align-items: center; gap: 6px;
-      background: none; border: 0; padding: 0;
+      background: none; border: 0; padding: 7px 12px; border-radius: 8px; margin: -7px 0;
       color: var(--text-secondary); font-family: inherit;
       font-size: 0.88rem; font-weight: 500; cursor: pointer;
-      transition: color .2s;
+      transition: color .2s, background-color .2s;
     }
-    .nav-dropdown-trigger:hover { color: var(--text-primary); }
+    .nav-dropdown-trigger:hover,
+    .nav-dropdown:hover .nav-dropdown-trigger,
+    .nav-dropdown[aria-open="true"] .nav-dropdown-trigger {
+      color: var(--accent); background: var(--accent-light);
+    }
     .nav-dropdown-trigger svg { transition: transform .2s; }
     .nav-dropdown[aria-open="true"] .nav-dropdown-trigger svg { transform: rotate(180deg); }
     .nav-dropdown-panel {
