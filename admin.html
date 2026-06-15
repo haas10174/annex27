@@ -5074,7 +5074,7 @@ function renderControlRow(ctrl, gapAnswers, existingFinding, hasEvidence, aiDraf
               // Matcht dashboard-render: alleen 'effectiviteit'-dim of expliciet kind='cmmi' krijgt CMMI-labels.
               const isCmmi = qKind === 'cmmi' || dim === 'effectiviteit';
               const label = isCmmi
-                ? ({ '4': 'Geoptimaliseerd', '3': 'Geïmplementeerd', '2': 'In ontwikkeling', '1': 'Gepland', '0': 'Niet aanwezig', 'nvt': 'N.v.t.' }[val] || val)
+                ? ({ '4': 'Geoptimaliseerd', '3': 'Gedefinieerd', '2': 'Beheerd', '1': 'Initieel', '0': 'Onvolledig', 'nvt': 'N.v.t.' }[val] || val)
                 : ({ '4': 'Ja', '3': 'Grotendeels', '2': 'Deels', '1': 'Beperkt', '0': 'Nee', 'nvt': 'N.v.t.' }[val] || val);
               const dimBadge = dim ? `<span style="font-size:0.66rem;font-weight:700;color:var(--accent-light);background:rgba(13,148,136,0.10);padding:1px 7px;border-radius:99px;letter-spacing:0.04em;text-transform:uppercase;margin-right:6px;">${esc(dim)}</span>` : '';
               return `<div class="client-answer" style="display:block;">

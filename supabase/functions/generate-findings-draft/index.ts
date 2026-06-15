@@ -92,11 +92,11 @@ const MAX_IMAGES_PER_CTRL = 6;
 const MAX_TEXT_FILES_PER_CTRL = 4;
 
 const cmmiLabel: Record<string, string> = {
-  '0': 'Niet / Nee',
-  '1': 'Beperkt / Gepland',
-  '2': 'Deels / In ontwikkeling',
-  '3': 'Grotendeels / Geïmplementeerd',
-  '4': 'Volledig / Ja / Geoptimaliseerd',
+  '0': 'Nee / Onvolledig',
+  '1': 'Beperkt / Initieel',
+  '2': 'Deels / Beheerd',
+  '3': 'Grotendeels / Gedefinieerd',
+  '4': 'Ja / Geoptimaliseerd',
   'nvt': 'Niet van toepassing',
 };
 

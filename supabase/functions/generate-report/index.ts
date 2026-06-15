@@ -124,11 +124,11 @@ serve(async (req) => {
     // Unified label-set: combineert CMMI (procesmaturiteit) en boolean (binaire feiten) in één lezing.
     // De klant kiest per vraag-type een van beide schalen; rapport-LLM mag passend taalgebruik kiezen.
     const cmmiLabel: Record<string, string> = {
-      '0': 'Niet / Nee',
-      '1': 'Beperkt / Gepland',
-      '2': 'Deels / In ontwikkeling',
-      '3': 'Grotendeels / Geïmplementeerd',
-      '4': 'Volledig / Ja / Geoptimaliseerd',
+      '0': 'Nee / Onvolledig',
+      '1': 'Beperkt / Initieel',
+      '2': 'Deels / Beheerd',
+      '3': 'Grotendeels / Gedefinieerd',
+      '4': 'Ja / Geoptimaliseerd',
       'nvt': 'Niet van toepassing'
     };
     const controlMap: Record<string, CtrlAnalysis> = {};
@@ -225,9 +225,9 @@ Legenda status-tags:
 - \`[N.v.t.]\` — klant heeft control expliciet uitgezonderd
 
 Schaal per sub-vraag (klant kiest tussen ja/nee voor binaire feiten of CMMI voor procesmaturiteit):
-\`0\`=Niet / Nee · \`1\`=Beperkt / Gepland · \`2\`=Deels / In ontwikkeling · \`3\`=Grotendeels / Geïmplementeerd · \`4\`=Volledig / Ja / Geoptimaliseerd · \`nvt\`=Niet van toepassing
+\`0\`=Nee / Onvolledig · \`1\`=Beperkt / Initieel · \`2\`=Deels / Beheerd · \`3\`=Grotendeels / Gedefinieerd · \`4\`=Ja / Geoptimaliseerd · \`nvt\`=Niet van toepassing
 
-Bij rapport-formulering: gebruik passend taalgebruik per vraag. Voor "is er een beleid" past "Ja, aanwezig" / "Nee, ontbreekt"; voor "wordt periodiek gemeten" past "geoptimaliseerd" / "in ontwikkeling".
+Bij rapport-formulering: gebruik passend taalgebruik per vraag. Voor "is er een beleid" past "Ja, aanwezig" / "Nee, ontbreekt"; voor "wordt periodiek gemeten" past "geoptimaliseerd" / "beheerd".
 
 \`\`\`
 ${ctrlSummary}

@@ -4822,12 +4822,12 @@ const NIS2_BOOL_OPTIONS = [
   { v: 'nvt',         label: 'N.v.t.',       score: null }
 ];
 const NIS2_CMMI_OPTIONS = [
-  { v: '4',   label: 'Geoptimaliseerd',  score: 4 },
-  { v: '3',   label: 'Gemeten',          score: 3 },
-  { v: '2',   label: 'Gedefinieerd',     score: 2 },
-  { v: '1',   label: 'Initieel',         score: 1 },
-  { v: '0',   label: 'Niet aanwezig',    score: 0 },
-  { v: 'nvt', label: 'N.v.t.',           score: null }
+  { v: '4',   label: '4 · Geoptimaliseerd', score: 4 },
+  { v: '3',   label: '3 · Gedefinieerd',    score: 3 },
+  { v: '2',   label: '2 · Beheerd',         score: 2 },
+  { v: '1',   label: '1 · Initieel',        score: 1 },
+  { v: '0',   label: '0 · Onvolledig',      score: 0 },
+  { v: 'nvt', label: 'N.v.t.',              score: null }
 ];
 function nis2OptionsForQ(q) {
   const isCmmi = q && (q.kind === 'cmmi' || q.type === 'effectiviteit' || q.dim === 'effectiviteit');
@@ -6445,11 +6445,11 @@ mergeGapQuestions();
 let gapAnswers = {};
 // Default CMMI-schaal voor procesmaturiteit-vragen (hoe wordt iets uitgevoerd / in welke mate effectief).
 const gapOptions = [
-  { label: 'Geoptimaliseerd', value: '4', cls: 'selected', desc: 'Volledig geïmplementeerd, gedocumenteerd en continu verbeterd' },
-  { label: 'Geïmplementeerd', value: '3', cls: 'selected', desc: 'Volledig geïmplementeerd en gedocumenteerd' },
-  { label: 'In ontwikkeling', value: '2', cls: 'selected-partial', desc: 'Gedeeltelijk geïmplementeerd of niet gedocumenteerd' },
-  { label: 'Gepland', value: '1', cls: 'selected-partial', desc: 'Gepland maar nog niet gestart' },
-  { label: 'Niet aanwezig', value: '0', cls: 'selected-no', desc: 'Geen proces of activiteit aanwezig' },
+  { label: '4 · Geoptimaliseerd', value: '4', cls: 'selected', desc: 'Gemeten, geëvalueerd en continu verbeterd' },
+  { label: '3 · Gedefinieerd', value: '3', cls: 'selected', desc: 'Vastgelegd, gedocumenteerd en organisatiebreed toegepast' },
+  { label: '2 · Beheerd', value: '2', cls: 'selected-partial', desc: 'Uitgevoerd en gepland, maar nog niet als norm vastgelegd' },
+  { label: '1 · Initieel', value: '1', cls: 'selected-partial', desc: 'Ad hoc uitgevoerd, persoonsafhankelijk en niet vastgelegd' },
+  { label: '0 · Onvolledig', value: '0', cls: 'selected-no', desc: 'Geen proces of activiteit aanwezig' },
   { label: 'N.v.t.', value: 'nvt', cls: 'selected-na', desc: 'Niet van toepassing op de organisatie' }
 ];
 // Boolean-schaal voor binaire feiten (is er X / wordt Y gedaan). Zelfde score-bereik 0-4 zodat aggregaten compatibel blijven.
