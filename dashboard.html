@@ -4647,6 +4647,15 @@ function renderQuickActions() {
         <div class="quick-action-desc">Templates met uw organisatiegegevens ingevuld</div>
       </div>` : '';
 
+  // NIS2-klanten kunnen hun jaarlijkse hertoets bijboeken (herhaalaankoop, niet in standaard-checkout)
+  const hasNis2 = ['nis2','iso_nis2_bundle','readiness','admin'].includes(userPakket);
+  const hertoetsCard = hasNis2 ? `
+      <div class="quick-action" onclick="window.location.href='/bestellen.html?plan=nis2_hertoets'">
+        <div class="quick-action-icon"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><polyline points="21 3 21 9 15 9"/></svg></div>
+        <div class="quick-action-title">NIS2 Jaarlijkse Hertoets</div>
+        <div class="quick-action-desc">Laat uw NIS2-dossier opnieuw toetsen (&euro;495)</div>
+      </div>` : '';
+
   if (isReadiness) {
     el.innerHTML = `
       <div class="quick-action" onclick="showView('gapanalyse')">
@@ -4655,6 +4664,7 @@ function renderQuickActions() {
         <div class="quick-action-desc">Toets alle 93 Annex A controls</div>
       </div>
       ${beleidCard}
+      ${hertoetsCard}
       <div class="quick-action" onclick="showView('berichten')">
         <div class="quick-action-icon"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
         <div class="quick-action-title">Berichten</div>
@@ -4668,6 +4678,7 @@ function renderQuickActions() {
         <div class="quick-action-desc">Toets alle 93 Annex A controls met maturity scoring</div>
       </div>
       ${beleidCard}
+      ${hertoetsCard}
       <div class="quick-action" onclick="showView('berichten')">
         <div class="quick-action-icon"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
         <div class="quick-action-title">Berichten</div>

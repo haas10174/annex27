@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1128" height="191" viewBox="0 0 1128 191" role="img" aria-label="Annex27 — ISO 27001, NIS2 en NEN 7510 voor het MKB">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1128" y2="191" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0F766E"/>
+      <stop offset="0.55" stop-color="#0D9488"/>
+      <stop offset="1" stop-color="#14B8A6"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1128" height="191" fill="url(#bg)"/>
+
+  <!-- Rustige geometrische accenten rechts, weg van de tekst en de logo-veilige zone linksonder -->
+  <g fill="#FFFFFF" opacity="0.06">
+    <circle cx="1010" cy="40" r="120"/>
+    <circle cx="1090" cy="150" r="70"/>
+  </g>
+  <g stroke="#FFFFFF" stroke-width="1.5" opacity="0.10" fill="none">
+    <rect x="120" y="-30" width="120" height="120" rx="20" transform="rotate(18 180 30)"/>
+  </g>
+
+  <!-- Wordmark -->
+  <text x="564" y="58" text-anchor="middle" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="24" font-weight="800" letter-spacing="-0.5" fill="#FFFFFF">annex<tspan fill="#CCFBF1">27</tspan></text>
+
+  <!-- Hoofdkop -->
+  <text x="564" y="105" text-anchor="middle" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="31" font-weight="800" letter-spacing="-0.6" fill="#FFFFFF">ISO 27001, NIS2 en NEN 7510 voor het MKB</text>
+
+  <!-- Subkop -->
+  <text x="564" y="140" text-anchor="middle" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="17" font-weight="500" letter-spacing="0.2" fill="#EAFBF7" opacity="0.92">Eenmalig geregeld, met een Lead Auditor &#183; annex27.nl</text>
+</svg>
