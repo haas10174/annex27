@@ -446,12 +446,18 @@
       </div>
     </div>
 
+    <style>
+      .plan-group-label{font-size:0.72rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-muted,#94A3B8);margin:22px 0 10px;}
+      .plan-group-label:first-of-type{margin-top:8px;}
+    </style>
+
+    <div class="plan-group-label">Kies uw startpunt</div>
+
     <div class="plan-option selected featured" onclick="selectPlan(this, 'gap', 795, 'eenmalig')">
       <div class="plan-radio"></div>
       <div style="flex:1;">
         <div class="plan-name">Gap-analyse <span class="plan-popular-tag">Meest gekozen</span></div>
-        <div class="plan-desc">Alle 93 Annex A controls + clausules 4-10, met bewijsvoering en Lead Auditor review. Past zich aan uw sector aan — inclusief NEN 7510 (zorg), BIO (overheid) en AVG-koppeling.</div>
-        <div class="plan-market">Markt-prijs consultancy: <s>&euro;2.500&ndash;&euro;3.000</s></div>
+        <div class="plan-desc">Volledige ISO 27001 gap-analyse met Lead Auditor review en sector-mapping (NEN 7510 of BIO).</div>
       </div>
       <div class="plan-price">&euro;795 <span class="plan-period">eenmalig</span></div>
     </div>
@@ -460,41 +466,43 @@
       <div class="plan-radio"></div>
       <div style="flex:1;">
         <div class="plan-name">NIS2 Readiness</div>
-        <div class="plan-desc">39 vragen op 10 NIS2-maatregelen (Art. 21) + bestuursverklaring + meldingsplicht-templates BE/NL + bestuur-kennispakket</div>
-        <div class="plan-market">Markt-prijs NIS2-traject: <s>&euro;3.500&ndash;&euro;6.000</s></div>
+        <div class="plan-desc">NIS2 Art. 21 met bestuursverklaring en meldingsplicht-templates voor NL en BE.</div>
       </div>
       <div class="plan-price">&euro;595 <span class="plan-period">eenmalig</span></div>
-    </div>
-
-    <div class="plan-option" onclick="selectPlan(this, 'nis2_hertoets', 495, 'per jaar')">
-      <div class="plan-radio"></div>
-      <div style="flex:1;">
-        <div class="plan-name">NIS2 Jaarlijkse Hertoets</div>
-        <div class="plan-desc">Voor wie de NIS2 Readiness al deed. Uw Lead Auditor toetst uw dossier opnieuw, verwerkt wijzigingen in wet, scope of leveranciers en levert een geactualiseerd rapport plus bestuursverklaring. U boekt zelf bij wanneer u wilt, er is geen automatische verlenging.</div>
-        <div class="plan-market">Aanbevolen &eacute;&eacute;n keer per jaar of na een grote wijziging</div>
-      </div>
-      <div class="plan-price">&euro;495 <span class="plan-period">per jaar</span></div>
     </div>
 
     <div class="plan-option" onclick="selectPlan(this, 'iso_nis2_bundle', 1190, 'eenmalig')">
       <div class="plan-radio"></div>
       <div style="flex:1;">
         <div class="plan-name">Bundel ISO 27001 + NIS2 <span class="plan-popular-tag">&euro;200 voordeel</span></div>
-        <div class="plan-desc">Gap-analyse plus NIS2 Readiness in &eacute;&eacute;n traject. Voor wie beide aanvliegt vanaf nul.</div>
-        <div class="plan-market">Los: &euro;1.390 &middot; bundel: &euro;1.190</div>
+        <div class="plan-desc">Gap-analyse en NIS2 Readiness samen in &eacute;&eacute;n traject.</div>
       </div>
       <div class="plan-price">&euro;1.190 <span class="plan-period">eenmalig</span></div>
     </div>
+
+    <div class="plan-group-label">Uitbreiding</div>
 
     <div class="plan-option" onclick="selectPlan(this, 'beleid', 395, 'eenmalig')">
       <div class="plan-radio"></div>
       <div style="flex:1;">
         <div class="plan-name">Beleidspakket</div>
-        <div class="plan-desc">29 ISO 27001 beleidsdocumenten + werkinstructies, auto-gevuld met uw klantdata, sector-specifiek en gevalideerd door Lead Auditor</div>
-        <div class="plan-market">Markt-prijs templates: <s>&euro;800&ndash;&euro;1.500</s></div>
+        <div class="plan-desc">29 ISO 27001 beleidsdocumenten en werkinstructies, auto-gevuld met uw gegevens.</div>
       </div>
       <div class="plan-price">&euro;395 <span class="plan-period">eenmalig</span></div>
     </div>
+
+    <!-- NIS2 Jaarlijkse Hertoets: herhaalaankoop voor bestaande klanten. Verborgen in de
+         standaard-checkout; verschijnt alleen via dashboard-deeplink ?plan=nis2_hertoets. -->
+    <div class="plan-option" id="hertoetsOption" style="display:none;" onclick="selectPlan(this, 'nis2_hertoets', 495, 'per jaar')">
+      <div class="plan-radio"></div>
+      <div style="flex:1;">
+        <div class="plan-name">NIS2 Jaarlijkse Hertoets</div>
+        <div class="plan-desc">Hertoets van uw NIS2-dossier door de Lead Auditor. U boekt zelf bij, geen automatische verlenging.</div>
+      </div>
+      <div class="plan-price">&euro;495 <span class="plan-period">per jaar</span></div>
+    </div>
+
+    <div class="plan-group-label">Maatwerk</div>
 
     <a href="mailto:info@annex27.nl?subject=Pre-audit%20Review%20%E2%80%94%20intake-aanvraag&body=Hallo%20Annex27%2C%0A%0AIk%20ben%20ge%C3%AFnteresseerd%20in%20een%20Pre-audit%20Review%20en%20zou%20graag%20een%20intake-gesprek%20plannen.%0A%0ABedrijf%3A%20%0AContactpersoon%3A%20%0ATelefoon%3A%20%0AKorte%20toelichting%20op%20de%20vraag%3A%20%0A%0AMet%20vriendelijke%20groet%2C" class="plan-option plan-contact" style="text-decoration:none;color:inherit;cursor:pointer;">
       <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#0D9488" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
@@ -783,6 +791,19 @@
     document.getElementById('orderProduct').textContent = el.querySelector('.plan-name').textContent;
     recomputeSummary();
   }
+
+  // Dashboard-deeplink: toon + selecteer de NIS2 Jaarlijkse Hertoets alleen als hij
+  // expliciet wordt opgevraagd (?plan=nis2_hertoets). Buiten dat blijft hij verborgen.
+  (function handleHertoetsDeeplink() {
+    try {
+      const plan = new URLSearchParams(window.location.search).get('plan');
+      if (plan !== 'nis2_hertoets') return;
+      document.addEventListener('DOMContentLoaded', () => {
+        const opt = document.getElementById('hertoetsOption');
+        if (opt) { opt.style.display = ''; selectPlan(opt, 'nis2_hertoets', 495, 'per jaar'); }
+      });
+    } catch (e) { /* geen deeplink — niets doen */ }
+  })();
 
   // ===== Country / type handlers =====
   document.addEventListener('DOMContentLoaded', () => {
