@@ -70,17 +70,20 @@ serve(async (req) => {
       return new Response(JSON.stringify({ error: 'Te veel verzoeken. Probeer over een uur opnieuw.' }), { status: 429, headers });
     }
 
-    // Verifieer dat lead recent in waitlist is gezet (laatste 5 min) — voorkomt arbitrary mail-blast
+    // Verifieer dat lead recent in waitlist is gezet (laatste 5 min) — voorkomt arbitrary mail-blast.
+    // Haal meteen de volledige row op zodat we de interne warme-lead-notificatie kunnen verrijken.
     const fiveMinAgo = new Date(Date.now() - 5 * 60 * 1000).toISOString();
     const { data: recent } = await supabase
       .from('waitlist')
-      .select('id')
+      .select('id, naam, bedrijf, bericht, created_at')
       .eq('email', email)
       .gte('created_at', fiveMinAgo)
+      .order('created_at', { ascending: false })
       .limit(1);
     if (!recent || recent.length === 0) {
       return new Response(JSON.stringify({ error: 'Geen recente quickscan-lead gevonden voor dit adres' }), { status: 404, headers });
     }
+    const leadRow = recent[0];
 
     // SMTP config
     const host = Deno.env.get('HOSTNET_SMTP_HOST');
