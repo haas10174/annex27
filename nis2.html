@@ -228,8 +228,131 @@
     <div class="callout" style="background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:10px;padding:18px 22px;margin-top:18px;">
       <strong style="color:var(--text-primary);">SaaS / cloud?</strong> Klassificatie hangt af van klantenkring en kritikaliteit. Doe de quickscan om uw status te checken.
     </div>
+
+    <!-- Interactieve beslishulp: sector + omvang → indicatieve NIS2-status -->
+    <div class="nis2-check" id="nis2Check">
+      <div class="nis2-check-head">
+        <h3>Doe de snelle check</h3>
+        <p>Twee vragen, een indicatie van uw NIS2-status. Geen account nodig.</p>
+      </div>
+
+      <div class="nis2-q">
+        <label for="nis2Sector">1. In welke sector valt uw hoofdactiviteit?</label>
+        <select id="nis2Sector">
+          <option value="">Kies uw sector&hellip;</option>
+          <optgroup label="Essentiële sectoren">
+            <option value="ess">Energie</option>
+            <option value="ess">Vervoer (lucht, spoor, water, weg)</option>
+            <option value="ess">Bankwezen</option>
+            <option value="ess">Financiële marktinfrastructuur</option>
+            <option value="ess">Gezondheidszorg</option>
+            <option value="ess">Drinkwater</option>
+            <option value="ess">Afvalwater</option>
+            <option value="ess">Digitale infrastructuur (datacenters, DNS, cloud)</option>
+            <option value="ess">Beheer van ICT-diensten (B2B)</option>
+            <option value="ess">Overheidsdiensten</option>
+            <option value="ess">Ruimtevaart</option>
+          </optgroup>
+          <optgroup label="Belangrijke sectoren">
+            <option value="bel">Post- en koeriersdiensten</option>
+            <option value="bel">Afvalstoffenbeheer</option>
+            <option value="bel">Chemische stoffen (productie, distributie)</option>
+            <option value="bel">Levensmiddelen (productie, verwerking, distributie)</option>
+            <option value="bel">Vervaardiging (medische apparaten, elektronica, machines, voertuigen)</option>
+            <option value="bel">Digitale aanbieders (marktplaatsen, zoekmachines, social platforms)</option>
+            <option value="bel">Onderzoek</option>
+          </optgroup>
+          <option value="geen">Geen van deze / weet ik niet</option>
+        </select>
+      </div>
+
+      <div class="nis2-q">
+        <label>2. Heeft u 50 of meer medewerkers, óf meer dan €10 miljoen jaaromzet?</label>
+        <div class="nis2-opts" role="radiogroup" aria-label="Omvang">
+          <button type="button" class="nis2-opt" data-size="ja">Ja</button>
+          <button type="button" class="nis2-opt" data-size="nee">Nee</button>
+          <button type="button" class="nis2-opt" data-size="weet-niet">Weet ik niet</button>
+        </div>
+      </div>
+
+      <div class="nis2-result" id="nis2Result" hidden>
+        <div class="nis2-result-tag" id="nis2ResultTag"></div>
+        <p id="nis2ResultText"></p>
+        <a href="/gap-analyse" class="nis2-result-cta" data-ga-event="quickscan_started" data-ga-cta-location="nis2_check">
+          Check uw status met de gratis quickscan
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <p class="nis2-result-note">Indicatie op basis van uw antwoorden, geen juridisch oordeel. Uitzonderingen (zoals enige aanbieder in een lidstaat of kritieke functie) kunnen u alsnog onder NIS2 brengen, ook onder de omvangsdrempel.</p>
+      </div>
+    </div>
   </div>
 </section>
+
+<style>
+  .nis2-check{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:28px;margin-top:22px;}
+  .nis2-check-head h3{font-size:1.15rem;color:var(--text-primary);margin:0 0 4px;}
+  .nis2-check-head p{color:var(--text-secondary);font-size:0.92rem;margin:0 0 20px;}
+  .nis2-q{margin-bottom:20px;}
+  .nis2-q label{display:block;font-weight:600;color:var(--text-primary);font-size:0.95rem;margin-bottom:10px;}
+  .nis2-q select{width:100%;padding:13px 14px;border:1px solid var(--border);border-radius:10px;font-size:0.95rem;font-family:inherit;color:var(--text-primary);background:#fff;cursor:pointer;}
+  .nis2-q select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(13,148,136,0.12);}
+  .nis2-opts{display:flex;gap:10px;flex-wrap:wrap;}
+  .nis2-opt{flex:1;min-width:96px;padding:13px 16px;border:1px solid var(--border);border-radius:10px;background:#fff;font-size:0.95rem;font-weight:600;color:var(--text-secondary);cursor:pointer;font-family:inherit;transition:all .15s;}
+  .nis2-opt:hover{border-color:var(--accent);color:var(--accent);}
+  .nis2-opt.active{background:var(--accent);border-color:var(--accent);color:#fff;}
+  .nis2-result{margin-top:8px;padding:22px;border-radius:12px;background:#FAF9F6;border:1px solid var(--border);border-left:3px solid var(--accent);}
+  .nis2-result-tag{display:inline-block;font-size:0.72rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--accent);margin-bottom:8px;}
+  .nis2-result p{color:var(--text-primary);font-size:1rem;line-height:1.6;margin:0 0 16px;}
+  .nis2-result-cta{display:inline-flex;align-items:center;gap:8px;padding:13px 22px;background:var(--accent);color:#fff;text-decoration:none;border-radius:10px;font-weight:700;font-size:0.92rem;}
+  .nis2-result-cta:hover{background:var(--accent-hover,#0F766E);}
+  .nis2-result-note{font-size:0.8rem!important;color:var(--text-secondary)!important;margin:14px 0 0!important;line-height:1.5!important;}
+  @media (max-width:600px){.nis2-opt{flex:1 1 100%;}}
+</style>
+<script>
+(function(){
+  var sectorEl = document.getElementById('nis2Sector');
+  var resultEl = document.getElementById('nis2Result');
+  var tagEl = document.getElementById('nis2ResultTag');
+  var textEl = document.getElementById('nis2ResultText');
+  var size = null;
+  var opts = document.querySelectorAll('.nis2-opt');
+
+  function evaluate(){
+    var sector = sectorEl.value;
+    if(!sector || !size) return;
+    var tag, text;
+    if(size === 'weet-niet'){
+      tag = 'Eerst uw omvang bepalen';
+      text = 'Of u onder NIS2 valt hangt sterk af van uw omvang. Tel uw medewerkers en jaaromzet na, of doe de quickscan, dan rekenen we het met u door.';
+    } else if(sector === 'geen'){
+      tag = 'Waarschijnlijk niet direct';
+      text = 'Uw hoofdactiviteit lijkt niet in een NIS2-sector te vallen. Let op: levert u aan een NIS2-plichtige organisatie, dan kan supply-chain-druk u alsnog dezelfde eisen opleggen.';
+    } else if(size === 'nee'){
+      tag = 'Mogelijk uitgezonderd op omvang';
+      text = 'Uw sector valt onder NIS2, maar onder de drempel van 50 medewerkers of €10M omzet bent u in principe uitgezonderd. Uitzonderingen kunnen u toch verplichten, dus een check is verstandig.';
+    } else if(sector === 'ess'){
+      tag = 'Waarschijnlijk essentiële entiteit';
+      text = 'Uw sector en omvang wijzen op een essentiële entiteit: de strengste NIS2-eisen, toezicht vooraf en boetes tot €10M of 2% van de wereldwijde omzet.';
+    } else {
+      tag = 'Waarschijnlijk belangrijke entiteit';
+      text = 'Uw sector en omvang wijzen op een belangrijke entiteit: de volledige NIS2-zorgplicht, toezicht achteraf en boetes tot €7M of 1,4% van de wereldwijde omzet.';
+    }
+    tagEl.textContent = tag;
+    textEl.textContent = text;
+    resultEl.hidden = false;
+  }
+
+  sectorEl.addEventListener('change', evaluate);
+  opts.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      opts.forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+      size = btn.getAttribute('data-size');
+      evaluate();
+    });
+  });
+})();
+</script>
 
 <section class="alt">
   <div class="container">
