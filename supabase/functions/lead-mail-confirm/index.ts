@@ -136,6 +136,52 @@ Annex27`;
       connection: { hostname: host, port, tls: port === 465, auth: { username: smtpUser, password: smtpPass } },
     });
     await client.send({ from: `Annex27 <${smtpUser}>`, to: email, subject, content: text, html });
+
+    // Interne warme-lead-notificatie naar de Lead Auditor, zodat hij persoonlijk kan opvolgen.
+    // Verrijkt met sector, score en de volledige quickscan-antwoorden uit de waitlist-row.
+    // Faalt nooit de klant-flow: bij een fout loggen we alleen.
+    try {
+      const notifyTo = (Deno.env.get('ADMIN_NOTIFY_EMAIL') || 'info@annex27.nl').trim();
+      const leadNaam = String(leadRow?.naam || naam || '').trim();
+      const leadBedrijf = String(leadRow?.bedrijf || bedrijf || '').trim();
+      const antwoorden = String(leadRow?.bericht || '').trim();
+      const wie = leadBedrijf || leadNaam || email;
+      const internSubject = `Warme lead: ${wie} — quickscan ${score || '?'}%${sectorLabel ? ` (${sectorLabel})` : ''}`;
+
+      const internText =
+`Nieuwe afgeronde quickscan. Warm opvolgen.
+
+Bedrijf:  ${leadBedrijf || '(niet opgegeven)'}
+Naam:     ${leadNaam || '(niet opgegeven)'}
+E-mail:   ${email}
+Sector:   ${sectorLabel || '(onbekend)'}
+Score:    ${score ? score + '%' : '(onbekend)'}
+
+Quickscan-antwoorden:
+${antwoorden || '(geen detail opgeslagen)'}
+
+Direct reageren: mailto:${email}`;
+
+      const internHtml =
+`<div style="font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;max-width:620px;margin:0 auto;color:#0F172A;line-height:1.55;">
+  <p style="margin:0 0 14px;font-weight:700;font-size:1.05rem;">Warme lead — afgeronde quickscan</p>
+  <table style="border-collapse:collapse;font-size:0.92rem;margin:0 0 18px;">
+    <tr><td style="padding:3px 14px 3px 0;color:#475569;">Bedrijf</td><td style="padding:3px 0;font-weight:600;">${escapeHtml(leadBedrijf || '(niet opgegeven)')}</td></tr>
+    <tr><td style="padding:3px 14px 3px 0;color:#475569;">Naam</td><td style="padding:3px 0;font-weight:600;">${escapeHtml(leadNaam || '(niet opgegeven)')}</td></tr>
+    <tr><td style="padding:3px 14px 3px 0;color:#475569;">E-mail</td><td style="padding:3px 0;"><a href="mailto:${escapeHtml(email)}" style="color:#0D9488;">${escapeHtml(email)}</a></td></tr>
+    <tr><td style="padding:3px 14px 3px 0;color:#475569;">Sector</td><td style="padding:3px 0;font-weight:600;">${escapeHtml(sectorLabel || '(onbekend)')}</td></tr>
+    <tr><td style="padding:3px 14px 3px 0;color:#475569;">Score</td><td style="padding:3px 0;font-weight:600;">${score ? escapeHtml(score) + '%' : '(onbekend)'}</td></tr>
+  </table>
+  <p style="margin:0 0 6px;font-weight:600;font-size:0.9rem;color:#334155;">Quickscan-antwoorden</p>
+  <pre style="white-space:pre-wrap;word-break:break-word;background:#F8FAFC;border:1px solid #E5E7EB;border-radius:8px;padding:12px 14px;font-size:0.82rem;color:#334155;margin:0 0 18px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;">${escapeHtml(antwoorden || '(geen detail opgeslagen)')}</pre>
+  <p style="margin:0;"><a href="mailto:${escapeHtml(email)}" style="display:inline-block;background:#0D9488;color:#fff;padding:11px 20px;border-radius:8px;text-decoration:none;font-weight:600;">Reageer naar deze lead →</a></p>
+</div>`;
+
+      await client.send({ from: `Annex27 leads <${smtpUser}>`, to: notifyTo, replyTo: email, subject: internSubject, content: internText, html: internHtml });
+    } catch (notifyErr) {
+      console.error('warm-lead notify error (niet-fataal):', notifyErr);
+    }
+
     await client.close();
 
     // Log voor audit
