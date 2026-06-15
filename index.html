@@ -406,6 +406,10 @@
       transition: opacity .15s, visibility .15s;
       z-index: 120;
     }
+    /* Onzichtbare brug over het 14px-gat zodat de hover niet wegvalt bij omlaag bewegen */
+    .nav-dropdown-panel::before {
+      content: ""; position: absolute; left: 0; right: 0; top: -16px; height: 16px;
+    }
     .nav-dropdown[aria-open="true"] .nav-dropdown-panel,
     .nav-dropdown:hover .nav-dropdown-panel {
       opacity: 1; visibility: visible; pointer-events: auto;
@@ -3491,6 +3495,25 @@
         hamburger.classList.remove('active');
         hamburger.setAttribute('aria-expanded', 'false');
       });
+    });
+  }
+
+  // Normen-dropdown: klik/touch-toggle (hover werkt al op desktop via CSS)
+  const normenTrigger = document.getElementById('navNormenTrigger');
+  const normenDropdown = normenTrigger ? normenTrigger.closest('.nav-dropdown') : null;
+  if (normenTrigger && normenDropdown) {
+    normenTrigger.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const isOpen = normenDropdown.getAttribute('aria-open') === 'true';
+      normenDropdown.setAttribute('aria-open', isOpen ? 'false' : 'true');
+      normenTrigger.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
+    });
+    document.addEventListener('click', (e) => {
+      if (!normenDropdown.contains(e.target)) {
+        normenDropdown.setAttribute('aria-open', 'false');
+        normenTrigger.setAttribute('aria-expanded', 'false');
+      }
     });
   }
 
