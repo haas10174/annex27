@@ -10,6 +10,7 @@ import { sendPaymentConfirmation } from './send-mail.ts';
 const PLAN_TO_PAKKET: Record<string, string> = {
   'gap': 'gap',
   'nis2': 'nis2',
+  'nis2_hertoets': 'nis2',
   'iso_nis2_bundle': 'iso_nis2_bundle',
   'beleid': 'beleid',
   'preaudit': 'admin',
