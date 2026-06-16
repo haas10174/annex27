@@ -17,10 +17,11 @@
   <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-    :root{--bg:#FAF9F6;--surface:#FFF;--bg-warm:#F5F3EF;--border:#E5E5E5;--border-light:#F0F0F0;--text-primary:#0F172A;--text-secondary:#475569;--text-muted:#94A3B8;--accent:#0D9488;--accent-hover:#0F766E;--accent-light:#CCFBF1;--dark:#0c0f1a;--success:#059669;--warning:#D97706;--danger:#dc2626;--radius:10px;--radius-lg:16px;}
+    :root{--bg:#FAF9F6;--surface:#FFF;--bg-warm:#F5F3EF;--border:#E5E5E5;--border-light:#F0F0F0;--text-primary:#0F172A;--text-secondary:#475569;--text-muted:#64748B;--accent:#0D9488;--accent-hover:#0F766E;--accent-light:#CCFBF1;--dark:#0c0f1a;--success:#059669;--warning:#D97706;--danger:#dc2626;--radius:10px;--radius-lg:16px;}
+    a:focus-visible,button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible,summary:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
     body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text-secondary);line-height:1.7;-webkit-font-smoothing:antialiased;}
     .container{max-width:1080px;margin:0 auto;padding:0 24px;}
-    nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(250,250,250,0.85);backdrop-filter:blur(16px);border-bottom:1px solid var(--border-light);height:64px;display:flex;align-items:center;padding:0 5%;}
+    nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(250,249,246,0.85);backdrop-filter:blur(16px);border-bottom:1px solid var(--border-light);height:64px;display:flex;align-items:center;padding:0 5%;}
     .nav-inner{display:flex;align-items:center;justify-content:space-between;width:100%;max-width:1120px;margin:0 auto;}
     .nav-logo{font-family:'Sora',sans-serif;font-size:1.4rem;font-weight:700;color:var(--text-primary);text-decoration:none;letter-spacing:-0.03em;}
     .nav-logo span{color:var(--accent);}
@@ -93,10 +94,10 @@
     .control-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px;flex-wrap:wrap;}
     .control-title{font-family:'Sora',sans-serif;font-size:0.96rem;font-weight:700;color:var(--text-primary);}
     .control-status{display:inline-block;padding:3px 10px;border-radius:99px;font-size:0.72rem;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;white-space:nowrap;}
-    .status-ok{background:rgba(5,150,105,0.1);color:var(--success);}
-    .status-gap{background:rgba(217,119,6,0.1);color:var(--warning);}
-    .status-miss{background:rgba(220,38,38,0.08);color:var(--danger);}
-    .status-partial{background:rgba(234,179,8,0.12);color:#a16207;}
+    .status-ok{background:rgba(5,150,105,0.1);color:#047857;}
+    .status-gap{background:rgba(217,119,6,0.1);color:#B45309;}
+    .status-miss{background:rgba(220,38,38,0.08);color:#B91C1C;}
+    .status-partial{background:rgba(234,179,8,0.12);color:#854d0e;}
     .control-body{font-size:0.88rem;color:var(--text-secondary);}
     .control-body strong{color:var(--text-primary);}
     .control-action{margin-top:8px;padding:10px 12px;background:var(--surface);border-left:3px solid var(--accent);border-radius:6px;font-size:0.86rem;}
@@ -140,11 +141,12 @@
     .evidence-file{display:inline-flex;align-items:center;gap:6px;font-size:0.8rem;color:var(--accent);font-family:monospace;background:var(--accent-light);padding:3px 8px;border-radius:6px;margin:4px 0 6px;}
     .evidence-file.missing{color:var(--text-muted);background:var(--border-light);font-style:italic;}
     .evidence-review{font-size:0.84rem;color:var(--text-secondary);line-height:1.6;}
-    .evidence-review .good{color:var(--success);}
-    .evidence-review .bad{color:var(--danger);}
+    .evidence-review .good{color:#047857;}
+    .evidence-review .bad{color:#B91C1C;}
+    .visually-hidden{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
 
     .matrix-table{width:100%;border-collapse:collapse;font-size:0.8rem;margin:10px 0;}
-    .matrix-table th{background:var(--dark);color:white;padding:8px 10px;text-align:left;font-size:0.72rem;letter-spacing:0.06em;text-transform:uppercase;font-weight:700;position:sticky;top:0;}
+    .matrix-table th{background:var(--dark);color:white;padding:8px 10px;text-align:left;font-size:0.72rem;letter-spacing:0.06em;text-transform:uppercase;font-weight:700;position:sticky;top:64px;}
     .matrix-table td{padding:7px 10px;border-bottom:1px solid var(--border-light);vertical-align:middle;}
     .matrix-table tr.group-head td{background:var(--bg-warm);font-family:'Sora',sans-serif;font-weight:700;color:var(--text-primary);padding:10px;border-top:2px solid var(--border);}
     .matrix-table .cid{font-family:monospace;font-weight:600;color:var(--text-primary);white-space:nowrap;}
@@ -470,10 +472,10 @@
             </div>
             <span class="evidence-file">📄 informatiebeveiligingsbeleid-draft.pdf &middot; 8 pag &middot; v0.3</span>
             <div class="evidence-review">
-              <span class="good">✓</span> Scope en toepassingsgebied zijn helder beschreven.
-              <span class="good">✓</span> Rollen (CISO, directie, medewerker) benoemd.<br>
-              <span class="bad">✗</span> Geen management-goedkeuring in het document zichtbaar.
-              <span class="bad">✗</span> Geen versiebeheer of review-datum (clausule 5.2 vereist jaarlijkse review).
+              <span class="good" aria-hidden="true">✓</span><span class="visually-hidden">Voldoet: </span> Scope en toepassingsgebied zijn helder beschreven.
+              <span class="good" aria-hidden="true">✓</span><span class="visually-hidden">Voldoet: </span> Rollen (CISO, directie, medewerker) benoemd.<br>
+              <span class="bad" aria-hidden="true">✗</span><span class="visually-hidden">Voldoet niet: </span> Geen management-goedkeuring in het document zichtbaar.
+              <span class="bad" aria-hidden="true">✗</span><span class="visually-hidden">Voldoet niet: </span> Geen versiebeheer of review-datum (clausule 5.2 vereist jaarlijkse review).
             </div>
           </div>
           <div class="evidence-row">
@@ -483,9 +485,9 @@
             </div>
             <span class="evidence-file">📊 asset-register.xlsx &middot; 47 assets &middot; owner: J. Bakker</span>
             <div class="evidence-review">
-              <span class="good">✓</span> 47 assets met classificatie, eigenaar en kritikaliteit.
-              <span class="good">✓</span> Laatste update 2 weken geleden.<br>
-              <span class="bad">✗</span> Cloud-subscriptions (AWS, SaaS-tools) ontbreken als aparte categorie.
+              <span class="good" aria-hidden="true">✓</span><span class="visually-hidden">Voldoet: </span> 47 assets met classificatie, eigenaar en kritikaliteit.
+              <span class="good" aria-hidden="true">✓</span><span class="visually-hidden">Voldoet: </span> Laatste update 2 weken geleden.<br>
+              <span class="bad" aria-hidden="true">✗</span><span class="visually-hidden">Voldoet niet: </span> Cloud-subscriptions (AWS, SaaS-tools) ontbreken als aparte categorie.
             </div>
           </div>
           <div class="evidence-row">
@@ -505,9 +507,9 @@
             </div>
             <span class="evidence-file">📋 leveranciers-overzicht.docx &middot; 6 leveranciers</span>
             <div class="evidence-review">
-              <span class="good">✓</span> 6 kritieke leveranciers benoemd met contactpersoon.<br>
-              <span class="bad">✗</span> Geen DPA's bijgevoegd. Quickscan noemt 14 SaaS-tools &middot; dekking ~43%.
-              <span class="bad">✗</span> Geen tiering (kritikaliteit), geen evaluatie-frequentie.
+              <span class="good" aria-hidden="true">✓</span><span class="visually-hidden">Voldoet: </span> 6 kritieke leveranciers benoemd met contactpersoon.<br>
+              <span class="bad" aria-hidden="true">✗</span><span class="visually-hidden">Voldoet niet: </span> Geen DPA's bijgevoegd. Quickscan noemt 14 SaaS-tools &middot; dekking ~43%.
+              <span class="bad" aria-hidden="true">✗</span><span class="visually-hidden">Voldoet niet: </span> Geen tiering (kritikaliteit), geen evaluatie-frequentie.
             </div>
           </div>
         </div>

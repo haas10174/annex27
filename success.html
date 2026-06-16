@@ -20,14 +20,15 @@
   <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    a:focus-visible,button:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
     :root {
       --bg: #FAF9F6;
       --surface: #FFFFFF;
-      --border: #E8E4DC;
-      --border-light: #EFEBE3;
+      --border: #E5E5E5;
+      --border-light: #F0F0F0;
       --text-primary: #0F172A;
       --text-secondary: #475569;
-      --text-muted: #94A3B8;
+      --text-muted: #64748B;
       --accent: #0D9488;
       --accent-hover: #0F766E;
       --accent-light: #CCFBF1;
@@ -218,7 +219,7 @@
 
   <div class="hero-card">
     <div class="check-icon">
-      <svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>
     </div>
     <h1>Betaling ontvangen, welkom bij Annex27.</h1>
     <p class="lede">Uw bestelling is bevestigd. Hieronder ziet u precies wat er nu gebeurt en wat u alvast kunt doen om straks zonder hindernissen te starten.</p>
@@ -255,16 +256,16 @@
     <h2>Bereid u alvast voor</h2>
     <p class="prep-sub">Klein verschil tussen klanten die in 1 sessie klaar zijn en klanten die in 3 sessies klaar zijn: voorbereiding. Vijf dingen die u nu al kunt verzamelen.</p>
     <ul class="prep-list">
-      <li><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/></svg><span><strong>Bestaande beleidsdocumenten:</strong> informatiebeveiligingsbeleid, AUP, wachtwoordbeleid, BCP, indien u die heeft. PDF of Word.</span></li>
-      <li><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6v6H9z"/></svg><span><strong>Asset-overzicht:</strong> export uit MDM/CMDB, of een spreadsheet met servers/laptops/SaaS-tools.</span></li>
-      <li><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M16 14l-4-2.5V8"/></svg><span><strong>Datum laatste incident-evaluatie of management-review:</strong> toont actieve governance.</span></li>
-      <li><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 11h-6M19 8v6"/></svg><span><strong>Toegangsmatrix of access-review:</strong> wie heeft toegang tot wat? Een screenshot uit IAM-tool of een Excel werkt.</span></li>
-      <li><svg viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="14" rx="2"/><path d="M6 10h12M6 14h8"/></svg><span><strong>Leveranciersregister:</strong> alle SaaS/cloud-providers + verwerkersovereenkomsten. Vooral relevant voor NIS2 supply-chain (Art. 21 maatregel 4).</span></li>
+      <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/></svg><span><strong>Bestaande beleidsdocumenten:</strong> informatiebeveiligingsbeleid, AUP, wachtwoordbeleid, BCP, indien u die heeft. PDF of Word.</span></li>
+      <li><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6v6H9z"/></svg><span><strong>Asset-overzicht:</strong> export uit MDM/CMDB, of een spreadsheet met servers/laptops/SaaS-tools.</span></li>
+      <li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M16 14l-4-2.5V8"/></svg><span><strong>Datum laatste incident-evaluatie of management-review:</strong> toont actieve governance.</span></li>
+      <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 11h-6M19 8v6"/></svg><span><strong>Toegangsmatrix of access-review:</strong> wie heeft toegang tot wat? Een screenshot uit IAM-tool of een Excel werkt.</span></li>
+      <li><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="6" width="20" height="14" rx="2"/><path d="M6 10h12M6 14h8"/></svg><span><strong>Leveranciersregister:</strong> alle SaaS/cloud-providers + verwerkersovereenkomsten. Vooral relevant voor NIS2 supply-chain (Art. 21 maatregel 4).</span></li>
     </ul>
   </div>
 
   <div class="reassure">
-    <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
     <div class="reassure-body">
       <strong>Geen druk, geen lock-in.</strong> Uw data is van u en blijft EU-only opgeslagen (zie <a href="/trust" style="color:var(--accent);text-decoration:underline;">Trust &amp; Security</a>). U bepaalt het tempo. Vragen tussendoor? Mail uw Lead Auditor direct op <a href="mailto:info@annex27.nl" style="color:var(--accent);text-decoration:underline;">info@annex27.nl</a>. Antwoord binnen één werkdag.
     </div>
@@ -273,7 +274,7 @@
   <div class="links">
     <a href="/portal" class="btn btn-primary">
       Direct inloggen
-      <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
     </a>
     <a href="/werkwijze" class="btn btn-ghost">Bekijk volledige werkwijze</a>
     <a href="/rapport-voorbeeld" class="btn btn-ghost">Voorbeeldrapport bekijken</a>

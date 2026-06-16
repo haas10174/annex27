@@ -19,7 +19,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-    :root{--bg:#FAF9F6;--surface:#FFF;--border:#E5E5E5;--border-light:#F0F0F0;--text-primary:#0F172A;--text-secondary:#475569;--text-muted:#94A3B8;--accent:#0D9488;--accent-light:#CCFBF1;--dark:#0c0f1a;--radius:10px;--radius-lg:16px;}
+    :root{--bg:#FAF9F6;--surface:#FFF;--border:#E5E5E5;--border-light:#F0F0F0;--text-primary:#0F172A;--text-secondary:#475569;--text-muted:#64748B;--accent:#0D9488;--accent-light:#CCFBF1;--dark:#0c0f1a;--radius:10px;--radius-lg:16px;}
+    a:focus-visible,button:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
     body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text-secondary);line-height:1.7;-webkit-font-smoothing:antialiased;}
     .container{max-width:1080px;margin:0 auto;padding:0 24px;}
     nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(250,250,250,0.85);backdrop-filter:blur(16px);border-bottom:1px solid var(--border-light);height:64px;display:flex;align-items:center;padding:0 5%;}
@@ -41,7 +42,7 @@
     .post:hover{border-color:var(--accent);box-shadow:0 8px 28px rgba(13,148,136,0.08);}
     .post a{text-decoration:none;color:inherit;display:flex;flex-direction:column;height:100%;}
     .post-cover{height:140px;background:linear-gradient(135deg,#0c0f1a 0%,#1e293b 100%);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.85);position:relative;overflow:hidden;}
-    .post-cover::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 20% 50%,rgba(20,184,166,0.18) 0%,transparent 60%);}
+    .post-cover::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 20% 50%,rgba(13,148,136,0.18) 0%,transparent 60%);}
     .post-cover .topic{position:relative;font-family:'Sora',sans-serif;font-size:1.6rem;font-weight:800;letter-spacing:-0.03em;}
     .post-body{padding:24px;flex:1;display:flex;flex-direction:column;}
     .post-meta{display:flex;gap:10px;font-size:0.74rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--accent);margin-bottom:10px;}
@@ -86,7 +87,7 @@
 
       <article class="post">
         <a href="/blog/cyberverzekering-mkb-2026">
-          <div class="post-cover"><div class="topic" style="font-size:1.4rem;">€&uarr;</div></div>
+          <div class="post-cover" aria-hidden="true"><div class="topic" style="font-size:1.4rem;">€&uarr;</div></div>
           <div class="post-body">
             <div class="post-meta"><span>Cyberverzekering</span><span class="dot">·</span><span class="date">19 apr 2026</span></div>
             <h2>Cyberverzekering 2026: waarom MKB-premies verdubbelen</h2>
@@ -98,7 +99,7 @@
 
       <article class="post">
         <a href="/blog/supply-chain-attacks-mkb">
-          <div class="post-cover"><div class="topic" style="font-size:1.3rem;">&#128279;</div></div>
+          <div class="post-cover" aria-hidden="true"><div class="topic" style="font-size:1.3rem;">&#128279;</div></div>
           <div class="post-body">
             <div class="post-meta"><span>Supply Chain</span><span class="dot">·</span><span class="date">19 apr 2026</span></div>
             <h2>Supply chain attacks voor MKB: 5 lessen uit MOVEit, SolarWinds en XZ Utils</h2>
@@ -110,7 +111,7 @@
 
       <article class="post">
         <a href="/blog/iso-27001-kosten-mkb">
-          <div class="post-cover"><div class="topic">€</div></div>
+          <div class="post-cover" aria-hidden="true"><div class="topic">€</div></div>
           <div class="post-body">
             <div class="post-meta"><span>Kostenanalyse</span><span class="dot">·</span><span class="date">15 apr 2026</span></div>
             <h2>Wat kost ISO 27001 certificering voor een MKB-bedrijf?</h2>
@@ -122,7 +123,7 @@
 
       <article class="post">
         <a href="/blog/iso-27001-vs-soc-2">
-          <div class="post-cover"><div class="topic">vs</div></div>
+          <div class="post-cover" aria-hidden="true"><div class="topic">vs</div></div>
           <div class="post-body">
             <div class="post-meta"><span>Vergelijking</span><span class="dot">·</span><span class="date">12 apr 2026</span></div>
             <h2>ISO 27001 vs SOC 2: welke past bij een Nederlandse SaaS?</h2>
@@ -134,7 +135,7 @@
 
       <article class="post">
         <a href="/blog/nis2-deadline-2026">
-          <div class="post-cover"><div class="topic">NIS2</div></div>
+          <div class="post-cover" aria-hidden="true"><div class="topic">NIS2</div></div>
           <div class="post-body">
             <div class="post-meta"><span>Wetgeving</span><span class="dot">·</span><span class="date">8 apr 2026</span></div>
             <h2>NIS2-deadline 2026: wat moet u nu doen?</h2>
@@ -144,8 +145,8 @@
         </a>
       </article>
 
-      <article class="post" style="opacity:0.55;pointer-events:none;">
-        <div class="post-cover"><div class="topic">SoA</div></div>
+      <article class="post" aria-disabled="true" style="opacity:0.55;pointer-events:none;">
+        <div class="post-cover" aria-hidden="true"><div class="topic">SoA</div></div>
         <div class="post-body">
           <div class="post-meta"><span>Methodologie</span><span class="dot">·</span><span class="date">binnenkort</span></div>
           <h2>De 7 meest gemaakte fouten in een ISO 27001 SoA</h2>

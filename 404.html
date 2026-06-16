@@ -20,12 +20,13 @@
       --border: #E5E5E5;
       --text-primary: #0F172A;
       --text-secondary: #475569;
-      --text-muted: #94A3B8;
+      --text-muted: #64748B;
       --accent: #0D9488;
       --accent-hover: #0F766E;
       --warm: #D97706;
     }
     html { scroll-behavior: smooth; }
+    a:focus-visible,button:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
     body {
       font-family: 'Inter', system-ui, sans-serif;
       background: var(--bg);
@@ -127,28 +128,28 @@
 
     <div class="nav-grid">
       <a class="nav-card" href="/">
-        🏠 Home
-        <span class="nav-card-arrow">→</span>
+        <span aria-hidden="true">🏠</span> Home
+        <span class="nav-card-arrow" aria-hidden="true">→</span>
       </a>
       <a class="nav-card" href="/gap-analyse">
-        ✓ Gratis quickscan
-        <span class="nav-card-arrow">→</span>
+        <span aria-hidden="true">✓</span> Gratis quickscan
+        <span class="nav-card-arrow" aria-hidden="true">→</span>
       </a>
       <a class="nav-card" href="/faq">
-        💬 Veelgestelde vragen
-        <span class="nav-card-arrow">→</span>
+        <span aria-hidden="true">💬</span> Veelgestelde vragen
+        <span class="nav-card-arrow" aria-hidden="true">→</span>
       </a>
       <a class="nav-card" href="/bestellen">
-        📋 Bestellen
-        <span class="nav-card-arrow">→</span>
+        <span aria-hidden="true">📋</span> Bestellen
+        <span class="nav-card-arrow" aria-hidden="true">→</span>
       </a>
       <a class="nav-card" href="/portal">
-        🔐 Klant-portal
-        <span class="nav-card-arrow">→</span>
+        <span aria-hidden="true">🔐</span> Klant-portal
+        <span class="nav-card-arrow" aria-hidden="true">→</span>
       </a>
       <a class="nav-card" href="/nis2">
-        ⚖️ NIS2-checklist
-        <span class="nav-card-arrow">→</span>
+        <span aria-hidden="true">⚖️</span> NIS2-checklist
+        <span class="nav-card-arrow" aria-hidden="true">→</span>
       </a>
     </div>
 

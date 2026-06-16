@@ -19,8 +19,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-    :root{--bg:#FAF9F6;--surface:#FFF;--border:#E5E5E5;--border-light:#F0F0F0;--text-primary:#0F172A;--text-secondary:#475569;--text-muted:#94A3B8;--accent:#0D9488;--accent-light:#CCFBF1;--dark:#0c0f1a;--radius:10px;}
+    :root{--bg:#FAF9F6;--surface:#FFF;--border:#E5E5E5;--border-light:#F0F0F0;--text-primary:#0F172A;--text-secondary:#475569;--text-muted:#64748B;--accent:#0D9488;--accent-light:#CCFBF1;--dark:#0c0f1a;--radius:10px;}
     html{scroll-behavior:smooth;}
+    a:focus-visible,button:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
     body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text-secondary);line-height:1.7;-webkit-font-smoothing:antialiased;}
     .container{max-width:880px;margin:0 auto;padding:0 24px;}
     nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(250,250,250,0.85);backdrop-filter:blur(16px);border-bottom:1px solid var(--border-light);height:64px;display:flex;align-items:center;padding:0 5%;}
@@ -63,10 +64,7 @@
 <nav>
   <div class="nav-inner">
     <a href="/" class="nav-logo">annex<span>27</span></a>
-    <a href="/" class="nav-back">
-      <svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-      Terug
-    </a>
+    <a href="/" class="nav-back"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Terug naar home</a>
   </div>
 </nav>
 
@@ -85,7 +83,7 @@
     <h2><span class="article-num">Art. 1</span>Partijen en definities</h2>
     <p>Deze verwerkersovereenkomst (hierna: <strong>DPA</strong>) wordt aangegaan tussen:</p>
     <ul>
-      <li><strong>Annex27</strong>, handelend onder de KBO-nummering 1006.203.170, zetel in Belgi&euml;, gevestigd onze Lead Auditor, hierna: de <strong>verwerker</strong>;</li>
+      <li><strong>Annex27</strong>, handelend onder de KBO-nummering 1006.203.170, met zetel in Belgi&euml;, vertegenwoordigd door de Lead Auditor, hierna: de <strong>verwerker</strong>;</li>
       <li><strong>De klant</strong>, de natuurlijke of rechtspersoon die een pakket van Annex27 afneemt en zich aanmeldt voor het platform, hierna: de <strong>verwerkingsverantwoordelijke</strong>.</li>
     </ul>
     <p>Begrippen als "persoonsgegevens", "verwerking", "betrokkene", "datalek" en "subverwerker" hebben de betekenis zoals omschreven in de Algemene verordening gegevensbescherming (Verordening (EU) 2016/679, hierna: <strong>AVG</strong>).</p>

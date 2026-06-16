@@ -18,7 +18,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-    :root{--bg:#FAF9F6;--surface:#FFFFFF;--border:#E5E5E5;--border-light:#F0F0F0;--text-primary:#0F172A;--text-secondary:#475569;--text-muted:#94A3B8;--accent:#0D9488;--accent-hover:#0F766E;--accent-light:#CCFBF1;--radius:10px;--radius-lg:16px;}
+    :root{--bg:#FAF9F6;--surface:#FFFFFF;--border:#E5E5E5;--border-light:#F0F0F0;--text-primary:#0F172A;--text-secondary:#475569;--text-muted:#64748B;--accent:#0D9488;--accent-hover:#0F766E;--accent-light:#CCFBF1;--radius:10px;--radius-lg:16px;}
+    a:focus-visible,button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible,summary:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
     html{scroll-behavior:smooth;}
     body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text-secondary);line-height:1.6;-webkit-font-smoothing:antialiased;}
     .container{max-width:1040px;margin:0 auto;padding:0 24px;}
@@ -174,7 +175,7 @@
       </div>
     </div>
 
-    <div class="roi-card result-card">
+    <div class="roi-card result-card" aria-live="polite">
       <h2>Indicatieve besparing met Annex27</h2>
       <p class="card-sub">Eerste 12 maanden, ten opzichte van uw huidige aanpak.</p>
 
@@ -182,6 +183,8 @@
         <span class="big" id="resultSavings">&euro;0</span>
         <span class="unit">netto besparing in jaar 1</span>
       </div>
+
+      <p class="result-note" id="resultNote" style="font-size:0.84rem;color:rgba(255,255,255,0.75);margin:-6px 0 16px;display:none;"></p>
 
       <div class="result-row negative">
         <span class="label">Uw huidige aanpak</span>
@@ -242,17 +245,29 @@
     resultRemain: document.getElementById('resultRemain'),
     resultSavings: document.getElementById('resultSavings'),
     resultHours: document.getElementById('resultHours'),
-    resultCta: document.getElementById('resultCta')
+    resultCta: document.getElementById('resultCta'),
+    resultNote: document.getElementById('resultNote')
   };
 
   function euro(n){ return '€' + Math.round(n).toLocaleString('nl-NL'); }
 
+  // Klem een waarde naar de min/max van het bijbehorende input-element.
+  function clampInput(el){
+    let v = parseFloat(el.value);
+    if (!isFinite(v)) v = 0;
+    const min = el.hasAttribute('min') ? parseFloat(el.getAttribute('min')) : -Infinity;
+    const max = el.hasAttribute('max') ? parseFloat(el.getAttribute('max')) : Infinity;
+    if (v < min) v = min;
+    if (v > max) v = max;
+    return v;
+  }
+
   function calc(){
     const norm = els.norm.value;
-    const hours = Math.max(0, parseFloat(els.hoursInternal.value) || 0);
-    const rate = Math.max(0, parseFloat(els.internalRate.value) || 0);
-    const days = Math.max(0, parseFloat(els.consultancyDays.value) || 0);
-    const dayRate = Math.max(0, parseFloat(els.consultancyRate.value) || 0);
+    const hours = clampInput(els.hoursInternal);
+    const rate = clampInput(els.internalRate);
+    const days = clampInput(els.consultancyDays);
+    const dayRate = clampInput(els.consultancyRate);
 
     const currentInternal = hours * 12 * rate;
     const currentConsultancy = days * dayRate;
@@ -274,6 +289,15 @@
     els.resultRemain.textContent = euro(remainingInternal + remainingConsultancy);
     els.resultSavings.textContent = euro(Math.max(0, savings));
     els.resultHours.textContent = Math.round(savedHoursPerYear).toLocaleString('nl-NL') + ' uur';
+
+    if (els.resultNote) {
+      if (savings <= 0) {
+        els.resultNote.textContent = 'Bij uw huidige invoer levert dit indicatief geen netto besparing in jaar 1 op: uw huidige aanpak kost ongeveer evenveel als of minder dan een Annex27-traject. De grootste winst zit dan in de bespaarde interne uren (' + Math.round(savedHoursPerYear).toLocaleString('nl-NL') + ' uur) en in een gevalideerd, audit-ready rapport.';
+        els.resultNote.style.display = '';
+      } else {
+        els.resultNote.style.display = 'none';
+      }
+    }
 
     const planMap = { iso: 'gap', nis2: 'nis2', bundle: 'iso_nis2_bundle', beleid: 'beleid' };
     els.resultCta.setAttribute('href', '/bestellen.html?plan=' + planMap[norm]);

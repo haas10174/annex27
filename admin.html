@@ -54,6 +54,7 @@
       --accent-dark: #0F766E;
       --accent-bg: rgba(13,148,136,0.08);
       --warning: #F59E0B;
+      --warning-text: #B45309;
       --warning-bg: rgba(245,158,11,0.1);
       --danger: #EF4444;
       --danger-bg: rgba(239,68,68,0.08);
@@ -109,10 +110,12 @@
     }
     .view-btn:hover { color: var(--text); background: rgba(16,24,40,0.03); }
     .view-btn.active {
-      color: var(--accent-light);
+      color: var(--accent);
       border-left-color: var(--accent-light);
       background: var(--accent-bg);
     }
+    .view-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; color: var(--text); }
+    .view-btn:active { background: rgba(13,148,136,0.12); }
     .view-btn .badge {
       margin-left: 6px;
       font-size: 0.65rem;
@@ -120,7 +123,7 @@
       border-radius: 10px;
       background: rgba(16,24,40,0.08);
     }
-    .view-btn.active .badge { background: rgba(13,148,136,0.25); color: var(--accent-light); }
+    .view-btn.active .badge { background: rgba(13,148,136,0.25); color: var(--accent); }
 
     /* Full-width views (Inbox / Orders) */
     .view { display: none; }
@@ -193,6 +196,8 @@
       color: var(--accent);
       border-bottom-color: var(--accent);
     }
+    .leads-tab:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; color: var(--text); }
+    .leads-tab:active { color: var(--accent); }
     .leads-tab-count {
       display: inline-block;
       min-width: 22px;
@@ -305,7 +310,7 @@
     .status-pill.canceled,
     .status-pill.expired { background: rgba(239,68,68,0.12); color: var(--danger); }
     .status-pill.open,
-    .status-pill.pending { background: rgba(245,158,11,0.12); color: var(--warning); }
+    .status-pill.pending { background: rgba(245,158,11,0.12); color: var(--warning-text); }
     .kpi-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -457,7 +462,9 @@
       transition: color 0.15s, border-color 0.15s;
     }
     .filter-btn:hover { color: var(--text); }
-    .filter-btn.active { color: var(--accent-light); border-bottom-color: var(--accent-light); }
+    .filter-btn.active { color: var(--accent); border-bottom-color: var(--accent-light); }
+    .filter-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; color: var(--text); }
+    .filter-btn:active { color: var(--accent); }
 
     .client-list {
       flex: 1;
@@ -515,7 +522,7 @@
       text-transform: uppercase;
       letter-spacing: 0.04em;
     }
-    .client-status.review-requested { background: rgba(245,158,11,0.12); color: var(--warning); }
+    .client-status.review-requested { background: rgba(245,158,11,0.12); color: var(--warning-text); }
     .client-status.in-review { background: rgba(13,148,136,0.12); color: var(--accent-light); }
     .client-status.reviewed { background: rgba(16,185,129,0.12); color: var(--success); }
     .client-status.in-progress { background: rgba(16,24,40,0.06); color: var(--text-muted); }
@@ -832,7 +839,9 @@
       position: relative;
     }
     .tab:hover { color: var(--text); }
-    .tab.active { color: var(--accent-light); border-bottom-color: var(--accent-light); }
+    .tab.active { color: var(--accent); border-bottom-color: var(--accent-light); }
+    .tab:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; color: var(--text); }
+    .tab:active { color: var(--accent); }
     .tab-count {
       margin-left: 6px;
       font-size: 0.7rem;
@@ -870,7 +879,7 @@
       font-family: 'Sora', sans-serif;
       font-weight: 700;
       font-size: 0.78rem;
-      color: var(--accent-light);
+      color: var(--accent);
       width: 70px;
       flex-shrink: 0;
     }
@@ -891,11 +900,11 @@
       font-weight: 600;
     }
     .ci-badge.compliant { background: rgba(16,185,129,0.12); color: var(--success); }
-    .ci-badge.partial { background: rgba(245,158,11,0.12); color: var(--warning); }
+    .ci-badge.partial { background: rgba(245,158,11,0.12); color: var(--warning-text); }
     .ci-badge.non-compliant { background: rgba(239,68,68,0.12); color: var(--danger); }
     .ci-badge.pending { background: rgba(16,24,40,0.06); color: var(--text-muted); }
     .ci-badge.evidence-yes { background: rgba(13,148,136,0.12); color: var(--accent-light); }
-    .ci-badge.evidence-no { background: rgba(245,158,11,0.12); color: var(--warning); }
+    .ci-badge.evidence-no { background: rgba(245,158,11,0.12); color: var(--warning-text); }
     .ci-icon { color: var(--accent-light); display: inline-flex; align-items: center; }
 
     /* Categorie-header met progress */
@@ -919,7 +928,7 @@
       background: rgba(13,148,136,0.08);
       padding: 3px 9px; border-radius: 100px;
     }
-    .cat-stat.cat-stat-finding { color: var(--warning); background: rgba(245,158,11,0.10); }
+    .cat-stat.cat-stat-finding { color: var(--warning-text); background: rgba(245,158,11,0.10); }
     .cat-stat svg { stroke: currentColor; flex-shrink: 0; }
 
     /* Filter-toolbar boven control-list */
@@ -1017,7 +1026,7 @@
       border: 1px solid rgba(245,158,11,0.2);
       border-radius: var(--radius);
       font-size: 0.82rem;
-      color: var(--warning);
+      color: var(--warning-text);
     }
 
     /* Finding editor */
@@ -1071,7 +1080,7 @@
     }
     .severity-pill:hover { color: var(--text); }
     .severity-pill.active[data-sev="info"] { background: rgba(13,148,136,0.15); color: var(--accent-light); border-color: var(--accent-light); }
-    .severity-pill.active[data-sev="minor"] { background: rgba(245,158,11,0.15); color: var(--warning); border-color: var(--warning); }
+    .severity-pill.active[data-sev="minor"] { background: rgba(245,158,11,0.15); color: var(--warning-text); border-color: var(--warning); }
     .severity-pill.active[data-sev="major"] { background: rgba(239,68,68,0.15); color: var(--danger); border-color: var(--danger); }
     .severity-pill.active[data-sev="critical"] { background: var(--danger); color: white; border-color: var(--danger); }
 
@@ -1107,7 +1116,7 @@
       padding-top: 4px;
       text-align: right;
     }
-    .save-status.saving { color: var(--warning); }
+    .save-status.saving { color: var(--warning-text); }
     .save-status.saved { color: var(--success); }
 
     /* Empty state */
@@ -1232,7 +1241,7 @@
       border-radius: 10px;
       letter-spacing: 0.02em;
     }
-    .ov-pending { background: var(--warning-bg); color: var(--warning); border: 1px solid rgba(245,158,11,0.25); }
+    .ov-pending { background: var(--warning-bg); color: var(--warning-text); border: 1px solid rgba(245,158,11,0.25); }
 
     .ov-realtime { text-align: center; padding: 8px 4px; }
     .ov-rt-big { font-family: 'Sora', sans-serif; font-size: 2.8rem; font-weight: 800; color: var(--accent); line-height: 1; }
@@ -1385,18 +1394,18 @@
 <!-- Login screen (shown while checking auth or when not logged in) -->
 <div class="login-screen" id="loginScreen" style="display:none;">
   <div class="login-card">
-    <div style="font-size:0.7rem;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:#14b8a6;margin-bottom:10px;">Annex27 &middot; Auditor</div>
+    <div style="font-size:0.7rem;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:#0D9488;margin-bottom:10px;">Annex27 &middot; Auditor</div>
     <h1>Auditor Dashboard</h1>
     <p id="loginMessage" style="margin-bottom:20px;">Log in met uw auditor-account.</p>
     <form id="adminLoginForm" onsubmit="return adminLogin(event)" style="display:flex;flex-direction:column;gap:10px;margin-bottom:14px;">
-      <input type="email" id="adminEmail" placeholder="E-mailadres" required autocomplete="email" style="padding:12px 14px;border:1px solid rgba(16,24,40,0.12);border-radius:10px;background:rgba(16,24,40,0.04);color:var(--text);font-family:inherit;font-size:0.92rem;outline:none;" />
-      <input type="password" id="adminPassword" placeholder="Wachtwoord" required autocomplete="current-password" style="padding:12px 14px;border:1px solid rgba(16,24,40,0.12);border-radius:10px;background:rgba(16,24,40,0.04);color:var(--text);font-family:inherit;font-size:0.92rem;outline:none;" />
+      <input type="email" id="adminEmail" aria-label="E-mailadres" placeholder="E-mailadres" required autocomplete="email" style="padding:12px 14px;border:1px solid rgba(16,24,40,0.12);border-radius:10px;background:rgba(16,24,40,0.04);color:var(--text);font-family:inherit;font-size:0.92rem;outline:none;" />
+      <input type="password" id="adminPassword" aria-label="Wachtwoord" placeholder="Wachtwoord" required autocomplete="current-password" style="padding:12px 14px;border:1px solid rgba(16,24,40,0.12);border-radius:10px;background:rgba(16,24,40,0.04);color:var(--text);font-family:inherit;font-size:0.92rem;outline:none;" />
       <div id="adminLoginError" style="display:none;padding:10px 12px;background:rgba(220,38,38,0.1);border:1px solid rgba(220,38,38,0.3);border-radius:8px;color:#fca5a5;font-size:0.82rem;"></div>
       <button type="submit" id="adminLoginBtn" style="padding:12px;background:#0D9488;color:#fff;border:none;border-radius:10px;font-weight:700;font-size:0.92rem;cursor:pointer;transition:background .2s;">Inloggen</button>
     </form>
     <div style="display:flex;justify-content:space-between;font-size:0.78rem;">
       <a href="/portal" style="color:rgba(16,24,40,0.5);text-decoration:none;">&larr; Klant-portaal</a>
-      <a href="#" onclick="adminForgot(event)" style="color:#14b8a6;text-decoration:none;">Wachtwoord vergeten?</a>
+      <a href="#" onclick="adminForgot(event)" style="color:#0D9488;text-decoration:none;">Wachtwoord vergeten?</a>
     </div>
   </div>
 </div>
@@ -1420,15 +1429,15 @@
     <div class="sidebar-header">
       <div class="brand">annex<span>27</span></div>
     </div>
-    <div class="view-switch">
-      <button class="view-btn active" data-view="overview">Overzicht</button>
-      <button class="view-btn" data-view="clients">Klanten</button>
-      <button class="view-btn" data-view="inbox">Inbox <span class="badge" id="inboxBadge">0</span></button>
-      <button class="view-btn" data-view="orders">Orders <span class="badge" id="ordersBadge">0</span></button>
-      <button class="view-btn" data-view="facturen">Facturen <span class="badge" id="facturenBadge">0</span></button>
-      <button class="view-btn" data-view="leads">Aanvragen <span class="badge" id="leadsBadge">0</span></button>
-      <button class="view-btn" data-view="benchmark">Benchmark</button>
-      <button class="view-btn" data-view="settings">Instellingen</button>
+    <div class="view-switch" role="tablist">
+      <button class="view-btn active" role="tab" id="viewBtnOverview" aria-selected="true" aria-controls="viewOverview" data-view="overview">Overzicht</button>
+      <button class="view-btn" role="tab" id="viewBtnClients" aria-selected="false" aria-controls="viewClients" data-view="clients">Klanten</button>
+      <button class="view-btn" role="tab" id="viewBtnInbox" aria-selected="false" aria-controls="viewInbox" data-view="inbox">Inbox <span class="badge" id="inboxBadge">0</span></button>
+      <button class="view-btn" role="tab" id="viewBtnOrders" aria-selected="false" aria-controls="viewOrders" data-view="orders">Orders <span class="badge" id="ordersBadge">0</span></button>
+      <button class="view-btn" role="tab" id="viewBtnFacturen" aria-selected="false" aria-controls="viewFacturen" data-view="facturen">Facturen <span class="badge" id="facturenBadge">0</span></button>
+      <button class="view-btn" role="tab" id="viewBtnLeads" aria-selected="false" aria-controls="viewLeads" data-view="leads">Aanvragen <span class="badge" id="leadsBadge">0</span></button>
+      <button class="view-btn" role="tab" id="viewBtnBenchmark" aria-selected="false" aria-controls="viewBenchmark" data-view="benchmark">Benchmark</button>
+      <button class="view-btn" role="tab" id="viewBtnSettings" aria-selected="false" aria-controls="viewSettings" data-view="settings">Instellingen</button>
     </div>
     <div class="client-filters" style="display:flex;align-items:center;flex-wrap:wrap;gap:6px;">
       <button class="filter-btn active" data-filter="all">Alle</button>
@@ -1449,7 +1458,7 @@
   <main class="main" id="main">
 
     <!-- View: Overzicht (dashboard KPIs + realtime) -->
-    <div class="view active" id="viewOverview">
+    <div class="view active" id="viewOverview" role="tabpanel" aria-labelledby="viewBtnOverview">
       <div class="view-full">
         <div class="view-header">
           <h1 style="font-family:'Sora',sans-serif;font-size:1.4rem;font-weight:800;margin:0 0 4px;">Overzicht</h1>
@@ -1533,7 +1542,7 @@
     </div>
 
     <!-- View: Klanten -->
-    <div class="view" id="viewClients">
+    <div class="view" id="viewClients" role="tabpanel" aria-labelledby="viewBtnClients">
     <div class="empty-state" id="mainEmpty">
       <div class="empty-icon"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
       <h2 style="font-family:'Sora',sans-serif;font-size:1.1rem;color:var(--text);margin-bottom:6px;">Selecteer een klant</h2>
@@ -1570,28 +1579,28 @@
       <!-- Status-pipeline — visuele steps van klant-journey -->
       <div id="clientPipeline" class="client-pipeline"></div>
 
-      <div class="tabs">
-        <button class="tab active" data-tab="findings">
+      <div class="tabs" role="tablist">
+        <button class="tab active" data-tab="findings" role="tab" id="tabFindings" aria-selected="true" aria-controls="panelFindings">
           1. Bevindingen <span class="tab-count" id="findingsCount">0</span>
         </button>
-        <button class="tab" data-tab="rapport">2. Rapport</button>
-        <button class="tab" data-tab="nis2admin" id="tabNis2admin" style="display:none;">
+        <button class="tab" data-tab="rapport" role="tab" id="tabRapport" aria-selected="false" aria-controls="panelRapport">2. Rapport</button>
+        <button class="tab" data-tab="nis2admin" id="tabNis2admin" role="tab" aria-selected="false" aria-controls="panelNis2admin" style="display:none;">
           NIS2 <span class="tab-count" id="nis2adminCount">0/39</span>
         </button>
-        <button class="tab" data-tab="policies" id="tabPolicies">
+        <button class="tab" data-tab="policies" id="tabPolicies" role="tab" aria-selected="false" aria-controls="panelPolicies">
           Policy signoffs <span class="tab-count" id="policyCount">0</span>
         </button>
-        <button class="tab" data-tab="messages">
+        <button class="tab" data-tab="messages" role="tab" id="tabMessages" aria-selected="false" aria-controls="panelMessages">
           Berichten <span class="tab-count" id="msgCount">0</span>
         </button>
-        <button class="tab" data-tab="invoices">
+        <button class="tab" data-tab="invoices" role="tab" id="tabInvoices" aria-selected="false" aria-controls="panelInvoices">
           Facturen <span class="tab-count" id="invoiceCount">0</span>
         </button>
-        <button class="tab" data-tab="profile">Profiel</button>
+        <button class="tab" data-tab="profile" role="tab" id="tabProfile" aria-selected="false" aria-controls="panelProfile">Profiel</button>
       </div>
 
       <!-- Findings tab: control-by-control review -->
-      <div class="panel active" id="panelFindings">
+      <div class="panel active" id="panelFindings" role="tabpanel" aria-labelledby="tabFindings">
         <div style="font-size:0.78rem;color:#0D9488;background:rgba(13,148,136,0.06);border:1px solid rgba(13,148,136,0.18);border-left:3px solid #0D9488;border-radius:8px;padding:9px 14px;margin-bottom:10px;line-height:1.5;">
           <strong>Tip:</strong> bevindingen die je hier opslaat (severity + tekst + aanbeveling) worden 1-op-1 meegenomen door de AI bij <em>Genereer rapport-draft</em>. De AI vult ze aan, maar overschrijft ze niet.
         </div>
@@ -1624,39 +1633,39 @@
       </div>
 
       <!-- Messages tab -->
-      <div class="panel" id="panelMessages">
+      <div class="panel" id="panelMessages" role="tabpanel" aria-labelledby="tabMessages">
         <div id="msgContainer"></div>
       </div>
 
       <!-- Rapport tab: upload/release PDF for client -->
-      <div class="panel" id="panelRapport">
+      <div class="panel" id="panelRapport" role="tabpanel" aria-labelledby="tabRapport">
         <div id="rapportContainer"></div>
       </div>
 
       <!-- NIS2 admin-review: read-only view van klant-antwoorden op de 39 NIS2-vragen -->
-      <div class="panel" id="panelNis2admin">
+      <div class="panel" id="panelNis2admin" role="tabpanel" aria-labelledby="tabNis2admin">
         <div id="nis2AdminContainer" style="font-size:0.88rem;"></div>
       </div>
 
       <!-- Policy signoffs tab: Lead Auditor reviews beleidspakket-versies van klant -->
-      <div class="panel" id="panelPolicies">
+      <div class="panel" id="panelPolicies" role="tabpanel" aria-labelledby="tabPolicies">
         <div id="policiesContainer" style="font-size:0.88rem;"></div>
       </div>
 
       <!-- Invoices tab: facturen voor deze klant -->
-      <div class="panel" id="panelInvoices">
+      <div class="panel" id="panelInvoices" role="tabpanel" aria-labelledby="tabInvoices">
         <div id="clientInvoicesContainer" style="font-size:0.88rem;"></div>
       </div>
 
       <!-- Profile tab -->
-      <div class="panel" id="panelProfile">
+      <div class="panel" id="panelProfile" role="tabpanel" aria-labelledby="tabProfile">
         <div id="profileContainer"></div>
       </div>
     </div>
     </div><!-- /viewClients -->
 
     <!-- View: Inbox (global messages) -->
-    <div class="view" id="viewInbox">
+    <div class="view" id="viewInbox" role="tabpanel" aria-labelledby="viewBtnInbox">
       <div class="view-full">
         <div class="view-header">
           <h1>Inbox &mdash; alle klantberichten</h1>
@@ -1678,7 +1687,7 @@
     </div>
 
     <!-- View: Orders (payments) -->
-    <div class="view" id="viewOrders">
+    <div class="view" id="viewOrders" role="tabpanel" aria-labelledby="viewBtnOrders">
       <div class="view-full">
         <div class="view-header">
           <h1>Orders &amp; betalingen</h1>
@@ -1703,7 +1712,7 @@
                 <th>Datum</th>
                 <th>Klant</th>
                 <th>Pakket</th>
-                <th>Bedrag</th>
+                <th style="text-align:right;font-variant-numeric:tabular-nums;">Bedrag</th>
                 <th>Status</th>
                 <th>Payment ID</th>
                 <th style="width:80px;">Acties</th>
@@ -1718,7 +1727,7 @@
     </div>
 
     <!-- View: Facturen (admin management + boekhouding) -->
-    <div class="view" id="viewFacturen">
+    <div class="view" id="viewFacturen" role="tabpanel" aria-labelledby="viewBtnFacturen">
       <div class="container-card" style="padding:24px;">
         <div class="section-title-row" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;gap:10px;flex-wrap:wrap;">
           <div>
@@ -1756,7 +1765,7 @@
                 <th>Datum</th>
                 <th>Klant</th>
                 <th>Product</th>
-                <th>Totaal</th>
+                <th style="text-align:right;font-variant-numeric:tabular-nums;">Totaal</th>
                 <th>BTW-regime</th>
                 <th>Status</th>
                 <th>Actie</th>
@@ -1777,16 +1786,16 @@
         <h3 style="font-family:'Sora',sans-serif;font-size:1.3rem;font-weight:800;margin-bottom:18px;">Nieuwe factuur</h3>
         <form onsubmit="createInvoice(event)" style="display:flex;flex-direction:column;gap:10px;">
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-            <div><label style="font-size:0.78rem;font-weight:600;">Klantnaam</label><input type="text" id="invKlant" required style="width:100%;padding:10px 12px;border:1px solid #E5E5E5;border-radius:8px;font-family:inherit;" /></div>
-            <div><label style="font-size:0.78rem;font-weight:600;">Bedrijf</label><input type="text" id="invBedrijf" required style="width:100%;padding:10px 12px;border:1px solid #E5E5E5;border-radius:8px;font-family:inherit;" /></div>
+            <div><label for="invKlant" style="font-size:0.78rem;font-weight:600;">Klantnaam</label><input type="text" id="invKlant" required style="width:100%;padding:10px 12px;border:1px solid #E5E5E5;border-radius:8px;font-family:inherit;" /></div>
+            <div><label for="invBedrijf" style="font-size:0.78rem;font-weight:600;">Bedrijf</label><input type="text" id="invBedrijf" required style="width:100%;padding:10px 12px;border:1px solid #E5E5E5;border-radius:8px;font-family:inherit;" /></div>
           </div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-            <div><label style="font-size:0.78rem;font-weight:600;">E-mail</label><input type="email" id="invEmail" required style="width:100%;padding:10px 12px;border:1px solid #E5E5E5;border-radius:8px;font-family:inherit;" /></div>
-            <div><label style="font-size:0.78rem;font-weight:600;">BTW-nummer klant</label><input type="text" id="invBtwNr" placeholder="Optioneel" style="width:100%;padding:10px 12px;border:1px solid #E5E5E5;border-radius:8px;font-family:inherit;" /></div>
+            <div><label for="invEmail" style="font-size:0.78rem;font-weight:600;">E-mail</label><input type="email" id="invEmail" required style="width:100%;padding:10px 12px;border:1px solid #E5E5E5;border-radius:8px;font-family:inherit;" /></div>
+            <div><label for="invBtwNr" style="font-size:0.78rem;font-weight:600;">BTW-nummer klant</label><input type="text" id="invBtwNr" placeholder="Optioneel" style="width:100%;padding:10px 12px;border:1px solid #E5E5E5;border-radius:8px;font-family:inherit;" /></div>
           </div>
-          <div><label style="font-size:0.78rem;font-weight:600;">Adres</label><input type="text" id="invAdres" placeholder="Straat, nr, postcode, stad" style="width:100%;padding:10px 12px;border:1px solid #E5E5E5;border-radius:8px;font-family:inherit;" /></div>
+          <div><label for="invAdres" style="font-size:0.78rem;font-weight:600;">Adres</label><input type="text" id="invAdres" placeholder="Straat, nr, postcode, stad" style="width:100%;padding:10px 12px;border:1px solid #E5E5E5;border-radius:8px;font-family:inherit;" /></div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-            <div><label style="font-size:0.78rem;font-weight:600;">Product</label>
+            <div><label for="invProduct" style="font-size:0.78rem;font-weight:600;">Product</label>
               <select id="invProduct" onchange="updateInvTotal()" style="width:100%;padding:10px 12px;border:1px solid #E5E5E5;border-radius:8px;font-family:inherit;">
                 <option value="gap" data-price="795">Gap-analyse &mdash; &euro;795</option>
                 <option value="beleid" data-price="395">Beleidspakket &mdash; &euro;395</option>
@@ -1795,9 +1804,9 @@
                 <option value="custom" data-price="0">Aangepast bedrag</option>
               </select>
             </div>
-            <div><label style="font-size:0.78rem;font-weight:600;">Bedrag (subtotal)</label><input type="number" id="invBedrag" value="795" step="0.01" onchange="updateInvTotal()" style="width:100%;padding:10px 12px;border:1px solid #E5E5E5;border-radius:8px;font-family:inherit;" /></div>
+            <div><label for="invBedrag" style="font-size:0.78rem;font-weight:600;">Bedrag (subtotal)</label><input type="number" id="invBedrag" value="795" step="0.01" onchange="updateInvTotal()" style="width:100%;padding:10px 12px;border:1px solid #E5E5E5;border-radius:8px;font-family:inherit;" /></div>
           </div>
-          <div><label style="font-size:0.78rem;font-weight:600;">Omschrijving</label><textarea id="invOmschrijving" rows="2" placeholder="Optionele toelichting" style="width:100%;padding:10px 12px;border:1px solid #E5E5E5;border-radius:8px;font-family:inherit;resize:vertical;"></textarea></div>
+          <div><label for="invOmschrijving" style="font-size:0.78rem;font-weight:600;">Omschrijving</label><textarea id="invOmschrijving" rows="2" placeholder="Optionele toelichting" style="width:100%;padding:10px 12px;border:1px solid #E5E5E5;border-radius:8px;font-family:inherit;resize:vertical;"></textarea></div>
           <div style="display:flex;justify-content:space-between;padding:6px 0;"><span style="color:#64748b;">Totaal</span><span id="invTotaal" style="font-family:'Sora',sans-serif;font-weight:800;font-size:1.1rem;">&euro; 795,00</span></div>
           <div style="font-size:0.76rem;color:#64748b;line-height:1.5;">Standaard BTW-regime: 21% op binnenlandse en EU B2C-klanten; verlegd voor EU B2B met geldig VIES-nummer; buiten EU zonder BTW. BTW-nummer <strong>BE1006.203.170</strong>.</div>
           <button type="submit" style="margin-top:8px;padding:12px;background:#0D9488;color:#fff;border:none;border-radius:10px;font-weight:700;cursor:pointer;">Factuur aanmaken</button>
@@ -1816,7 +1825,7 @@
     </div>
 
     <!-- View: Aanvragen (waitlist / offerte / quickscan-leads / pre-audit) -->
-    <div class="view" id="viewLeads">
+    <div class="view" id="viewLeads" role="tabpanel" aria-labelledby="viewBtnLeads">
       <div class="container-card" style="padding:24px;">
         <div class="section-title-row" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
           <div>
@@ -1829,12 +1838,12 @@
           </button>
         </div>
         <!-- Type-tabs (primaire navigatie) -->
-        <div id="leadsTypeTabs" style="display:flex;gap:4px;margin-bottom:14px;flex-wrap:wrap;border-bottom:1px solid var(--border);">
-          <button class="leads-tab active" data-type="all"       onclick="setLeadsType('all', this)">Alle <span class="leads-tab-count" id="leadsCntAll">0</span></button>
-          <button class="leads-tab"        data-type="quickscan" onclick="setLeadsType('quickscan', this)">Quickscan <span class="leads-tab-count" id="leadsCntQuickscan">0</span></button>
-          <button class="leads-tab"        data-type="beleid"    onclick="setLeadsType('beleid', this)">Beleidspakket <span class="leads-tab-count" id="leadsCntBeleid">0</span></button>
-          <button class="leads-tab"        data-type="nis2"      onclick="setLeadsType('nis2', this)">NIS2 <span class="leads-tab-count" id="leadsCntNis2">0</span></button>
-          <button class="leads-tab"        data-type="preaudit"  onclick="setLeadsType('preaudit', this)">Pre-audit <span class="leads-tab-count" id="leadsCntPreaudit">0</span></button>
+        <div id="leadsTypeTabs" role="tablist" style="display:flex;gap:4px;margin-bottom:14px;flex-wrap:wrap;border-bottom:1px solid var(--border);">
+          <button class="leads-tab active" role="tab" aria-selected="true"  aria-controls="leadsList" data-type="all"       onclick="setLeadsType('all', this)">Alle <span class="leads-tab-count" id="leadsCntAll">0</span></button>
+          <button class="leads-tab"        role="tab" aria-selected="false" aria-controls="leadsList" data-type="quickscan" onclick="setLeadsType('quickscan', this)">Quickscan <span class="leads-tab-count" id="leadsCntQuickscan">0</span></button>
+          <button class="leads-tab"        role="tab" aria-selected="false" aria-controls="leadsList" data-type="beleid"    onclick="setLeadsType('beleid', this)">Beleidspakket <span class="leads-tab-count" id="leadsCntBeleid">0</span></button>
+          <button class="leads-tab"        role="tab" aria-selected="false" aria-controls="leadsList" data-type="nis2"      onclick="setLeadsType('nis2', this)">NIS2 <span class="leads-tab-count" id="leadsCntNis2">0</span></button>
+          <button class="leads-tab"        role="tab" aria-selected="false" aria-controls="leadsList" data-type="preaudit"  onclick="setLeadsType('preaudit', this)">Pre-audit <span class="leads-tab-count" id="leadsCntPreaudit">0</span></button>
         </div>
         <!-- Status-filter (secundaire schakelaar) -->
         <div style="display:flex;gap:8px;margin-bottom:14px;align-items:center;">
@@ -1843,14 +1852,14 @@
           <button class="filter-btn"        data-status="afgehandeld" onclick="setLeadsStatus('afgehandeld', this)">Afgehandeld</button>
           <button class="filter-btn"        data-status="all"         onclick="setLeadsStatus('all', this)">Alle</button>
         </div>
-        <div id="leadsList">
+        <div id="leadsList" role="tabpanel">
           <div class="empty-state" style="padding:40px;text-align:center;color:var(--text-muted);">Laden...</div>
         </div>
       </div>
     </div>
 
     <!-- View: Benchmark — cross-klant gap-analyse statistieken -->
-    <div class="view" id="viewBenchmark">
+    <div class="view" id="viewBenchmark" role="tabpanel" aria-labelledby="viewBtnBenchmark">
       <div class="view-full">
         <div class="view-header">
           <h1 style="font-family:'Sora',sans-serif;font-size:1.4rem;font-weight:800;margin:0 0 4px;">Cross-klant benchmark</h1>
@@ -1867,7 +1876,7 @@
     </div>
 
     <!-- View: Instellingen -->
-    <div class="view" id="viewSettings">
+    <div class="view" id="viewSettings" role="tabpanel" aria-labelledby="viewBtnSettings">
       <div class="view-full">
         <div class="view-header">
           <h1 style="font-family:'Sora',sans-serif;font-size:1.4rem;font-weight:800;margin:0 0 4px;">Instellingen</h1>
@@ -1937,6 +1946,16 @@ const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 function esc(s) {
   if (s == null) return '';
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// Toetsenbord-activatie voor klikbare niet-knop-elementen (rijen/cards met role="button")
+// Enter of Spatie triggert dezelfde click-handler; Spatie voorkomt page-scroll.
+function rowKeyActivate(e) {
+  if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
+    if (e.target !== e.currentTarget && e.target.closest('a, button, input, textarea, select, [role="button"]')) return;
+    e.preventDefault();
+    e.currentTarget.click();
+  }
 }
 
 // ── Toast helper (admin) ──
@@ -2334,7 +2353,7 @@ async function loadOverview() {
         const pending = !l.processed_at;
         return '<div class="ov-list-item">'
           + '<div class="ov-list-title">' + esc(l.bedrijf || l.email || '-') + '</div>'
-          + '<div class="ov-list-meta">' + esc(l.product || 'lead') + ' &bull; ' + (pending ? '<span style="color:var(--warning);font-weight:600;">open</span>' : '<span style="color:var(--text-muted);">verwerkt</span>') + ' &bull; ' + ovTimeAgo(l.created_at) + '</div>'
+          + '<div class="ov-list-meta">' + esc(l.product || 'lead') + ' &bull; ' + (pending ? '<span style="color:var(--warning-text);font-weight:600;">open</span>' : '<span style="color:var(--text-muted);">verwerkt</span>') + ' &bull; ' + ovTimeAgo(l.created_at) + '</div>'
           + '</div>';
       }).join('');
     }
@@ -2474,7 +2493,7 @@ function renderInvoicesAdmin() {
         <td>${d}</td>
         <td>${esc(inv.naam)}<br/><span style="font-size:0.76rem;color:var(--text-muted);">${esc(inv.bedrijf)}</span></td>
         <td>${esc(INV_PRODUCT_LABELS[inv.product] || inv.product)}</td>
-        <td><strong>&euro;${Number(inv.total).toLocaleString('nl-NL', {minimumFractionDigits:2})}</strong></td>
+        <td style="text-align:right;font-variant-numeric:tabular-nums;"><strong>&euro;${Number(inv.total).toLocaleString('nl-NL', {minimumFractionDigits:2})}</strong></td>
         <td><span style="font-size:0.78rem;color:var(--text-muted);">${regime}</span></td>
         <td><span style="color:${statusColor};font-weight:600;font-size:0.82rem;text-transform:capitalize;">${esc(inv.status)}</span></td>
         <td style="white-space:nowrap;">
@@ -2701,9 +2720,9 @@ async function exportJournalCsv() {
 
 // ── VIEW SWITCHER ──
 function activateView(target) {
-  document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.view-btn').forEach(b => { b.classList.remove('active'); b.setAttribute('aria-selected', 'false'); });
   const btn = document.querySelector('.view-btn[data-view="' + target + '"]');
-  if (btn) btn.classList.add('active');
+  if (btn) { btn.classList.add('active'); btn.setAttribute('aria-selected', 'true'); }
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
   const view = document.getElementById('view' + target.charAt(0).toUpperCase() + target.slice(1));
   if (view) view.classList.add('active');
@@ -2816,7 +2835,7 @@ let expandedLeadId = null;            // rij die uitgeklapt is
 // Type-config: label + accent-kleur per product-key
 const LEADS_TYPE_META = {
   quickscan:         { label: 'Quickscan',         color: '#0D9488' },
-  quickscan_started: { label: 'Quickscan-start',   color: '#94A3B8' },
+  quickscan_started: { label: 'Quickscan-start',   color: '#94A3B8', textColor: '#475569' },
   beleid:            { label: 'Beleidspakket',     color: '#7C3AED' },
   nis2:              { label: 'NIS2 waitlist',     color: '#B45309' },
   preaudit:          { label: 'Pre-audit',         color: '#0F766E' },
@@ -2850,8 +2869,9 @@ async function loadLeadsCount() {
 
 function setLeadsType(type, btn) {
   currentLeadsType = type;
-  document.querySelectorAll('[data-type]').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.leads-tab[data-type]').forEach(b => { b.classList.remove('active'); b.setAttribute('aria-selected', 'false'); });
   btn.classList.add('active');
+  btn.setAttribute('aria-selected', 'true');
   expandedLeadId = null;
   renderLeads();
 }
@@ -2926,7 +2946,7 @@ function leadScoreCell(l) {
 function leadTableRows(leads) {
   return leads.map(l => {
     const ts = fmtLeadDate(l.created_at);
-    const meta = LEADS_TYPE_META[l.product] || { label: l.product || '—', color: '#64748B' };
+    const meta = LEADS_TYPE_META[l.product] || { label: l.product || '—', color: '#64748B', textColor: '#475569' };
     const naam = _esc(l.naam || '(geen naam)');
     const bedrijf = _esc(l.bedrijf || '—');
     const emailRaw = _esc(l.email || '');
@@ -2939,7 +2959,7 @@ function leadTableRows(leads) {
       ? `<span class="status-pill" style="background:rgba(16,185,129,0.12);color:var(--success);">&#10003; Afgehandeld</span>`
       : (l.product === 'quickscan_started'
         ? `<span class="status-pill" style="background:rgba(148,163,184,0.15);color:var(--text-muted);">Anoniem</span>`
-        : `<span class="status-pill" style="background:rgba(245,158,11,0.12);color:var(--warning);">Nieuw</span>`);
+        : `<span class="status-pill" style="background:rgba(245,158,11,0.12);color:var(--warning-text);">Nieuw</span>`);
     const actionBtn = processed
       ? `<button class="action-btn" style="font-size:0.74rem;padding:5px 9px;" onclick="event.stopPropagation();markLeadUnprocessed('${l.id}')">Heropenen</button>`
       : (l.product === 'quickscan_started'
@@ -2948,16 +2968,16 @@ function leadTableRows(leads) {
     const expanded = expandedLeadId === l.id;
     const rowClass = 'leads-row' + (expanded ? ' expanded' : '');
     const detailRow = expanded && l.bericht
-      ? `<tr class="leads-detail-row"><td colspan="7">${_esc(l.bericht)}</td></tr>`
+      ? `<tr class="leads-detail-row"><td colspan="8">${_esc(l.bericht)}</td></tr>`
       : '';
     return `
-      <tr class="${rowClass}" onclick="toggleLeadDetail('${l.id}')">
+      <tr class="${rowClass}" tabindex="0" role="button" aria-label="Aanvraag details tonen of verbergen" onclick="toggleLeadDetail('${l.id}')" onkeydown="rowKeyActivate(event)">
         <td class="col-ts">${ts.dateLabel}<span class="ts-time">${ts.time}</span></td>
-        <td><span class="leads-type-pill" style="background:${meta.color}1A;color:${meta.color};">${_esc(meta.label)}</span></td>
+        <td><span class="leads-type-pill" style="background:${meta.color}1A;color:${meta.textColor || meta.color};">${_esc(meta.label)}</span></td>
         <td>${naam}</td>
         <td style="color:var(--text-muted);">${bedrijf}</td>
         <td>${emailDisplay}</td>
-        <td>${score}</td>
+        <td style="text-align:right;font-variant-numeric:tabular-nums;">${score}</td>
         <td>${statusCell}</td>
         <td style="text-align:right;">${actionBtn}</td>
       </tr>
@@ -2976,7 +2996,7 @@ function leadsTableHtml(leads) {
           <th>Naam</th>
           <th>Bedrijf</th>
           <th>Email</th>
-          <th style="width:70px;">Score</th>
+          <th style="width:70px;text-align:right;font-variant-numeric:tabular-nums;">Score</th>
           <th style="width:130px;">Status</th>
           <th style="width:110px;"></th>
         </tr>
@@ -3422,7 +3442,7 @@ function renderInbox() {
     const attach = m.attachment_name
       ? `<div style="margin-top:6px;font-size:0.75rem;color:var(--text-muted);display:inline-flex;align-items:center;gap:6px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>${esc(m.attachment_name)}</div>`
       : '';
-    return `<div class="inbox-row ${unread?'unread':''}" onclick="openClientFromInbox('${esc(m.user_id)}')">
+    return `<div class="inbox-row ${unread?'unread':''}" tabindex="0" role="button" aria-label="Open klant-bericht" onclick="openClientFromInbox('${esc(m.user_id)}')" onkeydown="rowKeyActivate(event)">
       <div>
         <div class="inbox-from">${esc(fromName)} <span style="font-weight:400;color:var(--text-dim);font-size:0.75rem;margin-left:6px;">${tag}</span></div>
         <div class="inbox-preview">${esc(m.body || '').slice(0,220)}</div>
@@ -3446,9 +3466,9 @@ async function openClientFromInbox(userId) {
 
   // Switch to messages tab within client
   await selectClient(userId);
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => { t.classList.remove('active'); t.setAttribute('aria-selected', 'false'); });
   const msgTab = document.querySelector('.tab[data-tab="messages"]');
-  if (msgTab) msgTab.classList.add('active');
+  if (msgTab) { msgTab.classList.add('active'); msgTab.setAttribute('aria-selected', 'true'); }
   document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
   document.getElementById('panelMessages').classList.add('active');
 }
@@ -3579,14 +3599,14 @@ function renderOrders() {
   body.innerHTML = filtered.map(o => {
     const label = `${o.bedrijf || o.naam || o.email || o.id} (${fmtEur(o.amount)})`.replace(/'/g, "\\'");
     return `
-    <tr ${o.user_id ? `style="cursor:pointer;" onclick="openClientFromInbox('${esc(o.user_id)}')"` : ''}>
+    <tr ${o.user_id ? `style="cursor:pointer;" tabindex="0" role="button" aria-label="Open klant" onclick="openClientFromInbox('${esc(o.user_id)}')" onkeydown="rowKeyActivate(event)"` : ''}>
       <td>${esc(fmtDate(o.paid_at || o.created_at))}</td>
       <td>
         <div style="font-weight:600;">${esc(o.bedrijf || o.naam || '—')}</div>
         <div style="font-size:0.78rem;color:var(--text-muted);">${esc(o.email || '')}</div>
       </td>
       <td><span class="client-pakket">${esc(o.plan || '—')}</span></td>
-      <td style="font-variant-numeric:tabular-nums;">${fmtEur(o.amount)}</td>
+      <td style="text-align:right;font-variant-numeric:tabular-nums;">${fmtEur(o.amount)}</td>
       <td>
         <span class="status-pill ${esc(o.status||'pending')}">${esc(o.status||'pending')}</span>
         ${o.status === 'paid' && o.confirmed_at ? '<span style="display:inline-block;margin-left:6px;font-size:0.66rem;font-weight:700;color:#059669;background:rgba(16,185,129,0.1);padding:2px 7px;border-radius:99px;">BEVESTIGD</span>' : ''}
@@ -3638,8 +3658,9 @@ async function loadControls() {
 function bindTabs() {
   document.querySelectorAll('.tab').forEach(tab => {
     tab.addEventListener('click', () => {
-      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab').forEach(t => { t.classList.remove('active'); t.setAttribute('aria-selected', 'false'); });
       tab.classList.add('active');
+      tab.setAttribute('aria-selected', 'true');
       const target = tab.dataset.tab;
       document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
       document.getElementById('panel' + target.charAt(0).toUpperCase() + target.slice(1)).classList.add('active');
@@ -4801,7 +4822,7 @@ function renderClientList() {
       'reviewed': 'Afgerond',
       'deleted': 'Verwijderd'
     }[c.status] || 'In progress';
-    return `<div class="client-item${c.is_test ? ' is-test' : ''}" onclick="selectClient('${esc(c.user_id)}')" data-id="${esc(c.user_id)}">
+    return `<div class="client-item${c.is_test ? ' is-test' : ''}" tabindex="0" role="button" aria-label="Selecteer klant" onclick="selectClient('${esc(c.user_id)}')" onkeydown="rowKeyActivate(event)" data-id="${esc(c.user_id)}">
       ${c.unread_messages > 0 ? `<span class="client-unread">${c.unread_messages}</span>` : ''}
       ${c.is_test ? '<span class="client-test-badge" title="Admin/auditor-account in test-modus — niet zichtbaar in productie">TEST</span>' : ''}
       <div class="client-head">

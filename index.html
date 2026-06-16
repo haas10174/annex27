@@ -276,12 +276,12 @@
       --bg-alt: #FFFFFF;
       --bg-warm: #F2EFE8;
       --surface: #FFFFFF;
-      --border: #E8E4DC;
-      --border-light: #EFEBE3;
+      --border: #E5E5E5;
+      --border-light: #F0F0F0;
 
       --text-primary: #0F172A;
       --text-secondary: #475569;
-      --text-muted: #94A3B8;
+      --text-muted: #64748B;
 
       --accent: #0D9488;
       --accent-hover: #0F766E;
@@ -324,7 +324,7 @@
       position: fixed;
       top: 0; left: 0; right: 0;
       z-index: 100;
-      background: rgba(250,250,250,0.8);
+      background: rgba(250,249,246,0.8);
       backdrop-filter: blur(16px) saturate(180%);
       -webkit-backdrop-filter: blur(16px) saturate(180%);
       border-bottom: 1px solid var(--border-light);
@@ -602,7 +602,7 @@
       border: 1px solid var(--border);
       transition: all 0.2s;
     }
-    .btn-secondary:hover { border-color: var(--text-muted); background: var(--bg); }
+    .btn-secondary:hover { border-color: var(--accent); background: var(--bg-warm); box-shadow: var(--shadow-sm); }
 
     /* Hero visual — PDF rapport preview */
     .report-preview {
@@ -666,7 +666,7 @@
       position: absolute;
       top: 0; left: 0; right: 0;
       height: 3px;
-      background: #14b8a6;
+      background: #0D9488;
     }
     .report-logo {
       font-family: 'Sora', sans-serif;
@@ -1614,7 +1614,7 @@
         position: fixed;
         top: 64px;
         left: 0; right: 0;
-        background: rgba(250,250,250,0.98);
+        background: rgba(250,249,246,0.98);
         backdrop-filter: blur(16px);
         -webkit-backdrop-filter: blur(16px);
         padding: 24px;
@@ -1687,8 +1687,9 @@
   </div>
 </nav>
 
+<main>
 <!-- NIS2-DEADLINE BANNER -->
-<a href="/nis2" style="display:block;background:linear-gradient(90deg,#0F766E 0%,#0D9488 50%,#14b8a6 100%);color:#fff;text-decoration:none;padding:9px 24px;text-align:center;font-size:0.85rem;font-weight:500;letter-spacing:0.01em;position:relative;z-index:50;margin-top:64px;">
+<a href="/nis2" style="display:block;background:linear-gradient(90deg,#0F766E 0%,#0D9488 50%,#0D9488 100%);color:#fff;text-decoration:none;padding:9px 24px;text-align:center;font-size:0.85rem;font-weight:500;letter-spacing:0.01em;position:relative;z-index:50;margin-top:64px;">
   <strong style="font-weight:700;">NIS2 is sinds 17 oktober 2024 in werking</strong> &middot; Nederlandse uitvoeringswet wordt in 2026 van kracht. Bent u klaar? &rarr;
 </a>
 
@@ -2495,7 +2496,7 @@
           <li><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Review &amp; aanbevelingen door Lead Auditor</li>
           <li><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Professioneel PDF rapport, audit-ready</li>
         </ul>
-        <a href="bestellen.html?plan=gap" class="pkg-btn accent">Start gap-analyse</a>
+        <a href="/bestellen?plan=gap" class="pkg-btn accent">Start gap-analyse</a>
       </div>
 
       <div class="package">
@@ -2512,7 +2513,7 @@
           <li><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Meldingsplicht-procedure 24u/72u/1 mnd (Art. 23)</li>
           <li><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Lead Auditor review</li>
         </ul>
-        <a href="bestellen.html?plan=nis2" class="pkg-btn accent">Start NIS2 Readiness</a>
+        <a href="/bestellen?plan=nis2" class="pkg-btn accent">Start NIS2 Readiness</a>
       </div>
 
       <div class="package">
@@ -2530,7 +2531,7 @@
           <li><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Werkinstructies per controlfamilie A.5 t/m A.8</li>
           <li><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Review &amp; goedkeuring door Lead Auditor</li>
         </ul>
-        <a href="bestellen.html?plan=beleid" class="pkg-btn accent">Start bestelling</a>
+        <a href="/bestellen?plan=beleid" class="pkg-btn accent">Start bestelling</a>
       </div>
 
       <div class="package">
@@ -3175,7 +3176,7 @@
   right: -60px; top: -60px;
   width: 240px; height: 240px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(20,184,166,0.20), transparent 70%);
+  background: radial-gradient(circle, rgba(13,148,136,0.20), transparent 70%);
   pointer-events: none;
 }
 .founding-cta-content { position: relative; z-index: 1; }
@@ -3326,6 +3327,7 @@
     </div>
   </div>
 </section>
+</main>
 
 <!-- FOOTER -->
 <footer>
@@ -3543,7 +3545,7 @@
       <button type="submit" class="wl-submit" id="wlSubmit">Verstuur</button>
     </form>
     <div class="wl-success" id="wlSuccess">
-      <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="#14b8a6" stroke-width="2"><path d="M5 12l5 5L20 7"/></svg>
+      <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="#0D9488" stroke-width="2"><path d="M5 12l5 5L20 7"/></svg>
       <h4>Bedankt!</h4>
       <p>Wij nemen binnen 1 werkdag contact met u op via info@annex27.nl.</p>
     </div>
@@ -3561,7 +3563,7 @@
   .wl-desc { font-size:0.92rem; color:#475569; margin-bottom:22px; line-height:1.6; }
   .wl-form { display:flex; flex-direction:column; gap:10px; }
   .wl-form input, .wl-form textarea { width:100%; padding:12px 14px; border:1px solid #E5E5E5; border-radius:10px; font-family:inherit; font-size:0.92rem; color:#0f172a; outline:none; transition:border-color .2s; resize:vertical; }
-  .wl-form input:focus, .wl-form textarea:focus { border-color:#14b8a6; box-shadow:0 0 0 3px rgba(20,184,166,0.12); }
+  .wl-form input:focus, .wl-form textarea:focus { border-color:#0D9488; box-shadow:0 0 0 3px rgba(13,148,136,0.12); }
   .wl-error { display:none; padding:10px 12px; background:#FEF2F2; border:1px solid #FECACA; border-radius:8px; color:#DC2626; font-size:0.82rem; }
   .wl-error.visible { display:block; }
   .wl-submit { padding:14px; background:#0D9488; color:#fff; border:none; border-radius:10px; font-weight:700; font-size:0.95rem; cursor:pointer; transition:background .2s; margin-top:4px; }

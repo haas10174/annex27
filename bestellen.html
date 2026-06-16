@@ -31,10 +31,23 @@
   <script src="/vat-rules.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #FAF9F6;
+      --surface: #FFFFFF;
+      --border: #E5E5E5;
+      --border-light: #F0F0F0;
+      --text-primary: #0F172A;
+      --text-secondary: #475569;
+      --text-muted: #64748B;
+      --accent: #0D9488;
+      --accent-hover: #0F766E;
+      --accent-light: #CCFBF1;
+      --radius: 10px;
+    }
     body {
       font-family: 'Inter', -apple-system, sans-serif;
-      background: #FAFAFA;
-      color: #475569;
+      background: var(--bg);
+      color: var(--text-secondary);
       line-height: 1.7;
       min-height: 100vh;
       display: flex;
@@ -58,7 +71,7 @@
     }
     .order-right {
       padding: 48px;
-      background: #FAFAFA;
+      background: var(--bg);
     }
     .order-logo {
       font-size: 1.3rem;
@@ -84,8 +97,8 @@
     .post-purchase {
       margin-top: 28px;
       padding: 22px 24px;
-      background: #FAFAFA;
-      border: 1px solid #EAEAEA;
+      background: var(--bg);
+      border: 1px solid var(--border);
       border-radius: 12px;
     }
     .post-purchase-label {
@@ -107,7 +120,7 @@
     .plan-option {
       border: 0;
       border-left: 3px solid transparent;
-      background: #FAFAFA;
+      background: var(--bg);
       border-radius: 8px;
       padding: 20px 22px;
       margin-bottom: 8px;
@@ -169,8 +182,8 @@
     .plan-option.featured { /* no permanent color — selection state governs highlight */ }
 
     .order-summary {
-      background: white;
-      border: 1px solid #E5E5E5;
+      background: var(--surface);
+      border: 1px solid var(--border);
       border-radius: 12px;
       padding: 24px;
       margin-bottom: 24px;
@@ -196,16 +209,16 @@
     .order-form { display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px; }
     .order-input, .order-select {
       padding: 12px 16px;
-      border: 1px solid #E5E5E5;
+      border: 1px solid var(--border);
       border-radius: 10px;
       font-family: inherit;
       font-size: 0.9rem;
-      color: #0F172A;
+      color: var(--text-primary);
       outline: none;
-      background: white;
+      background: var(--surface);
       width: 100%;
     }
-    .order-input:focus, .order-select:focus { border-color: #0D9488; box-shadow: 0 0 0 3px rgba(13,148,136,0.1); }
+    .order-input:focus, .order-select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(13,148,136,0.1); }
 
     .field-label {
       font-size: 0.72rem; font-weight: 600; color: #64748B;
@@ -312,7 +325,7 @@
     .order-pay {
       width: 100%;
       padding: 16px;
-      background: #0D9488;
+      background: var(--accent);
       color: white;
       border: none;
       border-radius: 10px;
@@ -322,7 +335,7 @@
       cursor: pointer;
       transition: background 0.2s;
     }
-    .order-pay:hover { background: #0F766E; }
+    .order-pay:hover { background: var(--accent-hover); }
     .order-pay:disabled { opacity: 0.5; cursor: not-allowed; }
 
     .order-trust {
@@ -389,7 +402,9 @@
     .back-link a:hover { color: #0F172A; }
 
     h1, h3, .plan-name, .order-logo { font-family: 'Sora', sans-serif; }
-    :focus-visible { outline: 2px solid #0D9488; outline-offset: 2px; }
+    a:focus-visible, button:focus-visible, select:focus-visible,
+    input:focus-visible, textarea:focus-visible, summary:focus-visible,
+    [tabindex]:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
     @media (max-width: 768px) {
       html, body { overflow-x: hidden; }
@@ -451,9 +466,10 @@
       .plan-group-label:first-of-type{margin-top:8px;}
     </style>
 
+    <div role="radiogroup" aria-label="Kies uw pakket">
     <div class="plan-group-label">Kies uw startpunt</div>
 
-    <div class="plan-option selected featured" onclick="selectPlan(this, 'gap', 795, 'eenmalig')">
+    <div class="plan-option selected featured" role="radio" aria-checked="true" tabindex="0" onclick="selectPlan(this, 'gap', 795, 'eenmalig')" onkeydown="planKeydown(event, this, 'gap', 795, 'eenmalig')">
       <div class="plan-radio"></div>
       <div style="flex:1;">
         <div class="plan-name">Gap-analyse <span class="plan-popular-tag">Meest gekozen</span></div>
@@ -462,7 +478,7 @@
       <div class="plan-price">&euro;795 <span class="plan-period">eenmalig</span></div>
     </div>
 
-    <div class="plan-option" onclick="selectPlan(this, 'nis2', 595, 'eenmalig')">
+    <div class="plan-option" role="radio" aria-checked="false" tabindex="-1" onclick="selectPlan(this, 'nis2', 595, 'eenmalig')" onkeydown="planKeydown(event, this, 'nis2', 595, 'eenmalig')">
       <div class="plan-radio"></div>
       <div style="flex:1;">
         <div class="plan-name">NIS2 Readiness</div>
@@ -471,7 +487,7 @@
       <div class="plan-price">&euro;595 <span class="plan-period">eenmalig</span></div>
     </div>
 
-    <div class="plan-option" onclick="selectPlan(this, 'iso_nis2_bundle', 1190, 'eenmalig')">
+    <div class="plan-option" role="radio" aria-checked="false" tabindex="-1" onclick="selectPlan(this, 'iso_nis2_bundle', 1190, 'eenmalig')" onkeydown="planKeydown(event, this, 'iso_nis2_bundle', 1190, 'eenmalig')">
       <div class="plan-radio"></div>
       <div style="flex:1;">
         <div class="plan-name">Bundel ISO 27001 + NIS2 <span class="plan-popular-tag">&euro;200 voordeel</span></div>
@@ -482,7 +498,7 @@
 
     <div class="plan-group-label">Uitbreiding</div>
 
-    <div class="plan-option" onclick="selectPlan(this, 'beleid', 395, 'eenmalig')">
+    <div class="plan-option" role="radio" aria-checked="false" tabindex="-1" onclick="selectPlan(this, 'beleid', 395, 'eenmalig')" onkeydown="planKeydown(event, this, 'beleid', 395, 'eenmalig')">
       <div class="plan-radio"></div>
       <div style="flex:1;">
         <div class="plan-name">Beleidspakket</div>
@@ -493,13 +509,14 @@
 
     <!-- NIS2 Jaarlijkse Hertoets: herhaalaankoop voor bestaande klanten. Verborgen in de
          standaard-checkout; verschijnt alleen via dashboard-deeplink ?plan=nis2_hertoets. -->
-    <div class="plan-option" id="hertoetsOption" style="display:none;" onclick="selectPlan(this, 'nis2_hertoets', 495, 'per jaar')">
+    <div class="plan-option" id="hertoetsOption" style="display:none;" role="radio" aria-checked="false" tabindex="-1" onclick="selectPlan(this, 'nis2_hertoets', 495, 'per jaar')" onkeydown="planKeydown(event, this, 'nis2_hertoets', 495, 'per jaar')">
       <div class="plan-radio"></div>
       <div style="flex:1;">
         <div class="plan-name">NIS2 Jaarlijkse Hertoets</div>
         <div class="plan-desc">Hertoets van uw NIS2-dossier door de Lead Auditor. U boekt zelf bij, geen automatische verlenging.</div>
       </div>
       <div class="plan-price">&euro;495 <span class="plan-period">per jaar</span></div>
+    </div>
     </div>
 
     <div class="plan-group-label">Maatwerk</div>
@@ -547,7 +564,7 @@
   </div>
 
   <div class="order-right">
-    <div id="personalBanner" style="display:none;margin-bottom:16px;padding:14px 16px;background:rgba(20,184,166,0.08);border:1px solid rgba(20,184,166,0.25);border-left:3px solid #14b8a6;border-radius:8px;">
+    <div id="personalBanner" style="display:none;margin-bottom:16px;padding:14px 16px;background:rgba(13,148,136,0.08);border:1px solid rgba(13,148,136,0.25);border-left:3px solid #0D9488;border-radius:8px;">
       <div style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.12em;color:#0D9488;font-weight:600;margin-bottom:4px;">Uit uw quickscan</div>
       <div id="personalBannerText" style="font-size:0.92rem;color:#0F172A;line-height:1.5;"></div>
     </div>
@@ -610,12 +627,12 @@
         </div>
       </div>
 
-      <input class="order-input" type="text" name="naam" placeholder="Volledige naam" required maxlength="200" autocomplete="name" />
-      <input class="order-input" type="text" name="bedrijf" id="bedrijfInput" placeholder="Bedrijfsnaam" required maxlength="200" autocomplete="organization" />
-      <input class="order-input" type="email" name="email" placeholder="E-mailadres" required maxlength="320" autocomplete="email" />
+      <input class="order-input" type="text" name="naam" placeholder="Volledige naam" aria-label="Volledige naam" required maxlength="200" autocomplete="name" />
+      <input class="order-input" type="text" name="bedrijf" id="bedrijfInput" placeholder="Bedrijfsnaam" aria-label="Bedrijfsnaam" required maxlength="200" autocomplete="organization" />
+      <input class="order-input" type="email" name="email" placeholder="E-mailadres" aria-label="E-mailadres" required maxlength="320" autocomplete="email" />
 
       <div class="field-group" id="vatNumberWrap">
-        <input class="order-input" type="text" name="btw_nummer" id="vatInput" placeholder="BTW-nummer (bv. NL123456789B01)" maxlength="50" autocomplete="off" />
+        <input class="order-input" type="text" name="btw_nummer" id="vatInput" placeholder="BTW-nummer (bv. NL123456789B01)" aria-label="BTW-nummer" maxlength="50" autocomplete="off" />
         <div class="vat-status" id="vatStatus" role="status" aria-live="polite"></div>
         <div class="vat-hint" id="vatHint">
           <strong>Tip:</strong> met een geldig EU BTW-nummer buiten België wordt de BTW verlegd (0% op uw factuur, u geeft zelf aan).
@@ -628,7 +645,7 @@
 
       <details class="discount-toggle" id="discountToggle">
         <summary>Heeft u een kortingscode?</summary>
-        <input class="order-input" type="text" name="discount_code" id="discountInput" placeholder="Kortingscode" maxlength="50" autocomplete="off" />
+        <input class="order-input" type="text" name="discount_code" id="discountInput" placeholder="Kortingscode" aria-label="Kortingscode" maxlength="50" autocomplete="off" />
       </details>
 
       <label class="terms-accept" for="termsCheck">
@@ -779,8 +796,19 @@
   }
 
   function selectPlan(el, plan, price, period) {
-    document.querySelectorAll('.plan-option').forEach(p => p.classList.remove('selected'));
+    document.querySelectorAll('.plan-option').forEach(p => {
+      p.classList.remove('selected');
+      // Alleen echte radio-opties (binnen de radiogroup) krijgen aria/tab-state; de contact-link niet.
+      if (p.getAttribute('role') === 'radio') {
+        p.setAttribute('aria-checked', 'false');
+        p.setAttribute('tabindex', '-1');
+      }
+    });
     el.classList.add('selected');
+    if (el.getAttribute('role') === 'radio') {
+      el.setAttribute('aria-checked', 'true');
+      el.setAttribute('tabindex', '0');
+    }
     selectedPlan = plan;
     selectedPrice = price;
 
@@ -790,6 +818,28 @@
 
     document.getElementById('orderProduct').textContent = el.querySelector('.plan-name').textContent;
     recomputeSummary();
+  }
+
+  // Toetsenbordbediening voor de plan-radiogroup (WAI-ARIA radio pattern):
+  // Enter/Space selecteert, pijltjes verplaatsen naar de vorige/volgende zichtbare optie.
+  function planKeydown(e, el, plan, price, period) {
+    if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
+      e.preventDefault();
+      selectPlan(el, plan, price, period);
+      return;
+    }
+    if (e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+      const group = el.closest('[role="radiogroup"]');
+      if (!group) return;
+      const radios = Array.from(group.querySelectorAll('.plan-option[role="radio"]'))
+        .filter(r => r.offsetParent !== null); // alleen zichtbare opties
+      const idx = radios.indexOf(el);
+      if (idx === -1) return;
+      e.preventDefault();
+      const fwd = (e.key === 'ArrowDown' || e.key === 'ArrowRight');
+      const next = radios[(idx + (fwd ? 1 : -1) + radios.length) % radios.length];
+      if (next) { next.click(); next.focus(); }
+    }
   }
 
   // Dashboard-deeplink: toon + selecteer de NIS2 Jaarlijkse Hertoets alleen als hij
@@ -1049,6 +1099,7 @@
 
     // Disable button during request
     btn.disabled = true;
+    form.setAttribute('aria-busy', 'true');
     const originalText = btn.textContent;
     btn.textContent = 'Bezig met doorsturen naar Mollie...';
 
@@ -1106,6 +1157,7 @@
     } catch (err) {
       console.error('Payment error:', err);
       btn.disabled = false;
+      form.removeAttribute('aria-busy');
       btn.textContent = originalText;
 
       showOrderError('Er ging iets mis: ' + err.message + '. Probeer het opnieuw of neem contact op via info@annex27.nl');

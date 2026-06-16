@@ -18,8 +18,6 @@
   <meta name="description" content="Transparant overzicht: EU-only hosting, AES-256 encryptie, TLS 1.3, Row Level Security, signed URLs en automatische verwijdering. Technische en contractuele maatregelen." />
   <meta name="keywords" content="Annex27 security, data residency EU, AES-256, ISO 27001 platform security, RLS, signed URLs, data processing agreement" />
   <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large" />
-  <meta name="theme-color" content="#0D9488" />
-  <script src="/analytics.js"></script>
   <link rel="canonical" href="https://annex27.nl/trust" />
 
   <!-- Open Graph -->
@@ -71,7 +69,7 @@
       --border-light: #F0F0F0;
       --text-primary: #0F172A;
       --text-secondary: #475569;
-      --text-muted: #94A3B8;
+      --text-muted: #64748B;
       --accent: #0D9488;
       --accent-hover: #0F766E;
       --accent-light: #CCFBF1;
@@ -98,7 +96,7 @@
       position: fixed;
       top: 0; left: 0; right: 0;
       z-index: 100;
-      background: rgba(250,250,250,0.85);
+      background: rgba(250,249,246,0.85);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       border-bottom: 1px solid var(--border-light);
@@ -464,7 +462,7 @@
       .disclosure { grid-template-columns: 1fr; }
     }
 
-    :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    a:focus-visible,button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible,summary:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
 /* a27-mobile-baseline */ @media (max-width:768px){html,body{overflow-x:hidden;}img,figure,video,iframe{max-width:100%;height:auto;}table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;}pre,code{white-space:pre-wrap;word-wrap:break-word;}.container{padding-left:18px !important;padding-right:18px !important;}}
   </style>
 </head>
@@ -563,17 +561,23 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.min.js" integrity="sha384-2zrRDgDHSYB/GN3nFW3fsZXoxEhKIr3N2h63Tc6DEOB9JJdFIu8xMJT2Cph/gBil" crossorigin="anonymous"></script>
 <script>
 (async function loadTrustMetrics(){
+  const elD = document.getElementById('metric-deleted');
+  const elA = document.getElementById('metric-audit');
+  // Neutrale fallback i.p.v. een blijvende "—" onder de live-claim
+  function showFallback(){
+    if (elD && elD.textContent === '—') elD.textContent = 'n.n.b.';
+    if (elA && elA.textContent === '—') elA.textContent = 'n.n.b.';
+  }
   try {
     const TSB_URL = 'https://tvqhxhoohzdzekcfzjuv.supabase.co';
     const TSB_KEY = 'sb_publishable_-a0bntwsGr8mR9xROgJTzQ_Gylt8ZSo';
+    if (!window.supabase) { showFallback(); return; }
     const tsb = window.supabase.createClient(TSB_URL, TSB_KEY);
     const { data, error } = await tsb.rpc('trust_metrics');
-    if (error || !data) return;
-    const elD = document.getElementById('metric-deleted');
-    const elA = document.getElementById('metric-audit');
+    if (error || !data) { showFallback(); return; }
     if (elD) elD.textContent = (data.deleted_users_30d ?? 0).toString();
     if (elA) elA.textContent = (data.audit_events_30d ?? 0).toString();
-  } catch (e) { /* swallow */ }
+  } catch (e) { showFallback(); }
 })();
 </script>
 
@@ -643,7 +647,7 @@
           <div class="control-title">CSP, HSTS en SRI &mdash; door uzelf controleerbaar</div>
         </div>
         <div class="control-body">
-          Strikte Content Security Policy, HSTS (2 jaar, preload-ready), en Subresource Integrity-hashes op alle externe scripts. Open de devtools van uw browser, kijk in Network of Security &mdash; deze claim hoeft u ons niet op uw blauwe ogen te geloven.
+          Strikte Content Security Policy, HSTS (2 jaar, preload-ready), en Subresource Integrity-hashes op onze externe scripts van derden (CDN). First-party scripts worden vanaf ons eigen domein geserveerd. Open de devtools van uw browser, kijk in Network of Security &mdash; deze claim hoeft u ons niet op uw blauwe ogen te geloven.
         </div>
       </div>
     </div>

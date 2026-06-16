@@ -52,17 +52,17 @@
       --bg-alt: #FFFFFF;
       --bg-warm: #F2EFE8;
       --surface: #FFFFFF;
-      --border: #E8E4DC;
-      --border-light: #EFEBE3;
+      --border: #E5E5E5;
+      --border-light: #F0F0F0;
       --text-primary: #0F172A;
       --text-secondary: #475569;
-      --text-muted: #94A3B8;
+      --text-muted: #64748B;
       --accent: #0D9488;
       --accent-hover: #0F766E;
       --accent-light: #CCFBF1;
       --dark: #0c0f1a;
-      --warn: #D97706;
-      --danger: #DC2626;
+      --warn: #B45309;
+      --danger: #B91C1C;
       --radius-sm: 6px;
       --radius: 10px;
       --radius-lg: 16px;
@@ -196,7 +196,7 @@
       display: inline-flex; align-items: center; gap: 6px;
       font-weight: 600; font-size: 0.86rem;
     }
-    .ic-yes { color: #059669; }
+    .ic-yes { color: #047857; }
     .ic-no { color: var(--danger); }
     .ic-warn { color: var(--warn); }
     .ic-yes svg, .ic-no svg, .ic-warn svg { width: 16px; height: 16px; stroke-width: 2.6; }
@@ -294,7 +294,27 @@
       .ctable { min-width: 720px; }
     }
 
-    :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    a:focus-visible,button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible,summary:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+
+    /* Scroll-hint voor de brede vergelijkingstabel op mobiel */
+    .comparison-scroll { position: relative; }
+    .comparison-scroll::after {
+      content: '';
+      position: absolute; top: 0; right: 0; bottom: 0;
+      width: 40px; pointer-events: none;
+      background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.92) 100%);
+      border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+      display: none;
+    }
+    .scroll-hint {
+      display: none;
+      font-size: 0.78rem; color: var(--text-muted);
+      margin: 10px 2px 0; text-align: center;
+    }
+    @media (max-width: 768px) {
+      .comparison-scroll::after { display: block; }
+      .scroll-hint { display: block; }
+    }
   </style>
 </head>
 <body>
@@ -327,6 +347,7 @@
       Vergelijk op prijs, tempo, persoonlijke begeleiding, NL/BE-focus en evidence-validatie. Eerlijke cijfers gebaseerd op publieke tarieven en branche-rapportages.
     </p>
 
+    <div class="comparison-scroll">
     <div class="comparison-wrap">
       <table class="ctable">
         <thead>
@@ -398,6 +419,8 @@
         </tbody>
       </table>
     </div>
+    </div>
+    <p class="scroll-hint" aria-hidden="true">&larr; scroll horizontaal voor alle kolommen &rarr;</p>
 
     <p style="font-size:0.82rem;color:var(--text-muted);margin-top:14px;">
       Cijfers gebaseerd op publieke tarieven (Big4-rate cards 2025), Vanta/Drata-pricing pages en Bol.com/Smartsheet template-prijzen. Annex27-prijs: pioneer pricing (eerste 25 klanten).

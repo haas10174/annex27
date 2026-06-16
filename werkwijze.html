@@ -54,11 +54,11 @@
       --bg-alt: #FFFFFF;
       --bg-warm: #F2EFE8;
       --surface: #FFFFFF;
-      --border: #E8E4DC;
-      --border-light: #EFEBE3;
+      --border: #E5E5E5;
+      --border-light: #F0F0F0;
       --text-primary: #0F172A;
       --text-secondary: #475569;
-      --text-muted: #94A3B8;
+      --text-muted: #64748B;
       --accent: #0D9488;
       --accent-hover: #0F766E;
       --accent-light: #CCFBF1;
@@ -83,7 +83,7 @@
       position: fixed;
       top: 0; left: 0; right: 0;
       z-index: 100;
-      background: rgba(250,250,250,0.85);
+      background: rgba(250,249,246,0.85);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       border-bottom: 1px solid var(--border-light);
@@ -354,10 +354,9 @@
       .step-desc { font-size: 0.92rem; }
       .pillars { grid-template-columns: 1fr; gap: 8px; }
       .cta-card { grid-template-columns: 1fr; padding: 36px 22px; }
-      .cta-card h2 { font-size: 1.4rem; }
+      .cta-card h3 { font-size: 1.4rem; }
       .timeline-table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; max-width: 100%; }
       .timeline-table th, .timeline-table td { font-size: 0.84rem; padding: 8px 10px; }
-      .timeline-table th:nth-child(3), .timeline-table td:nth-child(3) { display: none; }
       footer { padding: 32px 0 24px; }
       .footer-inner { flex-direction: column; align-items: flex-start; gap: 12px; }
       .footer-links { flex-wrap: wrap; gap: 14px; }
@@ -368,8 +367,8 @@
       .step-row::before { left: 16px; right: 16px; }
     }
 
-    :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-  </style>
+    a:focus-visible,button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible,summary:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+</style>
 </head>
 <body>
 
@@ -407,7 +406,7 @@
         <div class="step-num">01</div>
         <div class="step-body">
           <div class="step-tag">Gratis · 5 minuten</div>
-          <div class="step-title">Quickscan: krijg een eerste indicatie</div>
+          <h3 class="step-title">Quickscan: krijg een eerste indicatie</h3>
           <p class="step-desc">
             U beantwoordt sectorspecifieke vragen (SaaS, zorg, IT-MSP, overheid of bouw). Geen account nodig. <strong>Direct</strong> ziet u uw indicatieve compliance-score, de Annex A-controls die voor uw sector relevant zijn en de meest voorkomende valkuilen.
           </p>
@@ -423,7 +422,7 @@
         <div class="step-num">02</div>
         <div class="step-body">
           <div class="step-tag">€795 · eenmalig</div>
-          <div class="step-title">Bestelling &amp; toegang tot dashboard</div>
+          <h3 class="step-title">Bestelling &amp; toegang tot dashboard</h3>
           <p class="step-desc">
             U kiest een pakket (Gap-analyse, NIS2 Readiness, Beleidspakket of Pre-audit Review) en betaalt veilig via Mollie (iDEAL, Bancontact, creditcard). <strong>Direct na betaling</strong> ontvangt u inloggegevens voor het dashboard. Bij EU-bedrijven met geldig BTW-nummer wordt BTW automatisch verlegd.
           </p>
@@ -439,7 +438,7 @@
         <div class="step-num">03</div>
         <div class="step-body">
           <div class="step-tag">Uw eigen tempo</div>
-          <div class="step-title">Volledige gap-analyse invullen</div>
+          <h3 class="step-title">Volledige gap-analyse invullen</h3>
           <p class="step-desc">
             In uw dashboard scoort u alle 93 Annex A-controls op de <strong>CMMI-volwassenheidsschaal</strong> (0=niet aanwezig, 4=geoptimaliseerd). Per control vindt u: wat het inhoudt, hoe het in uw sector voorkomt, en welke evidence wij verwachten. U kunt op- en afhaken, uw voortgang wordt continu opgeslagen.
           </p>
@@ -455,7 +454,7 @@
         <div class="step-num">04</div>
         <div class="step-body">
           <div class="step-tag">Optioneel, sterk aanbevolen</div>
-          <div class="step-title">Bewijsvoering aanleveren</div>
+          <h3 class="step-title">Bewijsvoering aanleveren</h3>
           <p class="step-desc">
             Per control upload u beleidsdocumenten, screenshots, exports of foto's. Alles wordt versleuteld opgeslagen in een EU-only storage bucket met Row-Level Security. Wij gebruiken visuele evidence (afbeeldingen) actief in het rapport. Uw screenshot van het wachtwoordbeleid leidt tot een directe observatie, niet tot een generieke aanbeveling.
           </p>
@@ -471,7 +470,7 @@
         <div class="step-num">05</div>
         <div class="step-body">
           <div class="step-tag">Lead Auditor review</div>
-          <div class="step-title">Persoonlijke review &amp; rapport-draft</div>
+          <h3 class="step-title">Persoonlijke review &amp; rapport-draft</h3>
           <p class="step-desc">
             Een gecertificeerde ISO 27001 Lead Auditor (DNV) reviewt uw antwoorden en evidence. Bevindingen worden vastgelegd: control-id, severity, observatie en aanbeveling. <strong>Deze bevindingen vormen het rapport.</strong> De Lead Auditor formuleert observaties, aanbevelingen en eindoordeel persoonlijk, op basis van uw evidence en antwoorden.
           </p>
@@ -487,7 +486,7 @@
         <div class="step-num">06</div>
         <div class="step-body">
           <div class="step-tag">Binnen 48 uur</div>
-          <div class="step-title">Eindrapport &amp; vrijgave</div>
+          <h3 class="step-title">Eindrapport &amp; vrijgave</h3>
           <p class="step-desc">
             U ontvangt een PDF-rapport met executive summary, score per Annex A-categorie, top-5 prioriteiten, gedetailleerde bevindingen per control en concrete aanbevelingen. Het rapport is <strong>auditor-ready</strong>: u kunt het naast een externe certificering-audit leggen zonder dat uw certificeringsinstantie er gaten in zal prikken.
           </p>

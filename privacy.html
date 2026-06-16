@@ -19,8 +19,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-    :root{--bg:#FAF9F6;--surface:#FFF;--border:#E5E5E5;--border-light:#F0F0F0;--text-primary:#0F172A;--text-secondary:#475569;--text-muted:#94A3B8;--accent:#0D9488;--accent-hover:#0F766E;--accent-light:#CCFBF1;--dark:#0c0f1a;--radius:10px;--radius-lg:16px;}
+    :root{--bg:#FAF9F6;--surface:#FFF;--border:#E5E5E5;--border-light:#F0F0F0;--text-primary:#0F172A;--text-secondary:#475569;--text-muted:#64748B;--accent:#0D9488;--accent-hover:#0F766E;--accent-light:#CCFBF1;--dark:#0c0f1a;--radius:10px;--radius-lg:16px;}
     html{scroll-behavior:smooth;}
+    a:focus-visible,button:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
     body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text-secondary);line-height:1.7;-webkit-font-smoothing:antialiased;}
     .container{max-width:880px;margin:0 auto;padding:0 24px;}
     nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(250,250,250,0.85);backdrop-filter:blur(16px);border-bottom:1px solid var(--border-light);height:64px;display:flex;align-items:center;padding:0 5%;}
@@ -162,52 +163,50 @@
     <h2 id="cookies">8. Cookies</h2>
     <p>Wij gebruiken uitsluitend de cookies die noodzakelijk zijn voor het functioneren van de site en, na uw toestemming, analytische cookies om het gebruik te verbeteren. Er zijn <strong>geen</strong> advertentie- of tracking-cookies van derden.</p>
 
-    <h3 style="font-size:1rem;font-weight:700;color:#0F172A;margin:24px 0 10px;">Overzicht van gebruikte cookies</h3>
-    <div style="overflow-x:auto;">
-      <table style="width:100%;border-collapse:collapse;font-size:0.88rem;margin:8px 0 16px;">
-        <thead>
-          <tr style="background:#F4F4F4;">
-            <th style="text-align:left;padding:10px 12px;border:1px solid #E5E5E5;">Cookie</th>
-            <th style="text-align:left;padding:10px 12px;border:1px solid #E5E5E5;">Doel</th>
-            <th style="text-align:left;padding:10px 12px;border:1px solid #E5E5E5;">Type</th>
-            <th style="text-align:left;padding:10px 12px;border:1px solid #E5E5E5;">Duur</th>
-            <th style="text-align:left;padding:10px 12px;border:1px solid #E5E5E5;">Toestemming</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td style="padding:10px 12px;border:1px solid #E5E5E5;"><code>sb-access-token</code> / <code>sb-refresh-token</code></td>
-            <td style="padding:10px 12px;border:1px solid #E5E5E5;">Authenticatie portaalsessie (Supabase)</td>
-            <td style="padding:10px 12px;border:1px solid #E5E5E5;">Essentieel &middot; 1e partij</td>
-            <td style="padding:10px 12px;border:1px solid #E5E5E5;">Sessie (1u) &middot; refresh 30d</td>
-            <td style="padding:10px 12px;border:1px solid #E5E5E5;">Niet nodig</td>
-          </tr>
-          <tr>
-            <td style="padding:10px 12px;border:1px solid #E5E5E5;"><code>annex27_consent_v1</code></td>
-            <td style="padding:10px 12px;border:1px solid #E5E5E5;">Onthoudt uw cookie-keuze</td>
-            <td style="padding:10px 12px;border:1px solid #E5E5E5;">Essentieel &middot; 1e partij (localStorage)</td>
-            <td style="padding:10px 12px;border:1px solid #E5E5E5;">1 jaar</td>
-            <td style="padding:10px 12px;border:1px solid #E5E5E5;">Niet nodig</td>
-          </tr>
-          <tr>
-            <td style="padding:10px 12px;border:1px solid #E5E5E5;"><code>_ga</code>, <code>_ga_*</code></td>
-            <td style="padding:10px 12px;border:1px solid #E5E5E5;">Google Analytics 4: geanonimiseerde bezoekersstatistieken (IP-anonymization aan, geen ad-features)</td>
-            <td style="padding:10px 12px;border:1px solid #E5E5E5;">Analytisch &middot; 3e partij (Google)</td>
-            <td style="padding:10px 12px;border:1px solid #E5E5E5;">Max 2 jaar</td>
-            <td style="padding:10px 12px;border:1px solid #E5E5E5;"><strong>Ja</strong>, opt-in</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+    <h3>Overzicht van gebruikte cookies</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Cookie</th>
+          <th>Doel</th>
+          <th>Type</th>
+          <th>Duur</th>
+          <th>Toestemming</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>sb-access-token</code> / <code>sb-refresh-token</code></td>
+          <td>Authenticatie portaalsessie (Supabase)</td>
+          <td>Essentieel &middot; 1e partij</td>
+          <td>Sessie (1u) &middot; refresh 30d</td>
+          <td>Niet nodig</td>
+        </tr>
+        <tr>
+          <td><code>annex27_consent_v1</code></td>
+          <td>Onthoudt uw cookie-keuze</td>
+          <td>Essentieel &middot; 1e partij (localStorage)</td>
+          <td>1 jaar</td>
+          <td>Niet nodig</td>
+        </tr>
+        <tr>
+          <td><code>_ga</code>, <code>_ga_*</code></td>
+          <td>Google Analytics 4: geanonimiseerde bezoekersstatistieken (IP-anonymization aan, geen ad-features)</td>
+          <td>Analytisch &middot; 3e partij (Google)</td>
+          <td>Max 2 jaar</td>
+          <td><strong>Ja</strong>, opt-in</td>
+        </tr>
+      </tbody>
+    </table>
 
     <p><strong>Google Consent Mode v2.</strong> Google Analytics wordt pas actief na uw expliciete toestemming via de cookie-banner. Zonder toestemming worden geen analytische cookies geplaatst en geen data naar Google verstuurd.</p>
 
-    <div style="background:#F7FBFB;border:1px solid #D9EEEC;border-left:3px solid #0D9488;border-radius:10px;padding:16px 20px;margin:16px 0;">
+    <div class="callout">
       <strong>Uw keuze wijzigen?</strong> Klik op de knop hieronder om uw cookie-keuze opnieuw in te stellen.<br/>
-      <button onclick="if(window.annex27ResetConsent){window.annex27ResetConsent();}else{alert('Herlaad de pagina en probeer opnieuw.');}" style="margin-top:10px;background:#0D9488;color:#fff;border:none;padding:10px 18px;border-radius:8px;font-family:inherit;font-weight:600;font-size:0.88rem;cursor:pointer;">Cookie-instellingen wijzigen</button>
+      <button onclick="if(window.annex27ResetConsent){window.annex27ResetConsent();}else{alert('Herlaad de pagina en probeer opnieuw.');}" style="margin-top:10px;background:var(--accent);color:#fff;border:none;padding:10px 18px;border-radius:var(--radius);font-family:inherit;font-weight:600;font-size:0.88rem;cursor:pointer;">Cookie-instellingen wijzigen</button>
     </div>
 
-    <p style="font-size:0.88rem;color:#64748B;">Wenst u GA4 ook buiten Annex27 uit te schakelen? Gebruik de officiële <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener">Google Analytics opt-out browser-extensie</a>.</p>
+    <p style="font-size:0.88rem;color:var(--text-muted);">Wenst u GA4 ook buiten Annex27 uit te schakelen? Gebruik de officiële <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener">Google Analytics opt-out browser-extensie</a>.</p>
 
     <h2>9. Uw rechten onder de AVG</h2>
     <p>U heeft de volgende rechten betreffende uw persoonsgegevens:</p>

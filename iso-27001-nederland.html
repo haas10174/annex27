@@ -66,11 +66,11 @@
     :root {
       --bg: #FAF9F6;
       --surface: #FFFFFF;
-      --border: #E8E4DC;
-      --border-light: #EFEBE3;
+      --border: #E5E5E5;
+      --border-light: #F0F0F0;
       --text-primary: #0F172A;
       --text-secondary: #475569;
-      --text-muted: #94A3B8;
+      --text-muted: #64748B;
       --accent: #0D9488;
       --accent-hover: #0F766E;
       --accent-light: #CCFBF1;
@@ -82,6 +82,7 @@
       --radius: 10px;
       --radius-lg: 16px;
     }
+    a:focus-visible, button:focus-visible, select:focus-visible, input:focus-visible, summary:focus-visible, [tabindex]:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
     html { scroll-behavior: smooth; }
     body {
       font-family: 'Inter', -apple-system, system-ui, sans-serif;
@@ -108,7 +109,7 @@
     .nav-back:hover { color: var(--text-primary); }
 
     .countdown-banner {
-      background: linear-gradient(90deg, #0F766E, #0D9488, #14b8a6);
+      background: linear-gradient(90deg, #0F766E, #115E59, #0D9488);
       color: white;
       padding: 10px 24px;
       text-align: center;
@@ -288,7 +289,7 @@
     .faq-q::after { content: '+'; font-size: 1.4rem; color: var(--accent); transition: transform 0.2s; }
     .faq-item.open .faq-q::after { transform: rotate(45deg); }
     .faq-a { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; padding: 0 20px; }
-    .faq-item.open .faq-a { max-height: 600px; padding: 0 20px 18px; }
+    .faq-item.open .faq-a { max-height: 1500px; padding: 0 20px 18px; }
     .faq-a p { font-size: 0.92rem; line-height: 1.7; color: var(--text-secondary); }
 
     .cta-box {
@@ -489,28 +490,28 @@
 
     <div class="faq-list">
       <div class="faq-item">
-        <button class="faq-q">Val ik onder de Cyberbeveiligingswet als Nederlands MKB?</button>
-        <div class="faq-a"><p>Direct als u 50+ FTE heeft of &euro;10M+ omzet en in een NIS2-sector werkt. Indirect altijd als uw klanten NIS2-plichtig zijn. Onze gratis quickscan geeft binnen 5 minuten antwoord op de scope-vraag.</p></div>
+        <button class="faq-q" aria-expanded="false" aria-controls="faq-nl-a1">Val ik onder de Cyberbeveiligingswet als Nederlands MKB?</button>
+        <div class="faq-a" id="faq-nl-a1"><p>Direct als u 50+ FTE heeft of &euro;10M+ omzet en in een NIS2-sector werkt. Indirect altijd als uw klanten NIS2-plichtig zijn. Onze gratis quickscan geeft binnen 5 minuten antwoord op de scope-vraag.</p></div>
       </div>
       <div class="faq-item">
-        <button class="faq-q">Wanneer treedt de Cyberbeveiligingswet in werking?</button>
-        <div class="faq-a"><p>Verwachte ingangsdatum 1 juli 2026. De Tweede Kamer heeft het wetsvoorstel op 15 april 2026 aangenomen. Eerste Kamer-behandeling in mei-juni 2026. Daarna handhaving uitrol per Q3-Q4 2026.</p></div>
+        <button class="faq-q" aria-expanded="false" aria-controls="faq-nl-a2">Wanneer treedt de Cyberbeveiligingswet in werking?</button>
+        <div class="faq-a" id="faq-nl-a2"><p>Verwachte ingangsdatum 1 juli 2026. De Tweede Kamer heeft het wetsvoorstel op 15 april 2026 aangenomen. Eerste Kamer-behandeling in mei-juni 2026. Daarna handhaving uitrol per Q3-Q4 2026.</p></div>
       </div>
       <div class="faq-item">
-        <button class="faq-q">Wat kost ISO 27001 voor Nederlands MKB?</button>
-        <div class="faq-a"><p>Nederlandse consultancy-trajecten gemiddeld &euro;15.000-25.000. Annex27 doet de gap-analyse vanaf &euro;795 inclusief Lead Auditor review, daarna optioneel beleidspakket (&euro;395) en pre-audit (&euro;1.495). Externe certificeringsaudit door geaccrediteerde instelling apart (&euro;4.000-12.000 afhankelijk van scope).</p></div>
+        <button class="faq-q" aria-expanded="false" aria-controls="faq-nl-a3">Wat kost ISO 27001 voor Nederlands MKB?</button>
+        <div class="faq-a" id="faq-nl-a3"><p>Nederlandse consultancy-trajecten gemiddeld &euro;15.000-25.000. Annex27 doet de gap-analyse vanaf &euro;795 inclusief Lead Auditor review, daarna optioneel beleidspakket (&euro;395) en pre-audit (&euro;1.495). Externe certificeringsaudit door geaccrediteerde instelling apart (&euro;4.000-12.000 afhankelijk van scope).</p></div>
       </div>
       <div class="faq-item">
-        <button class="faq-q">Welke geaccrediteerde instelling voor de externe audit?</button>
-        <div class="faq-a"><p>RvA-geaccrediteerde instellingen voor Nederland: DEKRA, KIWA, BSI Nederland, DNV Nederland, LRQA, T&Uuml;V Nord, SGS. Wij introduceren u bij de partij die past bij uw scope en sector. Selectie afhankelijk van uw locatie en gewenste audit-stijl.</p></div>
+        <button class="faq-q" aria-expanded="false" aria-controls="faq-nl-a4">Welke geaccrediteerde instelling voor de externe audit?</button>
+        <div class="faq-a" id="faq-nl-a4"><p>RvA-geaccrediteerde instellingen voor Nederland: DEKRA, KIWA, BSI Nederland, DNV Nederland, LRQA, T&Uuml;V Nord, SGS. Wij introduceren u bij de partij die past bij uw scope en sector. Selectie afhankelijk van uw locatie en gewenste audit-stijl.</p></div>
       </div>
       <div class="faq-item">
-        <button class="faq-q">Hoe verhoudt ISO 27001 zich tot BIO en NEN 7510?</button>
-        <div class="faq-a"><p>BIO en NEN 7510 zijn Nederlandse sector-specifieke aanvullingen op ISO 27001. BIO geldt voor overheid, NEN 7510 voor zorg. Beide gaan uit van een ISO 27001-fundament + extra eisen. Onze gap-analyse herkent uw sector en past de juiste norm-set toe.</p></div>
+        <button class="faq-q" aria-expanded="false" aria-controls="faq-nl-a5">Hoe verhoudt ISO 27001 zich tot BIO en NEN 7510?</button>
+        <div class="faq-a" id="faq-nl-a5"><p>BIO en NEN 7510 zijn Nederlandse sector-specifieke aanvullingen op ISO 27001. BIO geldt voor overheid, NEN 7510 voor zorg. Beide gaan uit van een ISO 27001-fundament + extra eisen. Onze gap-analyse herkent uw sector en past de juiste norm-set toe.</p></div>
       </div>
       <div class="faq-item">
-        <button class="faq-q">Wat als mijn klant ISO 27001 eist maar ik niet onder NIS2 val?</button>
-        <div class="faq-a"><p>Dan bent u indirect plichtig via supply-chain. Een groot deel van Nederlandse MKB krijgt deze druk: enterprise-klanten gebruiken hun NIS2-Art. 21-verplichting voor leveranciersbeheer als reden om ISO 27001 te eisen. Onze gap-analyse + beleidspakket dekt deze klant-eis af.</p></div>
+        <button class="faq-q" aria-expanded="false" aria-controls="faq-nl-a6">Wat als mijn klant ISO 27001 eist maar ik niet onder NIS2 val?</button>
+        <div class="faq-a" id="faq-nl-a6"><p>Dan bent u indirect plichtig via supply-chain. Een groot deel van Nederlandse MKB krijgt deze druk: enterprise-klanten gebruiken hun NIS2-Art. 21-verplichting voor leveranciersbeheer als reden om ISO 27001 te eisen. Onze gap-analyse + beleidspakket dekt deze klant-eis af.</p></div>
       </div>
     </div>
   </div>
@@ -540,7 +541,10 @@
 
 <script>
   document.querySelectorAll('.faq-q').forEach(q => {
-    q.addEventListener('click', () => q.closest('.faq-item').classList.toggle('open'));
+    q.addEventListener('click', () => {
+      const open = q.closest('.faq-item').classList.toggle('open');
+      q.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
   });
 </script>
 
