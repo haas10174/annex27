@@ -16,3 +16,8 @@ desktop.ini
 .vscode/
 *.swp
 *.swo
+.env.*
+.tmp*
+*.html.tmp
+.supabase/
+node_modules/

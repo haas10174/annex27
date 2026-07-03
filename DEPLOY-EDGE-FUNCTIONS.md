@@ -14,7 +14,7 @@ Genereer eenmalig een Personal Access Token. Daarna kan Claude `npx supabase fun
 4. Plak in PowerShell (eenmalig per shell-sessie):
 
    ```powershell
-   $env:SUPABASE_ACCESS_TOKEN = "sbp_xxxxxxxxxxxxxxxx"
+   $env:SUPABASE_ACCESS_TOKEN = "sbp_<JOUW_TOKEN_HIER>"
    ```
 
    Of permanent voor je gebruiker (zodat alle terminals het weten):
