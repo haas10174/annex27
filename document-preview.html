@@ -6,7 +6,7 @@
   <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=2" />
   <meta name="theme-color" content="#0D9488" />
   <meta name="robots" content="noindex, nofollow" />
-  <title>Documentpreview &mdash; Annex27</title>
+  <title>Documentpreview &middot; Annex27</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -24,7 +24,7 @@
       --border-light: #EFEBE3;
       --text-primary: #0F172A;
       --text-secondary: #475569;
-      --text-muted: #94A3B8;
+      --text-muted: #64748B;
       --accent: #0D9488;
       --accent-hover: #0F766E;
       --accent-light: #CCFBF1;
@@ -290,7 +290,7 @@
 
   <aside class="sidebar">
     <h1>annex<span>27</span></h1>
-    <p class="sidebar-sub">Beleidspakket &mdash; uw documenten met live ingevulde data</p>
+    <p class="sidebar-sub">Beleidspakket &middot; uw documenten met live ingevulde data</p>
     <div id="docTree"></div>
     <a href="/dashboard" class="btn btn-ghost" style="margin-top:18px;width:100%;justify-content:center;">
       <svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Terug naar dashboard
@@ -423,7 +423,7 @@ async function loadDoc(cat, item) {
   const warn = document.getElementById('placeholderWarn');
   if (result.stats.unfilled > 0) {
     document.getElementById('phWarnTitle').textContent = `${result.stats.unfilled} placeholder${result.stats.unfilled === 1 ? '' : 's'} nog in te vullen`;
-    document.getElementById('phWarnText').textContent = ` — geel gemarkeerde tekst zoals ${result.stats.openPlaceholders.slice(0, 3).join(', ')}${result.stats.openPlaceholders.length > 3 ? '...' : ''}`;
+    document.getElementById('phWarnText').textContent = `: geel gemarkeerde tekst zoals ${result.stats.openPlaceholders.slice(0, 3).join(', ')}${result.stats.openPlaceholders.length > 3 ? '...' : ''}`;
     warn.classList.add('show');
   } else {
     warn.classList.remove('show');

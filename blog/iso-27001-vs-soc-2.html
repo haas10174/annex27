@@ -53,7 +53,7 @@
   </script>
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-    :root{--bg:#FAF9F6;--surface:#FFF;--bg-warm:#F5F3EF;--border:#E5E5E5;--border-light:#F0F0F0;--text-primary:#0F172A;--text-secondary:#475569;--text-muted:#94A3B8;--accent:#0D9488;--accent-light:#CCFBF1;--dark:#0c0f1a;--radius:10px;}
+    :root{--bg:#FAF9F6;--surface:#FFF;--bg-warm:#F5F3EF;--border:#E5E5E5;--border-light:#F0F0F0;--text-primary:#0F172A;--text-secondary:#475569;--text-muted:#64748B;--accent:#0D9488;--accent-light:#CCFBF1;--dark:#0c0f1a;--radius:10px;}
     body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text-secondary);line-height:1.75;-webkit-font-smoothing:antialiased;}
     .container{max-width:780px;margin:0 auto;padding:0 24px;}
     nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(250,250,250,0.85);backdrop-filter:blur(16px);border-bottom:1px solid var(--border-light);height:64px;display:flex;align-items:center;padding:0 5%;}
@@ -110,7 +110,7 @@
   <div class="container">
     <div class="meta-row"><span class="pill">Vergelijking</span><span>12 april 2026</span><span>·</span><span>7 min lezen</span></div>
     <h1>ISO 27001 vs SOC 2: welke past bij een Nederlandse SaaS?</h1>
-    <p class="lead">De keuze hangt van uw klanten af — niet van wat u "cooler" vindt klinken. Praktische richtlijn voor MKB-SaaS in Nederland en België, met concrete beslisregels.</p>
+    <p class="lead">De keuze hangt van uw klanten af, niet van wat u "cooler" vindt klinken. Praktische richtlijn voor MKB-SaaS in Nederland en België, met concrete beslisregels.</p>
   </div>
 </section>
 
@@ -119,10 +119,10 @@
 
     <div class="tldr">
       <div class="tldr-label">TL;DR</div>
-      <p>Verkoopt u vooral in Europa: <strong>ISO 27001</strong>. Heeft u VS-klanten die SOC 2 vragen: doe <strong>beide</strong> (slimme volgorde: ISO eerst, SOC 2 erbovenop). Start zelden met SOC 2 alleen — in Europa wordt ISO beter herkend en is de audit-infrastructuur breder beschikbaar.</p>
+      <p>Verkoopt u vooral in Europa: <strong>ISO 27001</strong>. Heeft u VS-klanten die SOC 2 vragen: doe <strong>beide</strong> (slimme volgorde: ISO eerst, SOC 2 erbovenop). Start zelden met SOC 2 alleen: in Europa wordt ISO beter herkend en is de audit-infrastructuur breder beschikbaar.</p>
     </div>
 
-    <p>We krijgen de vraag wekelijks: "We starten met een compliance-traject — moeten we voor ISO 27001 of SOC 2 gaan?" Hieronder de feiten en een concrete beslisregel.</p>
+    <p>We krijgen de vraag wekelijks: "We starten met een compliance-traject: moeten we voor ISO 27001 of SOC 2 gaan?" Hieronder de feiten en een concrete beslisregel.</p>
 
     <h2>Wat zijn het, kort</h2>
 
@@ -164,17 +164,17 @@
     <ul>
       <li>Uw klanten zitten primair in <strong>Europa</strong>, UK, Midden-Oosten, Azië-Pacific.</li>
       <li>U opereert in <strong>sterk gereguleerde sectoren</strong>: zorg, overheid, banken, energie (Europese compliance-eisen verwijzen expliciet naar ISO 27001).</li>
-      <li>U valt onder <strong>NIS2</strong> — de 10 minimale maatregelen van NIS2 sluiten één-op-één aan op ISO 27001 controls.</li>
+      <li>U valt onder <strong>NIS2</strong>: de 10 minimale maatregelen van NIS2 sluiten één-op-één aan op ISO 27001 controls.</li>
       <li>U wilt een <strong>officieel certificaat</strong> dat u 3 jaar kunt tonen, niet jaarlijks een rapport moet updaten.</li>
       <li>U heeft een <strong>beperkter budget</strong> of kleiner team (ISO-traject is meestal goedkoper).</li>
     </ul>
 
     <h2>Wanneer kiest u SOC 2?</h2>
     <ul>
-      <li>U verkoopt <strong>SaaS aan Amerikaanse klanten</strong>, vooral enterprise — die vragen het letterlijk in hun security questionnaire.</li>
+      <li>U verkoopt <strong>SaaS aan Amerikaanse klanten</strong>, vooral enterprise, die vragen het letterlijk in hun security questionnaire.</li>
       <li>U verkoopt aan <strong>tech-bedrijven in de VS</strong> die SOC 2 gebruiken als vendor-criterium.</li>
       <li>U werkt met <strong>gevoelige klantdata</strong> waar de Trust Service Criteria op aansluiten (vooral Availability en Processing Integrity).</li>
-      <li>U heeft een <strong>moderne tech-stack</strong> met veel automatisering (AWS/GCP/Azure + monitoring) — SOC 2 is dan vaak sneller te halen dan de documentatielast van ISO suggereert.</li>
+      <li>U heeft een <strong>moderne tech-stack</strong> met veel automatisering (AWS/GCP/Azure + monitoring): SOC 2 is dan vaak sneller te halen dan de documentatielast van ISO suggereert.</li>
     </ul>
 
     <h2>Wanneer doet u beide?</h2>
@@ -183,7 +183,7 @@
       <li><strong>Eerst ISO 27001</strong>: bouwt uw ISMS en documentatie op een structurele manier op. Europees basiscertificaat in jaar 1.</li>
       <li><strong>Daarna SOC 2 Type II</strong> (jaar 2 of 3): bouwt dicht op uw ISO-fundament. Ongeveer 60-70% overlap. SOC-audit gaat sneller omdat de controls al gedocumenteerd en getoetst zijn.</li>
     </ol>
-    <p>Deze volgorde voorkomt dat u twee parallelle trajecten tegelijk draait — een klassieke fout die startups maken als ze onder druk van een grote Amerikaanse prospect SOC 2 eerst doen, maar later ISO nog willen voor Europese deals.</p>
+    <p>Deze volgorde voorkomt dat u twee parallelle trajecten tegelijk draait, een klassieke fout die startups maken als ze onder druk van een grote Amerikaanse prospect SOC 2 eerst doen, maar later ISO nog willen voor Europese deals.</p>
 
     <h2>Wat u beter niet doet</h2>
 
@@ -193,9 +193,9 @@
     <h3>"We doen ISO 27001 en SOC 2 is dan klaar"</h3>
     <p>De overlap is groot (~60-70%) maar niet volledig. Verschillen:</p>
     <ul>
-      <li>SOC 2 vraagt specifiek om operationele effectiviteit over een periode (Type II) — ISO 27001 toetst ook effectiviteit maar minder granulair.</li>
+      <li>SOC 2 vraagt specifiek om operationele effectiviteit over een periode (Type II). ISO 27001 toetst ook effectiviteit maar minder granulair.</li>
       <li>SOC 2 is meer output-gericht (logging, monitoring, change management), ISO is meer management-systeem-gericht (beleid, training, risico).</li>
-      <li>SOC 2 kent bedrijfseigen controls — u moet die zelf formuleren en bewijzen.</li>
+      <li>SOC 2 kent bedrijfseigen controls: u moet die zelf formuleren en bewijzen.</li>
     </ul>
 
     <h2>Praktisch: wat kost dit u?</h2>
@@ -214,7 +214,7 @@
 
     <div class="end-cta">
       <h3>Begin bij de basis: gap-analyse</h3>
-      <p>Of u nu ISO of SOC 2 wilt — de eerste stap is weten waar uw controls staan. Onze gap-analyse dekt de ISO 27001 Annex A volledig; SOC 2 Trust Service Criteria hebben ~70% overlap.</p>
+      <p>Of u nu ISO of SOC 2 wilt, de eerste stap is weten waar uw controls staan. Onze gap-analyse dekt de ISO 27001 Annex A volledig; SOC 2 Trust Service Criteria hebben ~70% overlap.</p>
       <a href="/gap-analyse">Start gratis quickscan &rarr;</a>
     </div>
 

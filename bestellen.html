@@ -83,7 +83,7 @@
     }
     .order-logo span { color: #0D9488; }
     h1 { font-size: 1.5rem; font-weight: 700; color: #0F172A; margin-bottom: 8px; }
-    .order-sub { font-size: 0.9rem; color: #94A3B8; margin-bottom: 20px; }
+    .order-sub { font-size: 0.9rem; color: #64748B; margin-bottom: 20px; }
 
     .combo-banner {
       display: flex; align-items: flex-start; gap: 12px;
@@ -103,7 +103,7 @@
     }
     .post-purchase-label {
       font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em;
-      text-transform: uppercase; color: #0D9488; margin-bottom: 12px;
+      text-transform: uppercase; color: #0F766E; margin-bottom: 12px;
     }
     .post-purchase h3 {
       font-size: 1.05rem; font-weight: 700; color: #0F172A;
@@ -153,14 +153,14 @@
       background: white;
     }
     .plan-name { font-size: 0.95rem; font-weight: 600; color: #0F172A; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-    .plan-desc { font-size: 0.78rem; color: #94A3B8; }
+    .plan-desc { font-size: 0.78rem; color: #64748B; }
     .plan-price { margin-left: auto; font-size: 1.1rem; font-weight: 700; color: #0F172A; white-space: nowrap; text-align: right; }
-    .plan-period { font-size: 0.72rem; font-weight: 400; color: #94A3B8; }
+    .plan-period { font-size: 0.72rem; font-weight: 400; color: #64748B; }
     .plan-market {
       display: block;
       font-size: 0.7rem;
       font-weight: 500;
-      color: #94A3B8;
+      color: #64748B;
       margin-top: 3px;
       letter-spacing: 0.01em;
     }
@@ -171,7 +171,7 @@
       font-weight: 700;
       letter-spacing: 0.08em;
       text-transform: uppercase;
-      color: #0D9488;
+      color: #0F766E;
       background: #CCFBF1;
       padding: 3px 8px;
       border-radius: 999px;
@@ -293,7 +293,7 @@
       cursor: pointer;
     }
     .terms-accept a {
-      color: #0D9488;
+      color: #0F766E;
       text-decoration: underline;
       text-underline-offset: 2px;
     }
@@ -308,11 +308,11 @@
       transition: color 0.15s;
     }
     .discount-toggle summary::-webkit-details-marker { display: none; }
-    .discount-toggle summary:hover { color: #0D9488; }
+    .discount-toggle summary:hover { color: #0F766E; }
     .discount-toggle summary::before {
       content: '+ ';
       font-weight: 700;
-      color: #0D9488;
+      color: #0F766E;
       margin-right: 4px;
     }
     .discount-toggle[open] summary::before { content: '− '; }
@@ -343,7 +343,7 @@
       flex-direction: column;
       gap: 8px;
       font-size: 0.75rem;
-      color: #94A3B8;
+      color: #64748B;
       margin-top: 16px;
     }
     .order-trust-item { display: flex; align-items: center; gap: 6px; }
@@ -360,7 +360,7 @@
     }
     .payment-methods-label {
       font-size: 0.72rem;
-      color: #94A3B8;
+      color: #64748B;
       font-weight: 500;
       margin-right: 4px;
     }
@@ -398,7 +398,7 @@
       margin-top: 24px;
       font-size: 0.82rem;
     }
-    .back-link a { color: #94A3B8; text-decoration: none; }
+    .back-link a { color: #64748B; text-decoration: none; }
     .back-link a:hover { color: #0F172A; }
 
     h1, h3, .plan-name, .order-logo { font-family: 'Sora', sans-serif; }
@@ -462,7 +462,7 @@
     </div>
 
     <style>
-      .plan-group-label{font-size:0.72rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-muted,#94A3B8);margin:22px 0 10px;}
+      .plan-group-label{font-size:0.72rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-muted,#64748B);margin:22px 0 10px;}
       .plan-group-label:first-of-type{margin-top:8px;}
     </style>
 
@@ -527,7 +527,7 @@
         <div class="plan-name">Pre-audit Review &middot; via intake</div>
         <div class="plan-desc">Scope, omvang en prijs worden bepaald tijdens een intake-gesprek. Facturatie op factuur, geen directe betaling.</div>
       </div>
-      <div class="plan-price" style="color:#0D9488;font-size:0.86rem;">Neem contact op &rarr;</div>
+      <div class="plan-price" style="color:#0F766E;font-size:0.86rem;">Neem contact op &rarr;</div>
     </a>
 
     <div class="post-purchase">
@@ -565,7 +565,7 @@
 
   <div class="order-right">
     <div id="personalBanner" style="display:none;margin-bottom:16px;padding:14px 16px;background:rgba(13,148,136,0.08);border:1px solid rgba(13,148,136,0.25);border-left:3px solid #0D9488;border-radius:8px;">
-      <div style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.12em;color:#0D9488;font-weight:600;margin-bottom:4px;">Uit uw quickscan</div>
+      <div style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.12em;color:#0F766E;font-weight:600;margin-bottom:4px;">Uit uw quickscan</div>
       <div id="personalBannerText" style="font-size:0.92rem;color:#0F172A;line-height:1.5;"></div>
     </div>
     <div class="order-summary">
@@ -792,7 +792,7 @@
     vatNote.textContent = vat.invoiceNote;
 
     const payBtn = document.getElementById('payBtn');
-    payBtn.textContent = 'Betalen \u2014 ' + fmtEur(vat.total);
+    payBtn.textContent = 'Betalen \u00b7 ' + fmtEur(vat.total);
   }
 
   function selectPlan(el, plan, price, period) {
@@ -1032,7 +1032,7 @@
       } else if (data && data.valid === true) {
         vatState.vatValid = true;
         vatState.companyName = data.company_name || null;
-        showVatStatus('valid', 'Geldig BTW-nummer' + (data.company_name ? ' \u2014 ' + data.company_name : ''));
+        showVatStatus('valid', 'Geldig BTW-nummer' + (data.company_name ? ' \u00b7 ' + data.company_name : ''));
       } else if (data && data.valid === false) {
         vatState.vatValid = false;
         showVatStatus('invalid', data.error || 'BTW-nummer niet gevonden in VIES. Wij factureren met BTW conform uw land.');

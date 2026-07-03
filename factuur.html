@@ -20,7 +20,7 @@
     :root {
       --ink: #0F172A;
       --ink-2: #475569;
-      --muted: #94A3B8;
+      --muted: #64748B;
       --accent: #0D9488;
       --accent-light: #14b8a6;
       --border: #E5E5E5;
@@ -278,7 +278,7 @@ function fmt(n) { return '\u20AC ' + Number(n).toLocaleString('nl-NL', { minimum
   // Ensure logged in (required for RLS)
   const { data: { session } } = await sb.auth.getSession();
   if (!session) {
-    sheet.innerHTML = '<div class="error">Log in om deze factuur te bekijken. <a href="/portal" style="color:#0D9488;">Klik hier om in te loggen</a> en open dan deze pagina opnieuw.</div>';
+    sheet.innerHTML = '<div class="error">Log in om deze factuur te bekijken. <a href="/portal" style="color:#0F766E;">Klik hier om in te loggen</a> en open dan deze pagina opnieuw.</div>';
     return;
   }
 
@@ -400,7 +400,7 @@ function fmt(n) { return '\u20AC ' + Number(n).toLocaleString('nl-NL', { minimum
             <div class="totals-row grand"><span>Totaal</span><span>${fmt(data.total)}</span></div>
           ` : vatDisplay.kind === 'reverse_charge' ? `
             <div class="totals-row"><span>Subtotaal</span><span>${fmt(data.subtotal)}</span></div>
-            <div class="totals-row"><span>BTW verlegd naar afnemer</span><span>&mdash;</span></div>
+            <div class="totals-row"><span>BTW verlegd naar afnemer</span><span>&middot;</span></div>
             <div class="totals-row grand"><span>Totaal</span><span>${fmt(data.total)}</span></div>
             <div style="margin-top:10px;font-size:0.76rem;color:var(--muted);text-align:right;line-height:1.5;">
               ${vatDisplay.note}
