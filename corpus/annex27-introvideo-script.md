@@ -40,7 +40,7 @@
 **Beeld:** het bureau-personage sleept documenten naar het scherm; vinkjes verschijnen; aan de zijkant lichten labels op: ISO 27001, NIS2, NEN 7510.
 
 **Voice-over:**
-"Wilt u verder, dan vult u de gap-analyse in en laadt u uw bewijs op. Het platform koppelt uw antwoorden automatisch aan ISO 27001, NIS2 en, als het past, NEN 7510 voor de zorg of de BIO voor de overheid. Eén keer invullen, alle normen tegelijk."
+"Wilt u verder, dan vult u de gap-analyse in en uploadt u uw bewijs. Het platform koppelt uw antwoorden automatisch aan ISO 27001, NIS2 en, als het past, NEN 7510 voor de zorg of de BIO voor de overheid. Eén keer invullen, alle normen tegelijk."
 
 ---
 
