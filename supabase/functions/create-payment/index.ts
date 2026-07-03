@@ -31,11 +31,20 @@ const PRODUCTS: Record<string, { name: string; price: number; period: string }> 
   'preaudit':         { name: 'Pre-audit Review',              price: 1495, period: 'eenmalig' },
 };
 
-// Server-side kortingscodes. NOOIT vertrouwen op client-side input.
-// fixedPrice = absolute eindprijs (negeert subtotaal). Gebruik alleen voor interne live-tests.
-const DISCOUNT_CODES: Record<string, { fixedPrice?: number; label: string }> = {
-  'RH-LIVE-TEST': { fixedPrice: 1, label: 'Live-test (€1)' },
-};
+// Server-side kortingscodes. NOOIT hardcoden in (publieke) source: lees uit Function-secrets.
+// Zet in Supabase -> Edge Functions -> Secrets: LIVE_TEST_CODE (de code) + optioneel LIVE_TEST_PRICE (default 1).
+// fixedPrice-kortingen gelden nooit op rechten-gevende / hoogwaardige plannen.
+const FIXED_PRICE_BLOCKED = new Set(['preaudit', 'iso_nis2_bundle']);
+function getDiscount(code: string, plan: string): { fixedPrice?: number; label: string } | null {
+  if (!code) return null;
+  const liveCode = Deno.env.get('LIVE_TEST_CODE');
+  if (liveCode && code === liveCode && !FIXED_PRICE_BLOCKED.has(plan)) {
+    const p = Number(Deno.env.get('LIVE_TEST_PRICE') || '1');
+    const price = isFinite(p) && p > 0 ? p : 1;
+    return { fixedPrice: price, label: `Live-test (€${price})` };
+  }
+  return null;
+}
 
 // Input validation
 const MAX_NAAM_LENGTH = 200;
