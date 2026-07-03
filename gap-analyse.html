@@ -1342,6 +1342,7 @@
       transition: all 0.2s;
     }
     .sector-option * { pointer-events: none; }
+    .sector-option:focus-visible { outline: 2px solid var(--accent, #0D9488); outline-offset: 2px; }
     .sector-option:hover {
       border-color: var(--accent);
       background: var(--accent-glow);
@@ -1760,43 +1761,43 @@
     </button>
     <h2>In welke sector opereert<br />uw organisatie?</h2>
     <p>Wij stemmen de quickscan af op uw sector zodat de resultaten en aanbevelingen direct relevant zijn.</p>
-    <div class="sector-grid">
-      <div class="sector-option" onclick="pickSector('saas', this)">
+    <div class="sector-grid" role="radiogroup" aria-label="Kies uw sector">
+      <div class="sector-option" role="radio" aria-checked="false" tabindex="0" aria-label="SaaS en Cloud" onclick="pickSector('saas', this)" onkeydown="sectorKeydown(event, this)">
         <span class="sector-option-icon">
           <svg viewBox="0 0 24 24"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>
         </span>
         <div class="sector-option-name">SaaS &amp; Cloud</div>
         <div class="sector-option-desc">Software, platforms, cloud-diensten</div>
       </div>
-      <div class="sector-option" onclick="pickSector('it', this)">
+      <div class="sector-option" role="radio" aria-checked="false" tabindex="-1" aria-label="IT-dienstverlener of MSP" onclick="pickSector('it', this)" onkeydown="sectorKeydown(event, this)">
         <span class="sector-option-icon">
           <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
         </span>
         <div class="sector-option-name">IT-dienstverlener / MSP</div>
         <div class="sector-option-desc">Managed services, consultancy, hosting</div>
       </div>
-      <div class="sector-option" onclick="pickSector('zorg', this)">
+      <div class="sector-option" role="radio" aria-checked="false" tabindex="-1" aria-label="Zorg en Medisch" onclick="pickSector('zorg', this)" onkeydown="sectorKeydown(event, this)">
         <span class="sector-option-icon">
           <svg viewBox="0 0 24 24"><path d="M8 2v4M16 2v4M4 6h16v15a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6z"/><path d="M12 11v6M9 14h6"/></svg>
         </span>
         <div class="sector-option-name">Zorg &amp; Medisch</div>
         <div class="sector-option-desc">Zorginstellingen, medische technologie</div>
       </div>
-      <div class="sector-option" onclick="pickSector('overheid', this)">
+      <div class="sector-option" role="radio" aria-checked="false" tabindex="-1" aria-label="Overheid en Semi-overheid" onclick="pickSector('overheid', this)" onkeydown="sectorKeydown(event, this)">
         <span class="sector-option-icon">
           <svg viewBox="0 0 24 24"><path d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M8 14v3M12 14v3M16 14v3"/></svg>
         </span>
         <div class="sector-option-name">Overheid &amp; Semi-overheid</div>
         <div class="sector-option-desc">Gemeenten, uitvoeringsorganisaties, ZBO's</div>
       </div>
-      <div class="sector-option" onclick="pickSector('bouw', this)">
+      <div class="sector-option" role="radio" aria-checked="false" tabindex="-1" aria-label="Bouw en Techniek" onclick="pickSector('bouw', this)" onkeydown="sectorKeydown(event, this)">
         <span class="sector-option-icon">
           <svg viewBox="0 0 24 24"><path d="M12 2l9 4v6c0 5-4 9-9 10-5-1-9-5-9-10V6l9-4z"/><path d="M8 11l3 3 5-6"/></svg>
         </span>
         <div class="sector-option-name">Bouw &amp; Techniek</div>
         <div class="sector-option-desc">Aannemers, ingenieursbureaus, infra</div>
       </div>
-      <div class="sector-option" onclick="pickSector('overig', this)">
+      <div class="sector-option" role="radio" aria-checked="false" tabindex="-1" aria-label="Scale-up of Overig" onclick="pickSector('overig', this)" onkeydown="sectorKeydown(event, this)">
         <span class="sector-option-icon">
           <svg viewBox="0 0 24 24"><polyline points="3 17 9 11 13 15 21 7"/><polyline points="14 7 21 7 21 14"/></svg>
         </span>
@@ -2225,9 +2226,30 @@ let selectedSector = null;
 
 function pickSector(key, el) {
   selectedSector = key;
-  document.querySelectorAll('.sector-option').forEach(o => o.classList.remove('selected'));
+  document.querySelectorAll('.sector-option').forEach(o => {
+    o.classList.remove('selected');
+    o.setAttribute('aria-checked', 'false');
+    o.tabIndex = -1;
+  });
   el.classList.add('selected');
+  el.setAttribute('aria-checked', 'true');
+  el.tabIndex = 0;
   document.getElementById('sectorConfirm').classList.add('enabled');
+}
+
+// Toetsenbord-navigatie voor de sector-radiogroup (pijltjes wisselen + selecteren, Enter/Spatie kiest).
+function sectorKeydown(e, el) {
+  const opts = Array.from(document.querySelectorAll('.sector-option'));
+  const i = opts.indexOf(el);
+  if (i < 0) return;
+  if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') { e.preventDefault(); el.click(); return; }
+  let next = null;
+  if (e.key === 'ArrowDown' || e.key === 'ArrowRight') { next = (i + 1) % opts.length; }
+  else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') { next = (i - 1 + opts.length) % opts.length; }
+  if (next === null) return;
+  e.preventDefault();
+  opts[next].focus();
+  opts[next].click();
 }
 
 function confirmSector() {
