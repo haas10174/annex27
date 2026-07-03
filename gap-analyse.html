@@ -1842,6 +1842,32 @@
   </div>
 </div>
 
+<style>
+  /* Zachte poort: kop-score gratis, detail-breakdown achter e-mail (#166). Fail-open: zonder JS blijft alles zichtbaar. */
+  .a27-gate { position: relative; }
+  .a27-gate__inner { filter: blur(7px); opacity: .5; pointer-events: none; user-select: none; transition: filter .35s ease, opacity .35s ease; }
+  .a27-gate.is-unlocked .a27-gate__inner { filter: none; opacity: 1; pointer-events: auto; user-select: auto; }
+  .a27-gate__lock {
+    position: absolute; inset: 0; z-index: 3;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
+    gap: 10px; padding: 22px 24px;
+    background: linear-gradient(180deg, rgba(250,249,246,.45) 0%, rgba(250,249,246,.9) 60%);
+    border: 1px solid #E8E4DC; border-radius: 16px;
+  }
+  .a27-gate.is-unlocked .a27-gate__lock { display: none; }
+  .a27-gate__lock-ic { width: 34px; height: 34px; display: flex; align-items: center; justify-content: center;
+    background: #E6F4F1; border-radius: 50%; color: #0D9488; }
+  .a27-gate__lock h4 { font-family: 'Sora', sans-serif; font-size: 1.02rem; font-weight: 700; color: #0F172A; margin: 2px 0 0; }
+  .a27-gate__lock p { font-size: .86rem; line-height: 1.5; color: #475569; max-width: 340px; margin: 0; }
+  .a27-gate__lock-btn {
+    margin-top: 4px; display: inline-flex; align-items: center; gap: 8px;
+    font-family: 'Sora', sans-serif; font-weight: 700; font-size: .88rem;
+    background: #0D9488; color: #fff; border: none; border-radius: 10px;
+    padding: 11px 20px; cursor: pointer; transition: background .2s;
+  }
+  .a27-gate__lock-btn:hover { background: #0F766E; }
+</style>
+
 <!-- ═══ RESULTS SCREEN ══════════════════ -->
 <div class="screen results" id="screenResults">
   <div class="results-topbar">
@@ -1880,7 +1906,21 @@
         <div class="big-ring-compare" id="bigCompare"></div>
       </div>
       <div>
-        <div class="results-cats" id="resultsCats"></div>
+        <div class="a27-gate" id="detailGate">
+          <div class="a27-gate__inner">
+            <div class="results-cats" id="resultsCats"></div>
+          </div>
+          <div class="a27-gate__lock" id="detailGateLock">
+            <div class="a27-gate__lock-ic">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            </div>
+            <h4>Uw volledige uitslag staat klaar</h4>
+            <p>Zie per categorie waar u sterk staat en waar de gaps zitten. We sturen het volledige overzicht ook als PDF naar uw inbox.</p>
+            <button type="button" class="a27-gate__lock-btn" onclick="focusLeadForm()">Toon mijn volledige uitslag
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </button>
+          </div>
+        </div>
         <div class="nis2-result" id="nis2Result">
           <div class="nis2-result-eyebrow">Deadline 1 juli 2026</div>
           <div class="nis2-result-title" id="nis2ResultTitle"></div>
@@ -2812,6 +2852,35 @@ function showLeadError(msg) {
   el.textContent = msg;
   el.style.display = 'block';
   el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+// Zachte poort (#166): detail-breakdown achter e-mail. Fail-open en idempotent.
+function focusLeadForm() {
+  var lc = document.getElementById('leadCapture');
+  if (lc) lc.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  var n = document.querySelector('#leadForm input[name="naam"]');
+  if (n) setTimeout(function () { try { n.focus({ preventScroll: true }); } catch (e) {} }, 420);
+}
+function unlockGatedDetail() {
+  var g = document.getElementById('detailGate');
+  if (g) g.classList.add('is-unlocked');
+  // Sector-blokken alsnog tonen als ze inhoud hebben.
+  var pit = document.getElementById('sectorPitfalls');
+  var si = document.getElementById('sectorInsights');
+  if (si && pit && pit.children.length) si.style.display = 'grid';
+  var sal = document.getElementById('sectorActionList');
+  var sa = document.getElementById('sectorActions');
+  if (sa && sal && sal.children.length) sa.style.display = 'block';
+}
+function applyDetailGate() {
+  // Reeds bekende lead (e-mail eerder ingevuld) ziet meteen alles.
+  var hasLead = false;
+  try { hasLead = !!localStorage.getItem('annex27_lead'); } catch (e) {}
+  if (hasLead) { unlockGatedDetail(); return; }
+  var g = document.getElementById('detailGate');
+  if (g) g.classList.remove('is-unlocked');
+  var si = document.getElementById('sectorInsights'); if (si) si.style.display = 'none';
+  var sa = document.getElementById('sectorActions'); if (sa) sa.style.display = 'none';
 }
 
 function submitLead(e) {
