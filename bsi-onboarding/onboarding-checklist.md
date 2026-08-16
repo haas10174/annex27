@@ -68,10 +68,14 @@ Klaar / te bevestigen:
 - [ ] **Bankbewijs als PDF** — recent rekeningafschrift of bankbrief die de IBAN bevestigt. *Verstuur bankdata alleen via een kanaal dat BSI je aanwijst; zet nooit je IBAN + afschrift in een gewone onbeveiligde mail als BSI daar een portaal voor heeft.*
 - [ ] Betaaltermijn 30 dagen akkoord? → **Ja**
 
-**Verzekering (Contract clausule 9 — verplicht):**
-- [ ] **Beroepsaansprakelijkheid (professional indemnity)** afsluiten.
-- [ ] **Bedrijfsaansprakelijkheid (public liability)** afsluiten.
-- [ ] Polis kunnen tonen aan BSI op verzoek. → *Regel dit vóór je eerste SOW; zonder passende dekking ben je contractueel in gebreke. Vraag een makelaar om een polis passend bij "ISO-audits als zelfstandig auditor".*
+**Verzekering (Contract clausule 9 — verplicht) — IN BEHANDELING**
+Plan: morgen bij **Jemar**, **AXA**, **BAV consultant €1M dekking**. Punten om af te vinken zodat de polis in één keer aan BSI voldoet:
+- [ ] **BAV** (beroepsaansprakelijkheid) €1M — professional indemnity
+- [ ] **BA uitbating** (bedrijfs-/uitbatingsaansprakelijkheid) — BSI eist deze náást BAV; dekt schade tijdens on-site audit
+- [ ] Verzekerde = **Annex27, KBO 1006.203.170** (onderneming, niet privé)
+- [ ] Activiteit omschreven als **"uitvoeren van ISO-conformiteitsaudits als onderaannemer"** (niet enkel "consultant")
+- [ ] Geografische dekking minimaal **EU/EER**
+- [ ] **Verzekeringsattest** meevragen om aan BSI te kunnen tonen (clausule 9)
 
 **Belasting/sociaal (NL Schedule + clausule 15):**
 - [ ] Jij (Annex27) draagt zelf btw, inkomstenbelasting en sociale bijdragen af. Geen dienstverband met BSI. → Stem af met je boekhouder hoe je BSI-omzet en de €750/€800-dagtarieven boekt (Belgische eenmanszaak, NL-klant, btw-verlegging B2B).
