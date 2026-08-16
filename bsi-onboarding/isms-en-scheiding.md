@@ -78,6 +78,9 @@ Alle informatie en middelen waarmee Annex27 werkt: de laptop(s), telefoon, onlin
 ### B.4 Versleuteling — BitLocker-onderbouwing (voldoet aan clausule 4 + GF077)
 GF077-verklaring die je afgeeft: *"I confirm that I have encryption software loaded onto my laptop."* Onderbouwing:
 
+> **Geverifieerd op 2026-08-16** (`manage-bde -status C:`): Protection Status = **Protection On**; Percentage Encrypted = **100%**; Encryption Method = **XTS-AES 128**; Key Protectors = **TPM + Numerical Password**. Conversion Status = *Used Space Only Encrypted* (Windows-standaard; overweeg "Full" voor maximale strengheid). Bewijs voor clausule 4 + GF077 is hiermee geleverd.
+
+
 - **Volledige-schijfversleuteling** op de systeemschijf met **BitLocker** (Windows 11 Pro bevat volledige BitLocker, niet alleen "apparaatversleuteling").
 - **Controle** (voer zelf uit in PowerShell/CMD):
   ```
