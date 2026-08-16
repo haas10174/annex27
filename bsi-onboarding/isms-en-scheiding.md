@@ -47,7 +47,10 @@ Clausule 4 zegt dat Annex27 (de Supplier) je een laptop levert voor de Services.
 - **Voorkeur:** een **apart, dedicated toestel** (of aparte Windows-gebruiker met eigen versleutelde profiel) uitsluitend voor BSI-werk. Schoonste scheiding, minste kans op vermenging.
 - **Minimaal aanvaardbaar:** één laptop, mits (1) volledige schijfversleuteling aan (BitLocker, zie Deel B), (2) BSI-data alleen in BSI-cloud en lokaal direct opgeruimd, (3) aparte browserprofielen/mapstructuur voor BSI vs Annex27.
 
-> **Beslissing die jij moet maken:** dedicated BSI-toestel of gescheiden profiel op één laptop. Leg de keuze hier vast: __________________________
+> **Beslissing (vastgelegd 2026-08-16):**
+> - **Primair BSI-toestel = MacBook Air M1 (2022)** met FileVault. Dit is het aangewezen audittoestel; hierop draait het BSI-werk.
+> - **Thuis-desktop (Windows) = alleen via een apart, dedicated Windows-gebruikersaccount** ("BSI-Audit") als je daar toch BSI-werk doet. Dat account is gescheiden van je normale Annex27-/privé-account: eigen bestanden, eigen browserprofiel, BSI-data uitsluitend in Point Global/SFDC (niets in de Annex27-ontwikkelmappen of het repo). BitLocker (schijfbreed, geverifieerd Aan) dekt beide accounts.
+> - Kruisgebruik vermijden: in je normale account géén BSI-data; in het BSI-account géén Annex27-ontwikkelwerk.
 
 ### A.7 Einde opdracht / contract
 - Per SOW: klantdata na upload lokaal verwijderen.
@@ -63,9 +66,10 @@ Alle informatie en middelen waarmee Annex27 werkt: de laptop(s), telefoon, onlin
 ### B.2 Middelen-inventaris (vul in en houd actueel)
 | Middel | Detail | Versleuteld? | MFA? |
 |---|---|---|---|
-| Laptop (werk) | Windows 11 Pro | BitLocker: ja/nee | n.v.t. |
-| Telefoon | | schermvergrendeling + encryptie | ja/nee |
-| Externe schijf / USB | | BitLocker To Go: ja/nee | n.v.t. |
+| **Auditlaptop (primair BSI)** | **MacBook Air M1 (2022), macOS** | **FileVault: te verifiëren** | n.v.t. |
+| Thuis-desktop (Annex27 + evt. BSI via apart profiel) | Windows 11 Pro | BitLocker: **Aan (geverifieerd 2026-08-16)** | n.v.t. |
+| Telefoon | | schermvergrendeling + encryptie: ja/nee | ja/nee |
+| Externe schijf / USB | | FileVault/BitLocker To Go: ja/nee | n.v.t. |
 | BSI-account (Point Global/SFDC/mail) | | (door BSI beheerd) | ja |
 | Annex27-Supabase | | (server-side) | ja |
 | Wachtwoordmanager | | | ja |
@@ -81,15 +85,24 @@ GF077-verklaring die je afgeeft: *"I confirm that I have encryption software loa
 > **Geverifieerd op 2026-08-16** (`manage-bde -status C:`): Protection Status = **Protection On**; Percentage Encrypted = **100%**; Encryption Method = **XTS-AES 128**; Key Protectors = **TPM + Numerical Password**. Conversion Status = *Used Space Only Encrypted* (Windows-standaard; overweeg "Full" voor maximale strengheid). Bewijs voor clausule 4 + GF077 is hiermee geleverd.
 
 
-- **Volledige-schijfversleuteling** op de systeemschijf met **BitLocker** (Windows 11 Pro bevat volledige BitLocker, niet alleen "apparaatversleuteling").
-- **Controle** (voer zelf uit in PowerShell/CMD):
+**Auditlaptop — MacBook Air M1 (2022), macOS → FileVault (dit is het toestel dat voor BSI telt):**
+- Zet **FileVault** aan: Systeeminstellingen → Privacy en beveiliging → **FileVault** → *Inschakelen*. (De M1-SSD is altijd hardwarematig versleuteld; FileVault koppelt dat aan je inlogwachtwoord, waardoor de data ook in rust beschermd is — dát is wat compliant is.)
+- **Controle** (Terminal):
+  ```
+  fdesetup status
+  ```
+  Vereist resultaat: **FileVault is On.**
+- **Herstelsleutel:** bewaar de FileVault-recovery key veilig **buiten de laptop** (wachtwoordmanager + geprint), of koppel aan je iCloud-account tijdens het inschakelen.
+- Sterk inlogwachtwoord + automatische schermvergrendeling ≤ 5 min.
+
+**Thuis-desktop — Windows 11 Pro → BitLocker (geverifieerd Aan):**
+- **Controle** (PowerShell als administrator):
   ```
   manage-bde -status C:
   ```
-  Vereist resultaat: **Conversion Status: Fully Encrypted** en **Protection Status: Protection On**.
-- **Aanzetten** als het uit staat: Instellingen → Privacy en beveiliging → Apparaatversleuteling/BitLocker, óf Configuratiescherm → BitLocker-stationsversleuteling → *BitLocker inschakelen* voor C:.
-- **Herstelsleutel (recovery key):** bewaar veilig en **niet op dezelfde laptop**. Aanbevolen: in je wachtwoordmanager én een geprinte kopie op een fysiek veilige plek. Niet op een onversleutelde USB of in je annex27-cloud.
-- **Externe dragers:** elke USB/externe schijf die werkdata raakt → **BitLocker To Go**.
+  Ideaal: **Protection On** (behaald) en **Fully Encrypted** (nu "Used Space Only", Windows-standaard, aanvaardbaar).
+- **Herstelsleutel (recovery key):** bewaar veilig en **niet op dezelfde machine**. Aanbevolen: in je wachtwoordmanager én een geprinte kopie op een fysiek veilige plek.
+- **Externe dragers:** elke USB/externe schijf die werkdata raakt → **BitLocker To Go** (Windows) / **FileVault** (Mac).
 - **Telefoon:** moderne Android/iPhone zijn standaard versleuteld mits een sterke schermvergrendeling is ingesteld — controleer dat.
 - **Volg de BSI IT-richtlijn:** als BSI een specifieke standaard of tool voorschrijft (BSI IT Policies for Contractors), volg die, ook als BitLocker al aanstaat.
 
