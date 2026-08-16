@@ -37,6 +37,11 @@ Reden: Annex27's cloudleveranciers (Supabase, de AI-pipeline met Mistral/OpenAI,
 - ❌ Persoonlijke opslag: privé-cloud (Google Drive/iCloud/Dropbox), privé-mail (`raoul_haas@live.nl`), USB-sticks zonder versleuteling, telefoon-galerij
 - ❌ Het GitHub-repo van Annex27 (public/private) of enige back-up daarvan
 
+### A.5-bis Sync & persoonlijke cloud
+- **Persoonlijke/Annex27-bestanden** mag je vrij syncen tussen je apparaten (iCloud, OneDrive, Dropbox, Google Drive). Geen bezwaar.
+- **BSI-auditdata mag NOOIT in een persoonlijke sync of cloud** (iCloud/OneDrive/Dropbox/Google Drive of enige eigen sync-map). Dat zou een **niet-geautoriseerde sub-verwerker** zijn (clausule 12) en de vertrouwelijkheid schenden — ook "tijdelijk" niet.
+- **Je synchronisatie voor BSI ís Point Global/SFDC:** beide toestellen (MacBook en het BSI-account op de thuis-PC) benaderen dezelfde auditdata via login op BSI's systemen. Geen eigen sync-map nodig; lokale kopieën zijn tijdelijk en worden na upload verwijderd.
+
 ### A.5 E-mailscheiding
 - **BSI-werk** → BSI-mailadres + BSI-footer. Verplicht per GF077.
 - **Annex27-business** → `@annex27.nl`.
