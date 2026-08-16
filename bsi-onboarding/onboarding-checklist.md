@@ -1,5 +1,7 @@
 # BSI Onboarding — Annex27 als Associate Resource (Supplier)
 
+> **Status (augustus 2026):** Blok 1-3 AFGEROND — contract + NL Schedule getekend, GF077 en Supplier Data Collection ingediend, IRCA/kwalificaties + certificaten + audit-ervaring aangetoond. Resterend en actief: **§4 verzekering, §5 IT & encryptie, §6 doorlopend, en de operationele scheiding BSI-werk vs Annex27-platform.**
+
 **Rollen in de contracten**
 - **Supplier** = Annex27 (KBO/BCE 1006.203.170, Joseph Smeetslaan 1 bus 13630, 3630 Maasmechelen, BE) — dit ben jij als onderneming.
 - **Contractor** = Raoul Haas — de persoon die de audits uitvoert.
