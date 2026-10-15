@@ -6841,7 +6841,7 @@ function renderModuleOverview() {
           </button>
           <div style="font-size:0.78rem;color:var(--text-muted);max-width:520px;line-height:1.55;text-align:center;margin-top:4px;">
             <strong style="color:var(--text-primary);">Hoe werkt dit?</strong> Het self-assessment is uw eigen overzicht met antwoorden + automatische bevindingen.
-            Het <strong>echte eindrapport</strong> krijgt u nadat onze Lead Auditor (IRCA-gecertificeerd) uw antwoorden + bewijsvoering heeft gereviewed,
+            Het <strong>echte eindrapport</strong> krijgt u nadat onze Lead Auditor uw antwoorden + bewijsvoering heeft gereviewed,
             alle bevindingen heeft geformuleerd en zijn eindoordeel heeft toegevoegd.
           </div>
         </div>
@@ -8463,13 +8463,13 @@ async function generateReport() {
       <div class="dc-cell"><span class="dc-key">Datum opgesteld</span><span class="dc-val">${date}</span></div>
       <div class="dc-cell"><span class="dc-key">Classificatie</span><span class="dc-val">Vertrouwelijk</span></div>
       <div class="dc-cell"><span class="dc-key">Norm</span><span class="dc-val">NEN-EN-ISO/IEC 27001:2023</span></div>
-      <div class="dc-cell"><span class="dc-key">Opsteller</span><span class="dc-val">Lead Auditor · IRCA-gecertificeerd</span></div>
+      <div class="dc-cell"><span class="dc-key">Opsteller</span><span class="dc-val">Lead Auditor ISO 27001</span></div>
       <div class="dc-cell"><span class="dc-key">Beoordeling</span><span class="dc-val">Annex27 ${reportId ? `· ID ${esc(String(reportId).slice(0, 8))}` : ''}</span></div>
       <div class="dc-cell"><span class="dc-key">Klant</span><span class="dc-val">${esc(bedrijf || naam)}</span></div>
       <div class="dc-cell"><span class="dc-key">Distributielijst</span><span class="dc-val">Directie · CISO · ${esc(bedrijf || 'klant')}</span></div>
     </div>
     <div class="doc-control-disclaimer">
-      Dit rapport is een <strong>point-in-time</strong> beoordeling op basis van sample-based onderzoek van de aangeleverde bewijsvoering. Het is geen geaccrediteerde certificering. Bevindingen zijn IRCA-conform geclassificeerd als Major NC, Minor NC of Observation (OFI).
+      Dit rapport is een <strong>point-in-time</strong> beoordeling op basis van sample-based onderzoek van de aangeleverde bewijsvoering. Het is geen geaccrediteerde certificering. Bevindingen zijn volgens gangbare certificatiepraktijk geclassificeerd als Major NC, Minor NC of Observation (OFI).
     </div>
   </div>
 

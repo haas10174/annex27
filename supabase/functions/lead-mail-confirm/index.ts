@@ -112,7 +112,7 @@ Bestel direct: https://annex27.nl/bestellen.html?plan=gap
 Vragen? Antwoord op deze mail of stuur naar info@annex27.nl.
 
 Met vriendelijke groet,
-Lead Auditor Annex27 — IRCA-gecertificeerd
+Raoul Haas, Lead Auditor ISO 27001
 Annex27`;
 
     const html =
@@ -129,7 +129,7 @@ Annex27`;
   </div>
   <p style="margin:0 0 24px;"><a href="https://annex27.nl/bestellen.html?plan=gap" style="display:inline-block;background:#0D9488;color:#fff;padding:12px 22px;border-radius:8px;text-decoration:none;font-weight:600;">Bestel volledige gap-analyse →</a></p>
   <p style="margin:0 0 8px;font-size:0.92rem;">Vragen? Antwoord op deze mail of stuur naar <a href="mailto:info@annex27.nl" style="color:#0D9488;">info@annex27.nl</a>.</p>
-  <p style="margin:24px 0 0;font-size:0.88rem;color:#475569;">Met vriendelijke groet,<br/>Lead Auditor Annex27 — IRCA-gecertificeerd<br/>Annex27</p>
+  <p style="margin:24px 0 0;font-size:0.88rem;color:#475569;">Met vriendelijke groet,<br/>Raoul Haas, Lead Auditor ISO 27001<br/>Annex27</p>
 </div>`;
 
     const client = new SMTPClient({
